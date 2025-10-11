@@ -176,16 +176,15 @@ type RawPostData = Partial<Post> & {
 
 function applyLocaleToData(original: RawPostData, locale: Locale) {
   const isEN = locale === "en"
-  const data: Partial<Post> & { blocks?: unknown[] } = { ...(original as Record<string, unknown>) } as Partial<Post> & {
-    blocks?: unknown[]
-  }
+  type LocalizedData = Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
+  const data = { ...(original as Record<string, unknown>) } as LocalizedData
 
   // Campos textuais
   if (isEN) {
     if (typeof original.title_en === "string") data.title = original.title_en
     if (typeof original.description_en === "string") data.description = original.description_en
     if (typeof original.content_en === "string") data.content = original.content_en
-    if (Array.isArray(original.blocks_en)) data.blocks = original.blocks_en
+    if (Array.isArray(original.blocks_en)) data.blocks = original.blocks_en as unknown[]
     if (typeof original.date_en === "string") data.date = original.date_en
     if (typeof original.readTime_en === "string") data.readTime = original.readTime_en
     if (typeof original.tag_en === "string") data.tag = original.tag_en

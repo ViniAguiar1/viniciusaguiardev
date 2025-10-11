@@ -7,7 +7,7 @@ import {
   SidebarContent,
 } from "@/components/ui/sidebar"
 
-import { FaGithub, FaLinkedin, FaInstagram, FaFacebook, FaWhatsapp } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
 export async function AppSidebar() {
   const locale = await getLocale()

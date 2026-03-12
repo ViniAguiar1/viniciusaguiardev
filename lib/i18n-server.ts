@@ -20,7 +20,10 @@ export type Dictionary = {
   }
   home: {
     title: string
+    subtitle: string
     description: string
+    ctaAbout: string
+    ctaResume: string
   }
   about: {
     title: string
@@ -37,15 +40,25 @@ const pt: Dictionary = {
     about: "Sobre",
     curriculum: "Curriculum",
   },
+
   home: {
-    title: "Olá, seja bem-vindo!",
+    title: "Vinicius Aguiar",
+
+    subtitle:
+      "Frontend Engineer especializado em React, Next.js e React Native.",
+
     description:
-      "Neste espaço, compartilho artigos, estudos e insights sobre programação e tecnologia — abrangendo desde o front-end até temas avançados e relevantes da área, sempre com o objetivo de agregar valor e promover conhecimento.",
+      "Construindo plataformas SaaS escaláveis e aplicações web modernas, com foco em experiência do usuário, arquitetura limpa e performance.",
+
+    ctaAbout: "Sobre mim",
+    ctaResume: "Download CV",
   },
+
   about: {
     title: "Sobre mim",
     subtitle: "Um pouco da minha trajetória, habilidades e interesses.",
   },
+
   ui: {
     search: "Buscar",
   },
@@ -57,15 +70,25 @@ const en: Dictionary = {
     about: "About",
     curriculum: "Resume",
   },
+
   home: {
-    title: "Hello, welcome!",
+    title: "Vinicius Aguiar",
+
+    subtitle:
+      "Frontend Engineer specializing in React, Next.js and React Native.",
+
     description:
-      "In this space, I share articles, studies and insights about programming and technology — covering everything from front-end to advanced and relevant topics in the field, always with the goal of adding value and promoting knowledge.",
+      "Building scalable SaaS platforms and modern web applications with a focus on user experience, clean architecture and performance.",
+
+    ctaAbout: "About me",
+    ctaResume: "Download Resume",
   },
+
   about: {
     title: "About me",
     subtitle: "A bit about my journey, skills and interests.",
   },
+
   ui: {
     search: "Search",
   },

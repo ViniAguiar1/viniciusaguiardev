@@ -127,11 +127,11 @@
 }
 
 [data-side="right"] {
-  --sidebar-width: 3rem; /* Sidebar direita bem fina */
+  --sidebar-width: 4.5rem; /* Sidebar direita com respiro do conteúdo */
 }
 
 [data-side="right"][data-slot="sidebar-container"] {
-  width: 3rem !important;
+  width: 4.5rem !important;
 }
 
 [data-side="right"][data-slot="sidebar-inner"] {
@@ -155,13 +155,13 @@
 
 /* Estilos específicos para a sidebar direita fina */
 [data-side="right"] {
-  width: 3rem !important;
-  min-width: 3rem !important;
-  max-width: 3rem !important;
+  width: 4.5rem !important;
+  min-width: 4.5rem !important;
+  max-width: 4.5rem !important;
 }
 
 [data-side="right"] .group\/sidebar-wrapper {
-  width: 3rem !important;
+  width: 4.5rem !important;
 }
 
 /* Centralizar os ícones na sidebar direita */

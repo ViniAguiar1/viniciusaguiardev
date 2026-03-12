@@ -58,7 +58,7 @@ export async function AppSidebar() {
           </Link>
           {/* Curriculum now downloads a PDF */}
           <a
-            href="/Vinicius_Aguiar_Front_end.pdf"
+            href="/Curriculo-Vinicius-Aguiar.pdf"
             className={`text-lg font-normal hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/Vinicius_Aguiar_Front_end.pdf" ? "text-blue-600" : "text-gray-700" : ""}`}
             style={{ transition: 'color 0.2s' }}
             download

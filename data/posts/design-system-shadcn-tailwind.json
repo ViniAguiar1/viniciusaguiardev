@@ -1,0 +1,181 @@
+{
+  "slug": "design-system-shadcn-tailwind",
+  "title": "Construindo um Design System com Shadcn UI e Tailwind",
+  "title_en": "Building a Design System with Shadcn UI and Tailwind",
+  "description": "Um guia prático sobre como estruturar um design system escalável utilizando Shadcn UI, Tailwind CSS e React — garantindo consistência visual e produtividade em aplicações modernas.",
+  "description_en": "A practical guide on building a scalable design system using Shadcn UI, Tailwind CSS and React — ensuring visual consistency and development productivity.",
+  "date": "16 de mar de 2026",
+  "date_en": "Mar 16, 2026",
+  "readTime": "7 min de leitura",
+  "readTime_en": "7 min read",
+  "tag": "Frontend",
+  "tag_en": "Frontend",
+  "tagColor": "bg-emerald-700",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "À medida que aplicações web crescem, manter consistência visual e qualidade de interface se torna um desafio. Componentes duplicados, variações de estilos e inconsistências de layout começam a surgir rapidamente. Um **design system** resolve esse problema ao estabelecer padrões reutilizáveis de interface. Neste artigo apresento como construir um design system moderno utilizando **Shadcn UI, Tailwind CSS e React**."
+    },
+    {
+      "type": "heading",
+      "text": "O que é um Design System",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Um design system é um conjunto de **componentes reutilizáveis, tokens de design e padrões de interface** que garantem consistência em toda a aplicação. Ele funciona como uma biblioteca centralizada de UI, permitindo que equipes construam interfaces mais rapidamente e com menos inconsistências."
+    },
+    {
+      "type": "list",
+      "items": [
+        "🎨 **Design Tokens:** cores, espaçamentos e tipografia padronizados.",
+        "🧱 **Componentes reutilizáveis:** botões, cards, inputs e modais.",
+        "📐 **Padrões de layout:** grids, espaçamentos e hierarquia visual."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Por que usar Shadcn UI",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Shadcn UI se tornou uma das soluções mais populares para construir interfaces modernas em React. Diferente de bibliotecas tradicionais, ele não é apenas um pacote de componentes pronto — ele gera componentes diretamente no projeto, permitindo controle total sobre estilos e comportamento."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Componentes baseados em **Radix UI**, garantindo acessibilidade.",
+        "Integração nativa com **Tailwind CSS**.",
+        "Controle total do código — os componentes ficam no seu projeto.",
+        "Alta flexibilidade para personalização."
+      ]
+    },
+    {
+      "type": "image",
+      "src": "/design-system-layers.svg",
+      "alt": "Arquitetura de um design system com tokens, componentes e telas",
+      "width": 900,
+      "height": 550
+    },
+    {
+      "type": "heading",
+      "text": "Estrutura de um Design System",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Uma forma comum de estruturar um design system em aplicações React é organizar os componentes em uma pasta dedicada dentro do projeto."
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      dialog.tsx\n      input.tsx\n  lib/\n    utils.ts"
+    },
+    {
+      "type": "paragraph",
+      "text": "A pasta **components/ui** contém os componentes base do sistema de design, enquanto utilidades compartilhadas podem ser colocadas em **lib**."
+    },
+    {
+      "type": "heading",
+      "text": "Exemplo de componente reutilizável",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Um botão é um dos componentes mais utilizados em qualquer aplicação. Utilizando Shadcn UI, podemos criar variações consistentes de estilo."
+    },
+    {
+      "type": "code",
+      "language": "tsx",
+      "code": "import { Button } from '@/components/ui/button'\n\nexport default function Example() {\n  return (\n    <div className=\"flex gap-4\">\n      <Button>Salvar</Button>\n      <Button variant=\"outline\">Cancelar</Button>\n      <Button variant=\"secondary\">Editar</Button>\n    </div>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Design tokens com Tailwind",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tailwind facilita a criação de design tokens utilizando variáveis de cor e classes utilitárias. Isso permite padronizar estilos em toda a aplicação."
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "code": ":root {\n  --primary: 222 89% 55%;\n  --background: 0 0% 100%;\n  --foreground: 222 47% 11%;\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Esses tokens são usados pelos componentes do design system para garantir consistência visual entre telas."
+    },
+    {
+      "type": "heading",
+      "text": "Benefícios em aplicações SaaS",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Em aplicações SaaS — como dashboards administrativos ou plataformas de gestão — um design system traz benefícios importantes:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "🚀 **Velocidade de desenvolvimento:** novos recursos podem reutilizar componentes existentes.",
+        "🎯 **Consistência visual:** interfaces seguem o mesmo padrão.",
+        "🔧 **Manutenção simplificada:** alterações em um componente afetam toda a aplicação.",
+        "👥 **Colaboração entre equipes:** designers e desenvolvedores compartilham o mesmo sistema."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Conclusão",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Design systems são essenciais para aplicações modernas. Utilizando Shadcn UI, Tailwind CSS e React, é possível construir uma base de componentes consistente e escalável. Esse tipo de abordagem melhora produtividade, qualidade de interface e facilita a evolução de produtos digitais ao longo do tempo."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "As web applications grow, maintaining visual consistency becomes increasingly difficult. Duplicate components, inconsistent styles and layout variations start to appear. A **design system** solves this by defining reusable UI patterns. In this article I show how to build a modern design system using **Shadcn UI, Tailwind CSS and React**."
+    },
+    {
+      "type": "heading",
+      "text": "What is a Design System",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A design system is a collection of **reusable components, design tokens and interface patterns** that ensure consistency across an application."
+    },
+    {
+      "type": "heading",
+      "text": "Why Shadcn UI",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Shadcn UI has become one of the most popular solutions for building modern React interfaces. Instead of shipping precompiled components, it generates them inside your project, giving you full control over styles and behavior."
+    },
+    {
+      "type": "heading",
+      "text": "Component architecture",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A common structure for design systems in React projects is organizing base components inside a dedicated folder."
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Design systems are essential for modern applications. Using Shadcn UI, Tailwind CSS and React, teams can build scalable and consistent interfaces while improving development speed."
+    }
+  ]
+}

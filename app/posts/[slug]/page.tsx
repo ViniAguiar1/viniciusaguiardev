@@ -8,7 +8,7 @@ import React from "react"
 import { getLocale } from "@/lib/i18n-server"
 
 type PageProps = {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export function generateStaticParams() {
@@ -17,8 +17,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params
   const locale = await getLocale()
-  const post = getPostBySlug(params.slug, locale)
+  const post = getPostBySlug(slug, locale)
   if (!post) return { title: "Post não encontrado" }
   return {
     title: `${post.title} | Blog`,
@@ -27,8 +28,9 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function PostPage({ params }: PageProps) {
+  const { slug } = await params
   const locale = await getLocale()
-  const post = getPostBySlug(params.slug, locale)
+  const post = getPostBySlug(slug, locale)
   if (!post) return notFound()
 
   const blocks = (post.blocks || []) as ContentBlock[]

@@ -37,7 +37,7 @@ export async function AppSidebar() {
 
         {/* Company/Role */}
         <div className="text-sm text-gray-500 mb-8 mt-2 dark:text-white">
-          Front End at <span className="font-medium">MovePro</span>.
+          Software Engineer at <span className="font-medium">Holy Solutions</span>.
         </div>
 
         {/* Main Menu Links */}

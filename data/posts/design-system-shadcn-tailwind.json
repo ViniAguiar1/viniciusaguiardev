@@ -139,7 +139,7 @@
   "blocks_en": [
     {
       "type": "paragraph",
-      "text": "As web applications grow, maintaining visual consistency becomes increasingly difficult. Duplicate components, inconsistent styles and layout variations start to appear. A **design system** solves this by defining reusable UI patterns. In this article I show how to build a modern design system using **Shadcn UI, Tailwind CSS and React**."
+      "text": "As web applications grow, maintaining visual consistency and interface quality becomes a challenge. Duplicate components, style variations, and layout inconsistencies start appearing quickly. A **design system** solves this problem by establishing reusable interface standards. In this article, I show how to build a modern design system using **Shadcn UI, Tailwind CSS, and React**."
     },
     {
       "type": "heading",
@@ -148,25 +148,108 @@
     },
     {
       "type": "paragraph",
-      "text": "A design system is a collection of **reusable components, design tokens and interface patterns** that ensure consistency across an application."
+      "text": "A design system is a set of **reusable components, design tokens, and interface patterns** that ensures consistency across the application. It works as a centralized UI library, allowing teams to build interfaces faster and with fewer inconsistencies."
+    },
+    {
+      "type": "list",
+      "items": [
+        "🎨 **Design Tokens:** standardized colors, spacing, and typography.",
+        "🧱 **Reusable components:** buttons, cards, inputs, and modals.",
+        "📐 **Layout patterns:** grids, spacing, and visual hierarchy."
+      ]
     },
     {
       "type": "heading",
-      "text": "Why Shadcn UI",
+      "text": "Why use Shadcn UI",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "Shadcn UI has become one of the most popular solutions for building modern React interfaces. Instead of shipping precompiled components, it generates them inside your project, giving you full control over styles and behavior."
+      "text": "Shadcn UI has become one of the most popular solutions for building modern interfaces in React. Unlike traditional libraries, it is not just a ready-made component package - it generates components directly in your project, allowing full control over styles and behavior."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Components based on **Radix UI**, ensuring accessibility.",
+        "Native integration with **Tailwind CSS**.",
+        "Full code ownership - components live inside your project.",
+        "High customization flexibility."
+      ]
+    },
+    {
+      "type": "image",
+      "src": "/design-system-layers.svg",
+      "alt": "Design system architecture with tokens, components, and screens",
+      "width": 900,
+      "height": 550
     },
     {
       "type": "heading",
-      "text": "Component architecture",
+      "text": "Structure of a Design System",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "A common structure for design systems in React projects is organizing base components inside a dedicated folder."
+      "text": "A common way to structure a design system in React applications is to organize components inside a dedicated folder within the project."
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      dialog.tsx\n      input.tsx\n  lib/\n    utils.ts"
+    },
+    {
+      "type": "paragraph",
+      "text": "The **components/ui** folder contains the core design system components, while shared utilities can be placed in **lib**."
+    },
+    {
+      "type": "heading",
+      "text": "Reusable component example",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A button is one of the most used components in any application. Using Shadcn UI, we can create consistent style variations."
+    },
+    {
+      "type": "code",
+      "language": "tsx",
+      "code": "import { Button } from '@/components/ui/button'\n\nexport default function Example() {\n  return (\n    <div className=\"flex gap-4\">\n      <Button>Save</Button>\n      <Button variant=\"outline\">Cancel</Button>\n      <Button variant=\"secondary\">Edit</Button>\n    </div>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Design tokens with Tailwind",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tailwind makes it easy to create design tokens using color variables and utility classes. This allows style standardization across the whole application."
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "code": ":root {\n  --primary: 222 89% 55%;\n  --background: 0 0% 100%;\n  --foreground: 222 47% 11%;\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "These tokens are used by design system components to ensure visual consistency across screens."
+    },
+    {
+      "type": "heading",
+      "text": "Benefits in SaaS applications",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "In SaaS applications - such as admin dashboards or management platforms - a design system brings important benefits:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "🚀 **Development speed:** new features can reuse existing components.",
+        "🎯 **Visual consistency:** interfaces follow the same standards.",
+        "🔧 **Simplified maintenance:** changes in one component propagate across the application.",
+        "👥 **Team collaboration:** designers and developers share the same system."
+      ]
     },
     {
       "type": "heading",
@@ -175,7 +258,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Design systems are essential for modern applications. Using Shadcn UI, Tailwind CSS and React, teams can build scalable and consistent interfaces while improving development speed."
+      "text": "Design systems are essential for modern applications. Using Shadcn UI, Tailwind CSS, and React, it is possible to build a consistent and scalable component foundation. This approach improves productivity, interface quality, and makes digital products easier to evolve over time."
     }
   ]
 }

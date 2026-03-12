@@ -33,7 +33,7 @@ export default async function Home() {
           {/* RIGHT: botões empilhados */}
           <div className="inline-grid grid-cols-1 gap-2 md:justify-self-end">
             <Link
-              href="/Vinicius_Aguiar_Front_end.pdf"
+              href="/Curriculo-Vinicius-Aguiar.pdf"
               target="_blank"
               className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >

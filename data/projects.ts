@@ -11,6 +11,7 @@ export type ProjectCategory =
   | "Health"
   | "Logistics"
   | "HealthTech"
+  | "Automotive"
 
 export type Project = {
   slug: string
@@ -42,14 +43,14 @@ export const projects: Project[] = [
     name: "X-Drop",
     logo: "/images/x-droplogo.png",
     tagline: {
-      pt: "Automação de e-commerce e integração com marketplaces",
-      en: "E-commerce automation and marketplace integrations",
+      pt: "Plataforma de gestão para operações de dropshipping",
+      en: "Management platform for dropshipping operations",
     },
     description: {
-      pt: "Solução de automação para operações de e-commerce, conectando vendedores a múltiplos marketplaces com foco em eficiência operacional e redução de trabalho manual.",
-      en: "Automation solution for e-commerce operations, connecting sellers to multiple marketplaces with focus on operational efficiency and reducing manual work.",
+      pt: "Sistema que integra catálogo, pedidos, expedição e pagamentos em um único painel, permitindo que vendedores gerenciem operações e finanças com governança por perfis de acesso e relatórios em tempo real.",
+      en: "Unified system connecting product catalogs, orders, shipping, and payments to help sellers scale their dropshipping business with role-based access controls and real-time financial reporting.",
     },
-    category: "E-commerce",
+    category: "SaaS",
     url: "https://xdrop.com.br/",
   },
   {
@@ -57,12 +58,12 @@ export const projects: Project[] = [
     name: "Vox Pet Digital",
     logo: "/images/vox-pet-digital.png",
     tagline: {
-      pt: "SaaS para pet shops e clínicas veterinárias",
-      en: "SaaS for pet shops and veterinary clinics",
+      pt: "Gestão e marketing 360° para petshops e clínicas veterinárias",
+      en: "Complete 360° management and marketing for pet businesses",
     },
     description: {
-      pt: "Plataforma SaaS multi-módulo para gestão de pet shops e clínicas veterinárias, com automações via WhatsApp, IA integrada para atendimento e integrações com Mercado Pago e Stripe.",
-      en: "Multi-module SaaS platform for managing pet shops and veterinary clinics, with WhatsApp automations, integrated AI for customer service, and Mercado Pago/Stripe integrations.",
+      pt: "Plataforma completa que oferece automação e ferramentas de gestão para clínicas veterinárias e petshops, combinando sistema de gerenciamento com assessoria especializada para aumentar faturamento e fidelizar clientes.",
+      en: "Integrated platform combining automated management tools and professional consulting services for veterinary clinics and pet shops, helping owners optimize operations, increase revenue, and build stronger customer relationships.",
     },
     category: "SaaS",
     url: "https://voxpetdigital.com.br/",
@@ -87,14 +88,14 @@ export const projects: Project[] = [
     name: "EasyToGo",
     logo: "/images/easytogo-logo.png",
     tagline: {
-      pt: "Soluções web e mobile para logística e mobilidade",
-      en: "Web and mobile solutions for logistics and mobility",
+      pt: "Soluções tecnológicas web e mobile",
+      en: "Web and mobile technology solutions",
     },
     description: {
-      pt: "Desenvolvimento de interfaces web e mobile com React, Next.js, React Native e Flutter em ambiente ágil, integrando APIs conectadas a fluxos reais de operação logística.",
-      en: "Web and mobile interface development with React, Next.js, React Native, and Flutter in an agile environment, integrating APIs connected to real logistics operation flows.",
+      pt: "Empresa de soluções tecnológicas focada no desenvolvimento de aplicações web e mobile com React, Next.js, React Native e Flutter em ambiente ágil e orientado a produto.",
+      en: "Technology solutions company focused on web and mobile application development with React, Next.js, React Native, and Flutter in an agile, product-oriented environment.",
     },
-    category: "Logistics",
+    category: "Agency",
     url: "https://www.easytogo.com.br/",
   },
   {
@@ -117,14 +118,14 @@ export const projects: Project[] = [
     name: "Direção Sobre Rodas",
     logo: "/images/direcao-sobre-rodas.png",
     tagline: {
-      pt: "Sistema de gestão para autoescolas",
-      en: "Management system for driving schools",
+      pt: "Marketplace de oficinas mecânicas e peças automotivas",
+      en: "Marketplace for auto repair shops and automotive parts",
     },
     description: {
-      pt: "Sistema completo de gestão para autoescolas, incluindo controle de alunos, agendamento de aulas, financeiro e acompanhamento de processos do Detran.",
-      en: "Complete management system for driving schools, including student management, class scheduling, finances, and DMV process tracking.",
+      pt: "Plataforma que conecta consumidores com oficinas mecânicas confiáveis e oferece um marketplace para compra de peças automotivas, facilitando a busca por reparos e aquisição de componentes em um único lugar.",
+      en: "Platform connecting consumers with reliable auto repair shops while providing a marketplace for purchasing vehicle components, streamlining the process of locating mechanics and sourcing quality parts in one place.",
     },
-    category: "Platform",
+    category: "Marketplace",
     url: "https://direcaosobrerodas.com.br/",
   },
   {
@@ -132,14 +133,14 @@ export const projects: Project[] = [
     name: "Rainha das Sete",
     logo: "/images/rainha-das-sete-logo.webp",
     tagline: {
-      pt: "Presença digital e e-commerce para marca de moda",
-      en: "Digital presence and e-commerce for fashion brand",
+      pt: "Fabricante de componentes elétricos automotivos",
+      en: "Automotive electrical components manufacturer",
     },
     description: {
-      pt: "Desenvolvimento da presença digital e loja virtual para marca de moda, com foco em experiência de compra, catálogo de produtos e integração com meios de pagamento.",
-      en: "Digital presence and online store development for a fashion brand, focused on shopping experience, product catalog, and payment integration.",
+      pt: "Fabricante e distribuidora de componentes elétricos para a indústria automotiva, incluindo bicos injetores, chicotes elétricos, fusíveis, conectores e sensores para veículos leves, pesados, ônibus e máquinas agrícolas.",
+      en: "Manufacturer and distributor of electrical components for the automotive industry, including injector nozzles, wiring harnesses, fuses, connectors, and sensors for light vehicles, trucks, buses, and agricultural equipment.",
     },
-    category: "E-commerce",
+    category: "Automotive",
     url: "https://rainhadassete.com.br/",
   },
   {
@@ -147,12 +148,12 @@ export const projects: Project[] = [
     name: "ErpWise",
     logo: "/logos/erpwise.svg",
     tagline: {
-      pt: "Sistema ERP para gestão empresarial",
-      en: "ERP system for business management",
+      pt: "Sistema de gestão para indústrias e distribuidoras",
+      en: "Management system for industrial and distribution businesses",
     },
     description: {
-      pt: "Sistema ERP voltado à gestão empresarial, centralizando processos de vendas, estoque, financeiro e relatórios em uma interface unificada.",
-      en: "ERP system for business management, centralizing sales, inventory, finance, and reporting processes in a unified interface.",
+      pt: "Solução de ERP desenvolvida para empresas de manufatura e distribuição no atacado, otimizando processos operacionais para melhorar a eficiência e a gestão empresarial.",
+      en: "ERP solution tailored for manufacturing and wholesale distribution companies, streamlining operational processes to improve efficiency and business management.",
     },
     category: "ERP",
     url: "https://www.erpwise.com.br/",
@@ -162,12 +163,12 @@ export const projects: Project[] = [
     name: "Vou Para New York",
     logo: "/images/vpny-logo.png",
     tagline: {
-      pt: "Plataforma de planejamento de viagens para Nova York",
-      en: "Travel planning platform for New York trips",
+      pt: "Portal de conteúdo e planejamento de viagens para Nova York",
+      en: "Travel content and planning portal for New York",
     },
     description: {
-      pt: "Plataforma de conteúdo e planejamento de viagens focada em Nova York, com roteiros, dicas e ferramentas para organizar a experiência do viajante.",
-      en: "Travel content and planning platform focused on New York, with itineraries, tips, and tools to organize the traveler's experience.",
+      pt: "Portal de conteúdo e planejamento de viagens focado em Nova York, com roteiros, dicas, guias e ferramentas para organizar a experiência do viajante.",
+      en: "Travel content and planning portal focused on New York, with itineraries, tips, guides, and tools to organize the traveler's experience.",
     },
     category: "Travel",
     url: "https://www.vouparanewyork.com/",
@@ -177,14 +178,14 @@ export const projects: Project[] = [
     name: "MovePro",
     logo: "/images/movepro-logo.png",
     tagline: {
-      pt: "Plataforma web + mobile de saúde e fitness",
-      en: "Web + mobile health and fitness platform",
+      pt: "Plataforma para nutricionistas e personal trainers",
+      en: "Platform for nutritionists and personal trainers",
     },
     description: {
-      pt: "Plataforma completa de saúde e fitness (web + mobile) com milhares de usuários, integrações com Stripe, FatSecret e Firebase, e monitoramento em produção com Crashlytics.",
-      en: "Full-stack health & fitness platform (web + mobile) with thousands of users, Stripe/FatSecret/Firebase integrations, and production monitoring with Crashlytics.",
+      pt: "Software para nutricionistas e personal trainers prescreverem planos alimentares e treinos personalizados, monitorarem o progresso de clientes e gerenciarem consultas em um único aplicativo web e mobile.",
+      en: "Software for nutritionists and personal trainers to prescribe customized meal plans and workouts, monitor client progress, and manage appointments in a single web and mobile application.",
     },
-    category: "Health",
+    category: "SaaS",
     url: "https://movepro-ruddy.vercel.app/",
   },
   {
@@ -192,7 +193,7 @@ export const projects: Project[] = [
     name: "SimQ",
     logo: "/images/simq-logo.jpeg",
     tagline: {
-      pt: "Plataforma de simulados e questões para concursos e vestibulares",
+      pt: "Plataforma de simulados e questões para concursos",
       en: "Mock exam and question platform for competitive exams",
     },
     description: {
@@ -222,12 +223,12 @@ export const projects: Project[] = [
     name: "Bionexo",
     logo: "/images/bionexo-logo.png",
     tagline: {
-      pt: "Marketplace B2B para a cadeia de suprimentos da saúde",
-      en: "B2B marketplace for the healthcare supply chain",
+      pt: "Melhores conexões para uma saúde melhor",
+      en: "Better connections for better health",
     },
     description: {
-      pt: "Maior marketplace B2B de saúde da América Latina, conectando hospitais, clínicas e fornecedores em uma plataforma de compras, cotações e gestão de suprimentos.",
-      en: "Latin America's largest B2B healthcare marketplace, connecting hospitals, clinics, and suppliers on a platform for purchasing, quotes, and supply management.",
+      pt: "Plataforma digital que conecta hospitais, clínicas e fornecedores de saúde para otimizar compras, vendas e gestão de insumos médicos, com a maior base de dados de transações do setor privado de saúde na América Latina.",
+      en: "Digital platform connecting hospitals, clinics, and healthcare suppliers to optimize procurement, sales, and medical supply management, powered by the largest transaction database in Latin America's private healthcare sector.",
     },
     category: "HealthTech",
     url: "https://bionexo.com/",

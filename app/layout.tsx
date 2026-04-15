@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { RightSidebar } from "@/components/right-sidebar";
+import { MobileHeader } from "@/components/mobile-header";
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 
@@ -39,8 +40,8 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <main className="flex-1">
-              {/* <SidebarTrigger /> */}
+            <main className="flex-1 flex flex-col">
+              <MobileHeader />
               {children}
             </main>
             <RightSidebar />

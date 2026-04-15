@@ -102,14 +102,14 @@ export const projects: Project[] = [
     name: "JoviPlanet",
     logo: "/images/jovi-planet-logo.png",
     tagline: {
-      pt: "Plataforma educacional interativa para crianças",
-      en: "Interactive educational platform for kids",
+      pt: "Plataforma de viagens e locação de experiências",
+      en: "Travel and experience rental platform",
     },
     description: {
-      pt: "Plataforma educacional voltada ao público infantil, com experiências interativas e gamificadas para engajar crianças no aprendizado digital.",
-      en: "Educational platform for children, featuring interactive and gamified experiences to engage kids in digital learning.",
+      pt: "Plataforma de viagens focada em locação de experiências, conectando viajantes a hospedagens, passeios e atividades em destinos turísticos.",
+      en: "Travel platform focused on experience rentals, connecting travelers to accommodations, tours, and activities at tourist destinations.",
     },
-    category: "EdTech",
+    category: "Travel",
     url: "https://joviplanet.com/",
   },
   {

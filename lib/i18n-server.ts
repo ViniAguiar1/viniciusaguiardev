@@ -16,6 +16,7 @@ export type Dictionary = {
   nav: {
     home: string
     about: string
+    projects: string
     curriculum: string
   }
   home: {
@@ -29,6 +30,10 @@ export type Dictionary = {
     title: string
     subtitle: string
   }
+  projects: {
+    title: string
+    subtitle: string
+  }
   ui: {
     search: string
   }
@@ -38,6 +43,7 @@ const pt: Dictionary = {
   nav: {
     home: "Home",
     about: "Sobre",
+    projects: "Projetos",
     curriculum: "Curriculum",
   },
 
@@ -59,6 +65,12 @@ const pt: Dictionary = {
     subtitle: "Um pouco da minha trajetória, habilidades e interesses.",
   },
 
+  projects: {
+    title: "Projetos",
+    subtitle:
+      "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+  },
+
   ui: {
     search: "Buscar",
   },
@@ -68,6 +80,7 @@ const en: Dictionary = {
   nav: {
     home: "Home",
     about: "About",
+    projects: "Projects",
     curriculum: "Resume",
   },
 
@@ -87,6 +100,12 @@ const en: Dictionary = {
   about: {
     title: "About me",
     subtitle: "A bit about my journey, skills and interests.",
+  },
+
+  projects: {
+    title: "Projects",
+    subtitle:
+      "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
   },
 
   ui: {

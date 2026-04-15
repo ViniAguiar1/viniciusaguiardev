@@ -56,6 +56,13 @@ export async function AppSidebar() {
           >
             {dict.nav.about}
           </Link>
+          <Link
+            href="/projetos"
+            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/projetos" ? "text-blue-600" : "text-gray-700" : ""}`}
+            style={{ transition: 'color 0.2s' }}
+          >
+            {dict.nav.projects}
+          </Link>
           {/* Curriculum now downloads a PDF */}
           <a
             href="/Curriculo-Vinicius-Aguiar.pdf"

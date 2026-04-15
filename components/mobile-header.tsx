@@ -9,7 +9,7 @@ export function MobileHeader() {
   const { setOpenMobile } = useSidebar()
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background px-4 py-3 md:hidden">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background px-4 py-3 lg:hidden">
       <button
         type="button"
         onClick={() => setOpenMobile(true)}

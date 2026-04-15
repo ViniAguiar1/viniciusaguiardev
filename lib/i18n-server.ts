@@ -33,8 +33,6 @@ export type Dictionary = {
   projects: {
     title: string
     subtitle: string
-    featured: string
-    all: string
   }
   ui: {
     search: string
@@ -70,9 +68,7 @@ const pt: Dictionary = {
   projects: {
     title: "Projetos",
     subtitle:
-      "Projetos reais que construí — SaaS, plataformas, integrações e automações em produção.",
-    featured: "Projetos em destaque",
-    all: "Outros projetos",
+      "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
   },
 
   ui: {
@@ -109,9 +105,7 @@ const en: Dictionary = {
   projects: {
     title: "Projects",
     subtitle:
-      "Real-world projects I've built — SaaS platforms, integrations, and production automations.",
-    featured: "Featured Projects",
-    all: "Other Projects",
+      "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
   },
 
   ui: {

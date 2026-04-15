@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# viniciusaguiar.dev
+
+Personal portfolio and blog built with Next.js, showcasing my work as a Software Engineer.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS 4, Shadcn UI
+- **Themes:** next-themes (light/dark/system)
+- **i18n:** PT-BR / EN (cookie-based)
+- **Deploy:** Vercel
+- **CI:** GitHub Actions (lint, typecheck, build)
+
+## Pages
+
+- `/` — Home with blog posts
+- `/sobre` — About, experience, tech stack
+- `/projetos` — Projects portfolio with modal details
+- `/posts/[slug]` — Blog post (JSON-based, bilingual)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start dev server (Turbopack) |
+| `pnpm build` | Production build |
+| `pnpm start` | Start production server |
+| `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Run TypeScript check |
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/              # Pages and layouts (App Router)
+components/       # React components
+  ui/             # Shadcn UI base components
+data/             # Blog posts (JSON) and projects data
+lib/              # Utilities, i18n, post loading
+public/           # Static assets, logos, PDFs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## CI/CD
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **CI:** GitHub Actions runs lint + typecheck + build on every PR to `main`
+- **Deploy:** Vercel (automatic preview on PRs, production on merge to `main`)
 
-## Deploy on Vercel
+## Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Vinicius Aguiar** — Software Engineer
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [LinkedIn](https://www.linkedin.com/in/viniciusaguiar-araujo/)
+- [GitHub](https://github.com/ViniAguiar1)

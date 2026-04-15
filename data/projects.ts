@@ -1,326 +1,223 @@
-import { Locale } from "@/lib/i18n-server"
-
-export type ProjectMetric = {
-  label: { pt: string; en: string }
-  value: string
-}
-
-export type ProjectChallenge = {
-  problem: { pt: string; en: string }
-  solution: { pt: string; en: string }
-}
+export type ProjectCategory =
+  | "SaaS"
+  | "Marketplace"
+  | "ERP"
+  | "Platform"
+  | "E-commerce"
+  | "Agency"
+  | "App"
+  | "EdTech"
+  | "Travel"
+  | "Health"
+  | "Logistics"
+  | "HealthTech"
 
 export type Project = {
   slug: string
   name: string
+  logo: string
   tagline: { pt: string; en: string }
   description: { pt: string; en: string }
-  context: { pt: string; en: string }
-  role: { pt: string; en: string }
-  status: "active" | "completed"
-  featured: boolean
-  technologies: string[]
-  features: { pt: string[]; en: string[] }
-  challenges: ProjectChallenge[]
-  metrics: ProjectMetric[]
-  links?: { label: string; url: string }[]
-}
-
-export function getLocalizedField<T extends Record<string, unknown>>(
-  field: T,
-  locale: Locale
-): string {
-  return (field[locale] ?? field["pt"]) as string
+  category: ProjectCategory
+  url?: string
 }
 
 export const projects: Project[] = [
   {
-    slug: "vox-pet-digital",
-    name: "Vox Pet Digital",
+    slug: "fastseller",
+    name: "FastSeller",
+    logo: "/logos/fastseller.svg",
     tagline: {
-      pt: "SaaS completo para pet shops e clínicas veterinárias",
-      en: "Full SaaS platform for pet shops and veterinary clinics",
+      pt: "Plataforma de automação para vendedores em marketplaces",
+      en: "Automation platform for marketplace sellers",
     },
     description: {
-      pt: "Plataforma SaaS multi-módulo para gestão de pet shops e clínicas veterinárias, com automações via WhatsApp e IA integrada para atendimento, recomendações e finalização de vendas.",
-      en: "Multi-module SaaS platform for managing pet shops and veterinary clinics, with WhatsApp automations and integrated AI for customer service, recommendations, and sales completion.",
+      pt: "Plataforma que centraliza a operação de vendedores em múltiplos marketplaces, automatizando gestão de pedidos, estoque e precificação para escalar vendas online.",
+      en: "Platform that centralizes seller operations across multiple marketplaces, automating order management, inventory, and pricing to scale online sales.",
     },
-    context: {
-      pt: "O mercado pet no Brasil movimenta bilhões por ano, mas a maioria dos estabelecimentos ainda opera com processos manuais. A Vox Pet Digital foi criada para digitalizar e automatizar toda a operação — do agendamento ao financeiro.",
-      en: "Brazil's pet market generates billions yearly, but most businesses still rely on manual processes. Vox Pet Digital was created to digitize and automate the entire operation — from scheduling to finance.",
-    },
-    role: {
-      pt: "Software Engineer · Part-time",
-      en: "Software Engineer · Part-time",
-    },
-    status: "active",
-    featured: true,
-    technologies: [
-      "React",
-      "Next.js",
-      "Node.js",
-      "TypeScript",
-      "PostgreSQL",
-      "WhatsApp API",
-      "OpenAI",
-      "Mercado Pago",
-      "Stripe",
-    ],
-    features: {
-      pt: [
-        "Módulo de agenda com gestão de horários e profissionais",
-        "Módulo financeiro com comissões e controle de vendas",
-        "Automação de atendimento via WhatsApp com fluxos inteligentes",
-        "IA para recomendação de produtos e finalização de vendas automatizada",
-        "Integração com Mercado Pago e Stripe para pagamentos",
-        "Registro automático de dados dos fluxos de IA no sistema",
-      ],
-      en: [
-        "Scheduling module with professional and time-slot management",
-        "Financial module with commissions and sales tracking",
-        "WhatsApp automation with intelligent conversation flows",
-        "AI-powered product recommendations and automated sales completion",
-        "Payment integration with Mercado Pago and Stripe",
-        "Automatic data registration from AI flows into the SaaS platform",
-      ],
-    },
-    challenges: [
-      {
-        problem: {
-          pt: "Integrar IA no fluxo de WhatsApp de forma confiável e que se conecte ao sistema de vendas",
-          en: "Reliably integrating AI into WhatsApp flows while connecting to the sales system",
-        },
-        solution: {
-          pt: "Arquitetura de eventos com Node.js processando mensagens do WhatsApp, chamando OpenAI para respostas contextuais e registrando dados automaticamente no PostgreSQL",
-          en: "Event-driven architecture with Node.js processing WhatsApp messages, calling OpenAI for contextual responses, and automatically registering data in PostgreSQL",
-        },
-      },
-      {
-        problem: {
-          pt: "Garantir consistência financeira entre múltiplos módulos (vendas, comissões, pagamentos)",
-          en: "Ensuring financial consistency across multiple modules (sales, commissions, payments)",
-        },
-        solution: {
-          pt: "Design de transações atômicas no PostgreSQL com validações em cada camada, garantindo que comissões e pagamentos estejam sempre sincronizados",
-          en: "Atomic transaction design in PostgreSQL with validations at each layer, ensuring commissions and payments are always synchronized",
-        },
-      },
-    ],
-    metrics: [
-      { label: { pt: "Módulos", en: "Modules" }, value: "6+" },
-      { label: { pt: "Integrações", en: "Integrations" }, value: "4" },
-      { label: { pt: "Automações IA", en: "AI Automations" }, value: "3+" },
-      { label: { pt: "Status", en: "Status" }, value: "Production" },
-    ],
-  },
-  {
-    slug: "movepro",
-    name: "MovePro",
-    tagline: {
-      pt: "Plataforma web + mobile para saúde e fitness usada por milhares",
-      en: "Web + mobile health & fitness platform used by thousands",
-    },
-    description: {
-      pt: "Plataforma completa (web + mobile) de saúde e fitness, com interfaces críticas usadas por milhares de usuários, integrações com serviços externos e monitoramento em produção.",
-      en: "Full-stack health & fitness platform (web + mobile) with critical interfaces used by thousands of users, external service integrations, and production monitoring.",
-    },
-    context: {
-      pt: "A MovePro precisava de uma plataforma robusta para conectar profissionais de saúde com usuários, com rastreamento nutricional, pagamentos e métricas — tudo em tempo real e com alta disponibilidade.",
-      en: "MovePro needed a robust platform connecting health professionals with users, featuring nutritional tracking, payments, and metrics — all in real-time with high availability.",
-    },
-    role: {
-      pt: "Software Engineer · Tempo integral",
-      en: "Software Engineer · Full-time",
-    },
-    status: "completed",
-    featured: true,
-    technologies: [
-      "React",
-      "Next.js",
-      "React Native",
-      "Expo",
-      "Stripe",
-      "Firebase",
-      "FatSecret API",
-      "Google APIs",
-      "Crashlytics",
-    ],
-    features: {
-      pt: [
-        "Interfaces web com React e Next.js focadas em performance",
-        "App mobile com React Native e Expo",
-        "Integração com Stripe para assinaturas e pagamentos",
-        "Rastreamento nutricional via FatSecret API",
-        "Autenticação e serviços com Firebase e Google",
-        "Monitoramento com Crashlytics e métricas de produto",
-      ],
-      en: [
-        "Web interfaces with React and Next.js focused on performance",
-        "Mobile app with React Native and Expo",
-        "Stripe integration for subscriptions and payments",
-        "Nutritional tracking via FatSecret API",
-        "Authentication and services with Firebase and Google",
-        "Monitoring with Crashlytics and product metrics",
-      ],
-    },
-    challenges: [
-      {
-        problem: {
-          pt: "Reduzir o tempo de carregamento e latência com múltiplas APIs externas",
-          en: "Reducing load time and latency with multiple external APIs",
-        },
-        solution: {
-          pt: "Otimização de queries, caching estratégico e consumo paralelo de APIs, reduzindo significativamente o tempo de resposta",
-          en: "Query optimization, strategic caching, and parallel API consumption, significantly reducing response times",
-        },
-      },
-      {
-        problem: {
-          pt: "Manter UX consistente entre web e mobile com bases de código diferentes",
-          en: "Maintaining consistent UX across web and mobile with different codebases",
-        },
-        solution: {
-          pt: "Design system compartilhado com componentes e tokens de design alinhados entre React (web) e React Native (mobile)",
-          en: "Shared design system with aligned components and design tokens between React (web) and React Native (mobile)",
-        },
-      },
-    ],
-    metrics: [
-      { label: { pt: "Usuários", en: "Users" }, value: "1,000+" },
-      { label: { pt: "Plataformas", en: "Platforms" }, value: "Web + Mobile" },
-      { label: { pt: "Integrações", en: "Integrations" }, value: "5+" },
-      { label: { pt: "Período", en: "Duration" }, value: "7 months" },
-    ],
+    category: "E-commerce",
   },
   {
     slug: "x-drop",
     name: "X-Drop",
+    logo: "/logos/x-drop.svg",
     tagline: {
-      pt: "Automação e-commerce com integração a marketplaces",
-      en: "E-commerce automation with marketplace integrations",
+      pt: "Automação de e-commerce e integração com marketplaces",
+      en: "E-commerce automation and marketplace integrations",
     },
     description: {
       pt: "Solução de automação para operações de e-commerce, conectando vendedores a múltiplos marketplaces com foco em eficiência operacional e redução de trabalho manual.",
       en: "Automation solution for e-commerce operations, connecting sellers to multiple marketplaces with focus on operational efficiency and reducing manual work.",
     },
-    context: {
-      pt: "Vendedores online que operam em múltiplos marketplaces enfrentam complexidade operacional enorme. O X-Drop automatiza processos como sincronização de estoque, precificação e gestão de pedidos.",
-      en: "Online sellers operating across multiple marketplaces face enormous operational complexity. X-Drop automates processes like inventory sync, pricing, and order management.",
-    },
-    role: {
-      pt: "Software Engineer",
-      en: "Software Engineer",
-    },
-    status: "completed",
-    featured: false,
-    technologies: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Node.js",
-      "REST APIs",
-      "Marketplace APIs",
-    ],
-    features: {
-      pt: [
-        "Sincronização de estoque entre múltiplos marketplaces",
-        "Gestão centralizada de pedidos e precificação",
-        "Dashboard de métricas operacionais",
-        "Integração com APIs de marketplaces brasileiros",
-      ],
-      en: [
-        "Inventory synchronization across multiple marketplaces",
-        "Centralized order and pricing management",
-        "Operational metrics dashboard",
-        "Integration with Brazilian marketplace APIs",
-      ],
-    },
-    challenges: [
-      {
-        problem: {
-          pt: "Lidar com APIs inconsistentes de diferentes marketplaces",
-          en: "Handling inconsistent APIs from different marketplaces",
-        },
-        solution: {
-          pt: "Camada de abstração unificada que normaliza dados de diferentes marketplaces em um modelo consistente",
-          en: "Unified abstraction layer normalizing data from different marketplaces into a consistent model",
-        },
-      },
-    ],
-    metrics: [
-      { label: { pt: "Marketplaces", en: "Marketplaces" }, value: "3+" },
-      { label: { pt: "Automações", en: "Automations" }, value: "5+" },
-      { label: { pt: "Status", en: "Status" }, value: "Completed" },
-    ],
+    category: "E-commerce",
   },
   {
-    slug: "holy-solutions",
-    name: "Holy Solutions",
+    slug: "vox-pet-digital",
+    name: "Vox Pet Digital",
+    logo: "/logos/vox-pet-digital.svg",
     tagline: {
-      pt: "Aplicações web e mobile escaláveis com IA e pagamentos",
-      en: "Scalable web & mobile apps with AI and payments",
+      pt: "SaaS para pet shops e clínicas veterinárias",
+      en: "SaaS for pet shops and veterinary clinics",
     },
     description: {
-      pt: "Desenvolvimento de aplicações web e mobile para clientes da Holy Solutions, com foco em interfaces escaláveis, integrações com IA e sistemas de pagamento.",
-      en: "Development of web and mobile applications for Holy Solutions clients, focused on scalable interfaces, AI integrations, and payment systems.",
+      pt: "Plataforma SaaS multi-módulo para gestão de pet shops e clínicas veterinárias, com automações via WhatsApp, IA integrada para atendimento e integrações com Mercado Pago e Stripe.",
+      en: "Multi-module SaaS platform for managing pet shops and veterinary clinics, with WhatsApp automations, integrated AI for customer service, and Mercado Pago/Stripe integrations.",
     },
-    context: {
-      pt: "A Holy Solutions atende clientes que precisam de soluções digitais robustas. Minha atuação envolve desde a arquitetura frontend até integrações com serviços externos e deploy em cloud.",
-      en: "Holy Solutions serves clients needing robust digital solutions. My work spans from frontend architecture to external service integrations and cloud deployment.",
+    category: "SaaS",
+  },
+  {
+    slug: "ikropp",
+    name: "iKropp",
+    logo: "/logos/ikropp.svg",
+    tagline: {
+      pt: "Plataforma digital de saúde e bem-estar",
+      en: "Digital health and wellness platform",
     },
-    role: {
-      pt: "Mid-level Software Engineer · Tempo integral",
-      en: "Mid-level Software Engineer · Full-time",
+    description: {
+      pt: "Plataforma digital focada em saúde e bem-estar, conectando profissionais e usuários com ferramentas de acompanhamento, conteúdo e serviços personalizados.",
+      en: "Digital platform focused on health and wellness, connecting professionals and users with tracking tools, content, and personalized services.",
     },
-    status: "active",
-    featured: false,
-    technologies: [
-      "React",
-      "Next.js",
-      "React Native",
-      "TypeScript",
-      "AWS",
-      "Asaas",
-      "Design System",
-    ],
-    features: {
-      pt: [
-        "Desenvolvimento end-to-end de features com APIs externas e IA",
-        "Criação de componentes reutilizáveis e Design System",
-        "Integração com sistemas de pagamento (Asaas)",
-        "Deploy e operação em ambientes AWS",
-      ],
-      en: [
-        "End-to-end feature development with external APIs and AI",
-        "Reusable component creation and Design System standardization",
-        "Payment system integration (Asaas)",
-        "Deployment and operation in AWS environments",
-      ],
+    category: "Health",
+  },
+  {
+    slug: "easytogo",
+    name: "EasyToGo",
+    logo: "/logos/easytogo.svg",
+    tagline: {
+      pt: "Soluções web e mobile para logística e mobilidade",
+      en: "Web and mobile solutions for logistics and mobility",
     },
-    challenges: [
-      {
-        problem: {
-          pt: "Padronizar interfaces entre múltiplos projetos de clientes diferentes",
-          en: "Standardizing interfaces across multiple client projects",
-        },
-        solution: {
-          pt: "Design System interno com componentes reutilizáveis e tokens de design consistentes entre projetos",
-          en: "Internal Design System with reusable components and consistent design tokens across projects",
-        },
-      },
-    ],
-    metrics: [
-      { label: { pt: "Projetos", en: "Projects" }, value: "Multiple" },
-      { label: { pt: "Stack", en: "Stack" }, value: "Web + Mobile" },
-      { label: { pt: "Cloud", en: "Cloud" }, value: "AWS" },
-    ],
+    description: {
+      pt: "Desenvolvimento de interfaces web e mobile com React, Next.js, React Native e Flutter em ambiente ágil, integrando APIs conectadas a fluxos reais de operação logística.",
+      en: "Web and mobile interface development with React, Next.js, React Native, and Flutter in an agile environment, integrating APIs connected to real logistics operation flows.",
+    },
+    category: "Logistics",
+  },
+  {
+    slug: "joviplanet",
+    name: "JoviPlanet",
+    logo: "/logos/joviplanet.svg",
+    tagline: {
+      pt: "Plataforma educacional interativa para crianças",
+      en: "Interactive educational platform for kids",
+    },
+    description: {
+      pt: "Plataforma educacional voltada ao público infantil, com experiências interativas e gamificadas para engajar crianças no aprendizado digital.",
+      en: "Educational platform for children, featuring interactive and gamified experiences to engage kids in digital learning.",
+    },
+    category: "EdTech",
+  },
+  {
+    slug: "direcao-sobre-rodas",
+    name: "Direção Sobre Rodas",
+    logo: "/logos/direcao-sobre-rodas.svg",
+    tagline: {
+      pt: "Sistema de gestão para autoescolas",
+      en: "Management system for driving schools",
+    },
+    description: {
+      pt: "Sistema completo de gestão para autoescolas, incluindo controle de alunos, agendamento de aulas, financeiro e acompanhamento de processos do Detran.",
+      en: "Complete management system for driving schools, including student management, class scheduling, finances, and DMV process tracking.",
+    },
+    category: "Platform",
+  },
+  {
+    slug: "rainha-das-sete",
+    name: "Rainha das Sete",
+    logo: "/logos/rainha-das-sete.svg",
+    tagline: {
+      pt: "Presença digital e e-commerce para marca de moda",
+      en: "Digital presence and e-commerce for fashion brand",
+    },
+    description: {
+      pt: "Desenvolvimento da presença digital e loja virtual para marca de moda, com foco em experiência de compra, catálogo de produtos e integração com meios de pagamento.",
+      en: "Digital presence and online store development for a fashion brand, focused on shopping experience, product catalog, and payment integration.",
+    },
+    category: "E-commerce",
+  },
+  {
+    slug: "erpwise",
+    name: "ErpWise",
+    logo: "/logos/erpwise.svg",
+    tagline: {
+      pt: "Sistema ERP para gestão empresarial",
+      en: "ERP system for business management",
+    },
+    description: {
+      pt: "Sistema ERP voltado à gestão empresarial, centralizando processos de vendas, estoque, financeiro e relatórios em uma interface unificada.",
+      en: "ERP system for business management, centralizing sales, inventory, finance, and reporting processes in a unified interface.",
+    },
+    category: "ERP",
+  },
+  {
+    slug: "vpny",
+    name: "Vou Para New York",
+    logo: "/logos/vpny.svg",
+    tagline: {
+      pt: "Plataforma de planejamento de viagens para Nova York",
+      en: "Travel planning platform for New York trips",
+    },
+    description: {
+      pt: "Plataforma de conteúdo e planejamento de viagens focada em Nova York, com roteiros, dicas e ferramentas para organizar a experiência do viajante.",
+      en: "Travel content and planning platform focused on New York, with itineraries, tips, and tools to organize the traveler's experience.",
+    },
+    category: "Travel",
+  },
+  {
+    slug: "movepro",
+    name: "MovePro",
+    logo: "/logos/movepro.svg",
+    tagline: {
+      pt: "Plataforma web + mobile de saúde e fitness",
+      en: "Web + mobile health and fitness platform",
+    },
+    description: {
+      pt: "Plataforma completa de saúde e fitness (web + mobile) com milhares de usuários, integrações com Stripe, FatSecret e Firebase, e monitoramento em produção com Crashlytics.",
+      en: "Full-stack health & fitness platform (web + mobile) with thousands of users, Stripe/FatSecret/Firebase integrations, and production monitoring with Crashlytics.",
+    },
+    category: "Health",
+  },
+  {
+    slug: "hashfy",
+    name: "Hashfy",
+    logo: "/logos/hashfy.svg",
+    tagline: {
+      pt: "Ferramenta de marketing e análise para redes sociais",
+      en: "Social media marketing and analytics tool",
+    },
+    description: {
+      pt: "Ferramenta SaaS de marketing digital focada em análise de hashtags, métricas de engajamento e insights para otimizar a presença em redes sociais.",
+      en: "Digital marketing SaaS tool focused on hashtag analysis, engagement metrics, and insights to optimize social media presence.",
+    },
+    category: "SaaS",
+  },
+  {
+    slug: "bionexo",
+    name: "Bionexo",
+    logo: "/logos/bionexo.svg",
+    tagline: {
+      pt: "Marketplace B2B para a cadeia de suprimentos da saúde",
+      en: "B2B marketplace for the healthcare supply chain",
+    },
+    description: {
+      pt: "Maior marketplace B2B de saúde da América Latina, conectando hospitais, clínicas e fornecedores em uma plataforma de compras, cotações e gestão de suprimentos.",
+      en: "Latin America's largest B2B healthcare marketplace, connecting hospitals, clinics, and suppliers on a platform for purchasing, quotes, and supply management.",
+    },
+    category: "HealthTech",
+    url: "https://bionexo.com/",
+  },
+  {
+    slug: "stacklabs",
+    name: "StackLabs",
+    logo: "/logos/stacklabs.svg",
+    tagline: {
+      pt: "Consultoria de desenvolvimento de software sob demanda",
+      en: "On-demand software development consultancy",
+    },
+    description: {
+      pt: "Consultoria de tecnologia focada em desenvolvimento de aplicações web e mobile para diferentes clientes, entregando interfaces escaláveis e performáticas com React, Next.js e React Native.",
+      en: "Technology consultancy focused on web and mobile application development for multiple clients, delivering scalable and performant interfaces with React, Next.js, and React Native.",
+    },
+    category: "Agency",
   },
 ]
-
-export function getFeaturedProjects(): Project[] {
-  return projects.filter((p) => p.featured)
-}
-
-export function getOtherProjects(): Project[] {
-  return projects.filter((p) => !p.featured)
-}

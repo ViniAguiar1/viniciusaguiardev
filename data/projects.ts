@@ -188,18 +188,19 @@ export const projects: Project[] = [
     url: "https://movepro-ruddy.vercel.app/",
   },
   {
-    slug: "hashfy",
-    name: "Hashfy",
-    logo: "/logos/hashfy.svg",
+    slug: "simq",
+    name: "SimQ",
+    logo: "/logos/simq.svg",
     tagline: {
-      pt: "Ferramenta de marketing e análise para redes sociais",
-      en: "Social media marketing and analytics tool",
+      pt: "Plataforma de simulados e questões para concursos e vestibulares",
+      en: "Mock exam and question platform for competitive exams",
     },
     description: {
-      pt: "Ferramenta SaaS de marketing digital focada em análise de hashtags, métricas de engajamento e insights para otimizar a presença em redes sociais.",
-      en: "Digital marketing SaaS tool focused on hashtag analysis, engagement metrics, and insights to optimize social media presence.",
+      pt: "Plataforma educacional focada em simulados, questões comentadas e trilhas de estudo para concursos públicos e vestibulares, com métricas de desempenho e acompanhamento de evolução.",
+      en: "Educational platform focused on mock exams, commented questions, and study tracks for public and college entrance exams, with performance metrics and progress tracking.",
     },
-    category: "SaaS",
+    category: "EdTech",
+    url: "https://simq.com.br/",
   },
   {
     slug: "klaus-drift-brasil",

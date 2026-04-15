@@ -18,8 +18,8 @@ export async function RightSidebar() {
   return (
     <Sidebar
       side="right"
-      // collapsible="none"
-      className="h-screen w-18 min-w-0 max-w-xs"
+      collapsible="none"
+      className="h-screen w-18 min-w-0 max-w-xs hidden md:flex"
     >
       <SidebarContent className="h-screen flex flex-col p-2">
 

@@ -40,7 +40,7 @@ export const projects: Project[] = [
   {
     slug: "x-drop",
     name: "X-Drop",
-    logo: "/logos/x-drop.svg",
+    logo: "/images/x-droplogo.png",
     tagline: {
       pt: "Automação de e-commerce e integração com marketplaces",
       en: "E-commerce automation and marketplace integrations",
@@ -50,11 +50,12 @@ export const projects: Project[] = [
       en: "Automation solution for e-commerce operations, connecting sellers to multiple marketplaces with focus on operational efficiency and reducing manual work.",
     },
     category: "E-commerce",
+    url: "https://xdrop.com.br/",
   },
   {
     slug: "vox-pet-digital",
     name: "Vox Pet Digital",
-    logo: "/logos/vox-pet-digital.svg",
+    logo: "/images/vox-pet-digital.png",
     tagline: {
       pt: "SaaS para pet shops e clínicas veterinárias",
       en: "SaaS for pet shops and veterinary clinics",
@@ -64,6 +65,7 @@ export const projects: Project[] = [
       en: "Multi-module SaaS platform for managing pet shops and veterinary clinics, with WhatsApp automations, integrated AI for customer service, and Mercado Pago/Stripe integrations.",
     },
     category: "SaaS",
+    url: "https://voxpetdigital.com.br/",
   },
   {
     slug: "ikropp",
@@ -78,6 +80,7 @@ export const projects: Project[] = [
       en: "Digital platform focused on health and wellness, connecting professionals and users with tracking tools, content, and personalized services.",
     },
     category: "Health",
+    url: "https://ikropp.com/",
   },
   {
     slug: "easytogo",
@@ -92,6 +95,7 @@ export const projects: Project[] = [
       en: "Web and mobile interface development with React, Next.js, React Native, and Flutter in an agile environment, integrating APIs connected to real logistics operation flows.",
     },
     category: "Logistics",
+    url: "https://www.easytogo.com.br/",
   },
   {
     slug: "joviplanet",
@@ -106,6 +110,7 @@ export const projects: Project[] = [
       en: "Educational platform for children, featuring interactive and gamified experiences to engage kids in digital learning.",
     },
     category: "EdTech",
+    url: "https://joviplanet.com/",
   },
   {
     slug: "direcao-sobre-rodas",
@@ -120,6 +125,7 @@ export const projects: Project[] = [
       en: "Complete management system for driving schools, including student management, class scheduling, finances, and DMV process tracking.",
     },
     category: "Platform",
+    url: "https://direcaosobrerodas.com.br/",
   },
   {
     slug: "rainha-das-sete",
@@ -134,6 +140,7 @@ export const projects: Project[] = [
       en: "Digital presence and online store development for a fashion brand, focused on shopping experience, product catalog, and payment integration.",
     },
     category: "E-commerce",
+    url: "https://rainhadassete.com.br/",
   },
   {
     slug: "erpwise",
@@ -148,6 +155,7 @@ export const projects: Project[] = [
       en: "ERP system for business management, centralizing sales, inventory, finance, and reporting processes in a unified interface.",
     },
     category: "ERP",
+    url: "https://www.erpwise.com.br/",
   },
   {
     slug: "vpny",
@@ -162,6 +170,7 @@ export const projects: Project[] = [
       en: "Travel content and planning platform focused on New York, with itineraries, tips, and tools to organize the traveler's experience.",
     },
     category: "Travel",
+    url: "https://www.vouparanewyork.com/",
   },
   {
     slug: "movepro",
@@ -176,6 +185,7 @@ export const projects: Project[] = [
       en: "Full-stack health & fitness platform (web + mobile) with thousands of users, Stripe/FatSecret/Firebase integrations, and production monitoring with Crashlytics.",
     },
     category: "Health",
+    url: "https://movepro-ruddy.vercel.app/",
   },
   {
     slug: "hashfy",
@@ -190,6 +200,21 @@ export const projects: Project[] = [
       en: "Digital marketing SaaS tool focused on hashtag analysis, engagement metrics, and insights to optimize social media presence.",
     },
     category: "SaaS",
+  },
+  {
+    slug: "klaus-drift-brasil",
+    name: "Klaus Drift Brasil",
+    logo: "/logos/klaus-drift-brasil.svg",
+    tagline: {
+      pt: "E-commerce automotivo especializado em drift e performance",
+      en: "Automotive e-commerce specialized in drift and performance",
+    },
+    description: {
+      pt: "Loja virtual focada no segmento automotivo de drift e performance, com catálogo de produtos, checkout e integração com meios de pagamento.",
+      en: "Online store focused on the automotive drift and performance segment, with product catalog, checkout, and payment integration.",
+    },
+    category: "E-commerce",
+    url: "https://klaus-driftbrasil.com.br/",
   },
   {
     slug: "bionexo",

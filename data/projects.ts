@@ -85,7 +85,7 @@ export const projects: Project[] = [
   {
     slug: "easytogo",
     name: "EasyToGo",
-    logo: "/logos/easytogo.svg",
+    logo: "/images/easytogo-logo.png",
     tagline: {
       pt: "Soluções web e mobile para logística e mobilidade",
       en: "Web and mobile solutions for logistics and mobility",
@@ -100,7 +100,7 @@ export const projects: Project[] = [
   {
     slug: "joviplanet",
     name: "JoviPlanet",
-    logo: "/logos/joviplanet.svg",
+    logo: "/images/jovi-planet-logo.png",
     tagline: {
       pt: "Plataforma educacional interativa para crianças",
       en: "Interactive educational platform for kids",
@@ -115,7 +115,7 @@ export const projects: Project[] = [
   {
     slug: "direcao-sobre-rodas",
     name: "Direção Sobre Rodas",
-    logo: "/logos/direcao-sobre-rodas.svg",
+    logo: "/images/direcao-sobre-rodas.png",
     tagline: {
       pt: "Sistema de gestão para autoescolas",
       en: "Management system for driving schools",
@@ -130,7 +130,7 @@ export const projects: Project[] = [
   {
     slug: "rainha-das-sete",
     name: "Rainha das Sete",
-    logo: "/logos/rainha-das-sete.svg",
+    logo: "/images/rainha-das-sete-logo.webp",
     tagline: {
       pt: "Presença digital e e-commerce para marca de moda",
       en: "Digital presence and e-commerce for fashion brand",
@@ -160,7 +160,7 @@ export const projects: Project[] = [
   {
     slug: "vpny",
     name: "Vou Para New York",
-    logo: "/logos/vpny.svg",
+    logo: "/images/vpny-logo.png",
     tagline: {
       pt: "Plataforma de planejamento de viagens para Nova York",
       en: "Travel planning platform for New York trips",
@@ -175,7 +175,7 @@ export const projects: Project[] = [
   {
     slug: "movepro",
     name: "MovePro",
-    logo: "/logos/movepro.svg",
+    logo: "/images/movepro-logo.png",
     tagline: {
       pt: "Plataforma web + mobile de saúde e fitness",
       en: "Web + mobile health and fitness platform",
@@ -190,7 +190,7 @@ export const projects: Project[] = [
   {
     slug: "simq",
     name: "SimQ",
-    logo: "/logos/simq.svg",
+    logo: "/images/simq-logo.jpeg",
     tagline: {
       pt: "Plataforma de simulados e questões para concursos e vestibulares",
       en: "Mock exam and question platform for competitive exams",
@@ -220,7 +220,7 @@ export const projects: Project[] = [
   {
     slug: "bionexo",
     name: "Bionexo",
-    logo: "/logos/bionexo.svg",
+    logo: "/images/bionexo-logo.png",
     tagline: {
       pt: "Marketplace B2B para a cadeia de suprimentos da saúde",
       en: "B2B marketplace for the healthcare supply chain",
@@ -235,7 +235,7 @@ export const projects: Project[] = [
   {
     slug: "stacklabs",
     name: "StackLabs",
-    logo: "/logos/stacklabs.svg",
+    logo: "/images/stack-labs-logo.jpeg",
     tagline: {
       pt: "Consultoria de desenvolvimento de software sob demanda",
       en: "On-demand software development consultancy",

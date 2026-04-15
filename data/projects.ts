@@ -88,12 +88,12 @@ export const projects: Project[] = [
     name: "EasyToGo",
     logo: "/images/easytogo-logo.png",
     tagline: {
-      pt: "Soluções tecnológicas web e mobile",
-      en: "Web and mobile technology solutions",
+      pt: "Software house especializada em desenvolvimento web e mobile",
+      en: "Software house specialized in web and mobile development",
     },
     description: {
-      pt: "Empresa de soluções tecnológicas focada no desenvolvimento de aplicações web e mobile com React, Next.js, React Native e Flutter em ambiente ágil e orientado a produto.",
-      en: "Technology solutions company focused on web and mobile application development with React, Next.js, React Native, and Flutter in an agile, product-oriented environment.",
+      pt: "Agência de software (software house) focada no desenvolvimento de aplicações web e mobile com React, Next.js, React Native e Flutter, atendendo clientes de diversos segmentos em ambiente ágil.",
+      en: "Software agency (software house) focused on web and mobile application development with React, Next.js, React Native, and Flutter, serving clients across multiple industries in an agile environment.",
     },
     category: "Agency",
     url: "https://www.easytogo.com.br/",

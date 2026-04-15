@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
 import { Languages } from "lucide-react"
 import {
@@ -10,20 +10,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-function getInitialLang(): "pt" | "en" {
-  if (typeof document === "undefined") return "pt"
+function getCookieLang(): "pt" | "en" {
   const m = document.cookie.match(/(?:^|; )lang=([^;]+)/)
   const val = m ? decodeURIComponent(m[1]) : "pt"
   return val === "en" ? "en" : "pt"
 }
 
+function subscribe(cb: () => void) {
+  window.addEventListener("languagechange", cb)
+  return () => window.removeEventListener("languagechange", cb)
+}
+
+function getSnapshot(): "pt" | "en" {
+  return getCookieLang()
+}
+
+function getServerSnapshot(): "pt" | "en" {
+  return "pt"
+}
+
 export function LanguageToggle() {
   const router = useRouter()
-  const [lang, setLang] = useState<"pt" | "en">("pt")
-
-  useEffect(() => {
-    setLang(getInitialLang())
-  }, [])
+  const lang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
   const label = useMemo(() => (lang === "en" ? "EN" : "PT"), [lang])
 
@@ -31,7 +39,6 @@ export function LanguageToggle() {
     try {
       document.cookie = `lang=${next}; path=/; max-age=${60 * 60 * 24 * 365 * 2}`
     } catch {}
-    setLang(next)
     router.refresh()
   }
 

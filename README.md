@@ -45,6 +45,7 @@ app/              # Pages and layouts (App Router)
 components/       # React components
   ui/             # Shadcn UI base components
 data/             # Blog posts (JSON) and projects data
+hooks/            # Custom React hooks
 lib/              # Utilities, i18n, post loading
 public/           # Static assets, logos, PDFs
 ```
@@ -53,6 +54,10 @@ public/           # Static assets, logos, PDFs
 
 - **CI:** GitHub Actions runs lint + typecheck + build on every PR to `main`
 - **Deploy:** Vercel (automatic preview on PRs, production on merge to `main`)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 

@@ -5,6 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { RightSidebar } from "@/components/right-sidebar";
 import { MobileHeader } from "@/components/mobile-header";
 import { ThemeProvider } from "@/components/theme-provider"
+import { JsonLd } from "@/components/json-ld"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -54,6 +55,9 @@ export const metadata: Metadata = {
       "Software Engineer especializado em React, Next.js e TypeScript.",
     images: ["/og-image.png"],
   },
+  alternates: {
+    canonical: siteUrl,
+  },
 };
 
 export default function RootLayout({
@@ -64,6 +68,19 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Vinicius Aguiar",
+            url: siteUrl,
+            logo: `${siteUrl}/og-image.png`,
+            sameAs: [
+              "https://github.com/ViniAguiar1",
+              "https://www.linkedin.com/in/viniciusaguiar-araujo/",
+            ],
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -4,7 +4,7 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: "Uses",
+    title: t(locale, "Ferramentas", "Uses", "Herramientas"),
     description: t(
       locale,
       "Ferramentas, apps e setup que uso no dia a dia como engenheiro de software.",
@@ -33,36 +33,54 @@ const categories: UsesCategory[] = [
         name: "VS Code",
         url: "https://code.visualstudio.com/",
         desc: {
-          pt: "Editor principal. Extensões essenciais: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
-          en: "Main editor. Essential extensions: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
-          es: "Editor principal. Extensiones esenciales: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
+          pt: "Editor principal. Extensões: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
+          en: "Main editor. Extensions: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
+          es: "Editor principal. Extensiones: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
+        },
+      },
+      {
+        name: "Cursor",
+        url: "https://cursor.sh/",
+        desc: {
+          pt: "Editor com IA integrada. Uso como segundo editor para tarefas que exigem contexto de codebase.",
+          en: "AI-powered editor. I use it as a secondary editor for tasks that require codebase context.",
+          es: "Editor con IA integrada. Lo uso como segundo editor para tareas que requieren contexto de codebase.",
+        },
+      },
+      {
+        name: "GitHub Theme",
+        url: "https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme",
+        desc: {
+          pt: "Tema principal na IDE. Clean, bom contraste e familiar.",
+          en: "Main IDE theme. Clean, good contrast and familiar.",
+          es: "Tema principal en la IDE. Clean, buen contraste y familiar.",
         },
       },
       {
         name: "Claude Code",
         url: "https://claude.ai/code",
         desc: {
-          pt: "Assistente de IA para engenharia — uso para implementação, review e exploração de codebase.",
-          en: "AI assistant for engineering — I use it for implementation, review and codebase exploration.",
-          es: "Asistente de IA para ingeniería — lo uso para implementación, review y exploración de codebase.",
+          pt: "Assistente de IA para engenharia — implementação, review e exploração de codebase.",
+          en: "AI assistant for engineering — implementation, review and codebase exploration.",
+          es: "Asistente de IA para ingeniería — implementación, review y exploración de codebase.",
         },
       },
       {
-        name: "GitHub Copilot",
-        url: "https://github.com/features/copilot",
+        name: "OpenAI Codex",
+        url: "https://openai.com/index/codex/",
         desc: {
-          pt: "Autocomplete com IA integrado ao VS Code para acelerar escrita de código.",
-          en: "AI-powered autocomplete integrated into VS Code to speed up code writing.",
-          es: "Autocomplete con IA integrado en VS Code para acelerar la escritura de código.",
+          pt: "Agente de código da OpenAI. Uso para tarefas assíncronas e geração de código.",
+          en: "OpenAI's coding agent. I use it for async tasks and code generation.",
+          es: "Agente de código de OpenAI. Lo uso para tareas asíncronas y generación de código.",
         },
       },
       {
-        name: "Geist (fonte)",
-        url: "https://vercel.com/font",
+        name: "JetBrains Mono",
+        url: "https://www.jetbrains.com/lp/mono/",
         desc: {
-          pt: "Fonte sans-serif da Vercel. Uso tanto no editor quanto neste site.",
-          en: "Sans-serif font by Vercel. I use it both in the editor and on this site.",
-          es: "Fuente sans-serif de Vercel. La uso tanto en el editor como en este sitio.",
+          pt: "Fonte monospace no editor e terminal. Ligatures que facilitam leitura de código.",
+          en: "Monospace font in editor and terminal. Ligatures that make code easier to read.",
+          es: "Fuente monospace en editor y terminal. Ligatures que facilitan la lectura de código.",
         },
       },
     ],
@@ -71,21 +89,39 @@ const categories: UsesCategory[] = [
     title: { pt: "Terminal", en: "Terminal", es: "Terminal" },
     items: [
       {
+        name: "Warp",
+        url: "https://www.warp.dev/",
+        desc: {
+          pt: "Terminal principal. Rápido, com autocomplete inteligente e blocos de comando.",
+          en: "Main terminal. Fast, with smart autocomplete and command blocks.",
+          es: "Terminal principal. Rápido, con autocomplete inteligente y bloques de comando.",
+        },
+      },
+      {
         name: "iTerm2",
         url: "https://iterm2.com/",
         desc: {
-          pt: "Terminal principal no macOS. Split panes, perfis por projeto e integração com zsh.",
-          en: "Main terminal on macOS. Split panes, per-project profiles and zsh integration.",
-          es: "Terminal principal en macOS. Split panes, perfiles por proyecto e integración con zsh.",
+          pt: "Terminal secundário. Split panes e perfis por projeto.",
+          en: "Secondary terminal. Split panes and per-project profiles.",
+          es: "Terminal secundario. Split panes y perfiles por proyecto.",
+        },
+      },
+      {
+        name: "Fish Shell",
+        url: "https://fishshell.com/",
+        desc: {
+          pt: "Shell com autosugestões e syntax highlighting out of the box. Sem configuração.",
+          en: "Shell with autosuggestions and syntax highlighting out of the box. Zero config.",
+          es: "Shell con autosugerencias y syntax highlighting listo para usar. Sin configuración.",
         },
       },
       {
         name: "Zsh + Oh My Zsh",
         url: "https://ohmyz.sh/",
         desc: {
-          pt: "Shell com plugins e aliases que aceleram o workflow de git e navegação.",
-          en: "Shell with plugins and aliases that speed up git workflow and navigation.",
-          es: "Shell con plugins y aliases que aceleran el workflow de git y navegación.",
+          pt: "Shell alternativo com plugins e aliases para git e navegação.",
+          en: "Alternative shell with plugins and aliases for git and navigation.",
+          es: "Shell alternativo con plugins y aliases para git y navegación.",
         },
       },
       {
@@ -124,36 +160,36 @@ const categories: UsesCategory[] = [
         name: "TypeScript",
         url: "https://www.typescriptlang.org/",
         desc: {
-          pt: "Uso em 100% dos projetos. Tipagem forte evita bugs em produção.",
-          en: "Used in 100% of projects. Strong typing prevents production bugs.",
-          es: "Uso en 100% de los proyectos. Tipado fuerte evita bugs en producción.",
+          pt: "Uso em 100% dos projetos. Tipagem forte que evita bugs em produção.",
+          en: "Used in 100% of projects. Strong typing that prevents production bugs.",
+          es: "Uso en 100% de los proyectos. Tipado fuerte que evita bugs en producción.",
         },
       },
       {
         name: "Tailwind CSS",
         url: "https://tailwindcss.com/",
         desc: {
-          pt: "Utility-first CSS. Produtividade alta e consistência visual sem escrever CSS custom.",
+          pt: "Utility-first CSS. Produtividade alta e consistência visual sem CSS custom.",
           en: "Utility-first CSS. High productivity and visual consistency without custom CSS.",
-          es: "Utility-first CSS. Alta productividad y consistencia visual sin escribir CSS custom.",
+          es: "Utility-first CSS. Alta productividad y consistencia visual sin CSS custom.",
         },
       },
       {
         name: "Shadcn UI",
         url: "https://ui.shadcn.com/",
         desc: {
-          pt: "Componentes baseados em Radix UI com controle total do código. Base do design system.",
-          en: "Radix UI-based components with full code ownership. Design system foundation.",
-          es: "Componentes basados en Radix UI con control total del código. Base del design system.",
+          pt: "Componentes Radix UI com controle total do código. Base do design system.",
+          en: "Radix UI components with full code ownership. Design system foundation.",
+          es: "Componentes Radix UI con control total del código. Base del design system.",
         },
       },
       {
         name: "Node.js",
         url: "https://nodejs.org/",
         desc: {
-          pt: "Runtime para backend e APIs. Uso com Express, Fastify ou API routes do Next.js.",
-          en: "Backend and API runtime. Used with Express, Fastify or Next.js API routes.",
-          es: "Runtime para backend y APIs. Uso con Express, Fastify o API routes de Next.js.",
+          pt: "Runtime para backend e APIs. Express, Fastify ou API routes do Next.js.",
+          en: "Backend and API runtime. Express, Fastify or Next.js API routes.",
+          es: "Runtime para backend y APIs. Express, Fastify o API routes de Next.js.",
         },
       },
       {
@@ -165,27 +201,54 @@ const categories: UsesCategory[] = [
           es: "Base de datos principal. Multi-tenant con RLS, pgVector para IA, transacciones atómicas.",
         },
       },
+      {
+        name: "MongoDB",
+        url: "https://www.mongodb.com/",
+        desc: {
+          pt: "Banco NoSQL para projetos com dados flexíveis e alta velocidade de leitura.",
+          en: "NoSQL database for projects with flexible data and high read speed.",
+          es: "Base de datos NoSQL para proyectos con datos flexibles y alta velocidad de lectura.",
+        },
+      },
+      {
+        name: "Firebase",
+        url: "https://firebase.google.com/",
+        desc: {
+          pt: "Auth, Firestore, Cloud Functions e push notifications em projetos mobile.",
+          en: "Auth, Firestore, Cloud Functions and push notifications in mobile projects.",
+          es: "Auth, Firestore, Cloud Functions y push notifications en proyectos mobile.",
+        },
+      },
     ],
   },
   {
     title: { pt: "Apps", en: "Apps", es: "Apps" },
     items: [
       {
-        name: "Arc Browser",
-        url: "https://arc.net/",
+        name: "Google Chrome",
+        url: "https://www.google.com/chrome/",
         desc: {
-          pt: "Browser principal. Spaces para separar contextos (trabalho, pessoal, projetos).",
-          en: "Main browser. Spaces to separate contexts (work, personal, projects).",
-          es: "Navegador principal. Spaces para separar contextos (trabajo, personal, proyectos).",
+          pt: "Browser principal. DevTools, perfis separados e extensões para dev.",
+          en: "Main browser. DevTools, separate profiles and dev extensions.",
+          es: "Navegador principal. DevTools, perfiles separados y extensiones para dev.",
+        },
+      },
+      {
+        name: "ChatGPT",
+        url: "https://chat.openai.com/",
+        desc: {
+          pt: "Uso para pesquisa, brainstorm e geração de conteúdo fora do código.",
+          en: "Used for research, brainstorming and content generation outside of code.",
+          es: "Lo uso para investigación, brainstorm y generación de contenido fuera del código.",
         },
       },
       {
         name: "Figma",
         url: "https://www.figma.com/",
         desc: {
-          pt: "Design e prototipação. Uso para consultar designs antes de implementar.",
-          en: "Design and prototyping. I use it to review designs before implementing.",
-          es: "Diseño y prototipado. Lo uso para consultar diseños antes de implementar.",
+          pt: "Design e prototipação. Consulto designs antes de implementar.",
+          en: "Design and prototyping. I review designs before implementing.",
+          es: "Diseño y prototipado. Consulto diseños antes de implementar.",
         },
       },
       {
@@ -198,20 +261,20 @@ const categories: UsesCategory[] = [
         },
       },
       {
-        name: "Slack / Discord",
-        desc: {
-          pt: "Comunicação com times e comunidades de dev.",
-          en: "Communication with teams and dev communities.",
-          es: "Comunicación con equipos y comunidades de dev.",
-        },
-      },
-      {
         name: "Postman",
         url: "https://www.postman.com/",
         desc: {
           pt: "Teste de APIs REST. Collections organizadas por projeto.",
           en: "REST API testing. Collections organized by project.",
           es: "Testing de APIs REST. Collections organizadas por proyecto.",
+        },
+      },
+      {
+        name: "Slack / Discord",
+        desc: {
+          pt: "Comunicação com times e comunidades de dev.",
+          en: "Communication with teams and dev communities.",
+          es: "Comunicación con equipos y comunidades de dev.",
         },
       },
     ],
@@ -223,9 +286,18 @@ const categories: UsesCategory[] = [
         name: "Vercel",
         url: "https://vercel.com/",
         desc: {
-          pt: "Deploy de todos os projetos Next.js. Preview automático em PRs, zero config.",
-          en: "Deploy for all Next.js projects. Automatic preview on PRs, zero config.",
-          es: "Deploy de todos los proyectos Next.js. Preview automático en PRs, zero config.",
+          pt: "Deploy de projetos Next.js. Preview automático em PRs, zero config.",
+          en: "Next.js project deploys. Automatic preview on PRs, zero config.",
+          es: "Deploy de proyectos Next.js. Preview automático en PRs, zero config.",
+        },
+      },
+      {
+        name: "Render",
+        url: "https://render.com/",
+        desc: {
+          pt: "Deploy de APIs, workers e serviços backend. Alternativa simples ao AWS para projetos menores.",
+          en: "API, worker and backend service deploys. Simple AWS alternative for smaller projects.",
+          es: "Deploy de APIs, workers y servicios backend. Alternativa simple a AWS para proyectos menores.",
         },
       },
       {
@@ -247,6 +319,24 @@ const categories: UsesCategory[] = [
         },
       },
       {
+        name: "Cloudflare",
+        url: "https://www.cloudflare.com/",
+        desc: {
+          pt: "DNS, CDN e proteção. Uso para domínios e performance de entrega.",
+          en: "DNS, CDN and protection. Used for domains and delivery performance.",
+          es: "DNS, CDN y protección. Uso para dominios y rendimiento de entrega.",
+        },
+      },
+      {
+        name: "Hostinger",
+        url: "https://www.hostinger.com.br/",
+        desc: {
+          pt: "Hospedagem e domínios para projetos de clientes e sites institucionais.",
+          en: "Hosting and domains for client projects and institutional sites.",
+          es: "Hosting y dominios para proyectos de clientes y sitios institucionales.",
+        },
+      },
+      {
         name: "Docker",
         url: "https://www.docker.com/",
         desc: {
@@ -256,11 +346,20 @@ const categories: UsesCategory[] = [
         },
       },
       {
+        name: "Resend",
+        url: "https://resend.com/",
+        desc: {
+          pt: "API de email transacional. Simples, moderna e com boa DX.",
+          en: "Transactional email API. Simple, modern and great DX.",
+          es: "API de email transaccional. Simple, moderna y con buena DX.",
+        },
+      },
+      {
         name: "Stripe / Mercado Pago / Asaas",
         desc: {
-          pt: "Provedores de pagamento que integro nos projetos. PIX, cartão, assinaturas.",
-          en: "Payment providers I integrate in projects. PIX, card, subscriptions.",
-          es: "Proveedores de pago que integro en los proyectos. PIX, tarjeta, suscripciones.",
+          pt: "Provedores de pagamento. PIX, cartão, assinaturas recorrentes.",
+          en: "Payment providers. PIX, card, recurring subscriptions.",
+          es: "Proveedores de pago. PIX, tarjeta, suscripciones recurrentes.",
         },
       },
     ],
@@ -269,11 +368,12 @@ const categories: UsesCategory[] = [
     title: { pt: "Hardware", en: "Hardware", es: "Hardware" },
     items: [
       {
-        name: "MacBook Pro",
+        name: "MacBook Air M2",
+        url: "https://www.apple.com/macbook-air/",
         desc: {
-          pt: "Máquina principal de desenvolvimento. Apple Silicon, 16GB RAM.",
-          en: "Main development machine. Apple Silicon, 16GB RAM.",
-          es: "Máquina principal de desarrollo. Apple Silicon, 16GB RAM.",
+          pt: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso e leve.",
+          en: "Main machine. Apple Silicon M2, 16GB RAM, 256GB SSD. Silent and lightweight.",
+          es: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso y liviano.",
         },
       },
       {

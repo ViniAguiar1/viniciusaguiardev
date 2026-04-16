@@ -37,7 +37,7 @@ export default async function PostPage({ params }: PageProps) {
   const blocks = (post.blocks || []) as ContentBlock[]
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 py-12">
+    <div className="w-full max-w-3xl mx-auto px-4 py-12 overflow-hidden">
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -68,7 +68,7 @@ export default async function PostPage({ params }: PageProps) {
         </span>
       ) : null}
 
-      <h1 className="text-3xl md:text-4xl font-bold leading-tight mb-2">
+      <h1 className="text-2xl md:text-4xl font-bold leading-tight mb-2 break-words">
         {post.title}
       </h1>
       <p className="text-sm text-muted-foreground mb-8">
@@ -76,7 +76,7 @@ export default async function PostPage({ params }: PageProps) {
         {post.readTime ? ` · ${post.readTime}` : null}
       </p>
 
-      <article className="space-y-6 text-base leading-relaxed">
+      <article className="space-y-6 text-base leading-relaxed min-w-0">
         {blocks.length ? (
           blocks.map((block, i) => {
             switch (block.type) {
@@ -104,7 +104,7 @@ export default async function PostPage({ params }: PageProps) {
                       alt={block.alt || "Imagem do post"}
                       width={block.width || 1200}
                       height={block.height || 675}
-                      className="rounded-md border border-border"
+                      className="rounded-md border border-border w-full h-auto"
                     />
                     {block.alt ? (
                       <span className="text-xs text-muted-foreground">{block.alt}</span>

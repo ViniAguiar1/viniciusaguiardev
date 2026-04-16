@@ -89,7 +89,7 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <main className="flex-1 flex flex-col">
+            <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
               <MobileHeader />
               {children}
             </main>

@@ -30,7 +30,7 @@ export default async function EngineeringPage() {
       <section className="space-y-3 mb-12">
         {/* Topic 1: SaaS Architecture */}
         <EngineeringTopic
-          title={en ? "SaaS Architecture — Vox Pet Digital" : "Arquitetura SaaS — Vox Pet Digital"}
+          title={en ? "SaaS Architecture — Vertical Platform" : "Arquitetura SaaS — Plataforma Vertical"}
           subtitle={en
             ? "Multi-module platform: scheduling, sales, finance, WhatsApp AI"
             : "Plataforma multi-módulo: agenda, vendas, financeiro, IA no WhatsApp"}
@@ -38,48 +38,46 @@ export default async function EngineeringPage() {
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
               {en
-                ? "Multi-module SaaS platform serving pet shops and veterinary clinics. I designed the system to handle scheduling, sales, finance, commissions, and WhatsApp automations — all operating as a single product with shared data."
-                : "Plataforma SaaS multi-módulo para pet shops e clínicas veterinárias. Projetei o sistema para lidar com agenda, vendas, financeiro, comissões e automações via WhatsApp — tudo operando como um único produto com dados compartilhados."}
+                ? "Multi-module SaaS platform serving small businesses in a specific vertical. I designed the system to handle scheduling, sales, finance, commissions, and WhatsApp automations — all operating as a single product with shared data."
+                : "Plataforma SaaS multi-módulo para pequenos negócios em um vertical específico. Projetei o sistema para lidar com agenda, vendas, financeiro, comissões e automações via WhatsApp — tudo operando como um único produto com dados compartilhados."}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                  {en ? "Key Decisions" : "Decisões-chave"}
-                </h4>
-                <ul className="text-sm space-y-1.5">
-                  <li className="flex items-start gap-2">
-                    <span className="text-muted-foreground mt-0.5">-</span>
-                    {en
-                      ? "Event-driven architecture for WhatsApp → OpenAI → PostgreSQL pipeline"
-                      : "Arquitetura orientada a eventos para pipeline WhatsApp → OpenAI → PostgreSQL"}
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-muted-foreground mt-0.5">-</span>
-                    {en
-                      ? "Atomic transactions to keep sales, commissions and payments always in sync"
-                      : "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados"}
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-muted-foreground mt-0.5">-</span>
-                    {en
-                      ? "AI integration in WhatsApp for automated support and product recommendations"
-                      : "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos"}
-                  </li>
-                </ul>
-              </div>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                {en ? "Key Decisions" : "Decisões-chave"}
+              </h4>
+              <ul className="text-sm space-y-1.5">
+                <li className="flex items-start gap-2">
+                  <span className="text-muted-foreground mt-0.5">-</span>
+                  {en
+                    ? "Event-driven architecture for WhatsApp → LLM → PostgreSQL pipeline"
+                    : "Arquitetura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL"}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-muted-foreground mt-0.5">-</span>
+                  {en
+                    ? "Atomic transactions to keep sales, commissions and payments always in sync"
+                    : "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados"}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-muted-foreground mt-0.5">-</span>
+                  {en
+                    ? "AI integration in WhatsApp for automated support and product recommendations"
+                    : "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos"}
+                </li>
+              </ul>
+            </div>
 
-              <div>
-                <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                  Stack
-                </h4>
-                <div className="flex flex-wrap gap-1.5">
-                  {["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "WhatsApp API", "OpenAI", "Mercado Pago", "Stripe"].map((t) => (
-                    <span key={t} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">
-                      {t}
-                    </span>
-                  ))}
-                </div>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                Stack
+              </h4>
+              <div className="flex flex-wrap gap-1.5">
+                {["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "WhatsApp API", "OpenAI", "Stripe"].map((t) => (
+                  <span key={t} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">
+                    {t}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -89,8 +87,8 @@ export default async function EngineeringPage() {
               </h4>
               <p className="text-sm leading-relaxed">
                 {en
-                  ? "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on OpenAI latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during OpenAI spikes."
-                  : "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência da OpenAI) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos da OpenAI."}
+                  ? "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on LLM latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during provider spikes."
+                  : "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência do LLM) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos do provedor."}
               </p>
             </div>
           </div>
@@ -110,7 +108,7 @@ export default async function EngineeringPage() {
                 : "Para produtos SaaS que atendem múltiplos negócios, o isolamento de tenants é uma decisão arquitetural central. Avaliei três estratégias e implementei a abordagem de banco compartilhado com defesa em profundidade."}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
                 {
                   title: en ? "DB per tenant" : "DB por tenant",
@@ -183,17 +181,17 @@ export default async function EngineeringPage() {
         <EngineeringTopic
           title={en ? "Payments & External Integrations" : "Pagamentos e integrações externas"}
           subtitle={en
-            ? "Stripe, Mercado Pago, Asaas — webhooks, idempotency, PIX flows"
-            : "Stripe, Mercado Pago, Asaas — webhooks, idempotência, fluxos PIX"}
+            ? "Webhooks, idempotency, PIX flows across multiple providers"
+            : "Webhooks, idempotência, fluxos PIX em múltiplos provedores"}
         >
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
               {en
-                ? "I've integrated payment systems across multiple products — Stripe (MovePro), Mercado Pago and Asaas (Vox Pet, Holy Solutions). Each has different webhook patterns, failure modes, and consistency guarantees."
-                : "Integrei sistemas de pagamento em múltiplos produtos — Stripe (MovePro), Mercado Pago e Asaas (Vox Pet, Holy Solutions). Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes."}
+                ? "I've integrated payment systems across multiple production products — Stripe, Mercado Pago and Asaas. Each has different webhook patterns, failure modes, and consistency guarantees."
+                : "Integrei sistemas de pagamento em múltiplos produtos em produção — Stripe, Mercado Pago e Asaas. Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes."}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-md border border-border p-4">
                 <h4 className="text-sm font-medium mb-2">
                   {en ? "Webhook Architecture" : "Arquitetura de Webhooks"}
@@ -211,7 +209,7 @@ export default async function EngineeringPage() {
                   {en ? "Real-world Concerns" : "Preocupações reais"}
                 </h4>
                 <ul className="text-xs space-y-1.5 text-muted-foreground">
-                  <li>- {en ? "PIX confirmation delays (Asaas vs. Mercado Pago behave differently)" : "Atrasos na confirmação de PIX (Asaas vs. Mercado Pago se comportam diferente)"}</li>
+                  <li>- {en ? "PIX confirmation delays vary between providers" : "Atrasos na confirmação de PIX variam entre provedores"}</li>
                   <li>- {en ? "Webhook retries arriving out of order" : "Retries de webhook chegando fora de ordem"}</li>
                   <li>- {en ? "Reconciliation between local state and provider state" : "Reconciliação entre estado local e estado do provedor"}</li>
                   <li>- {en ? "Graceful degradation when provider is down" : "Degradação graciosa quando o provedor está fora"}</li>
@@ -235,16 +233,16 @@ export default async function EngineeringPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {(en ? [
               { signal: "API latency", detail: "Third-party API timeouts causing cascading failures in checkout — solved with circuit breaker pattern and fallback responses" },
-              { signal: "Marketplace inconsistencies", detail: "Shopee/marketplace APIs returning inconsistent product data — built abstraction layer normalizing different schemas into unified model" },
+              { signal: "Marketplace inconsistencies", detail: "External marketplace APIs returning inconsistent product data — built abstraction layer normalizing different schemas into unified model" },
               { signal: "Legacy migration", detail: "Migrating client systems from PHP monolith to React + Next.js without downtime — incremental strangler fig approach" },
-              { signal: "Performance at scale", detail: "MovePro API response times degrading with growing user base — query optimization, strategic caching, parallel API calls" },
+              { signal: "Performance at scale", detail: "API response times degrading with growing user base — query optimization, strategic caching, parallel API calls" },
               { signal: "Cross-platform UX", detail: "Maintaining consistent UX between React (web) and React Native (mobile) — shared design tokens and component contracts" },
               { signal: "Data consistency", detail: "Financial modules (sales + commissions + payments) drifting out of sync — atomic transactions with PostgreSQL advisory locks" },
             ] : [
               { signal: "Latência de API", detail: "Timeouts de APIs terceiras causando falhas em cascata no checkout — resolvido com circuit breaker e respostas fallback" },
-              { signal: "Inconsistências de marketplace", detail: "APIs de Shopee/marketplaces retornando dados inconsistentes — camada de abstração normalizando schemas em modelo unificado" },
+              { signal: "Inconsistências de marketplace", detail: "APIs de marketplaces externos retornando dados inconsistentes — camada de abstração normalizando schemas em modelo unificado" },
               { signal: "Migração de legado", detail: "Migrando sistemas de clientes de monolito PHP para React + Next.js sem downtime — abordagem incremental strangler fig" },
-              { signal: "Performance em escala", detail: "Tempos de resposta da API do MovePro degradando com crescimento — otimização de queries, caching estratégico, chamadas paralelas" },
+              { signal: "Performance em escala", detail: "Tempos de resposta da API degradando com crescimento de usuários — otimização de queries, caching estratégico, chamadas paralelas" },
               { signal: "UX cross-platform", detail: "Manter UX consistente entre React (web) e React Native (mobile) — design tokens e contratos de componentes compartilhados" },
               { signal: "Consistência de dados", detail: "Módulos financeiros (vendas + comissões + pagamentos) perdendo sincronia — transações atômicas com advisory locks do PostgreSQL" },
             ]).map((item) => (
@@ -276,12 +274,12 @@ export default async function EngineeringPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="rounded-md border border-border p-4">
               <h3 className="text-sm font-medium mb-2">
-                {en ? "WhatsApp AI Agent (Vox Pet)" : "Agente IA no WhatsApp (Vox Pet)"}
+                {en ? "WhatsApp AI Agent" : "Agente IA no WhatsApp"}
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {en
-                  ? "OpenAI-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable."
-                  : "Agente com OpenAI para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível."}
+                  ? "LLM-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable."
+                  : "Agente com LLM para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível."}
               </p>
             </div>
 
@@ -291,8 +289,8 @@ export default async function EngineeringPage() {
               </h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {en
-                  ? "Document ingestion → chunk splitting → embedding generation (HuggingFace/OpenAI) → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context."
-                  : "Ingestão de documentos → chunking → geração de embeddings (HuggingFace/OpenAI) → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM."}
+                  ? "Document ingestion → chunk splitting → embedding generation → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context."
+                  : "Ingestão de documentos → chunking → geração de embeddings → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM."}
               </p>
               <Link
                 href="/posts/rag-langchain-postgres-fullcycle"

@@ -49,7 +49,7 @@ const pt: Dictionary = {
     about: "Sobre",
     projects: "Projetos",
     engineering: "Engenharia",
-    uses: "Uses",
+    uses: "Ferramentas",
     curriculum: "Curriculum",
   },
 
@@ -127,7 +127,7 @@ const es: Dictionary = {
     about: "Acerca",
     projects: "Proyectos",
     engineering: "Ingeniería",
-    uses: "Uses",
+    uses: "Herramientas",
     curriculum: "Currículum",
   },
 

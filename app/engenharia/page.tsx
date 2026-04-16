@@ -1,6 +1,9 @@
 import Link from "next/link"
 import { getLocale } from "@/lib/i18n-server"
 import { EngineeringTopic } from "@/components/engineering-topic"
+import { JsonLd } from "@/components/json-ld"
+
+const siteUrl = "https://viniciusaguiardev.com.br"
 
 export async function generateMetadata() {
   const locale = await getLocale()
@@ -17,8 +20,53 @@ export default async function EngineeringPage() {
   const locale = await getLocale()
   const en = locale === "en"
 
+  const faq = en
+    ? [
+        { q: "What is multi-tenant architecture?", a: "A design pattern where multiple organizations share the same application and database, but each tenant's data is isolated. The most common approach in modern SaaS is shared database with tenant_id column and PostgreSQL Row Level Security (RLS) as a safety net." },
+        { q: "How to handle payment webhooks reliably?", a: "Use a layered approach: validate signatures on every event, enforce idempotency with stored event IDs, ack immediately and process in background, validate state transitions with a state machine, run periodic reconciliation jobs, and route failed events to a dead letter queue." },
+        { q: "How to integrate AI into production systems?", a: "Treat AI as a system component, not a standalone feature. Process messages asynchronously, register data back into your database, implement fallbacks for when the LLM is unavailable, and monitor response quality. The key is reliability — the system must work even when the AI provider has issues." },
+        { q: "What is the circuit breaker pattern?", a: "A resilience pattern for third-party API integrations. When an external API starts failing, the circuit breaker 'opens' and returns fallback responses instead of cascading the failure through your system. After a cooldown period, it allows test requests to check if the service recovered." },
+      ]
+    : [
+        { q: "O que é arquitetura multi-tenant?", a: "Um padrão de design onde múltiplas organizações compartilham a mesma aplicação e banco de dados, mas os dados de cada tenant são isolados. A abordagem mais comum em SaaS moderno é banco compartilhado com coluna tenant_id e Row Level Security (RLS) do PostgreSQL como rede de segurança." },
+        { q: "Como lidar com webhooks de pagamento de forma confiável?", a: "Use uma abordagem em camadas: valide assinaturas em cada evento, garanta idempotência com IDs de eventos armazenados, responda imediatamente e processe em background, valide transições de estado com state machine, execute jobs de reconciliação periódicos e direcione eventos com falha para uma dead letter queue." },
+        { q: "Como integrar IA em sistemas de produção?", a: "Trate a IA como um componente do sistema, não uma feature isolada. Processe mensagens de forma assíncrona, registre dados de volta no banco, implemente fallbacks para quando o LLM estiver indisponível e monitore a qualidade das respostas. O ponto central é confiabilidade — o sistema precisa funcionar mesmo quando o provedor de IA tem problemas." },
+        { q: "O que é o padrão circuit breaker?", a: "Um padrão de resiliência para integrações com APIs terceiras. Quando uma API externa começa a falhar, o circuit breaker 'abre' e retorna respostas fallback ao invés de propagar a falha pelo sistema. Após um período de cooldown, permite requisições de teste para verificar se o serviço se recuperou." },
+      ]
+
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-12">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: en ? "Engineering" : "Engenharia",
+          description: en
+            ? "Architecture decisions, trade-offs, and real problems solved in production."
+            : "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
+          url: `${siteUrl}/engenharia`,
+          author: {
+            "@type": "Person",
+            name: "Vinicius Aguiar",
+            url: siteUrl,
+          },
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: item.a,
+            },
+          })),
+        }}
+      />
+
       {/* Hero */}
       <header className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
@@ -312,6 +360,25 @@ export default async function EngineeringPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="mb-12">
+        <div className="flex items-center gap-3 mb-5">
+          <h2 className="text-xl font-semibold">
+            {en ? "Frequently Asked Questions" : "Perguntas frequentes"}
+          </h2>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <div className="space-y-4">
+          {faq.map((item) => (
+            <div key={item.q} className="rounded-lg border border-border bg-card p-5">
+              <h3 className="text-sm font-semibold">{item.q}</h3>
+              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{item.a}</p>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -6,6 +6,7 @@ import { CodeBlock } from "@/components/code-block"
 import { renderInline } from "@/lib/inline-md"
 import React from "react"
 import { getLocale } from "@/lib/i18n-server"
+import { JsonLd } from "@/components/json-ld"
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -37,6 +38,25 @@ export default async function PostPage({ params }: PageProps) {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: post.title,
+          description: post.description ?? "",
+          datePublished: post.date,
+          url: `https://viniciusaguiardev.com.br/posts/${slug}`,
+          author: {
+            "@type": "Person",
+            name: "Vinicius Aguiar",
+            url: "https://viniciusaguiardev.com.br",
+          },
+          publisher: {
+            "@type": "Person",
+            name: "Vinicius Aguiar",
+          },
+        }}
+      />
       {post.tag ? (
         <span
           className={cn(

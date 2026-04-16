@@ -7,9 +7,9 @@ export async function generateMetadata() {
     title: "Uses",
     description: t(
       locale,
-      "Ferramentas, apps e setup que uso no dia a dia como Software Engineer.",
+      "Ferramentas, apps e setup que uso no dia a dia como engenheiro de software.",
       "Tools, apps and setup I use daily as a Software Engineer.",
-      "Herramientas, apps y setup que uso día a día como Software Engineer."
+      "Herramientas, apps y setup que uso día a día como ingeniero de software."
     ),
   }
 }
@@ -300,9 +300,9 @@ export default async function UsesPage() {
         <p className="text-muted-foreground mt-2 max-w-2xl">
           {t(
             locale,
-            "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como Software Engineer.",
+            "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como engenheiro de software.",
             "This is not a static page — it's a living document with everything I currently use as a Software Engineer.",
-            "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como Software Engineer."
+            "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como ingeniero de software."
           )}
         </p>
       </header>

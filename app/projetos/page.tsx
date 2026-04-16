@@ -2,10 +2,15 @@ import { getDictionary, getLocale } from "@/lib/i18n-server"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 
-export const metadata = {
-  title: "Projetos",
-  description:
-    "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: locale === "en" ? "Projects" : "Projetos",
+    description:
+      locale === "en"
+        ? "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms."
+        : "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+  }
 }
 
 export default async function ProjectsPage() {

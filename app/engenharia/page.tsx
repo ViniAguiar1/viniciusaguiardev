@@ -2,10 +2,15 @@ import Link from "next/link"
 import { getLocale } from "@/lib/i18n-server"
 import { EngineeringTopic } from "@/components/engineering-topic"
 
-export const metadata = {
-  title: "Engenharia",
-  description:
-    "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: locale === "en" ? "Engineering" : "Engenharia",
+    description:
+      locale === "en"
+        ? "Architecture decisions, trade-offs, and real problems solved in production."
+        : "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
+  }
 }
 
 export default async function EngineeringPage() {

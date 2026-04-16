@@ -30,6 +30,15 @@
       "text": "Se a sua aplicação não estiver preparada para lidar com esses cenários, você vai descobrir o problema quando um cliente reclamar que pagou mas não recebeu acesso — ou pior, quando o financeiro notar que os números não batem."
     },
     {
+      "type": "paragraph",
+      "text": "O diagrama abaixo mostra o fluxo completo que vamos construir neste artigo:"
+    },
+    {
+      "type": "image",
+      "src": "/payment-webhook.png",
+      "alt": "Diagrama do lifecycle de um webhook de pagamento — validação, idempotência, fila, worker, retry e reconciliação"
+    },
+    {
       "type": "heading",
       "text": "Validação de assinatura",
       "level": 2
@@ -235,6 +244,15 @@
     {
       "type": "paragraph",
       "text": "If your application isn't prepared to handle these scenarios, you'll discover the problem when a customer complains they paid but didn't get access — or worse, when finance notices the numbers don't add up."
+    },
+    {
+      "type": "paragraph",
+      "text": "The diagram below shows the complete flow we'll build in this article:"
+    },
+    {
+      "type": "image",
+      "src": "/payment-webhook.png",
+      "alt": "Payment webhook lifecycle diagram — validation, idempotency, queue, worker, retry and reconciliation"
     },
     {
       "type": "heading",

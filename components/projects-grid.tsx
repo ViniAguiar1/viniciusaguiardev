@@ -44,6 +44,8 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               key={project.slug}
               type="button"
               onClick={() => setSelected(project)}
+              data-umami-event="project-click"
+              data-umami-event-project={project.name}
               className={cn(
                 "group rounded-lg border border-border bg-card text-card-foreground p-5",
                 "flex items-center gap-5 transition-all text-left w-full",
@@ -152,6 +154,8 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                     href={selected.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-umami-event="project-visit"
+                    data-umami-event-project={selected.name}
                     className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                   >
                     {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : "Acessar site"}

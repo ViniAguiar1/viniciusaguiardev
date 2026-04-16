@@ -20,6 +20,7 @@ export type Dictionary = {
     about: string
     projects: string
     engineering: string
+    uses: string
     curriculum: string
   }
   home: {
@@ -48,6 +49,7 @@ const pt: Dictionary = {
     about: "Sobre",
     projects: "Projetos",
     engineering: "Engenharia",
+    uses: "Ferramentas",
     curriculum: "Curriculum",
   },
 
@@ -86,6 +88,7 @@ const en: Dictionary = {
     about: "About",
     projects: "Projects",
     engineering: "Engineering",
+    uses: "Uses",
     curriculum: "Resume",
   },
 
@@ -124,6 +127,7 @@ const es: Dictionary = {
     about: "Acerca",
     projects: "Proyectos",
     engineering: "Ingeniería",
+    uses: "Herramientas",
     curriculum: "Currículum",
   },
 

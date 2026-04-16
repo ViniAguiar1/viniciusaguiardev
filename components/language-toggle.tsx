@@ -10,10 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-function getCookieLang(): "pt" | "en" {
+type Lang = "pt" | "en" | "es"
+
+function getCookieLang(): Lang {
   const m = document.cookie.match(/(?:^|; )lang=([^;]+)/)
   const val = m ? decodeURIComponent(m[1]) : "pt"
-  return val === "en" ? "en" : "pt"
+  if (val === "en") return "en"
+  if (val === "es") return "es"
+  return "pt"
 }
 
 function subscribe(cb: () => void) {
@@ -21,21 +25,23 @@ function subscribe(cb: () => void) {
   return () => window.removeEventListener("languagechange", cb)
 }
 
-function getSnapshot(): "pt" | "en" {
+function getSnapshot(): Lang {
   return getCookieLang()
 }
 
-function getServerSnapshot(): "pt" | "en" {
+function getServerSnapshot(): Lang {
   return "pt"
 }
+
+const labels: Record<Lang, string> = { pt: "PT", en: "EN", es: "ES" }
 
 export function LanguageToggle() {
   const router = useRouter()
   const lang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
-  const label = useMemo(() => (lang === "en" ? "EN" : "PT"), [lang])
+  const label = useMemo(() => labels[lang], [lang])
 
-  function setLanguage(next: "pt" | "en") {
+  function setLanguage(next: Lang) {
     try {
       document.cookie = `lang=${next}; path=/; max-age=${60 * 60 * 24 * 365 * 2}`
     } catch {}
@@ -50,8 +56,8 @@ export function LanguageToggle() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setLanguage("pt")}>Português (PT-BR)</DropdownMenuItem>
         <DropdownMenuItem onClick={() => setLanguage("en")}>English (EN)</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("es")}>Español (ES)</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-

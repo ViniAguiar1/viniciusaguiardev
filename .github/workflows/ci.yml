@@ -38,3 +38,6 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      - name: AEO Check
+        run: pnpm run aeo

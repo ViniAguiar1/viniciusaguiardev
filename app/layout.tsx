@@ -23,7 +23,7 @@ const siteUrl = "https://viniciusaguiardev.com.br"
 
 export const metadata: Metadata = {
   title: {
-    default: "Vinicius Aguiar — Software Engineer",
+    default: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
     template: "%s | Vinicius Aguiar",
   },
   description:
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     alternateLocale: "en_US",
     siteName: "Vinicius Aguiar",
-    title: "Vinicius Aguiar — Software Engineer",
+    title: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
     description:
       "Software Engineer especializado em React, Next.js e TypeScript. Construindo plataformas SaaS, integrações e sistemas em produção.",
     url: siteUrl,
@@ -43,13 +43,13 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Vinicius Aguiar — Software Engineer",
+        alt: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vinicius Aguiar — Software Engineer",
+    title: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
     description:
       "Software Engineer especializado em React, Next.js e TypeScript.",
     images: ["/og-image.png"],

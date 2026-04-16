@@ -19,9 +19,41 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const siteUrl = "https://viniciusaguiardev.com.br"
+
 export const metadata: Metadata = {
-  title: "Vinicius Aguiar",
-  description: "Portfólio de Vinicius Aguiar, desenvolvedor Front-End especializado em React, Next.js e tecnologias modernas. Descubra projetos, artigos e experiências profissionais.",
+  title: {
+    default: "Vinicius Aguiar — Software Engineer",
+    template: "%s | Vinicius Aguiar",
+  },
+  description:
+    "Software Engineer especializado em React, Next.js e TypeScript. Construindo plataformas SaaS, integrações e sistemas em produção.",
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    alternateLocale: "en_US",
+    siteName: "Vinicius Aguiar",
+    title: "Vinicius Aguiar — Software Engineer",
+    description:
+      "Software Engineer especializado em React, Next.js e TypeScript. Construindo plataformas SaaS, integrações e sistemas em produção.",
+    url: siteUrl,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Vinicius Aguiar — Software Engineer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Vinicius Aguiar — Software Engineer",
+    description:
+      "Software Engineer especializado em React, Next.js e TypeScript.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({

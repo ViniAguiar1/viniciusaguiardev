@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sidebar"
 import { ModeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
+import { SearchButton } from "@/components/search-button"
 import { getLocale, getDictionary } from "@/lib/i18n-server"
 
 export async function RightSidebar() {
@@ -33,11 +34,7 @@ export async function RightSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              {/* <SidebarMenuButton asChild size="sm" className="w-8 h-8 p-0 hover:bg-transparent">
-                <a href="/search" title={dict.ui.search} className="flex items-center justify-center">
-                  <Search className="w-5 h-5" />
-                </a>
-              </SidebarMenuButton> */}
+              <SearchButton />
             </SidebarMenuItem>
           </SidebarMenu>
         </div>

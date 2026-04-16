@@ -376,14 +376,6 @@ const categories: UsesCategory[] = [
           es: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso y liviano.",
         },
       },
-      {
-        name: "Monitor externo",
-        desc: {
-          pt: "Segundo monitor para code review, documentação e terminal lado a lado.",
-          en: "Secondary monitor for code review, docs and terminal side by side.",
-          es: "Segundo monitor para code review, documentación y terminal lado a lado.",
-        },
-      },
     ],
   },
 ]

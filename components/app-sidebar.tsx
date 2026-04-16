@@ -57,6 +57,9 @@ export async function AppSidebar() {
           <SidebarNavLink href="/uses" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.uses}
           </SidebarNavLink>
+          <SidebarNavLink href="/busca" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+            {dict.nav.search}
+          </SidebarNavLink>
           <SidebarNavLink href="/Curriculo-Vinicius-Aguiar.pdf" className="text-lg font-normal hover:underline text-gray-700" download>
             {dict.nav.curriculum}
           </SidebarNavLink>

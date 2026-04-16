@@ -21,6 +21,7 @@ export type Dictionary = {
     projects: string
     engineering: string
     uses: string
+    search: string
     curriculum: string
   }
   home: {
@@ -50,6 +51,7 @@ const pt: Dictionary = {
     projects: "Projetos",
     engineering: "Engenharia",
     uses: "Ferramentas",
+    search: "Busca",
     curriculum: "Curriculum",
   },
 
@@ -89,6 +91,7 @@ const en: Dictionary = {
     projects: "Projects",
     engineering: "Engineering",
     uses: "Uses",
+    search: "Search",
     curriculum: "Resume",
   },
 
@@ -128,6 +131,7 @@ const es: Dictionary = {
     projects: "Proyectos",
     engineering: "Ingeniería",
     uses: "Herramientas",
+    search: "Búsqueda",
     curriculum: "Currículum",
   },
 

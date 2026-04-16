@@ -19,9 +19,9 @@ export async function RightSidebar() {
     <Sidebar
       side="right"
       collapsible="none"
-      className="h-screen w-18 min-w-0 max-w-xs hidden lg:flex"
+      className="sticky top-0 h-screen w-18 min-w-0 max-w-xs hidden lg:flex"
     >
-      <SidebarContent className="h-screen flex flex-col p-2">
+      <SidebarContent className="h-full flex flex-col p-2">
 
         <div className="flex flex-col items-center gap-3 mb-4">
           <SidebarMenu className="flex flex-col items-center gap-3">

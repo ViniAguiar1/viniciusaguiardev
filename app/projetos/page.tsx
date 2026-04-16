@@ -1,6 +1,7 @@
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
+import { FadeIn } from "@/components/fade-in"
 
 export async function generateMetadata() {
   const locale = await getLocale()
@@ -22,21 +23,26 @@ export default async function ProjectsPage() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-12">
       {/* Header */}
-      <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-          {dict.projects.title}
-        </h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl">
-          {dict.projects.subtitle}
-        </p>
-      </header>
+      <FadeIn>
+        <header className="mb-10">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+            {dict.projects.title}
+          </h1>
+          <p className="text-muted-foreground mt-2 max-w-2xl">
+            {dict.projects.subtitle}
+          </p>
+        </header>
+      </FadeIn>
 
       {/* Projects grid + modal */}
-      <section>
-        <ProjectsGrid projects={projects} locale={locale} />
-      </section>
+      <FadeIn delay={100}>
+        <section>
+          <ProjectsGrid projects={projects} locale={locale} />
+        </section>
+      </FadeIn>
 
       {/* Footer stats */}
+      <FadeIn delay={200}>
       <section className="mt-10 rounded-lg border border-border bg-card p-6">
         <div className="grid grid-cols-3 gap-6 text-center">
           <div>
@@ -59,6 +65,7 @@ export default async function ProjectsPage() {
           </div>
         </div>
       </section>
+      </FadeIn>
     </div>
   )
 }

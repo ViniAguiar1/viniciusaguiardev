@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { getDictionary, getLocale } from "@/lib/i18n-server"
 import { JsonLd } from "@/components/json-ld"
+import { FadeIn } from "@/components/fade-in"
 
 export default async function Home() {
   const locale = await getLocale()
@@ -32,6 +33,7 @@ export default async function Home() {
       />
 
       {/* HERO */}
+      <FadeIn>
       <header className="mb-10">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
 
@@ -70,15 +72,16 @@ export default async function Home() {
 
         </div>
       </header>
+      </FadeIn>
 
       {/* POSTS */}
       <main>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {articles.map((article) => (
+          {articles.map((article, index) => (
+            <FadeIn key={article.slug} delay={index * 100}>
             <article
-              key={article.slug}
               className={cn(
                 "rounded-lg border border-border bg-card text-card-foreground shadow p-6 flex flex-col justify-between min-h-45 transition-transform hover:-translate-y-1 hover:shadow-lg relative cursor-pointer"
               )}
@@ -124,6 +127,7 @@ export default async function Home() {
               </div>
 
             </article>
+            </FadeIn>
           ))}
 
         </div>

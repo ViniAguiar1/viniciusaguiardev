@@ -32,7 +32,7 @@ export async function AppSidebar() {
         {/* Name and Title */}
         <div className="text-center mb-1 dark:text-white">
           <h1 className="text-3xl dark:text-white font-light text-[#444] leading-none mb-1">Vinicius Aguiar</h1>
-          <p className="text-lg font-normal text-gray-500 -mt-1">Web Developer</p>
+          <p className="text-lg font-normal text-gray-500 -mt-1">Software Engineer</p>
         </div>
 
         {/* Company/Role */}

@@ -1,10 +1,10 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Copy, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Prism from "prismjs"
-import "prismjs/components/prism-markup" // html
+import "prismjs/components/prism-markup"
 import "prismjs/components/prism-javascript"
 import "prismjs/components/prism-jsx"
 import "prismjs/components/prism-typescript"
@@ -13,6 +13,8 @@ import "prismjs/components/prism-json"
 import "prismjs/components/prism-bash"
 import "prismjs/components/prism-markdown"
 import "prismjs/components/prism-css"
+import "prismjs/components/prism-sql"
+import "prismjs/components/prism-python"
 
 type Props = {
   code: string
@@ -32,11 +34,27 @@ function normalizeLang(lang?: string): string {
   if (["md", "markdown"].includes(l)) return "markdown"
   if (["html", "xml", "svg"].includes(l)) return "markup"
   if (["css"].includes(l)) return "css"
+  if (["sql"].includes(l)) return "sql"
+  if (["python", "py"].includes(l)) return "python"
   return l
 }
 
 export function CodeBlock({ code, language, className }: Props) {
   const [copied, setCopied] = useState(false)
+  const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null)
+
+  const lang = normalizeLang(language)
+
+  useEffect(() => {
+    try {
+      const grammar = Prism.languages[lang] ?? Prism.languages["markup"]
+      if (grammar) {
+        setHighlightedHtml(Prism.highlight(code, grammar, lang))
+      }
+    } catch {
+      // keep plain text
+    }
+  }, [code, lang])
 
   const onCopy = useCallback(async () => {
     try {
@@ -48,20 +66,8 @@ export function CodeBlock({ code, language, className }: Props) {
     }
   }, [code])
 
-  const lang = useMemo(() => normalizeLang(language), [language])
-  const html = useMemo(() => {
-    try {
-      const languages = (Prism as unknown as { languages: Record<string, unknown> }).languages
-      const grammar = languages[lang] ?? languages["markup"]
-      const highlight = (Prism as unknown as { highlight: (c: string, g: unknown, l: string) => string }).highlight
-      return highlight(code, grammar, lang)
-    } catch {
-      return code
-    }
-  }, [code, lang])
-
   return (
-    <div className={cn("group relative", className)}>
+    <div className={cn("group relative min-w-0", className)}>
       <button
         type="button"
         onClick={onCopy}
@@ -74,11 +80,15 @@ export function CodeBlock({ code, language, className }: Props) {
         {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
         {copied ? "Copiado" : "Copiar"}
       </button>
-      <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto text-sm">
-        <code
-          className={cn("whitespace-pre", lang ? `language-${lang}` : undefined)}
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+      <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto text-sm" suppressHydrationWarning>
+        {highlightedHtml ? (
+          <code
+            className={cn("whitespace-pre", `language-${lang}`)}
+            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+          />
+        ) : (
+          <code className="whitespace-pre">{code}</code>
+        )}
       </pre>
     </div>
   )

@@ -67,6 +67,11 @@
       ]
     },
     {
+      "type": "image",
+      "src": "/circut-break.png",
+      "alt": "Diagrama da state machine do Circuit Breaker — estados CLOSED, OPEN e HALF-OPEN com transições"
+    },
+    {
       "type": "heading",
       "text": "Implementação em TypeScript",
       "level": 2
@@ -284,6 +289,11 @@
       ]
     },
     {
+      "type": "image",
+      "src": "/circut-break.png",
+      "alt": "Circuit Breaker state machine diagram — CLOSED, OPEN and HALF-OPEN states with transitions"
+    },
+    {
       "type": "heading",
       "text": "TypeScript implementation",
       "level": 2
@@ -499,6 +509,11 @@
         "**OPEN (abierto)** — estado de protección. Las solicitudes **no** van a la API. Retorna fallback inmediatamente. Después de un período de cooldown, transiciona a HALF-OPEN.",
         "**HALF-OPEN (medio abierto)** — estado de prueba. Permite **una** solicitud como prueba. Si tiene éxito, vuelve a CLOSED. Si falla, vuelve a OPEN."
       ]
+    },
+    {
+      "type": "image",
+      "src": "/circut-break.png",
+      "alt": "Diagrama de la state machine del Circuit Breaker — estados CLOSED, OPEN y HALF-OPEN con transiciones"
     },
     {
       "type": "heading",

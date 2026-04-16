@@ -4,6 +4,7 @@ import { Menu } from "lucide-react"
 import { useSidebar } from "@/components/ui/sidebar"
 import { ModeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
+import { SearchButton } from "@/components/search-button"
 
 export function MobileHeader() {
   const { setOpenMobile } = useSidebar()
@@ -22,6 +23,7 @@ export function MobileHeader() {
       <span className="text-sm font-semibold">Vinicius Aguiar</span>
 
       <div className="flex items-center gap-1.5">
+        <SearchButton />
         <LanguageToggle />
         <ModeToggle />
       </div>

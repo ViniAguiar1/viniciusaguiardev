@@ -50,7 +50,7 @@ export function LanguageToggle() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm">
+      <DropdownMenuTrigger suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm">
         <Languages className="h-4 w-4" /> {label}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

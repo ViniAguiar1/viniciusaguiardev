@@ -2,6 +2,7 @@ import Link from "next/link"
 import { getLocale, t } from "@/lib/i18n-server"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
+import { FadeIn } from "@/components/fade-in"
 
 const siteUrl = "https://viniciusaguiardev.com.br"
 
@@ -71,6 +72,7 @@ export default async function EngineeringPage() {
       />
 
       {/* Hero */}
+      <FadeIn>
       <header className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
           {t(locale, "Engenharia", "Engineering", "Ingeniería")}
@@ -83,8 +85,10 @@ export default async function EngineeringPage() {
           )}
         </p>
       </header>
+      </FadeIn>
 
       {/* Expandable topics */}
+      <FadeIn delay={100}>
       <section className="space-y-3 mb-12">
         <EngineeringTopic
           title={t(locale, "Arquitetura SaaS — Plataforma Vertical", "SaaS Architecture — Vertical Platform", "Arquitectura SaaS — Plataforma Vertical")}
@@ -208,8 +212,10 @@ export default async function EngineeringPage() {
           </div>
         </EngineeringTopic>
       </section>
+      </FadeIn>
 
       {/* Problems Solved */}
+      <FadeIn delay={200}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
           <h2 className="text-xl font-semibold">{t(locale, "Problemas resolvidos em produção", "Problems Solved in Production", "Problemas resueltos en producción")}</h2>
@@ -233,8 +239,10 @@ export default async function EngineeringPage() {
           </div>
         </div>
       </section>
+      </FadeIn>
 
       {/* AI in Production */}
+      <FadeIn delay={300}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
           <h2 className="text-xl font-semibold">{t(locale, "Sistemas de IA em produção", "AI Systems in Production", "Sistemas de IA en producción")}</h2>
@@ -275,8 +283,10 @@ export default async function EngineeringPage() {
           </div>
         </div>
       </section>
+      </FadeIn>
 
       {/* FAQ */}
+      <FadeIn delay={400}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
           <h2 className="text-xl font-semibold">{t(locale, "Perguntas frequentes", "Frequently Asked Questions", "Preguntas frecuentes")}</h2>
@@ -291,8 +301,10 @@ export default async function EngineeringPage() {
           ))}
         </div>
       </section>
+      </FadeIn>
 
       {/* Deep dives */}
+      <FadeIn delay={500}>
       <section>
         <div className="flex items-center gap-3 mb-5">
           <h2 className="text-xl font-semibold">{t(locale, "Aprofundamentos", "Deep Dives", "Profundizaciones")}</h2>
@@ -312,6 +324,7 @@ export default async function EngineeringPage() {
           ))}
         </div>
       </section>
+      </FadeIn>
     </div>
   )
 }

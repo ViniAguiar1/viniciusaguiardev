@@ -1,0 +1,44 @@
+# Vinicius Aguiar — Software Engineer
+
+> Portfólio pessoal e blog técnico de Vinicius Aguiar, Software Engineer especializado em React, Next.js, TypeScript e Node.js. O site apresenta projetos reais (SaaS, marketplaces, ERPs), artigos técnicos sobre arquitetura de software, e uma seção de engenharia com decisões técnicas e trade-offs em produção. Bilíngue (PT-BR / EN). URL base: `https://viniciusaguiardev.com.br`.
+
+Notas importantes:
+
+- O site é um portfólio profissional, não um produto ou API.
+- O conteúdo reflete experiência real em empresas e projetos em produção.
+- Posts técnicos incluem código-fonte em TypeScript, SQL e Python.
+- O idioma principal é Português (BR), com versão completa em Inglês.
+- Stack do site: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Shadcn UI.
+
+## Páginas
+
+- [Home](https://viniciusaguiardev.com.br/): Página inicial com listagem de artigos técnicos e apresentação profissional.
+- [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Holy Solutions, Vox Pet Digital, Stack Labs, MovePro, EasyToGo), habilidades, tech stack e conceitos-chave.
+- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio de 15 empresas/produtos onde atuou — SaaS, marketplaces, ERPs, e-commerce, plataformas de saúde, educação e viagens. Cada projeto tem logo, categoria e descrição.
+- [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
+
+## Artigos técnicos (Blog)
+
+- [Arquitetura multi-tenant com PostgreSQL](https://viniciusaguiardev.com.br/posts/multi-tenant-architecture-postgresql): Guia prático sobre multi-tenancy em SaaS — três estratégias avaliadas (DB per tenant, schema per tenant, shared DB + tenant_id), Row Level Security (RLS), indexação e particionamento.
+- [Arquitetura de webhooks para provedores de pagamento](https://viniciusaguiardev.com.br/posts/webhook-architecture-payment-providers): Como estruturar recebimento de webhooks em produção — validação de assinatura, idempotência, processamento assíncrono, state machine, reconciliação, dead letter queue e degradação graciosa. Inclui diagrama de fluxo.
+- [RAG com LangChain e PostgreSQL](https://viniciusaguiardev.com.br/posts/rag-langchain-postgres-fullcycle): Pipeline completo de Retrieval-Augmented Generation — ingestão de documentos, chunking, embeddings (HuggingFace/OpenAI), armazenamento vetorial com pgVector, busca semântica e fallback para matching por regras.
+- [Design System com Shadcn UI e Tailwind](https://viniciusaguiardev.com.br/posts/design-system-shadcn-tailwind): Construção de design systems escaláveis com Shadcn UI, tokens de design via CSS variables, variantes de componentes com CVA, e benefícios para times SaaS.
+
+## Experiência profissional
+
+- **Holy Solutions** (Nov 2025 — presente): Mid-level Software Engineer. React, Next.js, React Native, AWS, integrações com IA e pagamentos.
+- **Vox Pet Digital** (Ago 2025 — presente): Software Engineer. SaaS para pet shops/clínicas. WhatsApp AI, Mercado Pago, Stripe.
+- **Stack Labs** (Abr 2025 — Jan 2026): Software Engineer. Desenvolvimento web/mobile para múltiplos clientes.
+- **MovePro** (Mai 2025 — Nov 2025): Software Engineer. Plataforma de saúde/fitness web + mobile. Stripe, Firebase, Crashlytics.
+- **EasyToGo** (Mai 2024 — Jun 2025): Web/Mobile Developer. React, Next.js, React Native, Flutter.
+
+## Tech Stack
+
+React, React Native, Next.js, Node.js, TypeScript, PostgreSQL, Docker, AWS, Git, Tailwind CSS, Shadcn UI, Stripe, Mercado Pago, OpenAI, LangChain, pgVector, CI/CD, GitHub Actions.
+
+## Contato
+
+- Email: vinicius.aguiar1@icloud.com
+- GitHub: https://github.com/ViniAguiar1
+- LinkedIn: https://www.linkedin.com/in/viniciusaguiar-araujo/
+- Site: https://viniciusaguiardev.com.br

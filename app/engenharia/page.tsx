@@ -216,6 +216,13 @@ export default async function EngineeringPage() {
                 </ul>
               </div>
             </div>
+
+            <Link
+              href="/posts/webhook-architecture-payment-providers"
+              className="text-sm text-primary hover:underline inline-block"
+            >
+              {en ? "Read full implementation →" : "Ler implementação completa →"}
+            </Link>
           </div>
         </EngineeringTopic>
       </section>
@@ -312,8 +319,13 @@ export default async function EngineeringPage() {
           <div className="h-px flex-1 bg-border" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
+            {
+              title: en ? "Webhook Architecture for Payments" : "Arquitetura de Webhooks para Pagamentos",
+              desc: en ? "Idempotency, reconciliation, PIX flows" : "Idempotência, reconciliação, fluxos PIX",
+              href: "/posts/webhook-architecture-payment-providers",
+            },
             {
               title: en ? "Multi-tenant Architecture" : "Arquitetura Multi-tenant",
               desc: en ? "Shared DB, RLS, partitioning" : "Banco compartilhado, RLS, particionamento",

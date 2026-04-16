@@ -34,8 +34,8 @@ export function EngineeringTopic({ title, subtitle, children }: EngineeringTopic
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="right" className="w-full sm:w-1/2 sm:max-w-none overflow-y-auto">
-          <SheetHeader className="mb-6">
+        <SheetContent side="right" className="w-full sm:w-1/2 sm:max-w-none overflow-y-auto p-8">
+          <SheetHeader className="mb-6 p-0">
             <SheetTitle className="text-lg">{title}</SheetTitle>
             <SheetDescription>{subtitle}</SheetDescription>
           </SheetHeader>

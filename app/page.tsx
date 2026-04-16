@@ -65,6 +65,16 @@ export default async function Home() {
             </Link>
 
             <Link
+              href="https://api.whatsapp.com/send?phone=5511915369113&text=Ol%C3%A1%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar."
+              target="_blank"
+              data-umami-event="contact-click"
+              data-umami-event-source="hero"
+              className="px-4 py-2 text-sm rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition text-center"
+            >
+              {dict.home.ctaContact}
+            </Link>
+
+            <Link
               href="/sobre"
               className="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted transition text-center"
             >

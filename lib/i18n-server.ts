@@ -30,6 +30,7 @@ export type Dictionary = {
     description: string
     ctaAbout: string
     ctaResume: string
+    ctaContact: string
   }
   about: {
     title: string
@@ -66,6 +67,7 @@ const pt: Dictionary = {
 
     ctaAbout: "Sobre mim",
     ctaResume: "Download CV",
+    ctaContact: "Fale comigo",
   },
 
   about: {
@@ -106,6 +108,7 @@ const en: Dictionary = {
 
     ctaAbout: "About me",
     ctaResume: "Download Resume",
+    ctaContact: "Get in touch",
   },
 
   about: {
@@ -146,6 +149,7 @@ const es: Dictionary = {
 
     ctaAbout: "Sobre mí",
     ctaResume: "Descargar CV",
+    ctaContact: "Contáctame",
   },
 
   about: {

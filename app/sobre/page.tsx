@@ -3,8 +3,9 @@ import { getDictionary, getLocale } from "@/lib/i18n-server"
 import { ExperienceItem } from "@/components/experience-item"
 
 export const metadata = {
-  title: "Sobre | About | Blog",
-  description: "Sobre mim / About me",
+  title: "Sobre",
+  description:
+    "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.",
 }
 
 export default async function SobrePage() {

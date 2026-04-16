@@ -3,7 +3,7 @@ import { getLocale } from "@/lib/i18n-server"
 import { EngineeringTopic } from "@/components/engineering-topic"
 
 export const metadata = {
-  title: "Engineering | Engenharia",
+  title: "Engenharia",
   description:
     "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
 }

@@ -3,8 +3,9 @@ import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 
 export const metadata = {
-  title: "Projetos | Projects",
-  description: "Empresas e produtos onde atuei como Software Engineer.",
+  title: "Projetos",
+  description:
+    "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
 }
 
 export default async function ProjectsPage() {

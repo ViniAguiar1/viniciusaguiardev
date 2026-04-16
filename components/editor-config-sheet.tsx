@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useCallback } from "react"
-import { Copy, Check, FileCode } from "lucide-react"
+import { Copy, Check } from "lucide-react"
 import {
   Sheet,
   SheetContent,
@@ -45,10 +45,9 @@ export function EditorConfigSheet({ label, description }: EditorConfigSheetProps
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2.5 text-sm font-medium hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer"
+        className="text-sm text-primary hover:underline cursor-pointer inline-flex items-center gap-1"
       >
-        <FileCode className="w-4 h-4 text-muted-foreground" />
-        {label}
+        {label} →
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>

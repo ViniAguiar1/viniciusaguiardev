@@ -400,19 +400,6 @@ export default async function UsesPage() {
         </p>
       </header>
 
-      {/* Editor Config button */}
-      <div className="mb-10">
-        <EditorConfigSheet
-          label={t(locale, "Ver meu settings.json", "View my settings.json", "Ver mi settings.json")}
-          description={t(
-            locale,
-            "Configurações do VS Code que uso no dia a dia.",
-            "VS Code settings I use daily.",
-            "Configuraciones de VS Code que uso día a día."
-          )}
-        />
-      </div>
-
       <div className="space-y-10">
         {categories.map((cat) => (
           <section key={cat.title.en}>
@@ -447,6 +434,15 @@ export default async function UsesPage() {
                   </div>
                 </div>
               ))}
+              {cat.title.en === "Editor & Coding" && (
+                <div className="flex items-start gap-3">
+                  <span className="text-muted-foreground mt-0.5 select-none">-</span>
+                  <EditorConfigSheet
+                    label={t(locale, "Ver meu settings.json", "View my settings.json", "Ver mi settings.json")}
+                    description={t(locale, "Configurações do VS Code que uso no dia a dia.", "VS Code settings I use daily.", "Configuraciones de VS Code que uso día a día.")}
+                  />
+                </div>
+              )}
             </div>
           </section>
         ))}

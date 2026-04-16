@@ -1,12 +1,14 @@
 import { cookies } from "next/headers"
 
-export type Locale = "pt" | "en"
+export type Locale = "pt" | "en" | "es"
 
 export async function getLocale(): Promise<Locale> {
   try {
     const store = await cookies()
     const lang = store.get("lang")?.value
-    return lang === "en" ? "en" : "pt"
+    if (lang === "en") return "en"
+    if (lang === "es") return "es"
+    return "pt"
   } catch {
     return "pt"
   }
@@ -116,6 +118,53 @@ const en: Dictionary = {
   },
 }
 
+const es: Dictionary = {
+  nav: {
+    home: "Inicio",
+    about: "Acerca",
+    projects: "Proyectos",
+    engineering: "Ingeniería",
+    curriculum: "Currículum",
+  },
+
+  home: {
+    title: "Vinicius Aguiar",
+
+    subtitle:
+      "Frontend Engineer especializado en React, Next.js y React Native.",
+
+    description:
+      "Construyendo plataformas SaaS escalables y aplicaciones web modernas, con enfoque en experiencia de usuario, arquitectura limpia y rendimiento.",
+
+    ctaAbout: "Sobre mí",
+    ctaResume: "Descargar CV",
+  },
+
+  about: {
+    title: "Sobre mí",
+    subtitle: "Un poco de mi trayectoria, habilidades e intereses.",
+  },
+
+  projects: {
+    title: "Proyectos",
+    subtitle:
+      "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales.",
+  },
+
+  ui: {
+    search: "Buscar",
+  },
+}
+
 export function getDictionary(locale: Locale): Dictionary {
-  return locale === "en" ? en : pt
+  if (locale === "en") return en
+  if (locale === "es") return es
+  return pt
+}
+
+/** Helper for inline trilingual strings */
+export function t(locale: Locale, pt: string, en: string, es: string): string {
+  if (locale === "en") return en
+  if (locale === "es") return es
+  return pt
 }

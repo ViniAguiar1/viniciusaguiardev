@@ -1,5 +1,6 @@
 import { getLocale, t } from "@/lib/i18n-server"
 import Link from "next/link"
+import { EditorConfigSheet } from "@/components/editor-config-sheet"
 
 export async function generateMetadata() {
   const locale = await getLocale()
@@ -398,6 +399,19 @@ export default async function UsesPage() {
           )}
         </p>
       </header>
+
+      {/* Editor Config button */}
+      <div className="mb-10">
+        <EditorConfigSheet
+          label={t(locale, "Ver meu settings.json", "View my settings.json", "Ver mi settings.json")}
+          description={t(
+            locale,
+            "Configurações do VS Code que uso no dia a dia.",
+            "VS Code settings I use daily.",
+            "Configuraciones de VS Code que uso día a día."
+          )}
+        />
+      </div>
 
       <div className="space-y-10">
         {categories.map((cat) => (

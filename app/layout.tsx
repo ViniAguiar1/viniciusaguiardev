@@ -6,6 +6,7 @@ import { RightSidebar } from "@/components/right-sidebar";
 import { MobileHeader } from "@/components/mobile-header";
 import { ThemeProvider } from "@/components/theme-provider"
 import { JsonLd } from "@/components/json-ld"
+import Script from "next/script"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -68,6 +69,12 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="793f27db-931a-4f7b-b7bb-402caabc6f1c"
+          strategy="afterInteractive"
+        />
         <JsonLd
           data={{
             "@context": "https://schema.org",

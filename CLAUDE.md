@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
+nvm use 24        # Always run first — pnpm is only available under Node 24
 pnpm dev          # Dev server (Turbopack)
 pnpm build        # Production build (Turbopack)
 pnpm lint         # ESLint
@@ -12,7 +13,7 @@ pnpm typecheck    # tsc --noEmit
 pnpm aeo          # AEO readiness check (threshold 90/100, fails CI if below)
 ```
 
-Uses **pnpm** (not npm/yarn). Node 20 in CI. Turbopack is the bundler for both dev and build.
+Uses **pnpm** (not npm/yarn). Node 24 locally (via nvm), Node 20 in CI. Turbopack is the bundler for both dev and build.
 
 ## CI Pipeline
 

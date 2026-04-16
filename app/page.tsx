@@ -2,6 +2,7 @@ import { getAllPosts } from "@/lib/posts"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { getDictionary, getLocale } from "@/lib/i18n-server"
+import { JsonLd } from "@/components/json-ld"
 
 export default async function Home() {
   const locale = await getLocale()
@@ -10,6 +11,25 @@ export default async function Home() {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-10">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Vinicius Aguiar",
+          url: "https://viniciusaguiardev.com.br",
+          description: dict.home.description,
+          author: {
+            "@type": "Person",
+            name: "Vinicius Aguiar",
+            jobTitle: "Software Engineer",
+            url: "https://viniciusaguiardev.com.br",
+            sameAs: [
+              "https://github.com/ViniAguiar1",
+              "https://www.linkedin.com/in/viniciusaguiar-araujo/",
+            ],
+          },
+        }}
+      />
 
       {/* HERO */}
       <header className="mb-10">

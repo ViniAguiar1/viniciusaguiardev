@@ -154,7 +154,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                     rel="noopener noreferrer"
                     className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                   >
-                    {locale === "en" ? "Visit website" : "Acessar site"}
+                    {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : "Acessar site"}
                     <svg
                       className="w-3.5 h-3.5"
                       fill="none"

@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { getLocale } from "@/lib/i18n-server"
+import { getLocale, t } from "@/lib/i18n-server"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 
@@ -8,17 +8,20 @@ const siteUrl = "https://viniciusaguiardev.com.br"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: locale === "en" ? "Engineering" : "Engenharia",
-    description:
-      locale === "en"
-        ? "Architecture decisions, trade-offs, and real problems solved in production."
-        : "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
+    title: t(locale, "Engenharia", "Engineering", "Ingeniería"),
+    description: t(
+      locale,
+      "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
+      "Architecture decisions, trade-offs, and real problems solved in production.",
+      "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción."
+    ),
   }
 }
 
 export default async function EngineeringPage() {
   const locale = await getLocale()
   const en = locale === "en"
+  const es = locale === "es"
 
   const faq = en
     ? [

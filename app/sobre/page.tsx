@@ -1,15 +1,17 @@
 import { cn } from "@/lib/utils"
-import { getDictionary, getLocale } from "@/lib/i18n-server"
+import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { ExperienceItem } from "@/components/experience-item"
 
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: locale === "en" ? "About" : "Sobre",
-    description:
-      locale === "en"
-        ? "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer."
-        : "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.",
+    title: t(locale, "Sobre", "About", "Acerca"),
+    description: t(
+      locale,
+      "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.",
+      "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer.",
+      "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Software Engineer."
+    ),
   }
 }
 

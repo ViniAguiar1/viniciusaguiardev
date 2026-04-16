@@ -171,23 +171,31 @@ type RawPostData = Partial<Post> & {
   date_en?: string
   readTime_en?: string
   tag_en?: string
+  title_es?: string
+  description_es?: string
+  content_es?: string
+  blocks_es?: unknown[]
+  date_es?: string
+  readTime_es?: string
+  tag_es?: string
   blocks?: unknown[]
 }
 
 function applyLocaleToData(original: RawPostData, locale: Locale) {
-  const isEN = locale === "en"
   type LocalizedData = Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
   const data = { ...(original as Record<string, unknown>) } as LocalizedData
 
-  // Campos textuais
-  if (isEN) {
-    if (typeof original.title_en === "string") data.title = original.title_en
-    if (typeof original.description_en === "string") data.description = original.description_en
-    if (typeof original.content_en === "string") data.content = original.content_en
-    if (Array.isArray(original.blocks_en)) data.blocks = original.blocks_en as unknown[]
-    if (typeof original.date_en === "string") data.date = original.date_en
-    if (typeof original.readTime_en === "string") data.readTime = original.readTime_en
-    if (typeof original.tag_en === "string") data.tag = original.tag_en
+  const suffix = locale === "en" ? "_en" : locale === "es" ? "_es" : null
+
+  if (suffix) {
+    const raw = original as Record<string, unknown>
+    if (typeof raw[`title${suffix}`] === "string") data.title = raw[`title${suffix}`] as string
+    if (typeof raw[`description${suffix}`] === "string") data.description = raw[`description${suffix}`] as string
+    if (typeof raw[`content${suffix}`] === "string") data.content = raw[`content${suffix}`] as string
+    if (Array.isArray(raw[`blocks${suffix}`])) data.blocks = raw[`blocks${suffix}`] as unknown[]
+    if (typeof raw[`date${suffix}`] === "string") data.date = raw[`date${suffix}`] as string
+    if (typeof raw[`readTime${suffix}`] === "string") data.readTime = raw[`readTime${suffix}`] as string
+    if (typeof raw[`tag${suffix}`] === "string") data.tag = raw[`tag${suffix}`] as string
   }
 
   return data as Partial<Post> & { blocks?: unknown[] }

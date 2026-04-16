@@ -1,15 +1,17 @@
-import { getDictionary, getLocale } from "@/lib/i18n-server"
+import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: locale === "en" ? "Projects" : "Projetos",
-    description:
-      locale === "en"
-        ? "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms."
-        : "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+    title: t(locale, "Projetos", "Projects", "Proyectos"),
+    description: t(
+      locale,
+      "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+      "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
+      "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales."
+    ),
   }
 }
 
@@ -40,19 +42,19 @@ export default async function ProjectsPage() {
           <div>
             <div className="text-2xl font-bold">{projects.length}</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {locale === "en" ? "Projects" : "Projetos"}
+              {t(locale, "Projetos", "Projects", "Proyectos")}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">6+</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {locale === "en" ? "Industries" : "Segmentos"}
+              {t(locale, "Segmentos", "Industries", "Sectores")}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">Web + Mobile</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {locale === "en" ? "Full-stack Delivery" : "Entrega full-stack"}
+              {t(locale, "Entrega full-stack", "Full-stack Delivery", "Entrega full-stack")}
             </div>
           </div>
         </div>

@@ -17,6 +17,7 @@ export type Dictionary = {
     home: string
     about: string
     projects: string
+    engineering: string
     curriculum: string
   }
   home: {
@@ -44,6 +45,7 @@ const pt: Dictionary = {
     home: "Home",
     about: "Sobre",
     projects: "Projetos",
+    engineering: "Engenharia",
     curriculum: "Curriculum",
   },
 
@@ -81,6 +83,7 @@ const en: Dictionary = {
     home: "Home",
     about: "About",
     projects: "Projects",
+    engineering: "Engineering",
     curriculum: "Resume",
   },
 

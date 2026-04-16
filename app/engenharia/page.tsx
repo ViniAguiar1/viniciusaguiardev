@@ -312,6 +312,7 @@ export default async function EngineeringPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
+            { title: t(locale, "Circuit Breaker em Node.js", "Circuit Breaker in Node.js", "Circuit Breaker en Node.js"), desc: t(locale, "State machine, fallbacks, retry e monitoramento", "State machine, fallbacks, retry and monitoring", "State machine, fallbacks, retry y monitoreo"), href: "/posts/circuit-breaker-nodejs" },
             { title: t(locale, "Arquitetura de Webhooks para Pagamentos", "Webhook Architecture for Payments", "Arquitectura de Webhooks para Pagos"), desc: t(locale, "Idempotência, reconciliação, fluxos PIX", "Idempotency, reconciliation, PIX flows", "Idempotencia, reconciliación, flujos PIX"), href: "/posts/webhook-architecture-payment-providers" },
             { title: t(locale, "Arquitetura Multi-tenant", "Multi-tenant Architecture", "Arquitectura Multi-tenant"), desc: t(locale, "Banco compartilhado, RLS, particionamento", "Shared DB, RLS, partitioning", "Base compartida, RLS, particionamiento"), href: "/posts/multi-tenant-architecture-postgresql" },
             { title: t(locale, "RAG com LangChain", "RAG with LangChain", "RAG con LangChain"), desc: t(locale, "Embeddings, pgVector, busca semântica", "Embeddings, pgVector, semantic search", "Embeddings, pgVector, búsqueda semántica"), href: "/posts/rag-langchain-postgres-fullcycle" },

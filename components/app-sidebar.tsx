@@ -1,11 +1,11 @@
 import Image from "next/image"
-import Link from "next/link"
 import { getDictionary, getLocale } from "@/lib/i18n-server"
 
 import {
   Sidebar,
   SidebarContent,
 } from "@/components/ui/sidebar"
+import { SidebarNavLink } from "@/components/sidebar-nav-link"
 
 import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 
@@ -42,53 +42,27 @@ export async function AppSidebar() {
 
         {/* Main Menu Links */}
         <nav className="flex flex-col items-center gap-2 w-full">
-          <Link
-            href="/"
-            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-          >
+          <SidebarNavLink href="/" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.home}
-          </Link>
-          <Link
-            href="/sobre"
-            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/sobre" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-          >
+          </SidebarNavLink>
+          <SidebarNavLink href="/sobre" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.about}
-          </Link>
-          <Link
-            href="/projetos"
-            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/projetos" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-          >
+          </SidebarNavLink>
+          <SidebarNavLink href="/projetos" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.projects}
-          </Link>
-          <Link
-            href="/engenharia"
-            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/engenharia" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-          >
+          </SidebarNavLink>
+          <SidebarNavLink href="/engenharia" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.engineering}
-          </Link>
-          <Link
-            href="/uses"
-            className={`text-lg font-normal mb-1 hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/uses" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-          >
+          </SidebarNavLink>
+          <SidebarNavLink href="/uses" className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.uses}
-          </Link>
-          {/* Curriculum now downloads a PDF */}
-          <a
-            href="/Curriculo-Vinicius-Aguiar.pdf"
-            className={`text-lg font-normal hover:underline ${typeof window !== "undefined" ? window.location.pathname === "/Vinicius_Aguiar_Front_end.pdf" ? "text-blue-600" : "text-gray-700" : ""}`}
-            style={{ transition: 'color 0.2s' }}
-            download
-          >
+          </SidebarNavLink>
+          <SidebarNavLink href="/Curriculo-Vinicius-Aguiar.pdf" className="text-lg font-normal hover:underline text-gray-700" download>
             {dict.nav.curriculum}
-          </a>
+          </SidebarNavLink>
         </nav>
 
-        {/* Social Icons - moved directly below the main menu */}
+        {/* Social Icons */}
         <div className="flex justify-center items-center gap-6 mt-6 mb-12 w-full">
           <a href="https://github.com/ViniAguiar1" target="_blank" aria-label="GitHub" rel="noopener">
             <FaGithub className="w-7 h-7 text-gray-700 hover:text-black transition-colors" />
@@ -96,12 +70,6 @@ export async function AppSidebar() {
           <a href="https://www.linkedin.com/in/viniciusaguiar-araujo/" target="_blank" aria-label="LinkedIn" rel="noopener">
             <FaLinkedin className="w-7 h-7 text-gray-700 hover:text-blue-700 transition-colors" />
           </a>
-          {/* <a href="https://instagram.com/" target="_blank" aria-label="Instagram" rel="noopener">
-            <FaInstagram className="w-7 h-7 text-gray-700 hover:text-pink-500 transition-colors" />
-          </a> */}
-          {/* <a href="https://facebook.com/" target="_blank" aria-label="Facebook" rel="noopener">
-            <FaFacebook className="w-7 h-7 text-gray-700 hover:text-blue-600 transition-colors" />
-          </a> */}
           <a href="https://wa.me/5511915369113?text=Olá!%20Vim%20pelo%20seu%20site." target="_blank" aria-label="WhatsApp" rel="noopener">
             <FaWhatsapp className="w-7 h-7 text-gray-700 hover:text-green-600 transition-colors" />
           </a>

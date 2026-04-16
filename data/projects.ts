@@ -17,8 +17,8 @@ export type Project = {
   slug: string
   name: string
   logo: string
-  tagline: { pt: string; en: string }
-  description: { pt: string; en: string }
+  tagline: { pt: string; en: string; es?: string }
+  description: { pt: string; en: string; es?: string }
   category: ProjectCategory
   url?: string
 }

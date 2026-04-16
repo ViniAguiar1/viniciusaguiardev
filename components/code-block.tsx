@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Copy, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Prism from "prismjs"
@@ -41,15 +41,16 @@ function normalizeLang(lang?: string): string {
 
 export function CodeBlock({ code, language, className }: Props) {
   const [copied, setCopied] = useState(false)
-  const [highlightedHtml, setHighlightedHtml] = useState<string | null>(null)
-
+  const codeRef = useRef<HTMLElement>(null)
   const lang = normalizeLang(language)
 
   useEffect(() => {
+    const el = codeRef.current
+    if (!el) return
     try {
       const grammar = Prism.languages[lang] ?? Prism.languages["markup"]
       if (grammar) {
-        setHighlightedHtml(Prism.highlight(code, grammar, lang))
+        el.innerHTML = Prism.highlight(code, grammar, lang)
       }
     } catch {
       // keep plain text
@@ -81,14 +82,13 @@ export function CodeBlock({ code, language, className }: Props) {
         {copied ? "Copiado" : "Copiar"}
       </button>
       <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto text-sm" suppressHydrationWarning>
-        {highlightedHtml ? (
-          <code
-            className={cn("whitespace-pre", `language-${lang}`)}
-            dangerouslySetInnerHTML={{ __html: highlightedHtml }}
-          />
-        ) : (
-          <code className="whitespace-pre">{code}</code>
-        )}
+        <code
+          ref={codeRef}
+          className={cn("whitespace-pre", `language-${lang}`)}
+          suppressHydrationWarning
+        >
+          {code}
+        </code>
       </pre>
     </div>
   )

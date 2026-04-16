@@ -54,9 +54,9 @@ export function LanguageToggle() {
         <Languages className="h-4 w-4" /> {label}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setLanguage("pt")}>Português (PT-BR)</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("en")}>English (EN)</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("es")}>Español (ES)</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("pt")} data-umami-event="language-switch" data-umami-event-lang="pt">Português (PT-BR)</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("en")} data-umami-event="language-switch" data-umami-event-lang="en">English (EN)</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("es")} data-umami-event="language-switch" data-umami-event-lang="es">Español (ES)</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

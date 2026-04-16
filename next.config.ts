@@ -10,6 +10,19 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Link",
+            value: "<https://cloud.umami.is>; rel=preconnect",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

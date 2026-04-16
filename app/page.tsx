@@ -57,6 +57,8 @@ export default async function Home() {
             <Link
               href="/Curriculo-Vinicius-Aguiar.pdf"
               target="_blank"
+              data-umami-event="cv-download"
+              data-umami-event-source="hero"
               className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {dict.home.ctaResume}

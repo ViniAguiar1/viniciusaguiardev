@@ -1,6 +1,7 @@
 import { getLocale, t } from "@/lib/i18n-server"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
+import { ImageGallery } from "@/components/image-gallery"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -286,24 +287,19 @@ export default async function XDropPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.screenshotsTitle}
             </h2>
-            {/* Web Dashboard */}
-            <div className="rounded-lg border border-border overflow-hidden mb-6">
-              <Image
-                src="/xdrop/dashboard-xdrop.png.jpeg"
-                alt="X-Drop Dashboard — visão geral com métricas de vendas, faturamento e sellers ativos"
-                width={1280}
-                height={760}
-                className="w-full h-auto"
-              />
-            </div>
-
-            <div className="rounded-lg border border-border overflow-hidden mb-6">
-              <Image
-                src="/xdrop/catalog-xdrop.png.jpeg"
-                alt="X-Drop — Catálogo de produtos com 641 itens, busca, categorias e gestão de estoque"
-                width={1280}
-                height={760}
-                className="w-full h-auto"
+            {/* Web Gallery */}
+            <div className="mb-6">
+              <ImageGallery
+                images={[
+                  {
+                    src: "/xdrop/dashboard-xdrop.png.jpeg",
+                    alt: "X-Drop Dashboard — visão geral com métricas de vendas, faturamento e sellers ativos",
+                  },
+                  {
+                    src: "/xdrop/catalog-xdrop.png.jpeg",
+                    alt: "X-Drop — Catálogo de produtos com 641 itens, busca, categorias e gestão de estoque",
+                  },
+                ]}
               />
             </div>
 

@@ -18,7 +18,7 @@ export const projects: Project[] = [
   {
     slug: "fastseller",
     name: "FastSeller",
-    logo: "/logos/fastseller.svg",
+    logo: "/images/fastseller-logo.png",
     tagline: {
       pt: "Plataforma de automação para vendedores em marketplaces",
       en: "Automation platform for marketplace sellers",

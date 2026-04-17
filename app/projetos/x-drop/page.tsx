@@ -283,12 +283,14 @@ export default async function XDropPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.screenshotsTitle}
             </h2>
-            <div className="rounded-lg border border-dashed border-border bg-muted/20 p-12 text-center text-sm text-muted-foreground">
-              {locale === "en"
-                ? "Screenshots coming soon"
-                : locale === "es"
-                  ? "Capturas de pantalla próximamente"
-                  : "Screenshots em breve"}
+            <div className="rounded-lg border border-border overflow-hidden">
+              <Image
+                src="/dashboard-xdrop.png.jpeg"
+                alt="X-Drop Dashboard — visão geral com métricas de vendas, faturamento e sellers ativos"
+                width={1280}
+                height={760}
+                className="w-full h-auto"
+              />
             </div>
           </section>
         </FadeIn>

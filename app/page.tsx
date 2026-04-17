@@ -69,7 +69,7 @@ export default async function Home() {
               target="_blank"
               data-umami-event="contact-click"
               data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition text-center"
+              className="px-4 py-2 text-sm rounded-md bg-emerald-700 text-white hover:bg-emerald-800 transition text-center"
             >
               {dict.home.ctaContact}
             </Link>
@@ -162,7 +162,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {articles.map((article, index) => (
-            <FadeIn key={article.slug} delay={index * 100}>
+            <FadeIn key={article.slug} delay={Math.min(index * 50, 200)}>
             <article
               className={cn(
                 "rounded-lg border border-border bg-card text-card-foreground shadow p-6 flex flex-col justify-between min-h-45 transition-transform hover:-translate-y-1 hover:shadow-lg relative cursor-pointer"

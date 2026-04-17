@@ -243,7 +243,7 @@ export default async function IKroppPage() {
             <div className="flex items-center gap-4 mb-4">
               <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                 <Image
-                  src="/logos/ikropp.svg"
+                  src="/images/ikropp.png"
                   alt="iKropp"
                   width={40}
                   height={40}

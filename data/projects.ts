@@ -70,7 +70,7 @@ export const projects: Project[] = [
   {
     slug: "ikropp",
     name: "iKropp",
-    logo: "/logos/ikropp.svg",
+    logo: "/images/ikropp.png",
     tagline: {
       pt: "SaaS de gestão para clínicas de estética — 50k+ usuários",
       en: "Management SaaS for aesthetics clinics — 50k+ users",

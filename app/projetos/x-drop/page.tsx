@@ -58,6 +58,7 @@ export default async function XDropPage() {
       stackTitle: "Stack técnica",
       stackItems: [
         "React + Next.js + TypeScript",
+        "Swift UI (iOS nativo)",
         "NestJS (API backend)",
         "PostgreSQL + Firebase",
         "Docker + AWS",
@@ -100,6 +101,7 @@ export default async function XDropPage() {
       stackTitle: "Tech stack",
       stackItems: [
         "React + Next.js + TypeScript",
+        "Swift UI (iOS nativo)",
         "NestJS (API backend)",
         "PostgreSQL + Firebase",
         "Docker + AWS",
@@ -142,6 +144,7 @@ export default async function XDropPage() {
       stackTitle: "Stack técnico",
       stackItems: [
         "React + Next.js + TypeScript",
+        "Swift UI (iOS nativo)",
         "NestJS (API backend)",
         "PostgreSQL + Firebase",
         "Docker + AWS",
@@ -283,7 +286,8 @@ export default async function XDropPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.screenshotsTitle}
             </h2>
-            <div className="rounded-lg border border-border overflow-hidden">
+            {/* Web Dashboard */}
+            <div className="rounded-lg border border-border overflow-hidden mb-6">
               <Image
                 src="/dashboard-xdrop.png.jpeg"
                 alt="X-Drop Dashboard — visão geral com métricas de vendas, faturamento e sellers ativos"
@@ -291,6 +295,49 @@ export default async function XDropPage() {
                 height={760}
                 className="w-full h-auto"
               />
+            </div>
+
+            {/* Mobile App */}
+            <div className="rounded-lg border border-border bg-card p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-5 h-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                </svg>
+                <span className="text-sm font-medium">
+                  {locale === "en" ? "iOS App — Swift UI (native)" : locale === "es" ? "App iOS — Swift UI (nativo)" : "App iOS — Swift UI (nativo)"}
+                </span>
+                <a
+                  href="https://apps.apple.com/us/app/xdrop/id6749638204"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ml-auto text-xs text-muted-foreground hover:text-foreground transition inline-flex items-center gap-1"
+                >
+                  App Store
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-4.5-6H18m0 0v4.5m0-4.5L10.5 13.5" />
+                  </svg>
+                </a>
+              </div>
+              <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <div className="rounded-lg border border-border overflow-hidden">
+                  <Image
+                    src="/dashboard-app-xdrop.webp"
+                    alt="X-Drop iOS App — Dashboard executivo com métricas de vendas e faturamento"
+                    width={390}
+                    height={844}
+                    className="w-full h-auto"
+                  />
+                </div>
+                <div className="rounded-lg border border-border overflow-hidden">
+                  <Image
+                    src="/balance-screen.webp"
+                    alt="X-Drop iOS App — Tela de saldo com PIX e gestão financeira"
+                    width={390}
+                    height={844}
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
             </div>
           </section>
         </FadeIn>
@@ -330,6 +377,27 @@ export default async function XDropPage() {
               className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-4.5-6H18m0 0v4.5m0-4.5L10.5 13.5"
+                />
+              </svg>
+            </a>
+            <a
+              href="https://apps.apple.com/us/app/xdrop/id6749638204"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+            >
+              App Store (iOS)
               <svg
                 className="w-3.5 h-3.5"
                 fill="none"

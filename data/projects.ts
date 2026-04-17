@@ -65,6 +65,7 @@ export const projects: Project[] = [
     },
     category: "SaaS",
     url: "https://voxpetdigital.com.br/",
+    detailPage: "/projetos/vox-pet-digital",
   },
   {
     slug: "ikropp",

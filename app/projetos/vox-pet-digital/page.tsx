@@ -1,6 +1,7 @@
 import { getLocale, t } from "@/lib/i18n-server"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
+import { ImageGallery } from "@/components/image-gallery"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -58,13 +59,7 @@ export default async function VoxPetPage() {
           desc: "Dois providers (Focus NFe + NFe.io), fila resiliente processando a cada 30s, import de XML de fornecedores.",
         },
       ],
-      numbersTitle: "Escala do sistema",
-      stats: [
-        { value: "95", label: "modelos Prisma" },
-        { value: "91", label: "páginas frontend" },
-        { value: "14", label: "integrações externas" },
-        { value: "10", label: "tools de IA" },
-      ],
+      screenshotsTitle: "A plataforma",
       stackTitle: "Stack técnica",
       stackItems: [
         "Next.js 16 + React 19",
@@ -112,13 +107,7 @@ export default async function VoxPetPage() {
           desc: "Two providers (Focus NFe + NFe.io), resilient queue processing every 30s, supplier XML import.",
         },
       ],
-      numbersTitle: "System scale",
-      stats: [
-        { value: "95", label: "Prisma models" },
-        { value: "91", label: "frontend pages" },
-        { value: "14", label: "external integrations" },
-        { value: "10", label: "AI tools" },
-      ],
+      screenshotsTitle: "The platform",
       stackTitle: "Tech stack",
       stackItems: [
         "Next.js 16 + React 19",
@@ -166,13 +155,7 @@ export default async function VoxPetPage() {
           desc: "Dos providers (Focus NFe + NFe.io), cola resiliente procesando cada 30s, import de XML de proveedores.",
         },
       ],
-      numbersTitle: "Escala del sistema",
-      stats: [
-        { value: "95", label: "modelos Prisma" },
-        { value: "91", label: "páginas frontend" },
-        { value: "14", label: "integraciones externas" },
-        { value: "10", label: "tools de IA" },
-      ],
+      screenshotsTitle: "La plataforma",
       stackTitle: "Stack técnico",
       stackItems: [
         "Next.js 16 + React 19",
@@ -284,24 +267,32 @@ export default async function VoxPetPage() {
         </FadeIn>
 
         {/* Numbers */}
+        {/* Screenshots */}
         <FadeIn delay={300}>
           <section className="mb-12">
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
-              {c.numbersTitle}
+              {c.screenshotsTitle}
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {c.stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-lg border border-border bg-card p-4 text-center"
-                >
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <ImageGallery
+              images={[
+                {
+                  src: "/vox/dashboard-vox.jpeg",
+                  alt: "Vox Pet Digital — Dashboard principal com métricas da clínica",
+                },
+                {
+                  src: "/vox/agenda-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Sistema de agendamento de consultas",
+                },
+                {
+                  src: "/vox/vendas-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Módulo de vendas e PDV",
+                },
+                {
+                  src: "/vox/whatsapp-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Atendimento automatizado via WhatsApp com IA",
+                },
+              ]}
+            />
           </section>
         </FadeIn>
 

@@ -2,7 +2,6 @@
 
 import { useMemo, useSyncExternalStore } from "react"
 import { useRouter } from "next/navigation"
-import { Languages } from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,13 +32,13 @@ function getServerSnapshot(): Lang {
   return "pt"
 }
 
-const labels: Record<Lang, string> = { pt: "PT", en: "EN", es: "ES" }
+const flags: Record<Lang, string> = { pt: "🇧🇷", en: "🇺🇸", es: "🇪🇸" }
 
 export function LanguageToggle() {
   const router = useRouter()
   const lang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
 
-  const label = useMemo(() => labels[lang], [lang])
+  const flag = useMemo(() => flags[lang], [lang])
 
   function setLanguage(next: Lang) {
     try {
@@ -51,12 +50,12 @@ export function LanguageToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm">
-        <Languages className="h-4 w-4" /> {label}
+        <span className="text-base leading-none">{flag}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setLanguage("pt")} data-umami-event="language-switch" data-umami-event-lang="pt">Português (PT-BR)</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("en")} data-umami-event="language-switch" data-umami-event-lang="en">English (EN)</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("es")} data-umami-event="language-switch" data-umami-event-lang="es">Español (ES)</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("pt")} data-umami-event="language-switch" data-umami-event-lang="pt">🇧🇷 Português</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("en")} data-umami-event="language-switch" data-umami-event-lang="en">🇺🇸 English</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setLanguage("es")} data-umami-event="language-switch" data-umami-event-lang="es">🇪🇸 Español</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

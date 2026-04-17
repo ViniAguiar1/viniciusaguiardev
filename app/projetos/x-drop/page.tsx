@@ -289,8 +289,18 @@ export default async function XDropPage() {
             {/* Web Dashboard */}
             <div className="rounded-lg border border-border overflow-hidden mb-6">
               <Image
-                src="/dashboard-xdrop.png.jpeg"
+                src="/xdrop/dashboard-xdrop.png.jpeg"
                 alt="X-Drop Dashboard — visão geral com métricas de vendas, faturamento e sellers ativos"
+                width={1280}
+                height={760}
+                className="w-full h-auto"
+              />
+            </div>
+
+            <div className="rounded-lg border border-border overflow-hidden mb-6">
+              <Image
+                src="/xdrop/catalog-xdrop.png.jpeg"
+                alt="X-Drop — Catálogo de produtos com 641 itens, busca, categorias e gestão de estoque"
                 width={1280}
                 height={760}
                 className="w-full h-auto"
@@ -321,7 +331,7 @@ export default async function XDropPage() {
               <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
                 <div className="rounded-lg border border-border overflow-hidden">
                   <Image
-                    src="/dashboard-app-xdrop.webp"
+                    src="/xdrop/dashboard-app-xdrop.webp"
                     alt="X-Drop iOS App — Dashboard executivo com métricas de vendas e faturamento"
                     width={390}
                     height={844}
@@ -330,7 +340,7 @@ export default async function XDropPage() {
                 </div>
                 <div className="rounded-lg border border-border overflow-hidden">
                   <Image
-                    src="/balance-screen.webp"
+                    src="/xdrop/balance-screen.webp"
                     alt="X-Drop iOS App — Tela de saldo com PIX e gestão financeira"
                     width={390}
                     height={844}

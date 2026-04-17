@@ -26,20 +26,20 @@ const siteUrl = "https://viniciusaguiardev.com.br"
 
 export const metadata: Metadata = {
   title: {
-    default: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
+    default: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção",
     template: "%s | Vinicius Aguiar",
   },
   description:
-    "Software Engineer especializado em React, Next.js e TypeScript. Construindo plataformas SaaS, integrações e sistemas em produção.",
+    "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.",
   metadataBase: new URL(siteUrl),
   openGraph: {
     type: "website",
     locale: "pt_BR",
     alternateLocale: "en_US",
     siteName: "Vinicius Aguiar",
-    title: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
+    title: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção",
     description:
-      "Software Engineer especializado em React, Next.js e TypeScript. Construindo plataformas SaaS, integrações e sistemas em produção.",
+      "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.",
     url: siteUrl,
     images: [
       {
@@ -52,9 +52,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
+    title: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção",
     description:
-      "Software Engineer especializado em React, Next.js e TypeScript.",
+      "Software Engineer — plataformas SaaS, pagamentos e IA em produção.",
     images: ["/og-image.png"],
   },
   alternates: {

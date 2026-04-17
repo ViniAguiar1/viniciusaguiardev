@@ -19,8 +19,13 @@ export async function generateMetadata() {
   }
 }
 
-export default async function EngineeringPage() {
+type PageProps = {
+  searchParams: Promise<{ topic?: string }>
+}
+
+export default async function EngineeringPage({ searchParams }: PageProps) {
   const locale = await getLocale()
+  const { topic } = await searchParams
 
   const faq = locale === "en"
     ? [
@@ -91,6 +96,8 @@ export default async function EngineeringPage() {
       <FadeIn delay={100}>
       <section className="space-y-3 mb-12">
         <EngineeringTopic
+          id="saas-architecture"
+          defaultOpen={topic === "saas-architecture"}
           title={t(locale, "Arquitetura SaaS — Plataforma Vertical", "SaaS Architecture — Vertical Platform", "Arquitectura SaaS — Plataforma Vertical")}
           subtitle={t(locale, "Plataforma multi-módulo: agenda, vendas, financeiro, IA no WhatsApp", "Multi-module platform: scheduling, sales, finance, WhatsApp AI", "Plataforma multi-módulo: agenda, ventas, financiero, IA en WhatsApp")}
         >
@@ -134,6 +141,8 @@ export default async function EngineeringPage() {
         </EngineeringTopic>
 
         <EngineeringTopic
+          id="multi-tenant"
+          defaultOpen={topic === "multi-tenant"}
           title={t(locale, "Isolamento de dados Multi-tenant", "Multi-tenant Data Isolation", "Aislamiento de datos Multi-tenant")}
           subtitle={t(locale, "Banco compartilhado + tenant_id + RLS — avaliou 3 estratégias, escolheu simplicidade", "Shared DB + tenant_id + RLS — evaluated 3 strategies, chose simplicity", "Base compartida + tenant_id + RLS — evaluó 3 estrategias, eligió simplicidad")}
         >
@@ -175,6 +184,8 @@ export default async function EngineeringPage() {
         </EngineeringTopic>
 
         <EngineeringTopic
+          id="payments"
+          defaultOpen={topic === "payments"}
           title={t(locale, "Pagamentos e integrações externas", "Payments & External Integrations", "Pagos e integraciones externas")}
           subtitle={t(locale, "Webhooks, idempotência, fluxos PIX em múltiplos provedores", "Webhooks, idempotency, PIX flows across multiple providers", "Webhooks, idempotencia, flujos PIX en múltiples proveedores")}
         >

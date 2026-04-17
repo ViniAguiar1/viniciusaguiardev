@@ -69,7 +69,7 @@ export default async function Home() {
               target="_blank"
               data-umami-event="contact-click"
               data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition text-center"
+              className="px-4 py-2 text-sm rounded-md bg-emerald-700 text-white hover:bg-emerald-800 transition text-center"
             >
               {dict.home.ctaContact}
             </Link>

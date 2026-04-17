@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, useSyncExternalStore } from "react"
 import { cn } from "@/lib/utils"
 
 interface FadeInProps {
@@ -9,8 +9,13 @@ interface FadeInProps {
   delay?: number
 }
 
+const emptySubscribe = () => () => {}
+const getTrue = () => true
+const getFalse = () => false
+
 export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const hydrated = useSyncExternalStore(emptySubscribe, getTrue, getFalse)
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -35,11 +40,11 @@ export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
     <div
       ref={ref}
       className={cn(
-        "transition-all duration-500 ease-out",
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
+        hydrated ? "transition-all duration-500 ease-out" : "",
+        hydrated && !visible ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0",
         className
       )}
-      style={{ transitionDelay: `${delay}ms` }}
+      style={hydrated ? { transitionDelay: `${delay}ms` } : undefined}
     >
       {children}
     </div>

@@ -18,7 +18,7 @@ export const projects: Project[] = [
   {
     slug: "fastseller",
     name: "FastSeller",
-    logo: "/logos/fastseller.svg",
+    logo: "/images/fastseller-logo.png",
     tagline: {
       pt: "Plataforma de automação para vendedores em marketplaces",
       en: "Automation platform for marketplace sellers",
@@ -70,19 +70,20 @@ export const projects: Project[] = [
   {
     slug: "ikropp",
     name: "iKropp",
-    logo: "/logos/ikropp.svg",
+    logo: "/images/ikropp.png",
     tagline: {
-      pt: "Plataforma digital de saúde e bem-estar",
-      en: "Digital health and wellness platform",
-      es: "Plataforma digital de salud y bienestar",
+      pt: "SaaS de gestão para clínicas de estética — 50k+ usuários",
+      en: "Management SaaS for aesthetics clinics — 50k+ users",
+      es: "SaaS de gestión para clínicas de estética — 50k+ usuarios",
     },
     description: {
-      pt: "Plataforma digital focada em saúde e bem-estar, conectando profissionais e usuários com ferramentas de acompanhamento, conteúdo e serviços personalizados.",
-      en: "Digital platform focused on health and wellness, connecting professionals and users with tracking tools, content, and personalized services.",
-      es: "Plataforma digital enfocada en salud y bienestar, conectando profesionales y usuarios con herramientas de seguimiento, contenido y servicios personalizados.",
+      pt: "Plataforma SaaS para o setor de estética e saúde com 50.000+ usuários. Centraliza agenda, clientes, anamneses, profissionais, serviços e fluxos operacionais. Atuei como Software Engineer full stack, evoluindo módulos críticos em produção, modernizando sistema legado (PHP 5.3 → React/Next.js) e implementando Design System.",
+      en: "SaaS platform for the aesthetics and health sector with 50,000+ users. Centralizes scheduling, clients, anamnesis, professionals, services and operational workflows. I worked as a full stack Software Engineer, evolving critical production modules, modernizing legacy system (PHP 5.3 → React/Next.js) and implementing Design System.",
+      es: "Plataforma SaaS para el sector de estética y salud con 50.000+ usuarios. Centraliza agenda, clientes, anamnesis, profesionales, servicios y flujos operacionales. Actué como Software Engineer full stack, evolucionando módulos críticos en producción, modernizando sistema legado (PHP 5.3 → React/Next.js) e implementando Design System.",
     },
     category: "Health",
     url: "https://ikropp.com/",
+    detailPage: "/projetos/ikropp",
   },
   {
     slug: "movepro",

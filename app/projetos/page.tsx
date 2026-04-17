@@ -52,9 +52,9 @@ export default async function ProjectsPage() {
             </div>
           </div>
           <div>
-            <div className="text-2xl font-bold">6+</div>
+            <div className="text-2xl font-bold">SaaS + E-commerce</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, "Segmentos", "Industries", "Sectores")}
+              {t(locale, "Foco principal", "Main focus", "Enfoque principal")}
             </div>
           </div>
           <div>

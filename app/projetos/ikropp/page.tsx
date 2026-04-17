@@ -1,6 +1,7 @@
 import { getLocale, t } from "@/lib/i18n-server"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
+import { ImageGallery } from "@/components/image-gallery"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -349,9 +350,22 @@ export default async function IKroppPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.screenshotsTitle}
             </h2>
-            <div className="rounded-lg border border-dashed border-border bg-muted/20 p-12 text-center text-sm text-muted-foreground">
-              {t(locale, "Screenshots em breve", "Screenshots coming soon", "Capturas de pantalla próximamente")}
-            </div>
+            <ImageGallery
+              images={[
+                {
+                  src: "/ikropp/dashboard-ikropp.png.jpeg",
+                  alt: "iKropp — Dashboard principal da clínica",
+                },
+                {
+                  src: "/ikropp/agenda-ikropp.png.jpeg",
+                  alt: "iKropp — Sistema de agendamento de consultas",
+                },
+                {
+                  src: "/ikropp/servicos-ikropp.png.jpeg",
+                  alt: "iKropp — Gestão de serviços e procedimentos",
+                },
+              ]}
+            />
           </section>
         </FadeIn>
 

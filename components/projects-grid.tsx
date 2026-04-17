@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import * as Dialog from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -148,32 +149,58 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                   {selected.description[locale] ?? selected.description.pt}
                 </p>
 
-                {/* Link */}
-                {selected.url && (
-                  <a
-                    href={selected.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-umami-event="project-visit"
-                    data-umami-event-project={selected.name}
-                    className="mt-5 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
-                  >
-                    {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : "Acessar site"}
-                    <svg
-                      className="w-3.5 h-3.5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke="currentColor"
+                {/* Links */}
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {selected.detailPage && (
+                    <Link
+                      href={selected.detailPage}
+                      data-umami-event="project-detail"
+                      data-umami-event-project={selected.name}
+                      className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-4.5-6H18m0 0v4.5m0-4.5L10.5 13.5"
-                      />
-                    </svg>
-                  </a>
-                )}
+                      {locale === "en" ? "Learn more" : locale === "es" ? "Ver más" : "Ver mais"}
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </Link>
+                  )}
+                  {selected.url && (
+                    <a
+                      href={selected.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-umami-event="project-visit"
+                      data-umami-event-project={selected.name}
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
+                        selected.detailPage
+                          ? "border border-border hover:bg-muted"
+                          : "bg-primary text-primary-foreground hover:opacity-90"
+                      )}
+                    >
+                      {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : "Acessar site"}
+                      <svg
+                        className="w-3.5 h-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-4.5-6H18m0 0v4.5m0-4.5L10.5 13.5"
+                        />
+                      </svg>
+                    </a>
+                  )}
+                </div>
 
                 {/* Close */}
                 <Dialog.Close className="absolute top-4 right-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity">

@@ -48,8 +48,8 @@
       "ordered": false,
       "items": [
         "**Frontend:** React + Next.js com TypeScript — SSR para SEO do painel público, CSR para o dashboard interno",
-        "**Backend:** Node.js com API REST — separação clara entre domínios (pedidos, catálogo, financeiro, integrações)",
-        "**Banco:** PostgreSQL — modelagem relacional com índices compostos para queries de relatório",
+        "**Backend:** NestJS (Node.js) com API REST — módulos isolados por domínio (pedidos, catálogo, financeiro, integrações)",
+        "**Banco:** PostgreSQL + Firebase (auth e real-time listeners)",
         "**Infra:** AWS com containers Docker, CI/CD automatizado",
         "**Pagamentos:** Asaas (PIX, boleto) + Mercado Pago (cartão, PIX)",
         "**Marketplaces:** Mercado Livre API + Shopee API"
@@ -185,13 +185,17 @@
       "ordered": false,
       "items": [
         "React + Next.js + TypeScript (frontend)",
-        "Node.js + Express (API)",
-        "PostgreSQL (banco de dados)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (banco e auth)",
         "Docker + AWS (infraestrutura)",
         "Asaas + Mercado Pago (pagamentos)",
         "Mercado Livre API + Shopee API (marketplaces)",
         "CI/CD com deploy automatizado"
       ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nQuer conhecer mais sobre o projeto, o propósito e ver a plataforma? [Acesse a página dedicada da X-Drop](/projetos/x-drop)."
     }
   ],
   "blocks_en": [
@@ -226,8 +230,8 @@
       "ordered": false,
       "items": [
         "**Frontend:** React + Next.js with TypeScript — SSR for public panel SEO, CSR for the internal dashboard",
-        "**Backend:** Node.js with REST API — clear domain separation (orders, catalog, finance, integrations)",
-        "**Database:** PostgreSQL — relational modeling with composite indexes for reporting queries",
+        "**Backend:** NestJS (Node.js) with REST API — isolated modules per domain (orders, catalog, finance, integrations)",
+        "**Database:** PostgreSQL + Firebase (auth and real-time listeners)",
         "**Infra:** AWS with Docker containers, automated CI/CD",
         "**Payments:** Asaas (PIX, bank slip) + Mercado Pago (card, PIX)",
         "**Marketplaces:** Mercado Livre API + Shopee API"
@@ -363,13 +367,17 @@
       "ordered": false,
       "items": [
         "React + Next.js + TypeScript (frontend)",
-        "Node.js + Express (API)",
-        "PostgreSQL (database)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (database and auth)",
         "Docker + AWS (infrastructure)",
         "Asaas + Mercado Pago (payments)",
         "Mercado Livre API + Shopee API (marketplaces)",
         "CI/CD with automated deploys"
       ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nWant to learn more about the project, its purpose and see the platform? [Visit the X-Drop dedicated page](/projetos/x-drop)."
     }
   ],
   "blocks_es": [
@@ -404,8 +412,8 @@
       "ordered": false,
       "items": [
         "**Frontend:** React + Next.js con TypeScript — SSR para SEO del panel público, CSR para el dashboard interno",
-        "**Backend:** Node.js con API REST — separación clara entre dominios (pedidos, catálogo, financiero, integraciones)",
-        "**Base de datos:** PostgreSQL — modelado relacional con índices compuestos para queries de reportes",
+        "**Backend:** NestJS (Node.js) con API REST — módulos aislados por dominio (pedidos, catálogo, financiero, integraciones)",
+        "**Base de datos:** PostgreSQL + Firebase (auth y real-time listeners)",
         "**Infra:** AWS con contenedores Docker, CI/CD automatizado",
         "**Pagos:** Asaas (PIX, boleto) + Mercado Pago (tarjeta, PIX)",
         "**Marketplaces:** Mercado Livre API + Shopee API"
@@ -541,13 +549,17 @@
       "ordered": false,
       "items": [
         "React + Next.js + TypeScript (frontend)",
-        "Node.js + Express (API)",
-        "PostgreSQL (base de datos)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (base de datos y auth)",
         "Docker + AWS (infraestructura)",
         "Asaas + Mercado Pago (pagos)",
         "Mercado Livre API + Shopee API (marketplaces)",
         "CI/CD con deploys automatizados"
       ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\n¿Quieres conocer más sobre el proyecto, su propósito y ver la plataforma? [Accede a la página dedicada de X-Drop](/projetos/x-drop)."
     }
   ]
 }

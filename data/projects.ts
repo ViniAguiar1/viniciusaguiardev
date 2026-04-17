@@ -11,6 +11,7 @@ export type Project = {
   description: { pt: string; en: string; es?: string }
   category: ProjectCategory
   url?: string
+  detailPage?: string
 }
 
 export const projects: Project[] = [
@@ -46,6 +47,7 @@ export const projects: Project[] = [
     },
     category: "SaaS",
     url: "https://xdrop.com.br/",
+    detailPage: "/projetos/x-drop",
   },
   {
     slug: "vox-pet-digital",

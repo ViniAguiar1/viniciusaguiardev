@@ -6,6 +6,7 @@ import { RightSidebar } from "@/components/right-sidebar";
 import { MobileHeader } from "@/components/mobile-header";
 import { ThemeProvider } from "@/components/theme-provider"
 import { JsonLd } from "@/components/json-ld"
+import { Footer } from "@/components/footer"
 import Script from "next/script"
 import "./globals.css";
 
@@ -99,6 +100,7 @@ export default function RootLayout({
             <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
               <MobileHeader />
               {children}
+              <Footer />
             </main>
             <RightSidebar />
           </SidebarProvider>

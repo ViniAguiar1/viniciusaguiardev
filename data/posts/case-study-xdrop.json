@@ -1,0 +1,565 @@
+{
+  "slug": "case-study-xdrop",
+  "title": "Case Study: X-Drop — como construí um SaaS de dropshipping que faturou R$ 30k+ em 2 meses",
+  "title_en": "Case Study: X-Drop — how I built a dropshipping SaaS that generated R$ 30k+ in 2 months",
+  "title_es": "Case Study: X-Drop — cómo construí un SaaS de dropshipping que facturó R$ 30k+ en 2 meses",
+  "description": "Arquitetura, decisões técnicas e desafios reais de escalar uma plataforma SaaS de dropshipping com integrações Mercado Livre, Shopee, Asaas e Mercado Pago.",
+  "description_en": "Architecture, technical decisions and real challenges of scaling a dropshipping SaaS platform with Mercado Livre, Shopee, Asaas and Mercado Pago integrations.",
+  "description_es": "Arquitectura, decisiones técnicas y desafíos reales de escalar una plataforma SaaS de dropshipping con integraciones Mercado Livre, Shopee, Asaas y Mercado Pago.",
+  "date": "16 de abril de 2026",
+  "date_en": "Apr 16, 2026",
+  "date_es": "16 de abr. de 2026",
+  "readTime": "12 min de leitura",
+  "readTime_en": "12 min read",
+  "readTime_es": "12 min de lectura",
+  "tag": "Case Study",
+  "tag_en": "Case Study",
+  "tag_es": "Case Study",
+  "tagColor": "bg-emerald-700",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "A X-Drop é uma plataforma SaaS de gestão para operações de dropshipping. Em apenas 2 meses de operação, alcançamos **R$ 30k+ em faturamento processado**, **100+ usuários ativos**, **400+ pedidos** e um **MRR na casa dos R$ 20k**. Neste case study, vou compartilhar as decisões de arquitetura, os desafios técnicos reais e os trade-offs que enfrentamos para chegar nesses números."
+    },
+    {
+      "type": "heading",
+      "text": "O problema",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vendedores de dropshipping operam em múltiplos marketplaces simultaneamente — Mercado Livre, Shopee, entre outros. Cada plataforma tem sua própria API, seus próprios fluxos de pedido, e seus próprios formatos de dados. Sem uma ferramenta centralizada, o vendedor precisa alternar entre 3-4 painéis diferentes, conciliar estoque manualmente e lidar com múltiplos gateways de pagamento. É um processo que não escala."
+    },
+    {
+      "type": "paragraph",
+      "text": "A X-Drop resolve isso: **um único painel** que integra catálogo, pedidos, expedição, pagamentos e relatórios financeiros em tempo real — com governança por perfis de acesso para equipes."
+    },
+    {
+      "type": "heading",
+      "text": "Arquitetura e stack",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A stack foi escolhida com dois critérios: **velocidade de iteração** (precisávamos lançar rápido) e **capacidade de escalar** sem reescrever tudo em 6 meses."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Frontend:** React + Next.js com TypeScript — SSR para SEO do painel público, CSR para o dashboard interno",
+        "**Backend:** NestJS (Node.js) com API REST — módulos isolados por domínio (pedidos, catálogo, financeiro, integrações)",
+        "**Banco:** PostgreSQL + Firebase (auth e real-time listeners)",
+        "**Infra:** AWS com containers Docker, CI/CD automatizado",
+        "**Pagamentos:** Asaas (PIX, boleto) + Mercado Pago (cartão, PIX)",
+        "**Marketplaces:** Mercado Livre API + Shopee API"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Desafio #1: integração multi-marketplace",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada marketplace tem uma API completamente diferente. O Mercado Livre usa OAuth 2.0 com tokens de curta duração e webhooks para notificações. A Shopee tem seu próprio sistema de autenticação com assinatura HMAC. Os formatos de pedido, status e categorias são incompatíveis entre si."
+    },
+    {
+      "type": "paragraph",
+      "text": "A solução foi criar uma **camada de abstração por marketplace** — adapters que normalizam os dados para um schema interno unificado. Cada adapter implementa a mesma interface (`syncProducts`, `syncOrders`, `updateInventory`), mas lida internamente com as particularidades de cada API."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Interface comum para todos os marketplaces\ninterface MarketplaceAdapter {\n  syncProducts(sellerId: string): Promise<Product[]>\n  syncOrders(sellerId: string, since: Date): Promise<Order[]>\n  updateInventory(productId: string, quantity: number): Promise<void>\n  mapStatus(externalStatus: string): InternalOrderStatus\n}\n\n// Cada marketplace implementa sua própria versão\nclass MercadoLivreAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const token = await this.refreshToken(sellerId)\n    const raw = await this.api.get('/orders/search', { seller: sellerId, since })\n    return raw.results.map(order => this.normalizeOrder(order))\n  }\n}\n\nclass ShopeeAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const signature = this.generateHMAC(sellerId, timestamp)\n    const raw = await this.api.get('/order/get_order_list', { sign: signature })\n    return raw.order_list.map(order => this.normalizeOrder(order))\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Esse pattern nos permitiu adicionar novos marketplaces sem tocar no core da aplicação. Quando um marketplace muda sua API (o que acontece com frequência), o impacto fica contido no adapter."
+    },
+    {
+      "type": "heading",
+      "text": "Desafio #2: múltiplos gateways de pagamento",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Precisávamos suportar **Asaas** e **Mercado Pago** simultaneamente — cada vendedor pode escolher seu gateway preferido. Os desafios:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Webhooks diferentes:** cada gateway notifica em formatos distintos e com diferentes garantias de entrega",
+        "**Idempotência:** um mesmo pagamento pode gerar múltiplos webhooks (retry do gateway). Sem controle, você processa o mesmo pagamento duas vezes",
+        "**Conciliação:** o saldo reportado pelo gateway nem sempre bate com o que você calculou internamente",
+        "**PIX:** fluxo assíncrono com janela de expiração — o status muda de 'pending' para 'paid' ou 'expired' via webhook"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "A solução seguiu o mesmo princípio dos marketplaces: **adapter pattern** + uma tabela de eventos de pagamento com chave de idempotência. Cada webhook recebido é registrado com um hash único. Se o mesmo evento chega duas vezes, o segundo é descartado antes de qualquer processamento."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentWebhook(provider: string, payload: unknown) {\n  const adapter = getPaymentAdapter(provider) // 'asaas' | 'mercadopago'\n  const event = adapter.parseWebhook(payload)\n\n  // Idempotência: checa se esse evento já foi processado\n  const idempotencyKey = `${provider}:${event.externalId}:${event.type}`\n  const exists = await db.paymentEvent.findUnique({ where: { idempotencyKey } })\n  if (exists) return { status: 'already_processed' }\n\n  // Registra o evento e processa\n  await db.$transaction(async (tx) => {\n    await tx.paymentEvent.create({ data: { idempotencyKey, ...event } })\n    await tx.order.update({\n      where: { id: event.orderId },\n      data: { paymentStatus: event.status },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Desafio #3: escala e observabilidade",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Com 100+ usuários e 400+ pedidos em 2 meses, começamos a sentir os primeiros sinais de que decisões de arquitetura importam. Queries de relatório que levavam 50ms começaram a levar 800ms. Sincronizações de marketplace que rodavam em background começaram a competir por conexões do pool de banco."
+    },
+    {
+      "type": "paragraph",
+      "text": "As ações que tomamos:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Índices compostos** nas tabelas de pedidos e transações — queries de relatório voltaram para < 100ms",
+        "**Connection pooling** com limites separados para operações síncronas (API) e assíncronas (sync de marketplace)",
+        "**Rate limiting** por seller nas chamadas aos marketplaces — evita que um vendedor com catálogo grande consuma toda a cota da API",
+        "**Logs estruturados** com contexto de operação (sellerId, marketplace, orderId) — sem isso, debugar um problema em produção entre 3 marketplaces e 2 gateways é impossível",
+        "**Health checks** com métricas de latência por integração — se o tempo de resposta do Mercado Livre passa de 2s, recebemos alerta antes do usuário reclamar"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Desafio #4: governança e multi-tenancy",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A X-Drop atende vendedores com equipes. Um dono de loja precisa dar acesso a funcionários que processam pedidos, mas sem expor dados financeiros ou configurações de integração. Implementamos **RBAC (Role-Based Access Control)** com 3 níveis: admin, operador e visualizador."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada request passa por um middleware que valida o tenant (seller) e a role do usuário. Dados são filtrados por `sellerId` em toda query — não existe chamada ao banco que não passe por esse filtro. Isso garante isolamento total entre vendedores."
+    },
+    {
+      "type": "heading",
+      "text": "Resultados em 2 meses",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**R$ 30k+** em faturamento processado pela plataforma",
+        "**100+** usuários ativos",
+        "**400+** pedidos processados",
+        "**MRR de R$ 20k** — validando product-market fit",
+        "**2 marketplaces** integrados (Mercado Livre + Shopee)",
+        "**2 gateways** de pagamento (Asaas + Mercado Pago)",
+        "**Zero downtime** desde o lançamento"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Lições aprendidas",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Adapter pattern é essencial** quando você integra com sistemas externos que mudam sem aviso. Investir tempo na abstração no início economizou semanas depois",
+        "**Idempotência não é opcional** — com webhooks de pagamento, é a diferença entre cobrar o cliente uma vez ou duas vezes",
+        "**Observabilidade desde o dia 1.** Quando o Mercado Livre mudou o formato de um campo sem documentar, nossos logs estruturados mostraram exatamente qual campo quebrou, em qual seller, em qual pedido. Sem isso, seriam horas de debug",
+        "**Escala não é só infra.** Os primeiros gargalos foram queries mal indexadas e pool de conexão mal configurado — problemas de aplicação, não de servidor"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Stack final",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "React + Next.js + TypeScript (frontend)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (banco e auth)",
+        "Docker + AWS (infraestrutura)",
+        "Asaas + Mercado Pago (pagamentos)",
+        "Mercado Livre API + Shopee API (marketplaces)",
+        "CI/CD com deploy automatizado"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nQuer conhecer mais sobre o projeto, o propósito e ver a plataforma? [Acesse a página dedicada da X-Drop](/projetos/x-drop)."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "X-Drop is a SaaS management platform for dropshipping operations. In just 2 months of operation, we reached **R$ 30k+ in processed revenue**, **100+ active users**, **400+ orders** and an **MRR around R$ 20k**. In this case study, I'll share the architecture decisions, real technical challenges and trade-offs we faced to reach these numbers."
+    },
+    {
+      "type": "heading",
+      "text": "The problem",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dropshipping sellers operate across multiple marketplaces simultaneously — Mercado Livre, Shopee, among others. Each platform has its own API, its own order flows, and its own data formats. Without a centralized tool, a seller needs to switch between 3-4 different dashboards, reconcile inventory manually and deal with multiple payment gateways. It doesn't scale."
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop solves this: **a single dashboard** that integrates catalog, orders, shipping, payments and real-time financial reports — with role-based access control for teams."
+    },
+    {
+      "type": "heading",
+      "text": "Architecture and stack",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The stack was chosen based on two criteria: **iteration speed** (we needed to ship fast) and **ability to scale** without rewriting everything in 6 months."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Frontend:** React + Next.js with TypeScript — SSR for public panel SEO, CSR for the internal dashboard",
+        "**Backend:** NestJS (Node.js) with REST API — isolated modules per domain (orders, catalog, finance, integrations)",
+        "**Database:** PostgreSQL + Firebase (auth and real-time listeners)",
+        "**Infra:** AWS with Docker containers, automated CI/CD",
+        "**Payments:** Asaas (PIX, bank slip) + Mercado Pago (card, PIX)",
+        "**Marketplaces:** Mercado Livre API + Shopee API"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Challenge #1: multi-marketplace integration",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Each marketplace has a completely different API. Mercado Livre uses OAuth 2.0 with short-lived tokens and webhooks for notifications. Shopee has its own authentication system with HMAC signature. Order formats, statuses and categories are incompatible with each other."
+    },
+    {
+      "type": "paragraph",
+      "text": "The solution was to create a **per-marketplace abstraction layer** — adapters that normalize data to a unified internal schema. Each adapter implements the same interface (`syncProducts`, `syncOrders`, `updateInventory`), but internally handles each API's specifics."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Common interface for all marketplaces\ninterface MarketplaceAdapter {\n  syncProducts(sellerId: string): Promise<Product[]>\n  syncOrders(sellerId: string, since: Date): Promise<Order[]>\n  updateInventory(productId: string, quantity: number): Promise<void>\n  mapStatus(externalStatus: string): InternalOrderStatus\n}\n\n// Each marketplace implements its own version\nclass MercadoLivreAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const token = await this.refreshToken(sellerId)\n    const raw = await this.api.get('/orders/search', { seller: sellerId, since })\n    return raw.results.map(order => this.normalizeOrder(order))\n  }\n}\n\nclass ShopeeAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const signature = this.generateHMAC(sellerId, timestamp)\n    const raw = await this.api.get('/order/get_order_list', { sign: signature })\n    return raw.order_list.map(order => this.normalizeOrder(order))\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "This pattern allowed us to add new marketplaces without touching the application core. When a marketplace changes its API (which happens frequently), the impact stays contained within the adapter."
+    },
+    {
+      "type": "heading",
+      "text": "Challenge #2: multiple payment gateways",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "We needed to support **Asaas** and **Mercado Pago** simultaneously — each seller can choose their preferred gateway. The challenges:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Different webhooks:** each gateway notifies in distinct formats with different delivery guarantees",
+        "**Idempotency:** a single payment can trigger multiple webhooks (gateway retries). Without control, you process the same payment twice",
+        "**Reconciliation:** the balance reported by the gateway doesn't always match what you calculated internally",
+        "**PIX:** asynchronous flow with expiration window — status changes from 'pending' to 'paid' or 'expired' via webhook"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "The solution followed the same principle as marketplaces: **adapter pattern** + a payment events table with an idempotency key. Each incoming webhook is registered with a unique hash. If the same event arrives twice, the second one is discarded before any processing."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentWebhook(provider: string, payload: unknown) {\n  const adapter = getPaymentAdapter(provider) // 'asaas' | 'mercadopago'\n  const event = adapter.parseWebhook(payload)\n\n  // Idempotency: check if this event was already processed\n  const idempotencyKey = `${provider}:${event.externalId}:${event.type}`\n  const exists = await db.paymentEvent.findUnique({ where: { idempotencyKey } })\n  if (exists) return { status: 'already_processed' }\n\n  // Register the event and process\n  await db.$transaction(async (tx) => {\n    await tx.paymentEvent.create({ data: { idempotencyKey, ...event } })\n    await tx.order.update({\n      where: { id: event.orderId },\n      data: { paymentStatus: event.status },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Challenge #3: scale and observability",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "With 100+ users and 400+ orders in 2 months, we started feeling the first signs that architecture decisions matter. Report queries that took 50ms started taking 800ms. Marketplace syncs running in the background started competing for database connection pool slots."
+    },
+    {
+      "type": "paragraph",
+      "text": "Actions we took:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Composite indexes** on order and transaction tables — report queries went back to < 100ms",
+        "**Connection pooling** with separate limits for synchronous operations (API) and asynchronous ones (marketplace sync)",
+        "**Rate limiting** per seller on marketplace API calls — prevents a seller with a large catalog from consuming the entire API quota",
+        "**Structured logging** with operation context (sellerId, marketplace, orderId) — without this, debugging a production issue across 3 marketplaces and 2 gateways is impossible",
+        "**Health checks** with per-integration latency metrics — if Mercado Livre response time exceeds 2s, we get an alert before the user complains"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Challenge #4: governance and multi-tenancy",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop serves sellers with teams. A store owner needs to give employees access to process orders, but without exposing financial data or integration settings. We implemented **RBAC (Role-Based Access Control)** with 3 levels: admin, operator and viewer."
+    },
+    {
+      "type": "paragraph",
+      "text": "Every request passes through middleware that validates the tenant (seller) and user role. Data is filtered by `sellerId` in every query — there's no database call that doesn't pass through this filter. This guarantees complete isolation between sellers."
+    },
+    {
+      "type": "heading",
+      "text": "Results in 2 months",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**R$ 30k+** in revenue processed through the platform",
+        "**100+** active users",
+        "**400+** orders processed",
+        "**R$ 20k MRR** — validating product-market fit",
+        "**2 marketplaces** integrated (Mercado Livre + Shopee)",
+        "**2 payment gateways** (Asaas + Mercado Pago)",
+        "**Zero downtime** since launch"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Lessons learned",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Adapter pattern is essential** when integrating with external systems that change without notice. Investing time in abstraction early saved weeks later",
+        "**Idempotency is not optional** — with payment webhooks, it's the difference between charging the customer once or twice",
+        "**Observability from day 1.** When Mercado Livre changed a field format without documenting it, our structured logs showed exactly which field broke, for which seller, in which order. Without that, it would have been hours of debugging",
+        "**Scale isn't just infra.** The first bottlenecks were poorly indexed queries and misconfigured connection pooling — application-level problems, not server problems"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Final stack",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "React + Next.js + TypeScript (frontend)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (database and auth)",
+        "Docker + AWS (infrastructure)",
+        "Asaas + Mercado Pago (payments)",
+        "Mercado Livre API + Shopee API (marketplaces)",
+        "CI/CD with automated deploys"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nWant to learn more about the project, its purpose and see the platform? [Visit the X-Drop dedicated page](/projetos/x-drop)."
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "X-Drop es una plataforma SaaS de gestión para operaciones de dropshipping. En solo 2 meses de operación, alcanzamos **R$ 30k+ en facturación procesada**, **100+ usuarios activos**, **400+ pedidos** y un **MRR en la casa de R$ 20k**. En este case study, compartiré las decisiones de arquitectura, los desafíos técnicos reales y los trade-offs que enfrentamos para llegar a estos números."
+    },
+    {
+      "type": "heading",
+      "text": "El problema",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Los vendedores de dropshipping operan en múltiples marketplaces simultáneamente — Mercado Livre, Shopee, entre otros. Cada plataforma tiene su propia API, sus propios flujos de pedido y sus propios formatos de datos. Sin una herramienta centralizada, el vendedor necesita alternar entre 3-4 paneles diferentes, conciliar inventario manualmente y lidiar con múltiples gateways de pago. No escala."
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop resuelve esto: **un único panel** que integra catálogo, pedidos, envíos, pagos y reportes financieros en tiempo real — con control de acceso por roles para equipos."
+    },
+    {
+      "type": "heading",
+      "text": "Arquitectura y stack",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El stack fue elegido con dos criterios: **velocidad de iteración** (necesitábamos lanzar rápido) y **capacidad de escalar** sin reescribir todo en 6 meses."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Frontend:** React + Next.js con TypeScript — SSR para SEO del panel público, CSR para el dashboard interno",
+        "**Backend:** NestJS (Node.js) con API REST — módulos aislados por dominio (pedidos, catálogo, financiero, integraciones)",
+        "**Base de datos:** PostgreSQL + Firebase (auth y real-time listeners)",
+        "**Infra:** AWS con contenedores Docker, CI/CD automatizado",
+        "**Pagos:** Asaas (PIX, boleto) + Mercado Pago (tarjeta, PIX)",
+        "**Marketplaces:** Mercado Livre API + Shopee API"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Desafío #1: integración multi-marketplace",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada marketplace tiene una API completamente diferente. Mercado Livre usa OAuth 2.0 con tokens de corta duración y webhooks para notificaciones. Shopee tiene su propio sistema de autenticación con firma HMAC. Los formatos de pedido, estados y categorías son incompatibles entre sí."
+    },
+    {
+      "type": "paragraph",
+      "text": "La solución fue crear una **capa de abstracción por marketplace** — adapters que normalizan los datos hacia un schema interno unificado. Cada adapter implementa la misma interfaz (`syncProducts`, `syncOrders`, `updateInventory`), pero internamente maneja las particularidades de cada API."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Interfaz común para todos los marketplaces\ninterface MarketplaceAdapter {\n  syncProducts(sellerId: string): Promise<Product[]>\n  syncOrders(sellerId: string, since: Date): Promise<Order[]>\n  updateInventory(productId: string, quantity: number): Promise<void>\n  mapStatus(externalStatus: string): InternalOrderStatus\n}\n\n// Cada marketplace implementa su propia versión\nclass MercadoLivreAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const token = await this.refreshToken(sellerId)\n    const raw = await this.api.get('/orders/search', { seller: sellerId, since })\n    return raw.results.map(order => this.normalizeOrder(order))\n  }\n}\n\nclass ShopeeAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const signature = this.generateHMAC(sellerId, timestamp)\n    const raw = await this.api.get('/order/get_order_list', { sign: signature })\n    return raw.order_list.map(order => this.normalizeOrder(order))\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Este patrón nos permitió agregar nuevos marketplaces sin tocar el core de la aplicación. Cuando un marketplace cambia su API (lo que sucede con frecuencia), el impacto queda contenido en el adapter."
+    },
+    {
+      "type": "heading",
+      "text": "Desafío #2: múltiples gateways de pago",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Necesitábamos soportar **Asaas** y **Mercado Pago** simultáneamente — cada vendedor puede elegir su gateway preferido. Los desafíos:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Webhooks diferentes:** cada gateway notifica en formatos distintos y con diferentes garantías de entrega",
+        "**Idempotencia:** un mismo pago puede generar múltiples webhooks (retry del gateway). Sin control, procesas el mismo pago dos veces",
+        "**Conciliación:** el saldo reportado por el gateway no siempre coincide con lo que calculaste internamente",
+        "**PIX:** flujo asíncrono con ventana de expiración — el estado cambia de 'pending' a 'paid' o 'expired' vía webhook"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La solución siguió el mismo principio de los marketplaces: **adapter pattern** + una tabla de eventos de pago con clave de idempotencia. Cada webhook recibido se registra con un hash único. Si el mismo evento llega dos veces, el segundo se descarta antes de cualquier procesamiento."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentWebhook(provider: string, payload: unknown) {\n  const adapter = getPaymentAdapter(provider) // 'asaas' | 'mercadopago'\n  const event = adapter.parseWebhook(payload)\n\n  // Idempotencia: verifica si este evento ya fue procesado\n  const idempotencyKey = `${provider}:${event.externalId}:${event.type}`\n  const exists = await db.paymentEvent.findUnique({ where: { idempotencyKey } })\n  if (exists) return { status: 'already_processed' }\n\n  // Registra el evento y procesa\n  await db.$transaction(async (tx) => {\n    await tx.paymentEvent.create({ data: { idempotencyKey, ...event } })\n    await tx.order.update({\n      where: { id: event.orderId },\n      data: { paymentStatus: event.status },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Desafío #3: escala y observabilidad",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Con 100+ usuarios y 400+ pedidos en 2 meses, comenzamos a sentir las primeras señales de que las decisiones de arquitectura importan. Queries de reportes que tomaban 50ms empezaron a tomar 800ms. Sincronizaciones de marketplace que corrían en background empezaron a competir por conexiones del pool de base de datos."
+    },
+    {
+      "type": "paragraph",
+      "text": "Las acciones que tomamos:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Índices compuestos** en las tablas de pedidos y transacciones — queries de reportes volvieron a < 100ms",
+        "**Connection pooling** con límites separados para operaciones síncronas (API) y asíncronas (sync de marketplace)",
+        "**Rate limiting** por seller en llamadas a marketplaces — evita que un vendedor con catálogo grande consuma toda la cuota de la API",
+        "**Logs estructurados** con contexto de operación (sellerId, marketplace, orderId) — sin esto, debuggear un problema en producción entre 3 marketplaces y 2 gateways es imposible",
+        "**Health checks** con métricas de latencia por integración — si el tiempo de respuesta de Mercado Livre pasa de 2s, recibimos alerta antes de que el usuario se queje"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Desafío #4: gobernanza y multi-tenancy",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop atiende vendedores con equipos. Un dueño de tienda necesita dar acceso a empleados que procesan pedidos, pero sin exponer datos financieros o configuraciones de integración. Implementamos **RBAC (Role-Based Access Control)** con 3 niveles: admin, operador y visualizador."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada request pasa por un middleware que valida el tenant (seller) y el rol del usuario. Los datos se filtran por `sellerId` en toda query — no existe llamada a la base de datos que no pase por este filtro. Esto garantiza aislamiento total entre vendedores."
+    },
+    {
+      "type": "heading",
+      "text": "Resultados en 2 meses",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**R$ 30k+** en facturación procesada por la plataforma",
+        "**100+** usuarios activos",
+        "**400+** pedidos procesados",
+        "**MRR de R$ 20k** — validando product-market fit",
+        "**2 marketplaces** integrados (Mercado Livre + Shopee)",
+        "**2 gateways** de pago (Asaas + Mercado Pago)",
+        "**Zero downtime** desde el lanzamiento"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Lecciones aprendidas",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Adapter pattern es esencial** cuando integras con sistemas externos que cambian sin aviso. Invertir tiempo en la abstracción al inicio ahorró semanas después",
+        "**Idempotencia no es opcional** — con webhooks de pago, es la diferencia entre cobrar al cliente una vez o dos veces",
+        "**Observabilidad desde el día 1.** Cuando Mercado Livre cambió el formato de un campo sin documentar, nuestros logs estructurados mostraron exactamente qué campo se rompió, en cuál seller, en cuál pedido. Sin eso, habrían sido horas de debug",
+        "**Escala no es solo infra.** Los primeros cuellos de botella fueron queries mal indexadas y pool de conexiones mal configurado — problemas de aplicación, no de servidor"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Stack final",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "React + Next.js + TypeScript (frontend)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase (base de datos y auth)",
+        "Docker + AWS (infraestructura)",
+        "Asaas + Mercado Pago (pagos)",
+        "Mercado Livre API + Shopee API (marketplaces)",
+        "CI/CD con deploys automatizados"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\n¿Quieres conocer más sobre el proyecto, su propósito y ver la plataforma? [Accede a la página dedicada de X-Drop](/projetos/x-drop)."
+    }
+  ]
+}

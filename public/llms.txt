@@ -1,28 +1,33 @@
 # Vinicius Aguiar — Software Engineer
 
-> Portfólio pessoal e blog técnico de Vinicius Aguiar, Software Engineer especializado em React, Next.js, TypeScript e Node.js. O site apresenta projetos reais (SaaS, marketplaces, ERPs), artigos técnicos sobre arquitetura de software, e uma seção de engenharia com decisões técnicas e trade-offs em produção. Bilíngue (PT-BR / EN). URL base: `https://viniciusaguiardev.com.br`.
+> Portfólio pessoal e blog técnico de Vinicius Aguiar, Software Engineer especializado em React, Next.js, TypeScript e Node.js. O site apresenta projetos reais em produção (SaaS, e-commerce, health), artigos técnicos sobre arquitetura de software, e uma seção de engenharia com decisões técnicas e trade-offs em produção. Trilíngue (PT-BR / EN / ES). URL base: `https://viniciusaguiardev.com.br`.
 
 Notas importantes:
 
 - O site é um portfólio profissional, não um produto ou API.
 - O conteúdo reflete experiência real em empresas e projetos em produção.
 - Posts técnicos incluem código-fonte em TypeScript, SQL e Python.
-- O idioma principal é Português (BR), com versão completa em Inglês.
+- O idioma principal é Português (BR), com versões completas em Inglês e Espanhol.
 - Stack do site: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Shadcn UI.
 
 ## Páginas
 
-- [Home](https://viniciusaguiardev.com.br/): Página inicial com listagem de artigos técnicos e apresentação profissional.
+- [Home](https://viniciusaguiardev.com.br/): Página inicial com seção de engenharia, artigos técnicos e apresentação profissional.
 - [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Holy Solutions, Vox Pet Digital, Stack Labs, MovePro, EasyToGo), habilidades, tech stack e conceitos-chave.
-- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio de 15 empresas/produtos onde atuou — SaaS, marketplaces, ERPs, e-commerce, plataformas de saúde, educação e viagens. Cada projeto tem logo, categoria e descrição.
+- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 5 projetos em produção — FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em SaaS, e-commerce e health.
+- [X-Drop — Página dedicada](https://viniciusaguiardev.com.br/projetos/x-drop): Case de produto com propósito, métricas reais (R$ 30k+ faturados, 100+ usuários, 400+ pedidos, MRR R$ 20k em 2 meses), screenshots do dashboard web e app iOS nativo (Swift UI), stack técnica e links para App Store e site.
 - [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
 
 ## Artigos técnicos (Blog)
 
+- [Case Study: X-Drop](https://viniciusaguiardev.com.br/posts/case-study-xdrop): Como construí um SaaS de dropshipping que faturou R$ 30k+ em 2 meses — arquitetura com NestJS + Firebase, adapter pattern para multi-marketplace (Mercado Livre, Shopee), multi-gateway de pagamento (Asaas, Mercado Pago), idempotência, observabilidade e RBAC.
+- [Circuit Breaker em Node.js](https://viniciusaguiardev.com.br/posts/circuit-breaker-nodejs): Padrão de resiliência para APIs externas — state machine, fallbacks, retry e monitoramento em produção.
 - [Arquitetura multi-tenant com PostgreSQL](https://viniciusaguiardev.com.br/posts/multi-tenant-architecture-postgresql): Guia prático sobre multi-tenancy em SaaS — três estratégias avaliadas (DB per tenant, schema per tenant, shared DB + tenant_id), Row Level Security (RLS), indexação e particionamento.
-- [Arquitetura de webhooks para provedores de pagamento](https://viniciusaguiardev.com.br/posts/webhook-architecture-payment-providers): Como estruturar recebimento de webhooks em produção — validação de assinatura, idempotência, processamento assíncrono, state machine, reconciliação, dead letter queue e degradação graciosa. Inclui diagrama de fluxo.
-- [RAG com LangChain e PostgreSQL](https://viniciusaguiardev.com.br/posts/rag-langchain-postgres-fullcycle): Pipeline completo de Retrieval-Augmented Generation — ingestão de documentos, chunking, embeddings (HuggingFace/OpenAI), armazenamento vetorial com pgVector, busca semântica e fallback para matching por regras.
-- [Design System com Shadcn UI e Tailwind](https://viniciusaguiardev.com.br/posts/design-system-shadcn-tailwind): Construção de design systems escaláveis com Shadcn UI, tokens de design via CSS variables, variantes de componentes com CVA, e benefícios para times SaaS.
+- [Arquitetura de webhooks para provedores de pagamento](https://viniciusaguiardev.com.br/posts/webhook-architecture-payment-providers): Como estruturar recebimento de webhooks em produção — validação de assinatura, idempotência, processamento assíncrono, state machine, reconciliação, dead letter queue e degradação graciosa.
+- [RAG com LangChain e PostgreSQL](https://viniciusaguiardev.com.br/posts/rag-langchain-postgres-fullcycle): Pipeline completo de Retrieval-Augmented Generation — ingestão de documentos, chunking, embeddings, armazenamento vetorial com pgVector, busca semântica e fallback.
+- [Docker para devs frontend](https://viniciusaguiardev.com.br/posts/docker-for-frontend-devs): Do zero ao deploy — Dockerfile, multi-stage builds, docker-compose, ambientes dev/prod.
+- [Design System com Shadcn UI e Tailwind](https://viniciusaguiardev.com.br/posts/design-system-shadcn-tailwind): Construção de design systems escaláveis com Shadcn UI, tokens de design via CSS variables, variantes de componentes com CVA.
+- [Iniciando no TypeScript](https://viniciusaguiardev.com.br/posts/starting-typescript): Guia prático para devs JavaScript — tipos básicos, interfaces, generics, utility types e configuração.
 
 ## Experiência profissional
 
@@ -34,11 +39,12 @@ Notas importantes:
 
 ## Tech Stack
 
-React, React Native, Next.js, Node.js, TypeScript, PostgreSQL, Docker, AWS, Git, Tailwind CSS, Shadcn UI, Stripe, Mercado Pago, OpenAI, LangChain, pgVector, CI/CD, GitHub Actions.
+React, React Native, Next.js, NestJS, Node.js, TypeScript, Swift UI (iOS), PostgreSQL, Firebase, Docker, AWS, Git, Tailwind CSS, Shadcn UI, Stripe, Asaas, Mercado Pago, OpenAI, LangChain, pgVector, CI/CD, GitHub Actions.
 
 ## Contato
 
 - Email: vinicius.aguiar1@icloud.com
 - GitHub: https://github.com/ViniAguiar1
 - LinkedIn: https://www.linkedin.com/in/viniciusaguiar-araujo/
+- WhatsApp: https://api.whatsapp.com/send?phone=5511915369113
 - Site: https://viniciusaguiardev.com.br

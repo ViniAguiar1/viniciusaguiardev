@@ -11,18 +11,21 @@ import {
 } from "@/components/ui/sheet"
 
 interface EngineeringTopicProps {
+  id?: string
   title: string
   subtitle: string
   children: React.ReactNode
+  defaultOpen?: boolean
 }
 
-export function EngineeringTopic({ title, subtitle, children }: EngineeringTopicProps) {
-  const [open, setOpen] = useState(false)
+export function EngineeringTopic({ id, title, subtitle, children, defaultOpen = false }: EngineeringTopicProps) {
+  const [open, setOpen] = useState(defaultOpen)
 
   return (
     <>
       <button
         type="button"
+        id={id}
         onClick={() => setOpen(true)}
         className="w-full rounded-lg border border-border bg-card flex items-center gap-4 p-5 text-left cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all"
       >

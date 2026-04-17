@@ -30,6 +30,7 @@ export type Dictionary = {
     description: string
     ctaAbout: string
     ctaResume: string
+    ctaContact: string
   }
   about: {
     title: string
@@ -59,13 +60,14 @@ const pt: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer especializado em React, Next.js e React Native.",
+      "Software Engineer que constrói plataformas SaaS em produção — do sistema de pagamentos ao agente de IA no WhatsApp.",
 
     description:
-      "Construindo plataformas SaaS escaláveis e aplicações web modernas, com foco em experiência do usuário, arquitetura limpa e performance.",
+      "React, Next.js e TypeScript. Integrações de pagamento, arquitetura multi-tenant e automações com IA operando em produtos reais.",
 
     ctaAbout: "Sobre mim",
     ctaResume: "Download CV",
+    ctaContact: "Fale comigo",
   },
 
   about: {
@@ -99,13 +101,14 @@ const en: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer specializing in React, Next.js and React Native.",
+      "Software Engineer building production SaaS platforms — from payment systems to AI-powered WhatsApp agents.",
 
     description:
-      "Building scalable SaaS platforms and modern web applications with a focus on user experience, clean architecture and performance.",
+      "React, Next.js and TypeScript. Payment integrations, multi-tenant architecture and AI automation running in real products.",
 
     ctaAbout: "About me",
     ctaResume: "Download Resume",
+    ctaContact: "Get in touch",
   },
 
   about: {
@@ -139,13 +142,14 @@ const es: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer especializado en React, Next.js y React Native.",
+      "Software Engineer que construye plataformas SaaS en producción — desde sistemas de pago hasta agentes de IA en WhatsApp.",
 
     description:
-      "Construyendo plataformas SaaS escalables y aplicaciones web modernas, con enfoque en experiencia de usuario, arquitectura limpia y rendimiento.",
+      "React, Next.js y TypeScript. Integraciones de pago, arquitectura multi-tenant y automatizaciones con IA operando en productos reales.",
 
     ctaAbout: "Sobre mí",
     ctaResume: "Descargar CV",
+    ctaContact: "Contáctame",
   },
 
   about: {

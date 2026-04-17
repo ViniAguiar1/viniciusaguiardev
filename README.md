@@ -4,26 +4,30 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 
 **[viniciusaguiardev.com.br](https://viniciusaguiardev.com.br/)**
 
-![Preview](public/preview.png)
+![Preview](public/preview2.jpeg)
 
 ## What's inside
 
-- **15 real-world projects** — SaaS, marketplaces, ERPs, e-commerce, health and travel platforms
-- **4 technical articles** — multi-tenant architecture, webhook design for payments, RAG pipelines, design systems
-- **Engineering page** — architecture decisions, trade-offs and problems solved in production
+- **5 curated projects** — SaaS platforms, e-commerce and health systems with dedicated pages, case studies and real metrics
+- **9 technical articles** — case studies (X-Drop, Vox Pet), multi-tenant architecture, webhook design, circuit breaker, RAG pipelines, Docker, design systems
+- **Engineering page** — architecture decisions, trade-offs and problems solved in production (SaaS, multi-tenant, payments)
 - **Trilingual** — PT-BR, English and Spanish (cookie-based i18n)
 - **Dark/Light mode** — system preference with manual toggle
 - **Mobile-first** — responsive layout with hamburger menu for tablets and phones
+- **Custom 404** — animated astronaut illustration with navigation CTAs
 
 ## Pages
 
 | Route | Description |
 |---|---|
-| [`/`](https://viniciusaguiardev.com.br/) | Home with blog posts |
+| [`/`](https://viniciusaguiardev.com.br/) | Home with engineering preview, case studies and blog posts |
 | [`/sobre`](https://viniciusaguiardev.com.br/sobre) | About, experience, tech stack |
-| [`/projetos`](https://viniciusaguiardev.com.br/projetos) | Projects portfolio with modal details |
+| [`/projetos`](https://viniciusaguiardev.com.br/projetos) | Curated portfolio with modal details and "Learn more" pages |
+| [`/projetos/x-drop`](https://viniciusaguiardev.com.br/projetos/x-drop) | X-Drop dedicated page — R$ 30k+ revenue, 100+ users, iOS app |
+| [`/projetos/vox-pet-digital`](https://viniciusaguiardev.com.br/projetos/vox-pet-digital) | Vox Pet dedicated page — 95 Prisma models, WhatsApp AI, NF-e |
+| [`/projetos/ikropp`](https://viniciusaguiardev.com.br/projetos/ikropp) | iKropp dedicated page — 50k+ users, legacy modernization |
 | [`/engenharia`](https://viniciusaguiardev.com.br/engenharia) | Engineering — architecture, trade-offs, FAQ |
-| [`/posts/[slug]`](https://viniciusaguiardev.com.br/posts/webhook-architecture-payment-providers) | Technical blog posts |
+| [`/posts/[slug]`](https://viniciusaguiardev.com.br/posts/case-study-xdrop) | Technical blog posts and case studies |
 
 ## Tech Stack
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ChevronRight } from "lucide-react"
 import {
   Sheet,
@@ -19,11 +19,7 @@ interface EngineeringTopicProps {
 }
 
 export function EngineeringTopic({ id, title, subtitle, children, defaultOpen = false }: EngineeringTopicProps) {
-  const [open, setOpen] = useState(false)
-
-  useEffect(() => {
-    if (defaultOpen) setOpen(true)
-  }, [defaultOpen])
+  const [open, setOpen] = useState(defaultOpen)
 
   return (
     <>

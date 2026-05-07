@@ -1,4 +1,5 @@
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
+import { buildAlternates } from "@/lib/i18n"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 import { FadeIn } from "@/components/fade-in"
@@ -13,6 +14,7 @@ export async function generateMetadata() {
       "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
       "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales."
     ),
+    alternates: buildAlternates("/projetos", locale),
   }
 }
 

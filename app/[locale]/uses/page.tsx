@@ -1,4 +1,5 @@
 import { getLocale, t } from "@/lib/i18n-server"
+import { buildAlternates } from "@/lib/i18n"
 import Link from "next/link"
 import { EditorConfigSheet } from "@/components/editor-config-sheet"
 
@@ -12,6 +13,7 @@ export async function generateMetadata() {
       "Tools, apps and setup I use daily as a Software Engineer.",
       "Herramientas, apps y setup que uso día a día como ingeniero de software."
     ),
+    alternates: buildAlternates("/uses", locale),
   }
 }
 

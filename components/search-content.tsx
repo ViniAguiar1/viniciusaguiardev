@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Search, FileText, Briefcase } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 type SearchPost = {
   slug: string
@@ -36,6 +37,7 @@ interface SearchContentProps {
 }
 
 export function SearchContent({ posts, projects, locale, labels }: SearchContentProps) {
+  const safeLocale: Locale = isLocale(locale) ? locale : DEFAULT_LOCALE
   const [query, setQuery] = useState("")
 
   const q = query.toLowerCase().trim()
@@ -105,7 +107,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
             {filteredPosts.map((post) => (
               <Link
                 key={post.slug}
-                href={`/posts/${post.slug}`}
+                href={localePath(safeLocale, `/posts/${post.slug}`)}
                 className="group flex items-start gap-4 rounded-lg border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="flex-1 min-w-0">
@@ -143,7 +145,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
             {filteredProjects.map((project) => (
               <Link
                 key={project.slug}
-                href="/projetos"
+                href={localePath(safeLocale, "/projetos")}
                 className="group flex items-center gap-4 rounded-lg border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="relative flex-shrink-0 w-10 h-10 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">

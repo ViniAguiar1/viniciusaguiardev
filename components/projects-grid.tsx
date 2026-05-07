@@ -7,7 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Project } from "@/data/projects"
-import type { Locale } from "@/lib/i18n-server"
+import { localePath, type Locale } from "@/lib/i18n"
 
 const categoryColors: Record<string, string> = {
   SaaS: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
@@ -153,7 +153,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                 <div className="mt-5 flex flex-wrap gap-3">
                   {selected.detailPage && (
                     <Link
-                      href={selected.detailPage}
+                      href={localePath(locale, selected.detailPage)}
                       data-umami-event="project-detail"
                       data-umami-event-project={selected.name}
                       className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"

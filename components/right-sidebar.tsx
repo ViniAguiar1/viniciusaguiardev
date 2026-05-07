@@ -12,6 +12,7 @@ import { ModeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
 import { SearchButton } from "@/components/search-button"
 import { getLocale, getDictionary } from "@/lib/i18n-server"
+import { localePath } from "@/lib/i18n"
 
 export async function RightSidebar() {
   const locale = await getLocale()
@@ -28,7 +29,7 @@ export async function RightSidebar() {
           <SidebarMenu className="flex flex-col items-center gap-3">
             <SidebarMenuItem>
               <SidebarMenuButton asChild size="sm" className="w-8 h-8 p-0 hover:bg-transparent">
-                <Link href="/" title={dict.nav.home} className="flex items-center justify-center">
+                <Link href={localePath(locale, "/")} title={dict.nav.home} className="flex items-center justify-center">
                   <Home className="w-5 h-5" />
                 </Link>
               </SidebarMenuButton>

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath } from "@/lib/i18n"
 
 export async function Footer() {
   const locale = await getLocale()
@@ -52,13 +53,13 @@ export async function Footer() {
 
           {/* Right — nav */}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link href="/projetos" className="hover:text-foreground transition">
+            <Link href={localePath(locale, "/projetos")} className="hover:text-foreground transition">
               {t(locale, "Projetos", "Projects", "Proyectos")}
             </Link>
-            <Link href="/engenharia" className="hover:text-foreground transition">
+            <Link href={localePath(locale, "/engenharia")} className="hover:text-foreground transition">
               {t(locale, "Engenharia", "Engineering", "Ingeniería")}
             </Link>
-            <Link href="/sobre" className="hover:text-foreground transition">
+            <Link href={localePath(locale, "/sobre")} className="hover:text-foreground transition">
               {t(locale, "Sobre", "About", "Acerca")}
             </Link>
           </div>

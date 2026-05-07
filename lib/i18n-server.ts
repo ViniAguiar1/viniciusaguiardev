@@ -1,16 +1,17 @@
-import { cookies } from "next/headers"
+import { headers } from "next/headers"
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n"
 
-export type Locale = "pt" | "en" | "es"
+export { LOCALES, DEFAULT_LOCALE, isLocale, localePath, stripLocale, localeToHtmlLang, t } from "@/lib/i18n"
+export type { Locale } from "@/lib/i18n"
 
 export async function getLocale(): Promise<Locale> {
   try {
-    const store = await cookies()
-    const lang = store.get("lang")?.value
-    if (lang === "en") return "en"
-    if (lang === "es") return "es"
-    return "pt"
+    const h = await headers()
+    const fromHeader = h.get("x-locale")
+    if (isLocale(fromHeader)) return fromHeader
+    return DEFAULT_LOCALE
   } catch {
-    return "pt"
+    return DEFAULT_LOCALE
   }
 }
 
@@ -169,13 +170,6 @@ const es: Dictionary = {
 }
 
 export function getDictionary(locale: Locale): Dictionary {
-  if (locale === "en") return en
-  if (locale === "es") return es
-  return pt
-}
-
-/** Helper for inline trilingual strings */
-export function t(locale: Locale, pt: string, en: string, es: string): string {
   if (locale === "en") return en
   if (locale === "es") return es
   return pt

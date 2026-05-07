@@ -9,18 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(
-      locale,
-      "iKropp — SaaS de gestão para clínicas de estética",
-      "iKropp — Management SaaS for aesthetics clinics",
-      "iKropp — SaaS de gestión para clínicas de estética"
-    ),
-    description: t(
-      locale,
-      "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.",
-      "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.",
-      "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado."
-    ),
+    title: t(locale, { pt: "iKropp — SaaS de gestão para clínicas de estética", en: "iKropp — Management SaaS for aesthetics clinics", es: "iKropp — SaaS de gestión para clínicas de estética" }),
+    description: t(locale, { pt: "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.", en: "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.", es: "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado." }),
     alternates: buildAlternates("/projetos/ikropp", locale),
   }
 }

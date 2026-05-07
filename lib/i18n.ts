@@ -28,11 +28,15 @@ export function localeToHtmlLang(locale: Locale): string {
   return "pt-BR"
 }
 
-/** Helper for inline trilingual strings */
-export function t(locale: Locale, pt: string, en: string, es: string): string {
-  if (locale === "en") return en
-  if (locale === "es") return es
-  return pt
+/**
+ * Inline translation helper. Pass an object keyed by locale.
+ * `pt` is required and used as fallback when the requested locale has no entry.
+ *
+ * @example
+ *   t(locale, { pt: "Sobre", en: "About", es: "Acerca" })
+ */
+export function t(locale: Locale, translations: Partial<Record<Locale, string>> & { pt: string }): string {
+  return translations[locale] ?? translations.pt
 }
 
 export const SITE_URL = "https://viniciusaguiardev.com.br"

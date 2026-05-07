@@ -9,18 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(
-      locale,
-      "X-Drop — Plataforma SaaS de Dropshipping",
-      "X-Drop — Dropshipping SaaS Platform",
-      "X-Drop — Plataforma SaaS de Dropshipping"
-    ),
-    description: t(
-      locale,
-      "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.",
-      "How I built a platform connecting trusted suppliers with sellers entering the online sales world.",
-      "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online."
-    ),
+    title: t(locale, { pt: "X-Drop — Plataforma SaaS de Dropshipping", en: "X-Drop — Dropshipping SaaS Platform", es: "X-Drop — Plataforma SaaS de Dropshipping" }),
+    description: t(locale, { pt: "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.", en: "How I built a platform connecting trusted suppliers with sellers entering the online sales world.", es: "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online." }),
     alternates: buildAlternates("/projetos/x-drop", locale),
   }
 }

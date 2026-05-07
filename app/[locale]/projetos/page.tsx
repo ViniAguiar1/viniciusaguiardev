@@ -7,13 +7,8 @@ import { FadeIn } from "@/components/fade-in"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, "Projetos", "Projects", "Proyectos"),
-    description: t(
-      locale,
-      "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
-      "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
-      "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales."
-    ),
+    title: t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos" }),
+    description: t(locale, { pt: "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.", en: "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.", es: "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales." }),
     alternates: buildAlternates("/projetos", locale),
   }
 }
@@ -50,19 +45,19 @@ export default async function ProjectsPage() {
           <div>
             <div className="text-2xl font-bold">{projects.length}</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, "Projetos", "Projects", "Proyectos")}
+              {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos" })}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">SaaS + E-commerce</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, "Foco principal", "Main focus", "Enfoque principal")}
+              {t(locale, { pt: "Foco principal", en: "Main focus", es: "Enfoque principal" })}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">Web + Mobile</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, "Entrega full-stack", "Full-stack Delivery", "Entrega full-stack")}
+              {t(locale, { pt: "Entrega full-stack", en: "Full-stack Delivery", es: "Entrega full-stack" })}
             </div>
           </div>
         </div>

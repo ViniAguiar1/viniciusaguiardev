@@ -1,15 +1,20 @@
+import type { Locale } from "@/lib/i18n"
+
 export type ProjectCategory =
   | "SaaS"
   | "E-commerce"
   | "Health"
   | "Open Source"
 
+/** Translated string with PT as the required fallback. */
+export type LocalizedString = Partial<Record<Locale, string>> & { pt: string }
+
 export type Project = {
   slug: string
   name: string
   logo: string
-  tagline: { pt: string; en: string; es?: string }
-  description: { pt: string; en: string; es?: string }
+  tagline: LocalizedString
+  description: LocalizedString
   category: ProjectCategory
   url?: string
   detailPage?: string

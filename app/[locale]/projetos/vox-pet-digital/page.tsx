@@ -9,18 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(
-      locale,
-      "Vox Pet Digital — SaaS para clínicas veterinárias",
-      "Vox Pet Digital — Veterinary clinic SaaS",
-      "Vox Pet Digital — SaaS para clínicas veterinarias"
-    ),
-    description: t(
-      locale,
-      "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.",
-      "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.",
-      "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial."
-    ),
+    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias" }),
+    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial." }),
     alternates: buildAlternates("/projetos/vox-pet-digital", locale),
   }
 }

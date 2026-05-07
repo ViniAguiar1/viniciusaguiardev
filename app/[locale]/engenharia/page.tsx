@@ -10,13 +10,8 @@ const siteUrl = "https://viniciusaguiardev.com.br"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, "Engenharia", "Engineering", "Ingeniería"),
-    description: t(
-      locale,
-      "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
-      "Architecture decisions, trade-offs, and real problems solved in production.",
-      "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción."
-    ),
+    title: t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería" }),
+    description: t(locale, { pt: "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.", en: "Architecture decisions, trade-offs, and real problems solved in production.", es: "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción." }),
     alternates: buildAlternates("/engenharia", locale),
   }
 }
@@ -56,12 +51,8 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         data={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          name: t(locale, "Engenharia", "Engineering", "Ingeniería"),
-          description: t(locale,
-            "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.",
-            "Architecture decisions, trade-offs, and real problems solved in production.",
-            "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción."
-          ),
+          name: t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería" }),
+          description: t(locale, { pt: "Arquitetura de sistemas, decisões técnicas e problemas reais resolvidos em produção.", en: "Architecture decisions, trade-offs, and real problems solved in production.", es: "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción." }),
           url: `${siteUrl}/engenharia`,
           author: { "@type": "Person", name: "Vinicius Aguiar", url: siteUrl },
         }}
@@ -82,14 +73,10 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       <FadeIn>
       <header className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-          {t(locale, "Engenharia", "Engineering", "Ingeniería")}
+          {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería" })}
         </h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
-          {t(locale,
-            "Sistemas que projetei e operei em produção — decisões de arquitetura, trade-offs e restrições reais.",
-            "Systems I've designed and operated in production — architecture decisions, trade-offs, and real constraints.",
-            "Sistemas que diseñé y operé en producción — decisiones de arquitectura, trade-offs y restricciones reales."
-          )}
+          {t(locale, { pt: "Sistemas que projetei e operei em produção — decisões de arquitetura, trade-offs e restrições reais.", en: "Systems I've designed and operated in production — architecture decisions, trade-offs, and real constraints.", es: "Sistemas que diseñé y operé en producción — decisiones de arquitectura, trade-offs y restricciones reales." })}
         </p>
       </header>
       </FadeIn>
@@ -100,25 +87,21 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         <EngineeringTopic
           id="saas-architecture"
           defaultOpen={topic === "saas-architecture"}
-          title={t(locale, "Arquitetura SaaS — Plataforma Vertical", "SaaS Architecture — Vertical Platform", "Arquitectura SaaS — Plataforma Vertical")}
-          subtitle={t(locale, "Plataforma multi-módulo: agenda, vendas, financeiro, IA no WhatsApp", "Multi-module platform: scheduling, sales, finance, WhatsApp AI", "Plataforma multi-módulo: agenda, ventas, financiero, IA en WhatsApp")}
+          title={t(locale, { pt: "Arquitetura SaaS — Plataforma Vertical", en: "SaaS Architecture — Vertical Platform", es: "Arquitectura SaaS — Plataforma Vertical" })}
+          subtitle={t(locale, { pt: "Plataforma multi-módulo: agenda, vendas, financeiro, IA no WhatsApp", en: "Multi-module platform: scheduling, sales, finance, WhatsApp AI", es: "Plataforma multi-módulo: agenda, ventas, financiero, IA en WhatsApp" })}
         >
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
-              {t(locale,
-                "Plataforma SaaS multi-módulo para pequenos negócios em um vertical específico. Projetei o sistema para lidar com agenda, vendas, financeiro, comissões e automações via WhatsApp — tudo operando como um único produto com dados compartilhados.",
-                "Multi-module SaaS platform serving small businesses in a specific vertical. I designed the system to handle scheduling, sales, finance, commissions, and WhatsApp automations — all operating as a single product with shared data.",
-                "Plataforma SaaS multi-módulo para pequeños negocios en un vertical específico. Diseñé el sistema para manejar agenda, ventas, financiero, comisiones y automatizaciones vía WhatsApp — todo operando como un único producto con datos compartidos."
-              )}
+              {t(locale, { pt: "Plataforma SaaS multi-módulo para pequenos negócios em um vertical específico. Projetei o sistema para lidar com agenda, vendas, financeiro, comissões e automações via WhatsApp — tudo operando como um único produto com dados compartilhados.", en: "Multi-module SaaS platform serving small businesses in a specific vertical. I designed the system to handle scheduling, sales, finance, commissions, and WhatsApp automations — all operating as a single product with shared data.", es: "Plataforma SaaS multi-módulo para pequeños negocios en un vertical específico. Diseñé el sistema para manejar agenda, ventas, financiero, comisiones y automatizaciones vía WhatsApp — todo operando como un único producto con datos compartidos." })}
             </p>
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-                {t(locale, "Decisões-chave", "Key Decisions", "Decisiones clave")}
+                {t(locale, { pt: "Decisões-chave", en: "Key Decisions", es: "Decisiones clave" })}
               </h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, "Arquitetura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", "Event-driven architecture for WhatsApp → LLM → PostgreSQL pipeline", "Arquitectura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL")}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados", "Atomic transactions to keep sales, commissions and payments always in sync", "Transacciones atómicas para mantener ventas, comisiones y pagos siempre sincronizados")}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos", "AI integration in WhatsApp for automated support and product recommendations", "Integración de IA en WhatsApp para atención automatizada y recomendación de productos")}</li>
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Arquitetura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", en: "Event-driven architecture for WhatsApp → LLM → PostgreSQL pipeline", es: "Arquitectura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL" })}</li>
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados", en: "Atomic transactions to keep sales, commissions and payments always in sync", es: "Transacciones atómicas para mantener ventas, comisiones y pagos siempre sincronizados" })}</li>
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos", en: "AI integration in WhatsApp for automated support and product recommendations", es: "Integración de IA en WhatsApp para atención automatizada y recomendación de productos" })}</li>
               </ul>
             </div>
             <div>
@@ -132,11 +115,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             <div className="rounded-md border border-border bg-muted/20 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
               <p className="text-sm leading-relaxed">
-                {t(locale,
-                  "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência do LLM) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos do provedor.",
-                  "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on LLM latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during provider spikes.",
-                  "Los flujos de IA en WhatsApp necesitaban ser confiables para cerrar ventas automáticamente. La elección era entre procesamiento síncrono (más simple, pero bloquea en la latencia del LLM) vs. cola de eventos asíncrona. Optamos por el asíncrono — el usuario recibe un ack inmediato y la respuesta de la IA se procesa en background con lógica de retry. Esto agregó complejidad pero eliminó mensajes perdidos durante picos del proveedor."
-                )}
+                {t(locale, { pt: "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência do LLM) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos do provedor.", en: "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on LLM latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during provider spikes.", es: "Los flujos de IA en WhatsApp necesitaban ser confiables para cerrar ventas automáticamente. La elección era entre procesamiento síncrono (más simple, pero bloquea en la latencia del LLM) vs. cola de eventos asíncrona. Optamos por el asíncrono — el usuario recibe un ack inmediato y la respuesta de la IA se procesa en background con lógica de retry. Esto agregó complejidad pero eliminó mensajes perdidos durante picos del proveedor." })}
               </p>
             </div>
           </div>
@@ -145,22 +124,18 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         <EngineeringTopic
           id="multi-tenant"
           defaultOpen={topic === "multi-tenant"}
-          title={t(locale, "Isolamento de dados Multi-tenant", "Multi-tenant Data Isolation", "Aislamiento de datos Multi-tenant")}
-          subtitle={t(locale, "Banco compartilhado + tenant_id + RLS — avaliou 3 estratégias, escolheu simplicidade", "Shared DB + tenant_id + RLS — evaluated 3 strategies, chose simplicity", "Base compartida + tenant_id + RLS — evaluó 3 estrategias, eligió simplicidad")}
+          title={t(locale, { pt: "Isolamento de dados Multi-tenant", en: "Multi-tenant Data Isolation", es: "Aislamiento de datos Multi-tenant" })}
+          subtitle={t(locale, { pt: "Banco compartilhado + tenant_id + RLS — avaliou 3 estratégias, escolheu simplicidade", en: "Shared DB + tenant_id + RLS — evaluated 3 strategies, chose simplicity", es: "Base compartida + tenant_id + RLS — evaluó 3 estrategias, eligió simplicidad" })}
         >
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
-              {t(locale,
-                "Para produtos SaaS que atendem múltiplos negócios, o isolamento de tenants é uma decisão arquitetural central. Avaliei três estratégias e implementei a abordagem de banco compartilhado com defesa em profundidade.",
-                "For SaaS products serving multiple businesses, tenant isolation is a core architectural decision. I evaluated three strategies and implemented the shared database approach with defense-in-depth.",
-                "Para productos SaaS que atienden múltiples negocios, el aislamiento de tenants es una decisión arquitectural central. Evalué tres estrategias e implementé el enfoque de base compartida con defensa en profundidad."
-              )}
+              {t(locale, { pt: "Para produtos SaaS que atendem múltiplos negócios, o isolamento de tenants é uma decisão arquitetural central. Avaliei três estratégias e implementei a abordagem de banco compartilhado com defesa em profundidade.", en: "For SaaS products serving multiple businesses, tenant isolation is a core architectural decision. I evaluated three strategies and implemented the shared database approach with defense-in-depth.", es: "Para productos SaaS que atienden múltiples negocios, el aislamiento de tenants es una decisión arquitectural central. Evalué tres estrategias e implementé el enfoque de base compartida con defensa en profundidad." })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {[
-                { title: t(locale, "DB por tenant", "DB per tenant", "DB por tenant"), desc: t(locale, "Máximo isolamento, alto custo operacional", "Max isolation, high operational cost", "Máximo aislamiento, alto costo operacional"), status: t(locale, "Descartado", "Discarded", "Descartado") },
-                { title: t(locale, "Schema por tenant", "Schema per tenant", "Schema por tenant"), desc: t(locale, "Bom isolamento, complexidade de migrações", "Good isolation, migration complexity", "Buen aislamiento, complejidad de migraciones"), status: t(locale, "Descartado", "Discarded", "Descartado") },
-                { title: t(locale, "DB compartilhado + tenant_id", "Shared DB + tenant_id", "DB compartida + tenant_id"), desc: t(locale, "Melhor custo/simplicidade, requer RLS", "Best cost/simplicity ratio, needs RLS", "Mejor costo/simplicidad, requiere RLS"), status: t(locale, "Escolhido", "Chosen", "Elegido") },
+                { title: t(locale, { pt: "DB por tenant", en: "DB per tenant", es: "DB por tenant" }), desc: t(locale, { pt: "Máximo isolamento, alto custo operacional", en: "Max isolation, high operational cost", es: "Máximo aislamiento, alto costo operacional" }), status: t(locale, { pt: "Descartado", en: "Discarded", es: "Descartado" }) },
+                { title: t(locale, { pt: "Schema por tenant", en: "Schema per tenant", es: "Schema por tenant" }), desc: t(locale, { pt: "Bom isolamento, complexidade de migrações", en: "Good isolation, migration complexity", es: "Buen aislamiento, complejidad de migraciones" }), status: t(locale, { pt: "Descartado", en: "Discarded", es: "Descartado" }) },
+                { title: t(locale, { pt: "DB compartilhado + tenant_id", en: "Shared DB + tenant_id", es: "DB compartida + tenant_id" }), desc: t(locale, { pt: "Melhor custo/simplicidade, requer RLS", en: "Best cost/simplicity ratio, needs RLS", es: "Mejor costo/simplicidad, requiere RLS" }), status: t(locale, { pt: "Escolhido", en: "Chosen", es: "Elegido" }) },
               ].map((s) => (
                 <div key={s.title} className="rounded-md border border-border p-3">
                   <div className="flex items-center justify-between mb-1">
@@ -172,15 +147,15 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               ))}
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{t(locale, "Camadas de isolamento", "Isolation Layers", "Capas de aislamiento")}</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{t(locale, { pt: "Camadas de isolamento", en: "Isolation Layers", es: "Capas de aislamiento" })}</h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">1</span>{t(locale, "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", "Application layer — all queries filtered by session.tenantId automatically", "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente")}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">2</span>{t(locale, "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", "Database layer — PostgreSQL Row Level Security (RLS) as safety net", "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad")}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">3</span>{t(locale, "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes")}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">1</span>{t(locale, { pt: "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", en: "Application layer — all queries filtered by session.tenantId automatically", es: "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">2</span>{t(locale, { pt: "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", en: "Database layer — PostgreSQL Row Level Security (RLS) as safety net", es: "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">3</span>{t(locale, { pt: "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", en: "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", es: "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes" })}</li>
               </ul>
             </div>
             <Link href={localePath(locale, "/posts/multi-tenant-architecture-postgresql")} className="text-sm text-primary hover:underline inline-block">
-              {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
+              {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →" })}
             </Link>
           </div>
         </EngineeringTopic>
@@ -188,39 +163,35 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         <EngineeringTopic
           id="payments"
           defaultOpen={topic === "payments"}
-          title={t(locale, "Pagamentos e integrações externas", "Payments & External Integrations", "Pagos e integraciones externas")}
-          subtitle={t(locale, "Webhooks, idempotência, fluxos PIX em múltiplos provedores", "Webhooks, idempotency, PIX flows across multiple providers", "Webhooks, idempotencia, flujos PIX en múltiples proveedores")}
+          title={t(locale, { pt: "Pagamentos e integrações externas", en: "Payments & External Integrations", es: "Pagos e integraciones externas" })}
+          subtitle={t(locale, { pt: "Webhooks, idempotência, fluxos PIX em múltiplos provedores", en: "Webhooks, idempotency, PIX flows across multiple providers", es: "Webhooks, idempotencia, flujos PIX en múltiples proveedores" })}
         >
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
-              {t(locale,
-                "Integrei sistemas de pagamento em múltiplos produtos em produção — Stripe, Mercado Pago e Asaas. Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes.",
-                "I've integrated payment systems across multiple production products — Stripe, Mercado Pago and Asaas. Each has different webhook patterns, failure modes, and consistency guarantees.",
-                "Integré sistemas de pago en múltiples productos en producción — Stripe, Mercado Pago y Asaas. Cada uno tiene patrones de webhook, modos de falla y garantías de consistencia diferentes."
-              )}
+              {t(locale, { pt: "Integrei sistemas de pagamento em múltiplos produtos em produção — Stripe, Mercado Pago e Asaas. Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes.", en: "I've integrated payment systems across multiple production products — Stripe, Mercado Pago and Asaas. Each has different webhook patterns, failure modes, and consistency guarantees.", es: "Integré sistemas de pago en múltiples productos en producción — Stripe, Mercado Pago y Asaas. Cada uno tiene patrones de webhook, modos de falla y garantías de consistencia diferentes." })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="rounded-md border border-border p-4">
-                <h4 className="text-sm font-medium mb-2">{t(locale, "Arquitetura de Webhooks", "Webhook Architecture", "Arquitectura de Webhooks")}</h4>
+                <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Arquitetura de Webhooks", en: "Webhook Architecture", es: "Arquitectura de Webhooks" })}</h4>
                 <ul className="text-xs space-y-1.5 text-muted-foreground">
-                  <li>- {t(locale, "Validação de assinatura em cada evento recebido", "Signature validation on every incoming event", "Validación de firma en cada evento recibido")}</li>
-                  <li>- {t(locale, "Chaves de idempotência para evitar processamento duplicado", "Idempotency keys to prevent duplicate processing", "Claves de idempotencia para evitar procesamiento duplicado")}</li>
-                  <li>- {t(locale, "Processamento assíncrono — ack imediato, processa em background", "Async processing — ack immediately, process in background", "Procesamiento asíncrono — ack inmediato, procesa en background")}</li>
-                  <li>- {t(locale, "Dead letter queue para eventos com falha", "Dead letter queue for failed events", "Dead letter queue para eventos con falla")}</li>
+                  <li>- {t(locale, { pt: "Validação de assinatura em cada evento recebido", en: "Signature validation on every incoming event", es: "Validación de firma en cada evento recibido" })}</li>
+                  <li>- {t(locale, { pt: "Chaves de idempotência para evitar processamento duplicado", en: "Idempotency keys to prevent duplicate processing", es: "Claves de idempotencia para evitar procesamiento duplicado" })}</li>
+                  <li>- {t(locale, { pt: "Processamento assíncrono — ack imediato, processa em background", en: "Async processing — ack immediately, process in background", es: "Procesamiento asíncrono — ack inmediato, procesa en background" })}</li>
+                  <li>- {t(locale, { pt: "Dead letter queue para eventos com falha", en: "Dead letter queue for failed events", es: "Dead letter queue para eventos con falla" })}</li>
                 </ul>
               </div>
               <div className="rounded-md border border-border p-4">
-                <h4 className="text-sm font-medium mb-2">{t(locale, "Preocupações reais", "Real-world Concerns", "Preocupaciones reales")}</h4>
+                <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Preocupações reais", en: "Real-world Concerns", es: "Preocupaciones reales" })}</h4>
                 <ul className="text-xs space-y-1.5 text-muted-foreground">
-                  <li>- {t(locale, "Atrasos na confirmação de PIX variam entre provedores", "PIX confirmation delays vary between providers", "Atrasos en la confirmación de PIX varían entre proveedores")}</li>
-                  <li>- {t(locale, "Retries de webhook chegando fora de ordem", "Webhook retries arriving out of order", "Retries de webhook llegando fuera de orden")}</li>
-                  <li>- {t(locale, "Reconciliação entre estado local e estado do provedor", "Reconciliation between local state and provider state", "Reconciliación entre estado local y estado del proveedor")}</li>
-                  <li>- {t(locale, "Degradação graciosa quando o provedor está fora", "Graceful degradation when provider is down", "Degradación graciosa cuando el proveedor está caído")}</li>
+                  <li>- {t(locale, { pt: "Atrasos na confirmação de PIX variam entre provedores", en: "PIX confirmation delays vary between providers", es: "Atrasos en la confirmación de PIX varían entre proveedores" })}</li>
+                  <li>- {t(locale, { pt: "Retries de webhook chegando fora de ordem", en: "Webhook retries arriving out of order", es: "Retries de webhook llegando fuera de orden" })}</li>
+                  <li>- {t(locale, { pt: "Reconciliação entre estado local e estado do provedor", en: "Reconciliation between local state and provider state", es: "Reconciliación entre estado local y estado del proveedor" })}</li>
+                  <li>- {t(locale, { pt: "Degradação graciosa quando o provedor está fora", en: "Graceful degradation when provider is down", es: "Degradación graciosa cuando el proveedor está caído" })}</li>
                 </ul>
               </div>
             </div>
             <Link href={localePath(locale, "/posts/webhook-architecture-payment-providers")} className="text-sm text-primary hover:underline inline-block">
-              {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
+              {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →" })}
             </Link>
           </div>
         </EngineeringTopic>
@@ -231,18 +202,18 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       <FadeIn delay={200}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, "Problemas resolvidos em produção", "Problems Solved in Production", "Problemas resueltos en producción")}</h2>
+          <h2 className="text-xl font-semibold">{t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
         <div className="rounded-lg border border-border bg-card p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {[
-              { signal: t(locale, "Latência de API", "API latency", "Latencia de API"), detail: t(locale, "Timeouts de APIs terceiras causando falhas em cascata no checkout — resolvido com circuit breaker e respostas fallback", "Third-party API timeouts causing cascading failures in checkout — solved with circuit breaker pattern and fallback responses", "Timeouts de APIs de terceros causando fallas en cascada en el checkout — resuelto con circuit breaker y respuestas fallback") },
-              { signal: t(locale, "Inconsistências de marketplace", "Marketplace inconsistencies", "Inconsistencias de marketplace"), detail: t(locale, "APIs de marketplaces externos retornando dados inconsistentes — camada de abstração normalizando schemas em modelo unificado", "External marketplace APIs returning inconsistent product data — built abstraction layer normalizing different schemas into unified model", "APIs de marketplaces externos retornando datos inconsistentes — capa de abstracción normalizando schemas en modelo unificado") },
-              { signal: t(locale, "Migração de legado", "Legacy migration", "Migración de legado"), detail: t(locale, "Migrando sistemas de clientes de monolito PHP para React + Next.js sem downtime — abordagem incremental strangler fig", "Migrating client systems from PHP monolith to React + Next.js without downtime — incremental strangler fig approach", "Migrando sistemas de clientes de monolito PHP a React + Next.js sin downtime — enfoque incremental strangler fig") },
-              { signal: t(locale, "Performance em escala", "Performance at scale", "Rendimiento a escala"), detail: t(locale, "Tempos de resposta da API degradando com crescimento de usuários — otimização de queries, caching estratégico, chamadas paralelas", "API response times degrading with growing user base — query optimization, strategic caching, parallel API calls", "Tiempos de respuesta de la API degradando con crecimiento de usuarios — optimización de queries, caching estratégico, llamadas paralelas") },
-              { signal: t(locale, "UX cross-platform", "Cross-platform UX", "UX cross-platform"), detail: t(locale, "Manter UX consistente entre React (web) e React Native (mobile) — design tokens e contratos de componentes compartilhados", "Maintaining consistent UX between React (web) and React Native (mobile) — shared design tokens and component contracts", "Mantener UX consistente entre React (web) y React Native (mobile) — design tokens y contratos de componentes compartidos") },
-              { signal: t(locale, "Consistência de dados", "Data consistency", "Consistencia de datos"), detail: t(locale, "Módulos financeiros (vendas + comissões + pagamentos) perdendo sincronia — transações atômicas com advisory locks do PostgreSQL", "Financial modules (sales + commissions + payments) drifting out of sync — atomic transactions with PostgreSQL advisory locks", "Módulos financieros (ventas + comisiones + pagos) perdiendo sincronía — transacciones atómicas con advisory locks de PostgreSQL") },
+              { signal: t(locale, { pt: "Latência de API", en: "API latency", es: "Latencia de API" }), detail: t(locale, { pt: "Timeouts de APIs terceiras causando falhas em cascata no checkout — resolvido com circuit breaker e respostas fallback", en: "Third-party API timeouts causing cascading failures in checkout — solved with circuit breaker pattern and fallback responses", es: "Timeouts de APIs de terceros causando fallas en cascada en el checkout — resuelto con circuit breaker y respuestas fallback" }) },
+              { signal: t(locale, { pt: "Inconsistências de marketplace", en: "Marketplace inconsistencies", es: "Inconsistencias de marketplace" }), detail: t(locale, { pt: "APIs de marketplaces externos retornando dados inconsistentes — camada de abstração normalizando schemas em modelo unificado", en: "External marketplace APIs returning inconsistent product data — built abstraction layer normalizing different schemas into unified model", es: "APIs de marketplaces externos retornando datos inconsistentes — capa de abstracción normalizando schemas en modelo unificado" }) },
+              { signal: t(locale, { pt: "Migração de legado", en: "Legacy migration", es: "Migración de legado" }), detail: t(locale, { pt: "Migrando sistemas de clientes de monolito PHP para React + Next.js sem downtime — abordagem incremental strangler fig", en: "Migrating client systems from PHP monolith to React + Next.js without downtime — incremental strangler fig approach", es: "Migrando sistemas de clientes de monolito PHP a React + Next.js sin downtime — enfoque incremental strangler fig" }) },
+              { signal: t(locale, { pt: "Performance em escala", en: "Performance at scale", es: "Rendimiento a escala" }), detail: t(locale, { pt: "Tempos de resposta da API degradando com crescimento de usuários — otimização de queries, caching estratégico, chamadas paralelas", en: "API response times degrading with growing user base — query optimization, strategic caching, parallel API calls", es: "Tiempos de respuesta de la API degradando con crecimiento de usuarios — optimización de queries, caching estratégico, llamadas paralelas" }) },
+              { signal: t(locale, { pt: "UX cross-platform", en: "Cross-platform UX", es: "UX cross-platform" }), detail: t(locale, { pt: "Manter UX consistente entre React (web) e React Native (mobile) — design tokens e contratos de componentes compartilhados", en: "Maintaining consistent UX between React (web) and React Native (mobile) — shared design tokens and component contracts", es: "Mantener UX consistente entre React (web) y React Native (mobile) — design tokens y contratos de componentes compartidos" }) },
+              { signal: t(locale, { pt: "Consistência de dados", en: "Data consistency", es: "Consistencia de datos" }), detail: t(locale, { pt: "Módulos financeiros (vendas + comissões + pagamentos) perdendo sincronia — transações atômicas com advisory locks do PostgreSQL", en: "Financial modules (sales + commissions + payments) drifting out of sync — atomic transactions with PostgreSQL advisory locks", es: "Módulos financieros (ventas + comisiones + pagos) perdiendo sincronía — transacciones atómicas con advisory locks de PostgreSQL" }) },
             ].map((item) => (
               <div key={item.signal} className="py-2">
                 <h3 className="text-sm font-medium">{item.signal}</h3>
@@ -258,39 +229,27 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       <FadeIn delay={300}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, "Sistemas de IA em produção", "AI Systems in Production", "Sistemas de IA en producción")}</h2>
+          <h2 className="text-xl font-semibold">{t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
         <div className="rounded-lg border border-border bg-card p-6 space-y-5">
           <p className="text-sm leading-relaxed">
-            {t(locale,
-              "Não chatbots — pipelines em produção onde IA é um componente em um sistema maior, com fallbacks, monitoramento e dados reais fluindo.",
-              "Not chatbots — production pipelines where AI is a component in a larger system, with fallbacks, monitoring, and real data flowing through.",
-              "No chatbots — pipelines en producción donde IA es un componente en un sistema mayor, con fallbacks, monitoreo y datos reales fluyendo."
-            )}
+            {t(locale, { pt: "Não chatbots — pipelines em produção onde IA é um componente em um sistema maior, com fallbacks, monitoramento e dados reais fluindo.", en: "Not chatbots — production pipelines where AI is a component in a larger system, with fallbacks, monitoring, and real data flowing through.", es: "No chatbots — pipelines en producción donde IA es un componente en un sistema mayor, con fallbacks, monitoreo y datos reales fluyendo." })}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="rounded-md border border-border p-4">
-              <h3 className="text-sm font-medium mb-2">{t(locale, "Agente IA no WhatsApp", "WhatsApp AI Agent", "Agente IA en WhatsApp")}</h3>
+              <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Agente IA no WhatsApp", en: "WhatsApp AI Agent", es: "Agente IA en WhatsApp" })}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                {t(locale,
-                  "Agente com LLM para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível.",
-                  "LLM-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable.",
-                  "Agente con LLM para atención, recomendación de productos y cierre de ventas. Mensajes procesados de forma asíncrona, datos registrados en PostgreSQL. Fallback a matching por reglas cuando LLM no está disponible."
-                )}
+                {t(locale, { pt: "Agente com LLM para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível.", en: "LLM-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable.", es: "Agente con LLM para atención, recomendación de productos y cierre de ventas. Mensajes procesados de forma asíncrona, datos registrados en PostgreSQL. Fallback a matching por reglas cuando LLM no está disponible." })}
               </p>
             </div>
             <div className="rounded-md border border-border p-4">
-              <h3 className="text-sm font-medium mb-2">{t(locale, "Pipeline RAG (LangChain + pgVector)", "RAG Pipeline (LangChain + pgVector)", "Pipeline RAG (LangChain + pgVector)")}</h3>
+              <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Pipeline RAG (LangChain + pgVector)", en: "RAG Pipeline (LangChain + pgVector)", es: "Pipeline RAG (LangChain + pgVector)" })}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                {t(locale,
-                  "Ingestão de documentos → chunking → geração de embeddings → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM.",
-                  "Document ingestion → chunk splitting → embedding generation → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context.",
-                  "Ingestión de documentos → chunking → generación de embeddings → almacenamiento vectorial en PostgreSQL con pgVector → búsqueda semántica con top-K como contexto para LLM."
-                )}
+                {t(locale, { pt: "Ingestão de documentos → chunking → geração de embeddings → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM.", en: "Document ingestion → chunk splitting → embedding generation → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context.", es: "Ingestión de documentos → chunking → generación de embeddings → almacenamiento vectorial en PostgreSQL con pgVector → búsqueda semántica con top-K como contexto para LLM." })}
               </p>
               <Link href={localePath(locale, "/posts/rag-langchain-postgres-fullcycle")} className="text-xs text-primary hover:underline mt-2 inline-block">
-                {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
+                {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →" })}
               </Link>
             </div>
           </div>
@@ -302,7 +261,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       <FadeIn delay={400}>
       <section className="mb-12">
         <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, "Perguntas frequentes", "Frequently Asked Questions", "Preguntas frecuentes")}</h2>
+          <h2 className="text-xl font-semibold">{t(locale, { pt: "Perguntas frequentes", en: "Frequently Asked Questions", es: "Preguntas frecuentes" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
         <div className="space-y-4">
@@ -320,16 +279,16 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       <FadeIn delay={500}>
       <section>
         <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, "Aprofundamentos", "Deep Dives", "Profundizaciones")}</h2>
+          <h2 className="text-xl font-semibold">{t(locale, { pt: "Aprofundamentos", en: "Deep Dives", es: "Profundizaciones" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
-            { title: t(locale, "Circuit Breaker em Node.js", "Circuit Breaker in Node.js", "Circuit Breaker en Node.js"), desc: t(locale, "State machine, fallbacks, retry e monitoramento", "State machine, fallbacks, retry and monitoring", "State machine, fallbacks, retry y monitoreo"), href: "/posts/circuit-breaker-nodejs" },
-            { title: t(locale, "Arquitetura de Webhooks para Pagamentos", "Webhook Architecture for Payments", "Arquitectura de Webhooks para Pagos"), desc: t(locale, "Idempotência, reconciliação, fluxos PIX", "Idempotency, reconciliation, PIX flows", "Idempotencia, reconciliación, flujos PIX"), href: "/posts/webhook-architecture-payment-providers" },
-            { title: t(locale, "Arquitetura Multi-tenant", "Multi-tenant Architecture", "Arquitectura Multi-tenant"), desc: t(locale, "Banco compartilhado, RLS, particionamento", "Shared DB, RLS, partitioning", "Base compartida, RLS, particionamiento"), href: "/posts/multi-tenant-architecture-postgresql" },
-            { title: t(locale, "RAG com LangChain", "RAG with LangChain", "RAG con LangChain"), desc: t(locale, "Embeddings, pgVector, busca semântica", "Embeddings, pgVector, semantic search", "Embeddings, pgVector, búsqueda semántica"), href: "/posts/rag-langchain-postgres-fullcycle" },
-            { title: t(locale, "Design Systems em escala", "Design Systems at Scale", "Design Systems a escala"), desc: t(locale, "Shadcn UI, tokens, contratos de componentes", "Shadcn UI, tokens, component contracts", "Shadcn UI, tokens, contratos de componentes"), href: "/posts/design-system-shadcn-tailwind" },
+            { title: t(locale, { pt: "Circuit Breaker em Node.js", en: "Circuit Breaker in Node.js", es: "Circuit Breaker en Node.js" }), desc: t(locale, { pt: "State machine, fallbacks, retry e monitoramento", en: "State machine, fallbacks, retry and monitoring", es: "State machine, fallbacks, retry y monitoreo" }), href: "/posts/circuit-breaker-nodejs" },
+            { title: t(locale, { pt: "Arquitetura de Webhooks para Pagamentos", en: "Webhook Architecture for Payments", es: "Arquitectura de Webhooks para Pagos" }), desc: t(locale, { pt: "Idempotência, reconciliação, fluxos PIX", en: "Idempotency, reconciliation, PIX flows", es: "Idempotencia, reconciliación, flujos PIX" }), href: "/posts/webhook-architecture-payment-providers" },
+            { title: t(locale, { pt: "Arquitetura Multi-tenant", en: "Multi-tenant Architecture", es: "Arquitectura Multi-tenant" }), desc: t(locale, { pt: "Banco compartilhado, RLS, particionamento", en: "Shared DB, RLS, partitioning", es: "Base compartida, RLS, particionamiento" }), href: "/posts/multi-tenant-architecture-postgresql" },
+            { title: t(locale, { pt: "RAG com LangChain", en: "RAG with LangChain", es: "RAG con LangChain" }), desc: t(locale, { pt: "Embeddings, pgVector, busca semântica", en: "Embeddings, pgVector, semantic search", es: "Embeddings, pgVector, búsqueda semántica" }), href: "/posts/rag-langchain-postgres-fullcycle" },
+            { title: t(locale, { pt: "Design Systems em escala", en: "Design Systems at Scale", es: "Design Systems a escala" }), desc: t(locale, { pt: "Shadcn UI, tokens, contratos de componentes", en: "Shadcn UI, tokens, component contracts", es: "Shadcn UI, tokens, contratos de componentes" }), href: "/posts/design-system-shadcn-tailwind" },
           ].map((post) => (
             <Link key={post.href} href={post.href} className="group rounded-lg border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
               <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">{post.title}</h3>

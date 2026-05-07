@@ -12,7 +12,7 @@ export async function Footer() {
           {/* Left — contact */}
           <div className="space-y-1">
             <p className="text-sm font-medium">
-              {t(locale, "Vamos conversar?", "Let's talk?", "Hablemos?")}
+              {t(locale, { pt: "Vamos conversar?", en: "Let's talk?", es: "Hablemos?" })}
             </p>
             <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
               <a
@@ -54,13 +54,13 @@ export async function Footer() {
           {/* Right — nav */}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <Link href={localePath(locale, "/projetos")} className="hover:text-foreground transition">
-              {t(locale, "Projetos", "Projects", "Proyectos")}
+              {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos" })}
             </Link>
             <Link href={localePath(locale, "/engenharia")} className="hover:text-foreground transition">
-              {t(locale, "Engenharia", "Engineering", "Ingeniería")}
+              {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería" })}
             </Link>
             <Link href={localePath(locale, "/sobre")} className="hover:text-foreground transition">
-              {t(locale, "Sobre", "About", "Acerca")}
+              {t(locale, { pt: "Sobre", en: "About", es: "Acerca" })}
             </Link>
           </div>
         </div>

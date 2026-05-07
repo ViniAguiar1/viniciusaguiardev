@@ -8,13 +8,8 @@ import { FadeIn } from "@/components/fade-in"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, "Busca", "Search", "Búsqueda"),
-    description: t(
-      locale,
-      "Busque por posts, projetos e conteúdo no portfólio.",
-      "Search for posts, projects and content in the portfolio.",
-      "Busca posts, proyectos y contenido en el portafolio."
-    ),
+    title: t(locale, { pt: "Busca", en: "Search", es: "Búsqueda" }),
+    description: t(locale, { pt: "Busque por posts, projetos e conteúdo no portfólio.", en: "Search for posts, projects and content in the portfolio.", es: "Busca posts, proyectos y contenido en el portafolio." }),
     alternates: buildAlternates("/busca", locale),
   }
 }
@@ -43,15 +38,10 @@ export default async function SearchPage() {
       <FadeIn>
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-            {t(locale, "Busca", "Search", "Búsqueda")}
+            {t(locale, { pt: "Busca", en: "Search", es: "Búsqueda" })}
           </h1>
           <p className="text-muted-foreground mt-2">
-            {t(
-              locale,
-              "Encontre posts, projetos e conteúdo técnico.",
-              "Find posts, projects and technical content.",
-              "Encuentra posts, proyectos y contenido técnico."
-            )}
+            {t(locale, { pt: "Encontre posts, projetos e conteúdo técnico.", en: "Find posts, projects and technical content.", es: "Encuentra posts, proyectos y contenido técnico." })}
           </p>
         </header>
       </FadeIn>
@@ -62,11 +52,11 @@ export default async function SearchPage() {
           projects={projectList}
           locale={locale}
           labels={{
-            placeholder: t(locale, "Digite para buscar...", "Type to search...", "Escribe para buscar..."),
-            posts: t(locale, "Posts", "Posts", "Posts"),
-            projects: t(locale, "Projetos", "Projects", "Proyectos"),
-            noResults: t(locale, "Nenhum resultado para", "No results for", "Sin resultados para"),
-            hint: t(locale, "Digite algo para buscar posts e projetos.", "Type something to search posts and projects.", "Escribe algo para buscar posts y proyectos."),
+            placeholder: t(locale, { pt: "Digite para buscar...", en: "Type to search...", es: "Escribe para buscar..." }),
+            posts: t(locale, { pt: "Posts", en: "Posts", es: "Posts" }),
+            projects: t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos" }),
+            noResults: t(locale, { pt: "Nenhum resultado para", en: "No results for", es: "Sin resultados para" }),
+            hint: t(locale, { pt: "Digite algo para buscar posts e projetos.", en: "Type something to search posts and projects.", es: "Escribe algo para buscar posts y proyectos." }),
           }}
         />
       </FadeIn>

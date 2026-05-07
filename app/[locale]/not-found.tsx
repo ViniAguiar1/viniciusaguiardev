@@ -59,21 +59,11 @@ export default async function NotFound() {
       </p>
 
       <h1 className="text-2xl font-semibold mb-2">
-        {t(
-          locale,
-          "Perdido no espaço",
-          "Lost in space",
-          "Perdido en el espacio"
-        )}
+        {t(locale, { pt: "Perdido no espaço", en: "Lost in space", es: "Perdido en el espacio" })}
       </h1>
 
       <p className="text-sm text-muted-foreground mb-8 max-w-sm">
-        {t(
-          locale,
-          "A página que você procura não existe ou foi movida. Mas não se preocupe — tem bastante coisa interessante por aqui.",
-          "The page you're looking for doesn't exist or has been moved. But don't worry — there's plenty of interesting stuff around here.",
-          "La página que buscas no existe o fue movida. Pero no te preocupes — hay bastante contenido interesante por aquí."
-        )}
+        {t(locale, { pt: "A página que você procura não existe ou foi movida. Mas não se preocupe — tem bastante coisa interessante por aqui.", en: "The page you're looking for doesn't exist or has been moved. But don't worry — there's plenty of interesting stuff around here.", es: "La página que buscas no existe o fue movida. Pero no te preocupes — hay bastante contenido interesante por aquí." })}
       </p>
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -81,19 +71,19 @@ export default async function NotFound() {
           href={localePath(locale, "/")}
           className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition"
         >
-          {t(locale, "Voltar ao início", "Back to home", "Volver al inicio")}
+          {t(locale, { pt: "Voltar ao início", en: "Back to home", es: "Volver al inicio" })}
         </Link>
         <Link
           href={localePath(locale, "/projetos")}
           className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
         >
-          {t(locale, "Ver projetos", "See projects", "Ver proyectos")}
+          {t(locale, { pt: "Ver projetos", en: "See projects", es: "Ver proyectos" })}
         </Link>
         <Link
           href={localePath(locale, "/engenharia")}
           className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
         >
-          {t(locale, "Engenharia", "Engineering", "Ingeniería")}
+          {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería" })}
         </Link>
       </div>
     </div>

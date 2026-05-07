@@ -2,6 +2,7 @@ export type ProjectCategory =
   | "SaaS"
   | "E-commerce"
   | "Health"
+  | "Open Source"
 
 export type Project = {
   slug: string
@@ -15,6 +16,23 @@ export type Project = {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "termai",
+    name: "termAI",
+    logo: "/images/termai.svg",
+    tagline: {
+      pt: "Emulador de terminal com IA integrada — Rust + Go",
+      en: "GPU-accelerated terminal with built-in AI — Rust + Go",
+      es: "Emulador de terminal con IA integrada — Rust + Go",
+    },
+    description: {
+      pt: "Projeto open source de emulador de terminal com renderização via GPU (wgpu) e engine de IA que detecta erros automaticamente e sugere correções via Claude ou OpenAI, com fallback offline por pattern matching. Rust pra core do emulador (PTY, vt100/xterm, split panes, scrollback) e Go pro daemon de IA. Distribuído como .app/.dmg assinado e notarizado para macOS.",
+      en: "Open-source terminal emulator with GPU rendering (wgpu) and an AI engine that automatically detects errors and suggests fixes via Claude or OpenAI, with offline pattern-matching fallback. Rust for the emulator core (PTY, vt100/xterm, split panes, scrollback) and Go for the AI daemon. Shipped as a signed and notarized .app/.dmg for macOS.",
+      es: "Proyecto open source de emulador de terminal con renderizado por GPU (wgpu) y motor de IA que detecta errores automáticamente y sugiere correcciones vía Claude u OpenAI, con fallback offline por pattern matching. Rust para el core del emulador (PTY, vt100/xterm, split panes, scrollback) y Go para el daemon de IA. Distribuido como .app/.dmg firmado y notarizado para macOS.",
+    },
+    category: "Open Source",
+    url: "https://github.com/ViniAguiar1/termai",
+  },
   {
     slug: "fastseller",
     name: "FastSeller",

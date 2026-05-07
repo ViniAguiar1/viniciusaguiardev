@@ -23,6 +23,7 @@ const categoryColors: Record<string, string> = {
   Logistics: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
   HealthTech: "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-400",
   Automotive: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+  "Open Source": "bg-zinc-100 text-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-300",
 }
 
 interface ProjectsGridProps {

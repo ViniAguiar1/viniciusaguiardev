@@ -6,8 +6,8 @@ import { ExperienceItem } from "@/components/experience-item"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Sobre", en: "About", es: "Acerca" }),
-    description: t(locale, { pt: "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.", en: "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer.", es: "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Software Engineer." }),
+    title: t(locale, { pt: "Sobre", en: "About", es: "Acerca", jp: "プロフィール" }),
+    description: t(locale, { pt: "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.", en: "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer.", es: "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Software Engineer.", jp: "Vinicius Aguiar（ソフトウェアエンジニア）の経歴、実務経験、スキル、技術スタック。" }),
     alternates: buildAlternates("/sobre", locale),
   }
 }
@@ -246,15 +246,15 @@ export default async function SobrePage() {
             <h2 className="text-2xl font-semibold leading-tight">Vinicius Aguiar</h2>
 
             <p className="mt-4 leading-relaxed">
-              {t(locale, { pt: "Frontend Software Engineer especializado no desenvolvimento de aplicações web e mobile modernas com o ecossistema JavaScript/TypeScript, com forte atuação em React, Next.js e React Native.", en: "Frontend Software Engineer specialized in building modern web and mobile applications using the JavaScript/TypeScript ecosystem, with strong focus on React, Next.js and React Native.", es: "Frontend Software Engineer especializado en el desarrollo de aplicaciones web y móviles modernas con el ecosistema JavaScript/TypeScript, con fuerte enfoque en React, Next.js y React Native." })}
+              {t(locale, { pt: "Frontend Software Engineer especializado no desenvolvimento de aplicações web e mobile modernas com o ecossistema JavaScript/TypeScript, com forte atuação em React, Next.js e React Native.", en: "Frontend Software Engineer specialized in building modern web and mobile applications using the JavaScript/TypeScript ecosystem, with strong focus on React, Next.js and React Native.", es: "Frontend Software Engineer especializado en el desarrollo de aplicaciones web y móviles modernas con el ecosistema JavaScript/TypeScript, con fuerte enfoque en React, Next.js y React Native.", jp: "JavaScript/TypeScriptエコシステムを用いたモダンなWeb・モバイルアプリケーション開発に特化したフロントエンドソフトウェアエンジニア。React、Next.js、React Nativeでの実績が豊富。" })}
             </p>
 
             <p className="mt-3 leading-relaxed text-sm text-muted-foreground">
-              {t(locale, { pt: "Experiência no desenvolvimento e operação de produtos SaaS em produção, incluindo integrações com APIs, sistemas de autenticação, serviços de pagamento e fluxos reais de usuários.", en: "Experience developing and operating SaaS products in production, including API integrations, authentication systems, payment services and real-world user workflows.", es: "Experiencia en el desarrollo y operación de productos SaaS en producción, incluyendo integraciones con APIs, sistemas de autenticación, servicios de pago y flujos reales de usuarios." })}
+              {t(locale, { pt: "Experiência no desenvolvimento e operação de produtos SaaS em produção, incluindo integrações com APIs, sistemas de autenticação, serviços de pagamento e fluxos reais de usuários.", en: "Experience developing and operating SaaS products in production, including API integrations, authentication systems, payment services and real-world user workflows.", es: "Experiencia en el desarrollo y operación de productos SaaS en producción, incluyendo integraciones con APIs, sistemas de autenticación, servicios de pago y flujos reales de usuarios.", jp: "本番環境におけるSaaSプロダクトの開発・運用経験 — API連携、認証システム、決済サービス、実ユーザーフローを含む。" })}
             </p>
 
             <p className="mt-3 leading-relaxed text-sm text-muted-foreground">
-              {t(locale, { pt: "Execução orientada a produto com entrega em cloud (AWS, CI/CD e serviços em contêineres), além de automações com IA integradas a aplicações reais.", en: "Product-driven execution with cloud-based delivery (AWS, CI/CD and containerized services), plus AI-augmented automation flows integrated into real applications.", es: "Ejecución orientada a producto con entrega en cloud (AWS, CI/CD y servicios en contenedores), además de automatizaciones con IA integradas a aplicaciones reales." })}
+              {t(locale, { pt: "Execução orientada a produto com entrega em cloud (AWS, CI/CD e serviços em contêineres), além de automações com IA integradas a aplicações reais.", en: "Product-driven execution with cloud-based delivery (AWS, CI/CD and containerized services), plus AI-augmented automation flows integrated into real applications.", es: "Ejecución orientada a producto con entrega en cloud (AWS, CI/CD y servicios en contenedores), además de automatizaciones con IA integradas a aplicaciones reales.", jp: "クラウドデリバリー（AWS、CI/CD、コンテナ化サービス）を伴うプロダクト志向の実行、および実アプリケーションに統合されたAI自動化。" })}
             </p>
           </div>
         </div>
@@ -264,34 +264,34 @@ export default async function SobrePage() {
       <section className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="rounded-lg border border-border bg-card p-6">
           <h3 className="text-xl font-semibold mb-3">
-            {t(locale, { pt: "Habilidades", en: "Skills", es: "Habilidades" })}
+            {t(locale, { pt: "Habilidades", en: "Skills", es: "Habilidades", jp: "スキル" })}
           </h3>
           <ul className="list-disc pl-5 space-y-1 text-sm">
             <li>React, Next.js, TypeScript</li>
             <li>React Native, Node.js, Flutter, Swift (iOS)</li>
             <li>HTML5, CSS3, Tailwind, Design System</li>
             <li>
-              {t(locale, { pt: "Integrações REST API, autenticação e fluxos de pagamento", en: "REST API integrations, authentication and payment flows", es: "Integraciones REST API, autenticación y flujos de pago" })}
+              {t(locale, { pt: "Integrações REST API, autenticação e fluxos de pagamento", en: "REST API integrations, authentication and payment flows", es: "Integraciones REST API, autenticación y flujos de pago", jp: "REST API連携、認証、決済フロー" })}
             </li>
             <li>
-              {t(locale, { pt: "Testes, performance e prontidão para produção", en: "Testing, performance and production readiness", es: "Testing, rendimiento y preparación para producción" })}
+              {t(locale, { pt: "Testes, performance e prontidão para produção", en: "Testing, performance and production readiness", es: "Testing, rendimiento y preparación para producción", jp: "テスト、パフォーマンス、本番環境への準備" })}
             </li>
           </ul>
         </div>
 
         <div className="rounded-lg border border-border bg-card p-6">
           <h3 className="text-xl font-semibold mb-3">
-            {t(locale, { pt: "Interesses", en: "Interests", es: "Intereses" })}
+            {t(locale, { pt: "Interesses", en: "Interests", es: "Intereses", jp: "興味" })}
           </h3>
           <ul className="list-disc pl-5 space-y-1 text-sm">
             <li>
-              {t(locale, { pt: "Experiência do Usuário e acessibilidade", en: "User Experience and accessibility", es: "Experiencia de Usuario y accesibilidad" })}
+              {t(locale, { pt: "Experiência do Usuário e acessibilidade", en: "User Experience and accessibility", es: "Experiencia de Usuario y accesibilidad", jp: "ユーザー体験とアクセシビリティ" })}
             </li>
             <li>
-              {t(locale, { pt: "Arquitetura frontend e performance", en: "Frontend architecture and performance", es: "Arquitectura frontend y rendimiento" })}
+              {t(locale, { pt: "Arquitetura frontend e performance", en: "Frontend architecture and performance", es: "Arquitectura frontend y rendimiento", jp: "フロントエンドアーキテクチャとパフォーマンス" })}
             </li>
             <li>
-              {t(locale, { pt: "IA aplicada a produtos digitais", en: "AI applied to digital products", es: "IA aplicada a productos digitales" })}
+              {t(locale, { pt: "IA aplicada a produtos digitais", en: "AI applied to digital products", es: "IA aplicada a productos digitales", jp: "デジタルプロダクトに応用するAI" })}
             </li>
           </ul>
         </div>
@@ -300,7 +300,7 @@ export default async function SobrePage() {
       {/* Experience */}
       <section className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
-          {t(locale, { pt: "Experiência", en: "Experience", es: "Experiencia" })}
+          {t(locale, { pt: "Experiência", en: "Experience", es: "Experiencia", jp: "実務経験" })}
         </h2>
 
         <div className="mt-4 space-y-8">
@@ -339,23 +339,23 @@ export default async function SobrePage() {
       {/* Core Concepts */}
       <section className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
-          {t(locale, { pt: "Conceitos-chave", en: "Core Concepts", es: "Conceptos clave" })}
+          {t(locale, { pt: "Conceitos-chave", en: "Core Concepts", es: "Conceptos clave", jp: "重要な概念" })}
         </h2>
 
         <ul className="mt-4 list-disc pl-5 space-y-2 text-sm">
-          <li>{t(locale, { pt: "Arquitetura SaaS e desenho de sistemas prontos para produção", en: "SaaS Architecture and production-ready system design", es: "Arquitectura SaaS y diseño de sistemas listos para producción" })}</li>
-          <li>{t(locale, { pt: "REST APIs, integrações, autenticação e serviços de pagamento", en: "REST APIs, system integrations, authentication and payment services", es: "REST APIs, integraciones, autenticación y servicios de pago" })}</li>
-          <li>{t(locale, { pt: "Agentes de IA e fluxos de automação integrados a produtos reais", en: "AI Agents and automation workflows integrated into real products", es: "Agentes de IA y flujos de automatización integrados a productos reales" })}</li>
-          <li>{t(locale, { pt: "Entrega em cloud com AWS, pipelines de CI/CD e serviços em contêineres", en: "Cloud delivery with AWS, CI/CD pipelines and containerized services", es: "Entrega en cloud con AWS, pipelines de CI/CD y servicios en contenedores" })}</li>
-          <li>{t(locale, { pt: "Estratégia de testes, confiabilidade, performance e usabilidade", en: "Testing strategy, reliability, performance and usability", es: "Estrategia de testing, confiabilidad, rendimiento y usabilidad" })}</li>
-          <li>{t(locale, { pt: "Execução ágil com Scrum/Kanban e ciclos iterativos de produto", en: "Agile execution with Scrum/Kanban and iterative product cycles", es: "Ejecución ágil con Scrum/Kanban y ciclos iterativos de producto" })}</li>
+          <li>{t(locale, { pt: "Arquitetura SaaS e desenho de sistemas prontos para produção", en: "SaaS Architecture and production-ready system design", es: "Arquitectura SaaS y diseño de sistemas listos para producción", jp: "SaaSアーキテクチャと本番環境向けシステム設計" })}</li>
+          <li>{t(locale, { pt: "REST APIs, integrações, autenticação e serviços de pagamento", en: "REST APIs, system integrations, authentication and payment services", es: "REST APIs, integraciones, autenticación y servicios de pago", jp: "REST API、連携、認証、決済サービス" })}</li>
+          <li>{t(locale, { pt: "Agentes de IA e fluxos de automação integrados a produtos reais", en: "AI Agents and automation workflows integrated into real products", es: "Agentes de IA y flujos de automatización integrados a productos reales", jp: "実プロダクトに統合されたAIエージェントと自動化フロー" })}</li>
+          <li>{t(locale, { pt: "Entrega em cloud com AWS, pipelines de CI/CD e serviços em contêineres", en: "Cloud delivery with AWS, CI/CD pipelines and containerized services", es: "Entrega en cloud con AWS, pipelines de CI/CD y servicios en contenedores", jp: "AWSへのクラウドデリバリー、CI/CDパイプライン、コンテナ化されたサービス" })}</li>
+          <li>{t(locale, { pt: "Estratégia de testes, confiabilidade, performance e usabilidade", en: "Testing strategy, reliability, performance and usability", es: "Estrategia de testing, confiabilidad, rendimiento y usabilidad", jp: "テスト戦略、信頼性、パフォーマンス、ユーザビリティ" })}</li>
+          <li>{t(locale, { pt: "Execução ágil com Scrum/Kanban e ciclos iterativos de produto", en: "Agile execution with Scrum/Kanban and iterative product cycles", es: "Ejecución ágil con Scrum/Kanban y ciclos iterativos de producto", jp: "Scrum/Kanbanによるアジャイル実行と反復的なプロダクトサイクル" })}</li>
         </ul>
       </section>
 
       {/* Projects */}
       <section className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
-          {t(locale, { pt: "Projetos em destaque", en: "Featured Projects", es: "Proyectos destacados" })}
+          {t(locale, { pt: "Projetos em destaque", en: "Featured Projects", es: "Proyectos destacados", jp: "注目のプロジェクト" })}
         </h2>
 
         <ul className="mt-4 list-disc pl-5 space-y-2 text-sm">
@@ -363,14 +363,14 @@ export default async function SobrePage() {
             <span className="font-medium">Vox Pet Digital</span>
             <span className="text-muted-foreground">
               {" — "}
-              {t(locale, { pt: "plataforma SaaS para pet shops e clínicas veterinárias com foco em gestão, agendamentos e relacionamento com clientes.", en: "SaaS platform for pet shops and veterinary clinics focused on scheduling, customer management and digital services.", es: "plataforma SaaS para pet shops y clínicas veterinarias enfocada en gestión, agendamiento y relación con clientes." })}
+              {t(locale, { pt: "plataforma SaaS para pet shops e clínicas veterinárias com foco em gestão, agendamentos e relacionamento com clientes.", en: "SaaS platform for pet shops and veterinary clinics focused on scheduling, customer management and digital services.", es: "plataforma SaaS para pet shops y clínicas veterinarias enfocada en gestión, agendamiento y relación con clientes.", jp: "ペットショップと動物病院向けのSaaSプラットフォーム。管理、予約、顧客関係構築に特化。" })}
             </span>
           </li>
           <li>
             <span className="font-medium">X-Drop</span>
             <span className="text-muted-foreground">
               {" — "}
-              {t(locale, { pt: "solução voltada à automação de e-commerce e integração com marketplaces.", en: "solution for e-commerce automation and marketplace integrations focused on operational efficiency.", es: "solución enfocada en automatización de e-commerce e integración con marketplaces." })}
+              {t(locale, { pt: "solução voltada à automação de e-commerce e integração com marketplaces.", en: "solution for e-commerce automation and marketplace integrations focused on operational efficiency.", es: "solución enfocada en automatización de e-commerce e integración con marketplaces.", jp: "Eコマース自動化とマーケットプレイス連携を中心としたソリューション。" })}
             </span>
           </li>
         </ul>
@@ -379,7 +379,7 @@ export default async function SobrePage() {
       {/* Contact */}
       <section className="mt-8 rounded-lg border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
-          {t(locale, { pt: "Contato", en: "Contact", es: "Contacto" })}
+          {t(locale, { pt: "Contato", en: "Contact", es: "Contacto", jp: "連絡先" })}
         </h2>
 
         <ul className="mt-4 space-y-2 text-sm">

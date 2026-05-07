@@ -46,9 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) return {}
   const locale: Locale = rawLocale
 
-  const title = t(locale, { pt: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção", en: "Vinicius Aguiar — Software Engineer | SaaS, Payments, AI in Production", es: "Vinicius Aguiar — Software Engineer | SaaS, Pagos, IA en Producción" })
+  const title = t(locale, { pt: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção", en: "Vinicius Aguiar — Software Engineer | SaaS, Payments, AI in Production", es: "Vinicius Aguiar — Software Engineer | SaaS, Pagos, IA en Producción", jp: "Vinicius Aguiar — ソフトウェアエンジニア | SaaS、決済、本番環境のAI" })
 
-  const description = t(locale, { pt: "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.", en: "Software Engineer building production SaaS platforms — payment integrations, multi-tenant architecture and AI automation. React, Next.js, TypeScript.", es: "Software Engineer que construye plataformas SaaS en producción — integraciones de pago, arquitectura multi-tenant y automatizaciones con IA. React, Next.js, TypeScript." })
+  const description = t(locale, { pt: "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.", en: "Software Engineer building production SaaS platforms — payment integrations, multi-tenant architecture and AI automation. React, Next.js, TypeScript.", es: "Software Engineer que construye plataformas SaaS en producción — integraciones de pago, arquitectura multi-tenant y automatizaciones con IA. React, Next.js, TypeScript.", jp: "本番環境でSaaSプラットフォームを構築するソフトウェアエンジニア — 決済連携、マルチテナントアーキテクチャ、AI自動化。React、Next.js、TypeScript。" })
 
   const ogLocale = locale === "en" ? "en_US" : locale === "es" ? "es_ES" : "pt_BR"
 
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     twitter: {
       card: "summary_large_image",
       title,
-      description: t(locale, { pt: "Software Engineer — plataformas SaaS, pagamentos e IA em produção.", en: "Software Engineer — SaaS platforms, payments and AI in production.", es: "Software Engineer — plataformas SaaS, pagos e IA en producción." }),
+      description: t(locale, { pt: "Software Engineer — plataformas SaaS, pagamentos e IA em produção.", en: "Software Engineer — SaaS platforms, payments and AI in production.", es: "Software Engineer — plataformas SaaS, pagos e IA en producción.", jp: "ソフトウェアエンジニア — 本番環境のSaaSプラットフォーム、決済、AI。" }),
       images: ["/og-image.png"],
     },
   }

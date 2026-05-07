@@ -1,4 +1,5 @@
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
@@ -20,6 +21,7 @@ export async function generateMetadata() {
       "How I built a platform connecting trusted suppliers with sellers entering the online sales world.",
       "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online."
     ),
+    alternates: buildAlternates("/projetos/x-drop", locale),
   }
 }
 
@@ -165,7 +167,7 @@ export default async function XDropPage() {
       <div className="w-full max-w-4xl mx-auto px-4 py-12">
         {/* Back link */}
         <Link
-          href="/projetos"
+          href={localePath(locale, "/projetos")}
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
         >
           <svg
@@ -371,7 +373,7 @@ export default async function XDropPage() {
         <FadeIn delay={600}>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
-              href="/posts/case-study-xdrop"
+              href={localePath(locale, "/posts/case-study-xdrop")}
               className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {c.caseStudyCta}

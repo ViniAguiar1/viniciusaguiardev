@@ -1,4 +1,5 @@
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
@@ -20,6 +21,7 @@ export async function generateMetadata() {
       "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.",
       "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial."
     ),
+    alternates: buildAlternates("/projetos/vox-pet-digital", locale),
   }
 }
 
@@ -180,7 +182,7 @@ export default async function VoxPetPage() {
       <div className="w-full max-w-4xl mx-auto px-4 py-12">
         {/* Back link */}
         <Link
-          href="/projetos"
+          href={localePath(locale, "/projetos")}
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -319,7 +321,7 @@ export default async function VoxPetPage() {
         <FadeIn delay={500}>
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
-              href="/posts/case-study-vox-pet"
+              href={localePath(locale, "/posts/case-study-vox-pet")}
               className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {c.caseStudyCta}

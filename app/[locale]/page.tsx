@@ -2,6 +2,7 @@ import { getAllPosts } from "@/lib/posts"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
+import { localePath } from "@/lib/i18n"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
 
@@ -75,7 +76,7 @@ export default async function Home() {
             </Link>
 
             <Link
-              href="/sobre"
+              href={localePath(locale, "/sobre")}
               className="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted transition text-center"
             >
               {dict.home.ctaAbout}
@@ -94,7 +95,7 @@ export default async function Home() {
               {t(locale, "Como eu penso sobre sistemas", "How I think about systems", "Cómo pienso sobre sistemas")}
             </h2>
             <Link
-              href="/engenharia"
+              href={localePath(locale, "/engenharia")}
               className="text-sm text-muted-foreground hover:text-foreground transition inline-flex items-center gap-1"
             >
               {t(locale, "Ver tudo", "See all", "Ver todo")}
@@ -142,7 +143,7 @@ export default async function Home() {
             ].map((topic) => (
               <Link
                 key={topic.title}
-                href={`/engenharia?topic=${topic.topicId}`}
+                href={localePath(locale, `/engenharia?topic=${topic.topicId}`)}
                 className="group rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
                 <svg className="w-5 h-5 text-muted-foreground mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -169,7 +170,7 @@ export default async function Home() {
               )}
             >
               <Link
-                href={`/posts/${article.slug}`}
+                href={localePath(locale, `/posts/${article.slug}`)}
                 aria-label={`Ir para ${article.title}`}
                 className="absolute inset-0"
               />

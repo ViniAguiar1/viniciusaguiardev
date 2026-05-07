@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
+import { buildAlternates } from "@/lib/i18n"
 import { ExperienceItem } from "@/components/experience-item"
 
 export async function generateMetadata() {
@@ -12,6 +13,7 @@ export async function generateMetadata() {
       "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer.",
       "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Software Engineer."
     ),
+    alternates: buildAlternates("/sobre", locale),
   }
 }
 

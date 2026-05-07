@@ -11,6 +11,7 @@ import path from "path"
 
 const PUBLIC = path.join(process.cwd(), "public")
 const APP = path.join(process.cwd(), "app")
+const LOCALE_APP = path.join(APP, "[locale]")
 const THRESHOLD = 90
 
 type Check = { label: string; passed: boolean; points: number }
@@ -63,8 +64,8 @@ function findInFiles(dir: string, pattern: RegExp, ext = ".tsx"): boolean {
   return false
 }
 
-const layoutContent = fs.existsSync(path.join(APP, "layout.tsx"))
-  ? fs.readFileSync(path.join(APP, "layout.tsx"), "utf-8")
+const layoutContent = fs.existsSync(path.join(LOCALE_APP, "layout.tsx"))
+  ? fs.readFileSync(path.join(LOCALE_APP, "layout.tsx"), "utf-8")
   : ""
 
 const schemaChecks: Check[] = [
@@ -91,7 +92,7 @@ const schemaChecks: Check[] = [
   {
     label: "Article schema in posts",
     passed: (() => {
-      const postsPage = path.join(APP, "posts", "[slug]", "page.tsx")
+      const postsPage = path.join(LOCALE_APP, "posts", "[slug]", "page.tsx")
       if (!fs.existsSync(postsPage)) return false
       return fs.readFileSync(postsPage, "utf-8").includes("Article")
     })(),
@@ -140,10 +141,10 @@ const contentChecks: Check[] = [
   {
     label: "Multiple pages exist (4+ routes)",
     passed:
-      fs.existsSync(path.join(APP, "page.tsx")) &&
-      fs.existsSync(path.join(APP, "sobre", "page.tsx")) &&
-      fs.existsSync(path.join(APP, "projetos", "page.tsx")) &&
-      fs.existsSync(path.join(APP, "engenharia", "page.tsx")),
+      fs.existsSync(path.join(LOCALE_APP, "page.tsx")) &&
+      fs.existsSync(path.join(LOCALE_APP, "sobre", "page.tsx")) &&
+      fs.existsSync(path.join(LOCALE_APP, "projetos", "page.tsx")) &&
+      fs.existsSync(path.join(LOCALE_APP, "engenharia", "page.tsx")),
     points: 4,
   },
   {
@@ -171,7 +172,7 @@ const contentChecks: Check[] = [
 categories.push({ name: "Content Structure", checks: contentChecks })
 
 // ── Citability ──
-const engPage = path.join(APP, "engenharia", "page.tsx")
+const engPage = path.join(LOCALE_APP, "engenharia", "page.tsx")
 const engContent = fs.existsSync(engPage) ? fs.readFileSync(engPage, "utf-8") : ""
 
 const citabilityChecks: Check[] = [

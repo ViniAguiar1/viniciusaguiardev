@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath, buildAlternates } from "@/lib/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
@@ -16,6 +17,7 @@ export async function generateMetadata() {
       "Architecture decisions, trade-offs, and real problems solved in production.",
       "Decisiones de arquitectura, trade-offs y problemas reales resueltos en producción."
     ),
+    alternates: buildAlternates("/engenharia", locale),
   }
 }
 
@@ -177,7 +179,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">3</span>{t(locale, "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes")}</li>
               </ul>
             </div>
-            <Link href="/posts/multi-tenant-architecture-postgresql" className="text-sm text-primary hover:underline inline-block">
+            <Link href={localePath(locale, "/posts/multi-tenant-architecture-postgresql")} className="text-sm text-primary hover:underline inline-block">
               {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
             </Link>
           </div>
@@ -217,7 +219,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 </ul>
               </div>
             </div>
-            <Link href="/posts/webhook-architecture-payment-providers" className="text-sm text-primary hover:underline inline-block">
+            <Link href={localePath(locale, "/posts/webhook-architecture-payment-providers")} className="text-sm text-primary hover:underline inline-block">
               {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
             </Link>
           </div>
@@ -287,7 +289,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                   "Ingestión de documentos → chunking → generación de embeddings → almacenamiento vectorial en PostgreSQL con pgVector → búsqueda semántica con top-K como contexto para LLM."
                 )}
               </p>
-              <Link href="/posts/rag-langchain-postgres-fullcycle" className="text-xs text-primary hover:underline mt-2 inline-block">
+              <Link href={localePath(locale, "/posts/rag-langchain-postgres-fullcycle")} className="text-xs text-primary hover:underline mt-2 inline-block">
                 {t(locale, "Ler implementação completa →", "Read full implementation →", "Leer implementación completa →")}
               </Link>
             </div>

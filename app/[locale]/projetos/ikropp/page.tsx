@@ -1,4 +1,5 @@
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
@@ -20,6 +21,7 @@ export async function generateMetadata() {
       "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.",
       "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado."
     ),
+    alternates: buildAlternates("/projetos/ikropp", locale),
   }
 }
 
@@ -225,7 +227,7 @@ export default async function IKroppPage() {
       <div className="w-full max-w-4xl mx-auto px-4 py-12">
         {/* Back link */}
         <Link
-          href="/projetos"
+          href={localePath(locale, "/projetos")}
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

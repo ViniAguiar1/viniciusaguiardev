@@ -1,61 +1,53 @@
 "use client"
 
-import { useMemo, useSyncExternalStore } from "react"
-import { useRouter } from "next/navigation"
+import { useMemo } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { LOCALES, DEFAULT_LOCALE, isLocale, stripLocale, localePath, type Locale } from "@/lib/i18n"
 
-type Lang = "pt" | "en" | "es"
+const flags: Record<Locale, string> = { pt: "🇧🇷", en: "🇺🇸", es: "🇪🇸" }
 
-function getCookieLang(): Lang {
-  const m = document.cookie.match(/(?:^|; )lang=([^;]+)/)
-  const val = m ? decodeURIComponent(m[1]) : "pt"
-  if (val === "en") return "en"
-  if (val === "es") return "es"
-  return "pt"
+function localeFromPath(pathname: string): Locale {
+  const first = pathname.split("/").filter(Boolean)[0]
+  return isLocale(first) ? first : DEFAULT_LOCALE
 }
-
-function subscribe(cb: () => void) {
-  window.addEventListener("languagechange", cb)
-  return () => window.removeEventListener("languagechange", cb)
-}
-
-function getSnapshot(): Lang {
-  return getCookieLang()
-}
-
-function getServerSnapshot(): Lang {
-  return "pt"
-}
-
-const flags: Record<Lang, string> = { pt: "🇧🇷", en: "🇺🇸", es: "🇪🇸" }
 
 export function LanguageToggle() {
   const router = useRouter()
-  const lang = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
-
+  const pathname = usePathname() ?? "/"
+  const lang = localeFromPath(pathname)
   const flag = useMemo(() => flags[lang], [lang])
 
-  function setLanguage(next: Lang) {
-    try {
-      document.cookie = `lang=${next}; path=/; max-age=${60 * 60 * 24 * 365 * 2}`
-    } catch {}
-    router.refresh()
+  function setLanguage(next: Locale) {
+    if (next === lang) return
+    const rest = stripLocale(pathname)
+    router.push(localePath(next, rest))
   }
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger suppressHydrationWarning className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm">
+      <DropdownMenuTrigger
+        suppressHydrationWarning
+        className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm"
+      >
         <span className="text-base leading-none">{flag}</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setLanguage("pt")} data-umami-event="language-switch" data-umami-event-lang="pt">🇧🇷 Português</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("en")} data-umami-event="language-switch" data-umami-event-lang="en">🇺🇸 English</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("es")} data-umami-event="language-switch" data-umami-event-lang="es">🇪🇸 Español</DropdownMenuItem>
+        {LOCALES.map((l) => (
+          <DropdownMenuItem
+            key={l}
+            onClick={() => setLanguage(l)}
+            data-umami-event="language-switch"
+            data-umami-event-lang={l}
+          >
+            {flags[l]} {l === "pt" ? "Português" : l === "en" ? "English" : "Español"}
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )

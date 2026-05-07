@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { getDictionary, getLocale } from "@/lib/i18n-server"
+import { localePath } from "@/lib/i18n"
 
 import {
   Sidebar,
@@ -42,19 +43,19 @@ export async function AppSidebar() {
 
         {/* Main Menu Links */}
         <nav className="flex flex-col items-center gap-2 w-full">
-          <SidebarNavLink href="/" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+          <SidebarNavLink href={localePath(locale, "/")} className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.home}
           </SidebarNavLink>
-          <SidebarNavLink href="/sobre" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+          <SidebarNavLink href={localePath(locale, "/sobre")} className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.about}
           </SidebarNavLink>
-          <SidebarNavLink href="/projetos" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+          <SidebarNavLink href={localePath(locale, "/projetos")} className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.projects}
           </SidebarNavLink>
-          <SidebarNavLink href="/engenharia" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+          <SidebarNavLink href={localePath(locale, "/engenharia")} className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.engineering}
           </SidebarNavLink>
-          <SidebarNavLink href="/uses" className="text-lg font-normal mb-1 hover:underline text-gray-700">
+          <SidebarNavLink href={localePath(locale, "/uses")} className="text-lg font-normal mb-1 hover:underline text-gray-700">
             {dict.nav.uses}
           </SidebarNavLink>
           <SidebarNavLink href="/Curriculo-Vinicius-Aguiar.pdf" className="text-lg font-normal hover:underline text-gray-700" download data-umami-event="cv-download" data-umami-event-source="sidebar">

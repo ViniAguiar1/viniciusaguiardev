@@ -1,4 +1,5 @@
 import { getLocale, t } from "@/lib/i18n-server"
+import { buildAlternates } from "@/lib/i18n"
 import { getAllPosts } from "@/lib/posts"
 import { projects } from "@/data/projects"
 import { SearchContent } from "@/components/search-content"
@@ -14,6 +15,7 @@ export async function generateMetadata() {
       "Search for posts, projects and content in the portfolio.",
       "Busca posts, proyectos y contenido en el portafolio."
     ),
+    alternates: buildAlternates("/busca", locale),
   }
 }
 

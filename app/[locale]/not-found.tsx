@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { getLocale, t } from "@/lib/i18n-server"
+import { localePath } from "@/lib/i18n"
 
 export default async function NotFound() {
   const locale = await getLocale()
@@ -77,19 +78,19 @@ export default async function NotFound() {
 
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
-          href="/"
+          href={localePath(locale, "/")}
           className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition"
         >
           {t(locale, "Voltar ao início", "Back to home", "Volver al inicio")}
         </Link>
         <Link
-          href="/projetos"
+          href={localePath(locale, "/projetos")}
           className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
         >
           {t(locale, "Ver projetos", "See projects", "Ver proyectos")}
         </Link>
         <Link
-          href="/engenharia"
+          href={localePath(locale, "/engenharia")}
           className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
         >
           {t(locale, "Engenharia", "Engineering", "Ingeniería")}

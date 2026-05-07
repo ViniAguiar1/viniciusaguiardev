@@ -6,31 +6,33 @@ import { CodeBlock } from "@/components/code-block"
 import { renderInline } from "@/lib/inline-md"
 import React from "react"
 import { getLocale } from "@/lib/i18n-server"
+import { LOCALES, isLocale, buildAlternates, SITE_URL, localePath, type Locale } from "@/lib/i18n"
 import { JsonLd } from "@/components/json-ld"
 
 type PageProps = {
-  params: Promise<{ slug: string }>
+  params: Promise<{ locale: string; slug: string }>
 }
 
 export function generateStaticParams() {
-  // Gera apenas pelos slugs independentes de idioma
-  return getAllPosts("pt").map((p) => ({ slug: p.slug }))
+  const slugs = getAllPosts("pt").map((p) => p.slug)
+  return LOCALES.flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params
-  const locale = await getLocale()
+  const { slug, locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : await getLocale()
   const post = getPostBySlug(slug, locale)
   if (!post) return { title: "Post não encontrado" }
   return {
     title: `${post.title} | Blog`,
     description: post.description ?? undefined,
+    alternates: buildAlternates(`/posts/${slug}`, locale),
   }
 }
 
 export default async function PostPage({ params }: PageProps) {
-  const { slug } = await params
-  const locale = await getLocale()
+  const { slug, locale: rawLocale } = await params
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : await getLocale()
   const post = getPostBySlug(slug, locale)
   if (!post) return notFound()
 
@@ -45,11 +47,11 @@ export default async function PostPage({ params }: PageProps) {
           headline: post.title,
           description: post.description ?? "",
           datePublished: post.date,
-          url: `https://viniciusaguiardev.com.br/posts/${slug}`,
+          url: `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`,
           author: {
             "@type": "Person",
             name: "Vinicius Aguiar",
-            url: "https://viniciusaguiardev.com.br",
+            url: SITE_URL,
           },
           publisher: {
             "@type": "Person",

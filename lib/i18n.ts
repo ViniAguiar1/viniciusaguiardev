@@ -1,4 +1,4 @@
-export const LOCALES = ["pt", "en", "es"] as const
+export const LOCALES = ["pt", "en", "es", "jp"] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = "pt"
 
@@ -25,6 +25,7 @@ export function stripLocale(pathname: string): string {
 export function localeToHtmlLang(locale: Locale): string {
   if (locale === "en") return "en-US"
   if (locale === "es") return "es-ES"
+  if (locale === "jp") return "ja-JP"
   return "pt-BR"
 }
 

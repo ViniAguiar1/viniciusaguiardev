@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias" }),
-    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial." }),
+    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias", jp: "Vox Pet Digital — 動物病院向けSaaS" }),
+    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial.", jp: "95のPrismaモデルを持つバーティカルSaaS、WhatsApp上のAI、Express→NestJSへの移行、マルチテナント + マルチ拠点。" }),
     alternates: buildAlternates("/projetos/vox-pet-digital", locale),
   }
 }
@@ -165,7 +165,7 @@ export default async function VoxPetPage() {
     },
   }
 
-  const c = content[locale]
+  const c = content[locale as keyof typeof content] ?? content.pt
 
   return (
     <SlideInPage>

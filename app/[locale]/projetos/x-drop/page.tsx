@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "X-Drop — Plataforma SaaS de Dropshipping", en: "X-Drop — Dropshipping SaaS Platform", es: "X-Drop — Plataforma SaaS de Dropshipping" }),
-    description: t(locale, { pt: "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.", en: "How I built a platform connecting trusted suppliers with sellers entering the online sales world.", es: "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online." }),
+    title: t(locale, { pt: "X-Drop — Plataforma SaaS de Dropshipping", en: "X-Drop — Dropshipping SaaS Platform", es: "X-Drop — Plataforma SaaS de Dropshipping", jp: "X-Drop — ドロップシッピングSaaSプラットフォーム" }),
+    description: t(locale, { pt: "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.", en: "How I built a platform connecting trusted suppliers with sellers entering the online sales world.", es: "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online.", jp: "信頼できるサプライヤーと、オンライン販売を始めたいセラーをつなぐプラットフォームをどう構築したか。" }),
     alternates: buildAlternates("/projetos/x-drop", locale),
   }
 }
@@ -150,7 +150,7 @@ export default async function XDropPage() {
     },
   }
 
-  const c = content[locale]
+  const c = content[locale as keyof typeof content] ?? content.pt
 
   return (
     <SlideInPage>

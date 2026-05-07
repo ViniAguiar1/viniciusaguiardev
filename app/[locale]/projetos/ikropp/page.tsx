@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "iKropp — SaaS de gestão para clínicas de estética", en: "iKropp — Management SaaS for aesthetics clinics", es: "iKropp — SaaS de gestión para clínicas de estética" }),
-    description: t(locale, { pt: "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.", en: "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.", es: "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado." }),
+    title: t(locale, { pt: "iKropp — SaaS de gestão para clínicas de estética", en: "iKropp — Management SaaS for aesthetics clinics", es: "iKropp — SaaS de gestión para clínicas de estética", jp: "iKropp — エステクリニック向け管理SaaS" }),
+    description: t(locale, { pt: "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.", en: "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.", es: "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado.", jp: "5万人以上のユーザーを抱えるエステクリニック管理プラットフォーム。予約、顧客、問診、スタッフ管理、レガシーシステムのモダナイゼーション。" }),
     alternates: buildAlternates("/projetos/ikropp", locale),
   }
 }
@@ -210,7 +210,7 @@ export default async function IKroppPage() {
     },
   }
 
-  const c = content[locale]
+  const c = content[locale as keyof typeof content] ?? content.pt
 
   return (
     <SlideInPage>

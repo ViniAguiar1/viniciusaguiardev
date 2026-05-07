@@ -124,7 +124,7 @@ export const getPostBySlug = cache((slug: string, locale: Locale = "pt"): Post |
   return all.find((p) => p.slug === slug) ?? null
 })
 
-function normalizeBlocks(data: Partial<Post> & { blocks?: unknown[] }): ContentBlock[] {
+export function normalizeBlocks(data: Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }): ContentBlock[] {
   // Se o JSON já trouxe blocks no formato esperado, filtra e normaliza
   if (Array.isArray(data.blocks)) {
     const allowed: ContentBlock[] = []
@@ -171,7 +171,7 @@ function normalizeBlocks(data: Partial<Post> & { blocks?: unknown[] }): ContentB
   return []
 }
 
-type RawPostData = Partial<Post> & {
+export type RawPostData = Partial<Post> & {
   title_en?: string
   description_en?: string
   content_en?: string
@@ -189,7 +189,7 @@ type RawPostData = Partial<Post> & {
   blocks?: unknown[]
 }
 
-function applyLocaleToData(original: RawPostData, locale: Locale) {
+export function applyLocaleToData(original: RawPostData, locale: Locale) {
   type LocalizedData = Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
   const data = { ...(original as Record<string, unknown>) } as LocalizedData
 
@@ -206,5 +206,5 @@ function applyLocaleToData(original: RawPostData, locale: Locale) {
     if (typeof raw[`tag${suffix}`] === "string") data.tag = raw[`tag${suffix}`] as string
   }
 
-  return data as Partial<Post> & { blocks?: unknown[] }
+  return data as Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
 }

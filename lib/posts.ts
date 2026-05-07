@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { cache } from "react"
 import type { Locale } from "@/lib/i18n-server"
 
 export type ParagraphBlock = {
@@ -48,8 +49,51 @@ export type Post = {
 }
 
 const postsDir = path.join(process.cwd(), "data", "posts")
+const isProd = process.env.NODE_ENV === "production"
 
-export function getAllPosts(locale: Locale = "pt"): Post[] {
+// Em produção, JSONs são imutáveis até o próximo deploy — vale persistir
+// o resultado entre requests. Em dev mantemos sempre fresh para o autor ver
+// mudanças sem reiniciar o servidor.
+const rawFileCache = new Map<string, RawPostData>()
+const localePostsCache = new Map<Locale, Post[]>()
+
+function readRawPost(file: string): RawPostData | null {
+  if (isProd) {
+    const cached = rawFileCache.get(file)
+    if (cached) return cached
+  }
+  try {
+    const fullPath = path.join(postsDir, file)
+    const raw = fs.readFileSync(fullPath, "utf-8")
+    const data = JSON.parse(raw) as RawPostData
+    if (isProd) rawFileCache.set(file, data)
+    return data
+  } catch {
+    return null
+  }
+}
+
+function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
+  const data = applyLocaleToData(raw, locale)
+  const slug = data.slug ?? file.replace(/\.json$/, "")
+  return {
+    slug,
+    title: data.title ?? slug,
+    description: data.description ?? "",
+    date: data.date ?? "",
+    readTime: data.readTime ?? "",
+    tag: data.tag ?? "",
+    tagColor: data.tagColor ?? "",
+    content: data.content ?? "",
+    blocks: normalizeBlocks(data),
+  }
+}
+
+export const getAllPosts = cache((locale: Locale = "pt"): Post[] => {
+  if (isProd) {
+    const cached = localePostsCache.get(locale)
+    if (cached) return cached
+  }
   if (!fs.existsSync(postsDir)) return []
 
   const files = fs
@@ -58,63 +102,27 @@ export function getAllPosts(locale: Locale = "pt"): Post[] {
     .filter((f) => f.endsWith(".json") && !f.startsWith("."))
 
   const posts: Post[] = []
-
   for (const file of files) {
-    try {
-      const fullPath = path.join(postsDir, file)
-      const raw = fs.readFileSync(fullPath, "utf-8")
-      const original = JSON.parse(raw) as RawPostData
-      const data = applyLocaleToData(original, locale)
-      const slug = data.slug ?? file.replace(/\.json$/, "")
-
-      posts.push({
-        slug,
-        title: data.title ?? slug,
-        description: data.description ?? "",
-        date: data.date ?? "",
-        readTime: data.readTime ?? "",
-        tag: data.tag ?? "",
-        tagColor: data.tagColor ?? "",
-        content: data.content ?? "",
-        blocks: normalizeBlocks(data),
-      })
-    } catch {
-      // Em caso de arquivo inválido, apenas ignora
-      continue
-    }
+    const raw = readRawPost(file)
+    if (!raw) continue
+    posts.push(buildPost(file, raw, locale))
   }
 
+  if (isProd) localePostsCache.set(locale, posts)
   return posts
-}
+})
 
-export function getPostBySlug(slug: string, locale: Locale = "pt"): Post | null {
-  // Tenta leitura direta: data/posts/<slug>.json
-  const directPath = path.join(postsDir, `${slug}.json`)
+export const getPostBySlug = cache((slug: string, locale: Locale = "pt"): Post | null => {
+  const directFile = `${slug}.json`
+  const directPath = path.join(postsDir, directFile)
   if (fs.existsSync(directPath)) {
-    try {
-      const raw = fs.readFileSync(directPath, "utf-8")
-      const original = JSON.parse(raw) as RawPostData
-      const data = applyLocaleToData(original, locale)
-      return {
-        slug: data.slug ?? slug,
-        title: data.title ?? slug,
-        description: data.description ?? "",
-        date: data.date ?? "",
-        readTime: data.readTime ?? "",
-        tag: data.tag ?? "",
-        tagColor: data.tagColor ?? "",
-        content: data.content ?? "",
-        blocks: normalizeBlocks(data),
-      }
-    } catch {
-      // fallback para busca por slug nos demais arquivos
-    }
+    const raw = readRawPost(directFile)
+    if (raw) return buildPost(directFile, raw, locale)
   }
 
   const all = getAllPosts(locale)
-  const found = all.find((p) => p.slug === slug)
-  return found ?? null
-}
+  return all.find((p) => p.slug === slug) ?? null
+})
 
 function normalizeBlocks(data: Partial<Post> & { blocks?: unknown[] }): ContentBlock[] {
   // Se o JSON já trouxe blocks no formato esperado, filtra e normaliza

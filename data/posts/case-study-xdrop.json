@@ -561,5 +561,192 @@
       "type": "paragraph",
       "text": "---\n\n¿Quieres conocer más sobre el proyecto, su propósito y ver la plataforma? [Accede a la página dedicada de X-Drop](/projetos/x-drop)."
     }
+  ],
+  "title_jp": "ケーススタディ: X-Drop — 2 か月で R$ 30k+ を売り上げたドロップシッピング SaaS を構築した方法",
+  "description_jp": "Mercado Livre、Shopee、Asaas、Mercado Pago との連携を備えたドロップシッピング SaaS プラットフォームをスケールさせる際のアーキテクチャ、技術的判断、そして実際の課題。",
+  "date_jp": "2026年4月16日",
+  "readTime_jp": "12分で読めます",
+  "tag_jp": "ケーススタディ",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "X-Drop は、ドロップシッピング業務のための SaaS 型マネジメントプラットフォームです。わずか 2 か月の運用で、**処理売上 R$ 30k+**、**100+ のアクティブユーザー**、**400+ の注文**、そして **R$ 20k 規模の MRR** を達成しました。本ケーススタディでは、これらの数字に到達するために私たちが直面したアーキテクチャの判断、実際の技術的課題、そしてトレードオフを共有します。"
+    },
+    {
+      "type": "heading",
+      "text": "課題",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ドロップシッピングの販売者は、Mercado Livre、Shopee など、複数のマーケットプレイスで同時に運用します。各プラットフォームには独自の API、独自の注文フロー、独自のデータ形式があります。一元化されたツールがなければ、販売者は 3〜4 個の異なるパネルを行き来し、手作業で在庫を照合し、複数の決済ゲートウェイに対応しなければなりません。これはスケールしないプロセスです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop はこれを解決します。**単一のパネル**で、カタログ、注文、出荷、決済、リアルタイムの財務レポートを統合し、チーム向けのアクセスロールによるガバナンスを備えています。"
+    },
+    {
+      "type": "heading",
+      "text": "アーキテクチャとスタック",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "スタックは 2 つの基準で選定しました。**イテレーション速度**（素早くローンチする必要がありました）と、6 か月後にすべてを書き直すことなく**スケールできる能力**です。"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**フロントエンド:** React + Next.js（TypeScript 使用）— 公開パネルの SEO には SSR、内部ダッシュボードには CSR",
+        "**バックエンド:** NestJS（Node.js）+ REST API — ドメインごとに分離されたモジュール（注文、カタログ、財務、連携）",
+        "**データベース:** PostgreSQL + Firebase（認証およびリアルタイムリスナー）",
+        "**インフラ:** Docker コンテナを用いた AWS、自動化された CI/CD",
+        "**決済:** Asaas（PIX、ボレト）+ Mercado Pago（カード、PIX）",
+        "**マーケットプレイス:** Mercado Livre API + Shopee API"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "課題 #1: マルチマーケットプレイス連携",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "各マーケットプレイスは、まったく異なる API を持っています。Mercado Livre は短命なトークンを用いた OAuth 2.0 と通知用の webhook を使用します。Shopee は HMAC 署名による独自の認証システムを持っています。注文、ステータス、カテゴリの形式は互いに互換性がありません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策は、**マーケットプレイスごとの抽象化レイヤー**を作ることでした。データを統一された内部スキーマに正規化する adapter です。各 adapter は同じインターフェース（`syncProducts`、`syncOrders`、`updateInventory`）を実装しますが、内部では各 API の特性を扱います。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// すべてのマーケットプレイス共通のインターフェース\ninterface MarketplaceAdapter {\n  syncProducts(sellerId: string): Promise<Product[]>\n  syncOrders(sellerId: string, since: Date): Promise<Order[]>\n  updateInventory(productId: string, quantity: number): Promise<void>\n  mapStatus(externalStatus: string): InternalOrderStatus\n}\n\n// 各マーケットプレイスは独自のバージョンを実装する\nclass MercadoLivreAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const token = await this.refreshToken(sellerId)\n    const raw = await this.api.get('/orders/search', { seller: sellerId, since })\n    return raw.results.map(order => this.normalizeOrder(order))\n  }\n}\n\nclass ShopeeAdapter implements MarketplaceAdapter {\n  async syncOrders(sellerId: string, since: Date) {\n    const signature = this.generateHMAC(sellerId, timestamp)\n    const raw = await this.api.get('/order/get_order_list', { sign: signature })\n    return raw.order_list.map(order => this.normalizeOrder(order))\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "このパターンにより、アプリケーションのコアに触れることなく新しいマーケットプレイスを追加できました。マーケットプレイスが API を変更したとき（これは頻繁に起こります）、その影響は adapter 内に封じ込められます。"
+    },
+    {
+      "type": "heading",
+      "text": "課題 #2: 複数の決済ゲートウェイ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "**Asaas** と **Mercado Pago** を同時にサポートする必要がありました。各販売者が好みのゲートウェイを選択できます。課題は次のとおりです:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**異なる webhook:** 各ゲートウェイは異なる形式で、異なる配信保証のもとに通知する",
+        "**冪等性:** 同一の決済が複数の webhook を発生させることがある（ゲートウェイのリトライ）。制御がないと、同じ決済を 2 回処理してしまう",
+        "**照合:** ゲートウェイが報告する残高が、内部で算出した値と必ずしも一致しない",
+        "**PIX:** 有効期限のある非同期フロー — ステータスが webhook 経由で 'pending' から 'paid' または 'expired' に変わる"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策はマーケットプレイスと同じ原則に従いました。**adapter パターン** + 冪等性キーを持つ決済イベントテーブルです。受信した各 webhook は一意のハッシュとともに記録されます。同じイベントが 2 回到着した場合、2 回目はあらゆる処理の前に破棄されます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentWebhook(provider: string, payload: unknown) {\n  const adapter = getPaymentAdapter(provider) // 'asaas' | 'mercadopago'\n  const event = adapter.parseWebhook(payload)\n\n  // 冪等性: このイベントがすでに処理済みかチェックする\n  const idempotencyKey = `${provider}:${event.externalId}:${event.type}`\n  const exists = await db.paymentEvent.findUnique({ where: { idempotencyKey } })\n  if (exists) return { status: 'already_processed' }\n\n  // イベントを登録して処理する\n  await db.$transaction(async (tx) => {\n    await tx.paymentEvent.create({ data: { idempotencyKey, ...event } })\n    await tx.order.update({\n      where: { id: event.orderId },\n      data: { paymentStatus: event.status },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "課題 #3: スケールと可観測性",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "2 か月で 100+ のユーザーと 400+ の注文を抱えると、アーキテクチャの判断が重要であるという最初の兆候を感じ始めました。50ms で完了していたレポートのクエリが 800ms かかるようになりました。バックグラウンドで動いていたマーケットプレイスの同期が、データベースのプール接続を奪い合うようになりました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私たちが取った対応は次のとおりです:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**複合インデックス**を注文テーブルとトランザクションテーブルに追加 — レポートのクエリが < 100ms に戻った",
+        "**Connection pooling** を、同期処理（API）と非同期処理（マーケットプレイス同期）で別々の上限を設けて構成",
+        "マーケットプレイスへの呼び出しに対する seller ごとの **rate limiting** — 大きなカタログを持つ販売者が API のクォータをすべて消費するのを防ぐ",
+        "操作コンテキスト（sellerId、marketplace、orderId）を含む**構造化ログ** — これがないと、3 つのマーケットプレイスと 2 つのゲートウェイにまたがる本番の問題をデバッグするのは不可能",
+        "連携ごとのレイテンシ指標を備えた **Health check** — Mercado Livre の応答時間が 2 秒を超えると、ユーザーが苦情を言う前にアラートを受け取る"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "課題 #4: ガバナンスとマルチテナンシー",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "X-Drop はチームを持つ販売者に対応します。店舗オーナーは、注文を処理する従業員にアクセス権を与える必要がありますが、財務データや連携設定を露出させてはいけません。私たちは 3 つのレベル（admin、operator、viewer）を持つ **RBAC（Role-Based Access Control）**を実装しました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "すべてのリクエストは、テナント（seller）とユーザーのロールを検証するミドルウェアを通過します。データはすべてのクエリで `sellerId` によってフィルタリングされます。このフィルターを通らないデータベース呼び出しは存在しません。これにより販売者間の完全な分離が保証されます。"
+    },
+    {
+      "type": "heading",
+      "text": "2 か月の成果",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "プラットフォームで処理された売上 **R$ 30k+**",
+        "**100+** のアクティブユーザー",
+        "**400+** の処理された注文",
+        "**R$ 20k の MRR** — プロダクトマーケットフィットを検証",
+        "統合済みの **2 マーケットプレイス**（Mercado Livre + Shopee）",
+        "**2 つの決済ゲートウェイ**（Asaas + Mercado Pago）",
+        "ローンチ以来 **Zero downtime**"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "学んだ教訓",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "予告なく変化する外部システムと連携する場合、**adapter パターンは不可欠**です。初期段階で抽象化に時間を投資したことで、後に数週間を節約できました",
+        "**冪等性は任意ではない** — 決済 webhook においては、顧客に 1 回請求するか 2 回請求するかの違いになります",
+        "**初日からの可観測性。** Mercado Livre があるフィールドの形式をドキュメント化せずに変更したとき、私たちの構造化ログは、どのフィールドが、どの seller で、どの注文で壊れたかを正確に示しました。それがなければ、何時間ものデバッグになっていたでしょう",
+        "**スケールはインフラだけの問題ではない。** 最初のボトルネックは、インデックスが不適切なクエリと、構成が不適切なコネクションプールでした。サーバーの問題ではなく、アプリケーションの問題です"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "最終的なスタック",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "React + Next.js + TypeScript（フロントエンド）",
+        "NestJS（API バックエンド）",
+        "PostgreSQL + Firebase（データベースと認証）",
+        "Docker + AWS（インフラ）",
+        "Asaas + Mercado Pago（決済）",
+        "Mercado Livre API + Shopee API（マーケットプレイス）",
+        "自動デプロイ付きの CI/CD"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nプロジェクトやその目的についてもっと知り、プラットフォームを見てみたいですか？ [X-Drop の専用ページにアクセスしてください](/projetos/x-drop)。"
+    }
   ]
 }

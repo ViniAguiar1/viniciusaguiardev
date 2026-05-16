@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   const description = t(locale, { pt: "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.", en: "Software Engineer building production SaaS platforms — payment integrations, multi-tenant architecture and AI automation. React, Next.js, TypeScript.", es: "Software Engineer que construye plataformas SaaS en producción — integraciones de pago, arquitectura multi-tenant y automatizaciones con IA. React, Next.js, TypeScript.", jp: "本番環境でSaaSプラットフォームを構築するソフトウェアエンジニア — 決済連携、マルチテナントアーキテクチャ、AI自動化。React、Next.js、TypeScript。" })
 
-  const ogLocale = locale === "en" ? "en_US" : locale === "es" ? "es_ES" : "pt_BR"
+  const ogLocale = locale === "en" ? "en_US" : locale === "es" ? "es_ES" : locale === "jp" ? "ja_JP" : "pt_BR"
 
   return {
     title: {
@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       type: "website",
       locale: ogLocale,
       alternateLocale: LOCALES.filter((l) => l !== locale).map((l) =>
-        l === "en" ? "en_US" : l === "es" ? "es_ES" : "pt_BR",
+        l === "en" ? "en_US" : l === "es" ? "es_ES" : l === "jp" ? "ja_JP" : "pt_BR",
       ),
       siteName: "Vinicius Aguiar",
       title,

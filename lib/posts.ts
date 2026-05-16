@@ -186,6 +186,13 @@ export type RawPostData = Partial<Post> & {
   date_es?: string
   readTime_es?: string
   tag_es?: string
+  title_jp?: string
+  description_jp?: string
+  content_jp?: string
+  blocks_jp?: unknown[]
+  date_jp?: string
+  readTime_jp?: string
+  tag_jp?: string
   blocks?: unknown[]
 }
 
@@ -193,7 +200,7 @@ export function applyLocaleToData(original: RawPostData, locale: Locale) {
   type LocalizedData = Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
   const data = { ...(original as Record<string, unknown>) } as LocalizedData
 
-  const suffix = locale === "en" ? "_en" : locale === "es" ? "_es" : null
+  const suffix = locale === "en" ? "_en" : locale === "es" ? "_es" : locale === "jp" ? "_jp" : null
 
   if (suffix) {
     const raw = original as Record<string, unknown>

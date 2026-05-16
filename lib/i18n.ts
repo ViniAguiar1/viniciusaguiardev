@@ -13,9 +13,12 @@ export function localePath(locale: Locale, path: string): string {
   return `/${locale}${normalized}`
 }
 
+/** Matches a leading locale segment, derived from LOCALES so it never goes stale. */
+const LOCALE_PREFIX_RE = new RegExp(`^/(${LOCALES.join("|")})(/.*|$)`)
+
 /** Strip the locale prefix from a path. `/pt/sobre` → `/sobre` */
 export function stripLocale(pathname: string): string {
-  const match = pathname.match(/^\/(pt|en|es)(\/.*|$)/)
+  const match = pathname.match(LOCALE_PREFIX_RE)
   if (!match) return pathname
   const rest = match[2]
   return rest && rest !== "" ? rest : "/"

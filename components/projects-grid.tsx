@@ -159,7 +159,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       data-umami-event-project={selected.name}
                       className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                     >
-                      {locale === "en" ? "Learn more" : locale === "es" ? "Ver más" : "Ver mais"}
+                      {locale === "en" ? "Learn more" : locale === "es" ? "Ver más" : locale === "jp" ? "詳しく見る" : "Ver mais"}
                       <svg
                         className="w-3.5 h-3.5"
                         fill="none"
@@ -185,7 +185,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                           : "bg-primary text-primary-foreground hover:opacity-90"
                       )}
                     >
-                      {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : "Acessar site"}
+                      {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : locale === "jp" ? "サイトを開く" : "Acessar site"}
                       <svg
                         className="w-3.5 h-3.5"
                         fill="none"

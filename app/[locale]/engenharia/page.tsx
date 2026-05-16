@@ -38,6 +38,13 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         { q: "¿Cómo integrar IA en sistemas de producción?", a: "Trate la IA como un componente del sistema, no una feature aislada. Procese mensajes de forma asíncrona, registre datos de vuelta en la base de datos, implemente fallbacks para cuando el LLM no esté disponible y monitoree la calidad de las respuestas. El punto central es confiabilidad — el sistema debe funcionar incluso cuando el proveedor de IA tiene problemas." },
         { q: "¿Qué es el patrón circuit breaker?", a: "Un patrón de resiliencia para integraciones con APIs de terceros. Cuando una API externa empieza a fallar, el circuit breaker se 'abre' y retorna respuestas fallback en lugar de propagar la falla por el sistema. Después de un período de cooldown, permite solicitudes de prueba para verificar si el servicio se recuperó." },
       ]
+    : locale === "jp"
+    ? [
+        { q: "マルチテナントアーキテクチャとは何ですか？", a: "複数の組織が同じアプリケーションとデータベースを共有しながら、各テナントのデータは分離される設計パターンです。最近のSaaSで最も一般的なアプローチは、tenant_id カラムを持つ共有データベースと、セーフティネットとしての PostgreSQL の Row Level Security（RLS）です。" },
+        { q: "決済Webhookを信頼性高く処理するには？", a: "多層的なアプローチを使います：すべてのイベントで署名を検証し、保存したイベントIDで冪等性を担保し、即座にackを返してバックグラウンドで処理し、ステートマシンで状態遷移を検証し、定期的な照合ジョブを実行し、失敗したイベントはデッドレターキューへ振り分けます。" },
+        { q: "本番システムにAIを統合するには？", a: "AIを単独の機能ではなく、システムの一部として扱います。メッセージを非同期で処理し、データをデータベースへ書き戻し、LLMが利用できないときのフォールバックを実装し、応答品質を監視します。要点は信頼性です — AIプロバイダーに問題があってもシステムは動作し続けなければなりません。" },
+        { q: "サーキットブレーカーパターンとは何ですか？", a: "サードパーティAPI連携のためのレジリエンスパターンです。外部APIが失敗し始めると、サーキットブレーカーが「開き」、障害をシステム全体に波及させる代わりにフォールバック応答を返します。クールダウン期間の後、サービスが回復したかを確認するためのテストリクエストを許可します。" },
+      ]
     : [
         { q: "O que é arquitetura multi-tenant?", a: "Um padrão de design onde múltiplas organizações compartilham a mesma aplicação e banco de dados, mas os dados de cada tenant são isolados. A abordagem mais comum em SaaS moderno é banco compartilhado com coluna tenant_id e Row Level Security (RLS) do PostgreSQL como rede de segurança." },
         { q: "Como lidar com webhooks de pagamento de forma confiável?", a: "Use uma abordagem em camadas: valide assinaturas em cada evento, garanta idempotência com IDs de eventos armazenados, responda imediatamente e processe em background, valide transições de estado com state machine, execute jobs de reconciliação periódicos e direcione eventos com falha para uma dead letter queue." },
@@ -290,7 +297,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             { title: t(locale, { pt: "RAG com LangChain", en: "RAG with LangChain", es: "RAG con LangChain", jp: "LangChainによるRAG" }), desc: t(locale, { pt: "Embeddings, pgVector, busca semântica", en: "Embeddings, pgVector, semantic search", es: "Embeddings, pgVector, búsqueda semántica", jp: "埋め込み、pgVector、意味検索" }), href: "/posts/rag-langchain-postgres-fullcycle" },
             { title: t(locale, { pt: "Design Systems em escala", en: "Design Systems at Scale", es: "Design Systems a escala", jp: "スケールするデザインシステム" }), desc: t(locale, { pt: "Shadcn UI, tokens, contratos de componentes", en: "Shadcn UI, tokens, component contracts", es: "Shadcn UI, tokens, contratos de componentes", jp: "Shadcn UI、デザイントークン、コンポーネント契約" }), href: "/posts/design-system-shadcn-tailwind" },
           ].map((post) => (
-            <Link key={post.href} href={post.href} className="group rounded-lg border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <Link key={post.href} href={localePath(locale, post.href)} className="group rounded-lg border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
               <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">{post.title}</h3>
               <p className="text-xs text-muted-foreground mt-1">{post.desc}</p>
             </Link>

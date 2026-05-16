@@ -228,10 +228,82 @@ const experiencesEs = [
   },
 ]
 
+const experiencesJp = [
+  {
+    period: "2025年11月 — 現在 · フルタイム · ブラジル・ミナスジェライス州 · リモート",
+    title: "ミドルレベル ソフトウェアエンジニア · Holy Solutions",
+    summary:
+      "React、Next.js、React Native によるWeb・モバイルアプリケーション開発。スケーラブルなインターフェースとユーザー中心の体験に注力。",
+    details: [
+      "外部API、決済、AIサービスを用いた機能のエンドツーエンド開発",
+      "React、Next.js、React Native によるWeb・モバイルインターフェースの開発",
+      "外部APIおよび決済システム（Asaas）との連携",
+      "再利用可能なコンポーネントの作成とデザインシステムの標準化",
+      "フロントエンドアーキテクチャおよびシステム連携の技術的意思決定への参加",
+      "AWS環境でのアプリケーションのデプロイと運用",
+    ],
+  },
+  {
+    period: "2025年8月 — 現在 · パートタイム · リモート",
+    title: "ソフトウェアエンジニア · Vox Pet Digital",
+    summary:
+      "ペットショップおよび動物病院向けSaaS「Vox Pet Digital」のソフトウェアエンジニアとして、プロダクトの進化に直接関与。",
+    details: [
+      "予約、販売、財務、手数料モジュールの実装",
+      "業務フローと連携したWhatsApp自動化の開発",
+      "自動応対と商品・サービス推薦のためのWhatsAppへのAI統合",
+      "システムへのデータ登録を伴う販売完了フロー",
+      "スタック：React、Next.js、Node.js、TypeScript、PostgreSQL",
+      "連携：WhatsApp、OpenAI、Mercado Pago、Stripe",
+      "本番環境でのデプロイと運用のフォローアップ",
+    ],
+  },
+  {
+    period: "2025年4月 — 2026年1月 · フルタイム · ブラジル・サンパウロ · リモート",
+    title: "ソフトウェアエンジニア · Stack Labs",
+    summary:
+      "さまざまなクライアント向けのWeb・モバイルアプリケーション開発。React、Next.js、React Native で高性能かつスケーラブルなインターフェースを提供。",
+    details: [
+      "React、React Native、Next.js によるレスポンシブで高性能なインターフェースの作成",
+      "再利用可能なコンポーネントとスケーラビリティを重視したフロントエンドアーキテクチャ",
+      "REST APIおよび外部サービス（決済、通知、認証、分析）との連携",
+      "パフォーマンス最適化、ユーザー体験の向上、本番環境のエラー削減",
+      "デプロイのフォローアップ、ログ監視、開発サイクル全体での協働",
+    ],
+  },
+  {
+    period: "2025年5月 — 2025年11月 · フルタイム · ブラジル・サンパウロ · リモート",
+    title: "ソフトウェアエンジニア · MovePro",
+    summary:
+      "MovePro プラットフォーム（Web + モバイル）の全面的な開発に参加。数千人のユーザーが利用する重要なインターフェースに貢献し、主要な連携をリード。",
+    details: [
+      "React と Next.js によるWebインターフェース開発。パフォーマンスとスケーラビリティに注力",
+      "React Native と Expo によるモバイルアプリの開発と保守",
+      "Stripe、FatSecret、Google、Firebase などの外部サービスとの連携",
+      "クエリとAPI呼び出しの最適化による読み込み時間とレイテンシの削減",
+      "Crashlytics、ログ、プロダクトメトリクスによる監視の実装",
+      "MovePro エコシステム全体で一貫したコンポーネントとUXの開発",
+      "技術的意思決定、リリースサイクル、プロダクトの進化への参加",
+    ],
+  },
+  {
+    period: "2024年5月 — 2025年6月 · ハイブリッド",
+    title: "Web開発者 / モバイル開発者 · Easytogo",
+    summary:
+      "アジャイルかつプロダクト志向の環境で、React、Next.js、React Native、Flutter によるWeb・モバイルインターフェースの開発。",
+    details: [
+      "React と Next.js による開発",
+      "React Native と Flutter によるモバイルアプリケーション",
+      "実際のユーザーフローに接続されたAPIとの連携",
+      "Scrum によるアジャイル環境での業務",
+    ],
+  },
+]
+
 export default async function SobrePage() {
   const locale = await getLocale()
   const dict = getDictionary(locale)
-  const experiences = locale === "en" ? experiencesEn : locale === "es" ? experiencesEs : experiencesPt
+  const experiences = locale === "en" ? experiencesEn : locale === "es" ? experiencesEs : locale === "jp" ? experiencesJp : experiencesPt
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-12">

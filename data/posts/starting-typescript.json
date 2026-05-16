@@ -236,52 +236,211 @@
       "type": "paragraph",
       "text": "If you write JavaScript and don't use TypeScript yet, you're giving up the most effective tool to prevent production bugs. TypeScript is not a different language — it's JavaScript with **static typing**. The compiler warns you about errors before the code runs, not after. In this guide, I present everything you need to start using TypeScript in real projects."
     },
-    { "type": "heading", "text": "Why TypeScript", "level": 2 },
+    {
+      "type": "heading",
+      "text": "Why TypeScript",
+      "level": 2
+    },
     {
       "type": "paragraph",
       "text": "JavaScript is dynamic — any variable can be anything at any time. This is flexible but dangerous. You only discover errors when the code runs and the user sees the error."
     },
-    { "type": "code", "language": "javascript", "code": "// JavaScript: this runs without error\nfunction calculateTotal(price, quantity) {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // Returns '102' (string), not 20\ncalculateTotal(10)      // Returns NaN, no warning" },
-    { "type": "paragraph", "text": "TypeScript catches these errors **before** running:" },
-    { "type": "code", "language": "typescript", "code": "// TypeScript: the compiler warns you\nfunction calculateTotal(price: number, quantity: number): number {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // ✗ Error: Argument of type 'string' is not assignable to 'number'\ncalculateTotal(10)      // ✗ Error: Expected 2 arguments, but got 1" },
-    { "type": "heading", "text": "Basic types", "level": 2 },
-    { "type": "paragraph", "text": "TypeScript primitive types map directly to JavaScript types:" },
-    { "type": "code", "language": "typescript", "code": "// Primitives\nlet name: string = 'Vinicius'\nlet age: number = 24\nlet isActive: boolean = true\n\n// Arrays\nlet tags: string[] = ['react', 'next', 'typescript']\nlet scores: number[] = [95, 87, 92]\n\n// Inline objects\nlet user: { name: string; email: string } = {\n  name: 'Vinicius',\n  email: 'vini@email.com'\n}" },
-    { "type": "paragraph", "text": "In practice, you almost never need to type variables explicitly — TypeScript **infers** the type automatically:" },
-    { "type": "code", "language": "typescript", "code": "// Automatic inference — TS knows it's a string\nlet name = 'Vinicius' // type: string\nlet age = 24           // type: number\nlet tags = ['react']   // type: string[]\n\n// Only type explicitly when necessary\nlet data: unknown = await fetchFromAPI()" },
-    { "type": "heading", "text": "Interfaces and Types", "level": 2 },
-    { "type": "paragraph", "text": "For more complex objects, use `interface` or `type`. The practical difference is minimal — use `interface` for objects and `type` for unions and composite types:" },
-    { "type": "code", "language": "typescript", "code": "// Interface — for objects\ninterface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n  avatar?: string // optional field\n}\n\n// Type — for unions and compositions\ntype Status = 'pending' | 'confirmed' | 'failed' | 'refunded'\n\ntype ApiResponse<T> = {\n  data: T\n  success: boolean\n  error: string | null\n}" },
-    { "type": "paragraph", "text": "Interfaces can be extended, which is useful for type inheritance:" },
-    { "type": "code", "language": "typescript", "code": "interface BaseEntity {\n  id: string\n  createdAt: Date\n  updatedAt: Date\n}\n\ninterface User extends BaseEntity {\n  name: string\n  email: string\n}\n\ninterface Order extends BaseEntity {\n  userId: string\n  total: number\n  status: Status\n}\n\n// User now has id, createdAt, updatedAt, name, email" },
-    { "type": "heading", "text": "Typed functions", "level": 2 },
-    { "type": "paragraph", "text": "Typing functions is where TypeScript shines the most. The compiler validates arguments and return type:" },
-    { "type": "code", "language": "typescript", "code": "// Typed parameters and return\nfunction createUser(name: string, email: string): User {\n  return {\n    id: crypto.randomUUID(),\n    name,\n    email,\n    role: 'user',\n    createdAt: new Date(),\n    updatedAt: new Date()\n  }\n}\n\n// Arrow function\nconst formatPrice = (cents: number): string => {\n  return `R$ ${(cents / 100).toFixed(2)}`\n}\n\n// Async function\nasync function getUser(id: string): Promise<User | null> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return null\n  return res.json()\n}" },
-    { "type": "heading", "text": "Generics: reusable types", "level": 2 },
-    { "type": "paragraph", "text": "Generics let you create functions and types that work with **any type** while keeping type safety. It's the most powerful TypeScript concept:" },
-    { "type": "code", "language": "typescript", "code": "// Without generics — would need one function per type\nfunction getFirstString(arr: string[]): string | undefined {\n  return arr[0]\n}\nfunction getFirstNumber(arr: number[]): number | undefined {\n  return arr[0]\n}\n\n// With generics — one function for all types\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0]\n}\n\ngetFirst(['a', 'b', 'c']) // type: string | undefined\ngetFirst([1, 2, 3])       // type: number | undefined\ngetFirst<User>(users)     // type: User | undefined" },
-    { "type": "paragraph", "text": "Generics are essential for API functions, React hooks, and any reusable code:" },
-    { "type": "code", "language": "typescript", "code": "// Generic API response\nasync function fetchAPI<T>(endpoint: string): Promise<ApiResponse<T>> {\n  const res = await fetch(`/api${endpoint}`)\n  const data = await res.json()\n  return data as ApiResponse<T>\n}\n\n// Usage — TS knows the return type\nconst { data: user } = await fetchAPI<User>('/users/123')\n// user is of type User\n\nconst { data: orders } = await fetchAPI<Order[]>('/orders')\n// orders is of type Order[]" },
-    { "type": "heading", "text": "Utility Types: transforming types", "level": 2 },
-    { "type": "paragraph", "text": "TypeScript comes with utility types that transform existing types. These are the ones I use daily:" },
-    { "type": "code", "language": "typescript", "code": "interface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n}\n\n// Partial — all fields become optional\ntype UpdateUser = Partial<User>\n// { id?: string; name?: string; email?: string; role?: ... }\n\n// Pick — select specific fields\ntype UserPreview = Pick<User, 'id' | 'name'>\n// { id: string; name: string }\n\n// Omit — remove specific fields\ntype CreateUser = Omit<User, 'id'>\n// { name: string; email: string; role: 'admin' | 'user' }\n\n// Record — create typed object\ntype UserMap = Record<string, User>\n// { [key: string]: User }" },
-    { "type": "paragraph", "text": "The most common use is in forms and APIs — where you need variations of the same type:" },
-    { "type": "code", "language": "typescript", "code": "// API: create user (no id, database generates it)\nasync function createUser(data: Omit<User, 'id'>): Promise<User> {\n  const res = await fetch('/api/users', {\n    method: 'POST',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}\n\n// API: partial update (all fields optional)\nasync function updateUser(id: string, data: Partial<User>): Promise<User> {\n  const res = await fetch(`/api/users/${id}`, {\n    method: 'PATCH',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}" },
-    { "type": "heading", "text": "Enums vs Union Types", "level": 2 },
-    { "type": "paragraph", "text": "Enums exist in TypeScript but in practice, **union types** are simpler and don't generate extra JavaScript code:" },
-    { "type": "code", "language": "typescript", "code": "// ❌ Enum — generates extra JS code, more complex\nenum PaymentStatus {\n  PENDING = 'pending',\n  CONFIRMED = 'confirmed',\n  FAILED = 'failed',\n}\n\n// ✅ Union type — simpler, zero overhead\ntype PaymentStatus = 'pending' | 'confirmed' | 'failed'\n\n// Both work the same for validation:\nfunction processPayment(status: PaymentStatus) {\n  switch (status) {\n    case 'pending':\n      return 'Waiting...'\n    case 'confirmed':\n      return 'Confirmed!'\n    case 'failed':\n      return 'Failed.'\n  }\n}" },
-    { "type": "heading", "text": "Type guards: narrowing types", "level": 2 },
-    { "type": "paragraph", "text": "When a value can be of multiple types, type guards help TypeScript understand which type it is at each moment:" },
-    { "type": "code", "language": "typescript", "code": "type Result = { success: true; data: User } | { success: false; error: string }\n\nfunction handleResult(result: Result) {\n  if (result.success) {\n    // TS knows result.data exists here\n    console.log(result.data.name)\n  } else {\n    // TS knows result.error exists here\n    console.error(result.error)\n  }\n}\n\n// Custom type guard\nfunction isUser(value: unknown): value is User {\n  return (\n    typeof value === 'object' &&\n    value !== null &&\n    'name' in value &&\n    'email' in value\n  )\n}\n\nconst data: unknown = await fetchSomething()\nif (isUser(data)) {\n  // TS knows data is User here\n  console.log(data.email)\n}" },
-    { "type": "heading", "text": "Configuration: tsconfig.json", "level": 2 },
-    { "type": "paragraph", "text": "The `tsconfig.json` defines how TypeScript behaves in the project. For modern projects with Next.js or Node.js, this is the base I recommend:" },
-    { "type": "code", "language": "json", "code": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": true,\n    \"paths\": {\n      \"@/*\": [\"./*\"]\n    }\n  },\n  \"include\": [\"**/*.ts\", \"**/*.tsx\"],\n  \"exclude\": [\"node_modules\"]\n}" },
-    { "type": "paragraph", "text": "The most important setting is `\"strict\": true` — it activates all type checks. Projects without strict mode lose most of TypeScript's value." },
-    { "type": "heading", "text": "Patterns I use in production", "level": 2 },
-    { "type": "paragraph", "text": "After using TypeScript in every project, these are the patterns I apply most in my daily work:" },
-    { "type": "list", "items": ["**Never use `any`** — use `unknown` when you don't know the type and type guard to validate", "**Inference first** — let TS infer the type whenever possible, only type explicitly when necessary", "**Interfaces for component props** — every React component prop should have an interface", "**Utility types for APIs** — `Omit<User, 'id'>` for creation, `Partial<User>` for updates", "**Union types instead of enums** — simpler, no runtime overhead", "**`as const`** — for literal arrays and objects that shouldn't change"] },
-    { "type": "code", "language": "typescript", "code": "// as const — turns values into literal types\nconst ROLES = ['admin', 'user', 'moderator'] as const\ntype Role = typeof ROLES[number] // 'admin' | 'user' | 'moderator'\n\n// React component props\ninterface ButtonProps {\n  label: string\n  variant?: 'primary' | 'secondary' | 'ghost'\n  onClick: () => void\n  disabled?: boolean\n}\n\nfunction Button({ label, variant = 'primary', onClick, disabled }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled} className={variant}>\n      {label}\n    </button>\n  )\n}" },
-    { "type": "heading", "text": "Conclusion", "level": 2 },
+    {
+      "type": "code",
+      "language": "javascript",
+      "code": "// JavaScript: this runs without error\nfunction calculateTotal(price, quantity) {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // Returns '102' (string), not 20\ncalculateTotal(10)      // Returns NaN, no warning"
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript catches these errors **before** running:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// TypeScript: the compiler warns you\nfunction calculateTotal(price: number, quantity: number): number {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // ✗ Error: Argument of type 'string' is not assignable to 'number'\ncalculateTotal(10)      // ✗ Error: Expected 2 arguments, but got 1"
+    },
+    {
+      "type": "heading",
+      "text": "Basic types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript primitive types map directly to JavaScript types:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Primitives\nlet name: string = 'Vinicius'\nlet age: number = 24\nlet isActive: boolean = true\n\n// Arrays\nlet tags: string[] = ['react', 'next', 'typescript']\nlet scores: number[] = [95, 87, 92]\n\n// Inline objects\nlet user: { name: string; email: string } = {\n  name: 'Vinicius',\n  email: 'vini@email.com'\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "In practice, you almost never need to type variables explicitly — TypeScript **infers** the type automatically:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Automatic inference — TS knows it's a string\nlet name = 'Vinicius' // type: string\nlet age = 24           // type: number\nlet tags = ['react']   // type: string[]\n\n// Only type explicitly when necessary\nlet data: unknown = await fetchFromAPI()"
+    },
+    {
+      "type": "heading",
+      "text": "Interfaces and Types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "For more complex objects, use `interface` or `type`. The practical difference is minimal — use `interface` for objects and `type` for unions and composite types:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Interface — for objects\ninterface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n  avatar?: string // optional field\n}\n\n// Type — for unions and compositions\ntype Status = 'pending' | 'confirmed' | 'failed' | 'refunded'\n\ntype ApiResponse<T> = {\n  data: T\n  success: boolean\n  error: string | null\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Interfaces can be extended, which is useful for type inheritance:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface BaseEntity {\n  id: string\n  createdAt: Date\n  updatedAt: Date\n}\n\ninterface User extends BaseEntity {\n  name: string\n  email: string\n}\n\ninterface Order extends BaseEntity {\n  userId: string\n  total: number\n  status: Status\n}\n\n// User now has id, createdAt, updatedAt, name, email"
+    },
+    {
+      "type": "heading",
+      "text": "Typed functions",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Typing functions is where TypeScript shines the most. The compiler validates arguments and return type:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Typed parameters and return\nfunction createUser(name: string, email: string): User {\n  return {\n    id: crypto.randomUUID(),\n    name,\n    email,\n    role: 'user',\n    createdAt: new Date(),\n    updatedAt: new Date()\n  }\n}\n\n// Arrow function\nconst formatPrice = (cents: number): string => {\n  return `R$ ${(cents / 100).toFixed(2)}`\n}\n\n// Async function\nasync function getUser(id: string): Promise<User | null> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return null\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Generics: reusable types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Generics let you create functions and types that work with **any type** while keeping type safety. It's the most powerful TypeScript concept:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Without generics — would need one function per type\nfunction getFirstString(arr: string[]): string | undefined {\n  return arr[0]\n}\nfunction getFirstNumber(arr: number[]): number | undefined {\n  return arr[0]\n}\n\n// With generics — one function for all types\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0]\n}\n\ngetFirst(['a', 'b', 'c']) // type: string | undefined\ngetFirst([1, 2, 3])       // type: number | undefined\ngetFirst<User>(users)     // type: User | undefined"
+    },
+    {
+      "type": "paragraph",
+      "text": "Generics are essential for API functions, React hooks, and any reusable code:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Generic API response\nasync function fetchAPI<T>(endpoint: string): Promise<ApiResponse<T>> {\n  const res = await fetch(`/api${endpoint}`)\n  const data = await res.json()\n  return data as ApiResponse<T>\n}\n\n// Usage — TS knows the return type\nconst { data: user } = await fetchAPI<User>('/users/123')\n// user is of type User\n\nconst { data: orders } = await fetchAPI<Order[]>('/orders')\n// orders is of type Order[]"
+    },
+    {
+      "type": "heading",
+      "text": "Utility Types: transforming types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript comes with utility types that transform existing types. These are the ones I use daily:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n}\n\n// Partial — all fields become optional\ntype UpdateUser = Partial<User>\n// { id?: string; name?: string; email?: string; role?: ... }\n\n// Pick — select specific fields\ntype UserPreview = Pick<User, 'id' | 'name'>\n// { id: string; name: string }\n\n// Omit — remove specific fields\ntype CreateUser = Omit<User, 'id'>\n// { name: string; email: string; role: 'admin' | 'user' }\n\n// Record — create typed object\ntype UserMap = Record<string, User>\n// { [key: string]: User }"
+    },
+    {
+      "type": "paragraph",
+      "text": "The most common use is in forms and APIs — where you need variations of the same type:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// API: create user (no id, database generates it)\nasync function createUser(data: Omit<User, 'id'>): Promise<User> {\n  const res = await fetch('/api/users', {\n    method: 'POST',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}\n\n// API: partial update (all fields optional)\nasync function updateUser(id: string, data: Partial<User>): Promise<User> {\n  const res = await fetch(`/api/users/${id}`, {\n    method: 'PATCH',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Enums vs Union Types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Enums exist in TypeScript but in practice, **union types** are simpler and don't generate extra JavaScript code:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ❌ Enum — generates extra JS code, more complex\nenum PaymentStatus {\n  PENDING = 'pending',\n  CONFIRMED = 'confirmed',\n  FAILED = 'failed',\n}\n\n// ✅ Union type — simpler, zero overhead\ntype PaymentStatus = 'pending' | 'confirmed' | 'failed'\n\n// Both work the same for validation:\nfunction processPayment(status: PaymentStatus) {\n  switch (status) {\n    case 'pending':\n      return 'Waiting...'\n    case 'confirmed':\n      return 'Confirmed!'\n    case 'failed':\n      return 'Failed.'\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Type guards: narrowing types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "When a value can be of multiple types, type guards help TypeScript understand which type it is at each moment:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "type Result = { success: true; data: User } | { success: false; error: string }\n\nfunction handleResult(result: Result) {\n  if (result.success) {\n    // TS knows result.data exists here\n    console.log(result.data.name)\n  } else {\n    // TS knows result.error exists here\n    console.error(result.error)\n  }\n}\n\n// Custom type guard\nfunction isUser(value: unknown): value is User {\n  return (\n    typeof value === 'object' &&\n    value !== null &&\n    'name' in value &&\n    'email' in value\n  )\n}\n\nconst data: unknown = await fetchSomething()\nif (isUser(data)) {\n  // TS knows data is User here\n  console.log(data.email)\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Configuration: tsconfig.json",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The `tsconfig.json` defines how TypeScript behaves in the project. For modern projects with Next.js or Node.js, this is the base I recommend:"
+    },
+    {
+      "type": "code",
+      "language": "json",
+      "code": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": true,\n    \"paths\": {\n      \"@/*\": [\"./*\"]\n    }\n  },\n  \"include\": [\"**/*.ts\", \"**/*.tsx\"],\n  \"exclude\": [\"node_modules\"]\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "The most important setting is `\"strict\": true` — it activates all type checks. Projects without strict mode lose most of TypeScript's value."
+    },
+    {
+      "type": "heading",
+      "text": "Patterns I use in production",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "After using TypeScript in every project, these are the patterns I apply most in my daily work:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Never use `any`** — use `unknown` when you don't know the type and type guard to validate",
+        "**Inference first** — let TS infer the type whenever possible, only type explicitly when necessary",
+        "**Interfaces for component props** — every React component prop should have an interface",
+        "**Utility types for APIs** — `Omit<User, 'id'>` for creation, `Partial<User>` for updates",
+        "**Union types instead of enums** — simpler, no runtime overhead",
+        "**`as const`** — for literal arrays and objects that shouldn't change"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// as const — turns values into literal types\nconst ROLES = ['admin', 'user', 'moderator'] as const\ntype Role = typeof ROLES[number] // 'admin' | 'user' | 'moderator'\n\n// React component props\ninterface ButtonProps {\n  label: string\n  variant?: 'primary' | 'secondary' | 'ghost'\n  onClick: () => void\n  disabled?: boolean\n}\n\nfunction Button({ label, variant = 'primary', onClick, disabled }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled} className={variant}>\n      {label}\n    </button>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion",
+      "level": 2
+    },
     {
       "type": "paragraph",
       "text": "TypeScript is not about writing more code — it's about **writing code the compiler can validate**. Types document intent, interfaces define contracts between modules, and generics enable reuse without losing safety. If you come from JavaScript, the learning curve is smooth: start by typing functions and props, then advance to generics and utility types. The gain in productivity and code confidence shows up fast."
@@ -292,52 +451,434 @@
       "type": "paragraph",
       "text": "Si escribes JavaScript y todavía no usas TypeScript, estás renunciando a la herramienta más eficaz para evitar bugs en producción. TypeScript no es un lenguaje diferente — es JavaScript con **tipado estático**. El compilador te avisa de los errores antes de que el código se ejecute, no después. En esta guía, presento todo lo que necesitas para empezar a usar TypeScript en proyectos reales."
     },
-    { "type": "heading", "text": "Por qué TypeScript", "level": 2 },
-    { "type": "paragraph", "text": "JavaScript es dinámico — cualquier variable puede ser cualquier cosa en cualquier momento. Esto es flexible pero peligroso. Solo descubres errores cuando el código se ejecuta y el usuario ve el error." },
-    { "type": "code", "language": "javascript", "code": "// JavaScript: esto corre sin error\nfunction calculateTotal(price, quantity) {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // Retorna '102' (string), no 20\ncalculateTotal(10)      // Retorna NaN, sin aviso" },
-    { "type": "paragraph", "text": "TypeScript atrapa estos errores **antes** de ejecutar:" },
-    { "type": "code", "language": "typescript", "code": "// TypeScript: el compilador te avisa\nfunction calculateTotal(price: number, quantity: number): number {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // ✗ Error: Argument of type 'string' is not assignable to 'number'\ncalculateTotal(10)      // ✗ Error: Expected 2 arguments, but got 1" },
-    { "type": "heading", "text": "Tipos básicos", "level": 2 },
-    { "type": "paragraph", "text": "Los tipos primitivos de TypeScript mapean directamente los tipos de JavaScript:" },
-    { "type": "code", "language": "typescript", "code": "// Primitivos\nlet name: string = 'Vinicius'\nlet age: number = 24\nlet isActive: boolean = true\n\n// Arrays\nlet tags: string[] = ['react', 'next', 'typescript']\nlet scores: number[] = [95, 87, 92]\n\n// Objetos inline\nlet user: { name: string; email: string } = {\n  name: 'Vinicius',\n  email: 'vini@email.com'\n}" },
-    { "type": "paragraph", "text": "En la práctica, casi nunca necesitas tipar variables explícitamente — TypeScript **infiere** el tipo automáticamente:" },
-    { "type": "code", "language": "typescript", "code": "// Inferencia automática — TS sabe que es string\nlet name = 'Vinicius' // tipo: string\nlet age = 24           // tipo: number\nlet tags = ['react']   // tipo: string[]\n\n// Tipar explícitamente solo cuando es necesario\nlet data: unknown = await fetchFromAPI()" },
-    { "type": "heading", "text": "Interfaces y Types", "level": 2 },
-    { "type": "paragraph", "text": "Para objetos más complejos, usa `interface` o `type`. La diferencia práctica es mínima — usa `interface` para objetos y `type` para unions y tipos compuestos:" },
-    { "type": "code", "language": "typescript", "code": "// Interface — para objetos\ninterface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n  avatar?: string // campo opcional\n}\n\n// Type — para unions y composiciones\ntype Status = 'pending' | 'confirmed' | 'failed' | 'refunded'\n\ntype ApiResponse<T> = {\n  data: T\n  success: boolean\n  error: string | null\n}" },
-    { "type": "paragraph", "text": "Las interfaces pueden extenderse, lo que es útil para herencia de tipos:" },
-    { "type": "code", "language": "typescript", "code": "interface BaseEntity {\n  id: string\n  createdAt: Date\n  updatedAt: Date\n}\n\ninterface User extends BaseEntity {\n  name: string\n  email: string\n}\n\ninterface Order extends BaseEntity {\n  userId: string\n  total: number\n  status: Status\n}\n\n// User ahora tiene id, createdAt, updatedAt, name, email" },
-    { "type": "heading", "text": "Funciones tipadas", "level": 2 },
-    { "type": "paragraph", "text": "Tipar funciones es donde TypeScript más brilla. El compilador valida los argumentos y el retorno:" },
-    { "type": "code", "language": "typescript", "code": "// Parámetros y retorno tipados\nfunction createUser(name: string, email: string): User {\n  return {\n    id: crypto.randomUUID(),\n    name,\n    email,\n    role: 'user',\n    createdAt: new Date(),\n    updatedAt: new Date()\n  }\n}\n\n// Arrow function\nconst formatPrice = (cents: number): string => {\n  return `R$ ${(cents / 100).toFixed(2)}`\n}\n\n// Función asíncrona\nasync function getUser(id: string): Promise<User | null> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return null\n  return res.json()\n}" },
-    { "type": "heading", "text": "Generics: tipos reutilizables", "level": 2 },
-    { "type": "paragraph", "text": "Generics permiten crear funciones y tipos que funcionan con **cualquier tipo**, manteniendo la seguridad. Es el concepto más poderoso de TypeScript:" },
-    { "type": "code", "language": "typescript", "code": "// Sin generics — necesitaría una función por tipo\nfunction getFirstString(arr: string[]): string | undefined {\n  return arr[0]\n}\nfunction getFirstNumber(arr: number[]): number | undefined {\n  return arr[0]\n}\n\n// Con generics — una función para todos los tipos\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0]\n}\n\ngetFirst(['a', 'b', 'c']) // tipo: string | undefined\ngetFirst([1, 2, 3])       // tipo: number | undefined\ngetFirst<User>(users)     // tipo: User | undefined" },
-    { "type": "paragraph", "text": "Generics son esenciales para funciones de API, hooks de React y cualquier código reutilizable:" },
-    { "type": "code", "language": "typescript", "code": "// Respuesta de API genérica\nasync function fetchAPI<T>(endpoint: string): Promise<ApiResponse<T>> {\n  const res = await fetch(`/api${endpoint}`)\n  const data = await res.json()\n  return data as ApiResponse<T>\n}\n\n// Uso — TS sabe el tipo del retorno\nconst { data: user } = await fetchAPI<User>('/users/123')\n// user es de tipo User\n\nconst { data: orders } = await fetchAPI<Order[]>('/orders')\n// orders es de tipo Order[]" },
-    { "type": "heading", "text": "Utility Types: transformando tipos", "level": 2 },
-    { "type": "paragraph", "text": "TypeScript viene con utility types que transforman tipos existentes. Estos son los que uso diariamente:" },
-    { "type": "code", "language": "typescript", "code": "interface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n}\n\n// Partial — todos los campos se vuelven opcionales\ntype UpdateUser = Partial<User>\n// { id?: string; name?: string; email?: string; role?: ... }\n\n// Pick — selecciona campos específicos\ntype UserPreview = Pick<User, 'id' | 'name'>\n// { id: string; name: string }\n\n// Omit — remueve campos específicos\ntype CreateUser = Omit<User, 'id'>\n// { name: string; email: string; role: 'admin' | 'user' }\n\n// Record — crea objeto tipado\ntype UserMap = Record<string, User>\n// { [key: string]: User }" },
-    { "type": "paragraph", "text": "El uso más común es en formularios y APIs — donde necesitas variaciones del mismo tipo:" },
-    { "type": "code", "language": "typescript", "code": "// API: crear usuario (sin id, la base de datos lo genera)\nasync function createUser(data: Omit<User, 'id'>): Promise<User> {\n  const res = await fetch('/api/users', {\n    method: 'POST',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}\n\n// API: actualizar parcialmente (todos los campos opcionales)\nasync function updateUser(id: string, data: Partial<User>): Promise<User> {\n  const res = await fetch(`/api/users/${id}`, {\n    method: 'PATCH',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}" },
-    { "type": "heading", "text": "Enums vs Union Types", "level": 2 },
-    { "type": "paragraph", "text": "Los enums existen en TypeScript pero en la práctica, los **union types** son más simples y no generan código JavaScript extra:" },
-    { "type": "code", "language": "typescript", "code": "// ❌ Enum — genera código JS extra, más complejo\nenum PaymentStatus {\n  PENDING = 'pending',\n  CONFIRMED = 'confirmed',\n  FAILED = 'failed',\n}\n\n// ✅ Union type — más simple, zero overhead\ntype PaymentStatus = 'pending' | 'confirmed' | 'failed'\n\n// Ambos funcionan igual para validación:\nfunction processPayment(status: PaymentStatus) {\n  switch (status) {\n    case 'pending':\n      return 'Esperando...'\n    case 'confirmed':\n      return '¡Confirmado!'\n    case 'failed':\n      return 'Falló.'\n  }\n}" },
-    { "type": "heading", "text": "Type guards: refinando tipos", "level": 2 },
-    { "type": "paragraph", "text": "Cuando un valor puede ser de varios tipos, los type guards ayudan a TypeScript a entender cuál tipo es en cada momento:" },
-    { "type": "code", "language": "typescript", "code": "type Result = { success: true; data: User } | { success: false; error: string }\n\nfunction handleResult(result: Result) {\n  if (result.success) {\n    // TS sabe que result.data existe aquí\n    console.log(result.data.name)\n  } else {\n    // TS sabe que result.error existe aquí\n    console.error(result.error)\n  }\n}\n\n// Type guard personalizado\nfunction isUser(value: unknown): value is User {\n  return (\n    typeof value === 'object' &&\n    value !== null &&\n    'name' in value &&\n    'email' in value\n  )\n}\n\nconst data: unknown = await fetchSomething()\nif (isUser(data)) {\n  // TS sabe que data es User aquí\n  console.log(data.email)\n}" },
-    { "type": "heading", "text": "Configuración: tsconfig.json", "level": 2 },
-    { "type": "paragraph", "text": "El `tsconfig.json` define cómo TypeScript se comporta en el proyecto. Para proyectos modernos con Next.js o Node.js, esta es la base que recomiendo:" },
-    { "type": "code", "language": "json", "code": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": true,\n    \"paths\": {\n      \"@/*\": [\"./*\"]\n    }\n  },\n  \"include\": [\"**/*.ts\", \"**/*.tsx\"],\n  \"exclude\": [\"node_modules\"]\n}" },
-    { "type": "paragraph", "text": "Lo más importante es `\"strict\": true` — activa todas las verificaciones de tipo. Proyectos sin strict mode pierden la mayor parte del valor de TypeScript." },
-    { "type": "heading", "text": "Patrones que uso en producción", "level": 2 },
-    { "type": "paragraph", "text": "Después de usar TypeScript en todos los proyectos, estos son los patrones que más aplico día a día:" },
-    { "type": "list", "items": ["**Nunca usar `any`** — usa `unknown` cuando no sabes el tipo y haz type guard para validar", "**Inferencia primero** — deja que TS infiera el tipo siempre que sea posible, tipar explícitamente solo cuando es necesario", "**Interfaces para props de componentes** — toda prop de componente React debe tener una interface", "**Utility types para APIs** — `Omit<User, 'id'>` para creación, `Partial<User>` para updates", "**Union types en lugar de enums** — más simples, sin overhead de runtime", "**`as const`** — para arrays y objetos literales que no deben cambiar"] },
-    { "type": "code", "language": "typescript", "code": "// as const — convierte valores en tipos literales\nconst ROLES = ['admin', 'user', 'moderator'] as const\ntype Role = typeof ROLES[number] // 'admin' | 'user' | 'moderator'\n\n// Props de componente React\ninterface ButtonProps {\n  label: string\n  variant?: 'primary' | 'secondary' | 'ghost'\n  onClick: () => void\n  disabled?: boolean\n}\n\nfunction Button({ label, variant = 'primary', onClick, disabled }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled} className={variant}>\n      {label}\n    </button>\n  )\n}" },
-    { "type": "heading", "text": "Conclusión", "level": 2 },
+    {
+      "type": "heading",
+      "text": "Por qué TypeScript",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript es dinámico — cualquier variable puede ser cualquier cosa en cualquier momento. Esto es flexible pero peligroso. Solo descubres errores cuando el código se ejecuta y el usuario ve el error."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "code": "// JavaScript: esto corre sin error\nfunction calculateTotal(price, quantity) {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // Retorna '102' (string), no 20\ncalculateTotal(10)      // Retorna NaN, sin aviso"
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript atrapa estos errores **antes** de ejecutar:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// TypeScript: el compilador te avisa\nfunction calculateTotal(price: number, quantity: number): number {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // ✗ Error: Argument of type 'string' is not assignable to 'number'\ncalculateTotal(10)      // ✗ Error: Expected 2 arguments, but got 1"
+    },
+    {
+      "type": "heading",
+      "text": "Tipos básicos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Los tipos primitivos de TypeScript mapean directamente los tipos de JavaScript:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Primitivos\nlet name: string = 'Vinicius'\nlet age: number = 24\nlet isActive: boolean = true\n\n// Arrays\nlet tags: string[] = ['react', 'next', 'typescript']\nlet scores: number[] = [95, 87, 92]\n\n// Objetos inline\nlet user: { name: string; email: string } = {\n  name: 'Vinicius',\n  email: 'vini@email.com'\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "En la práctica, casi nunca necesitas tipar variables explícitamente — TypeScript **infiere** el tipo automáticamente:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Inferencia automática — TS sabe que es string\nlet name = 'Vinicius' // tipo: string\nlet age = 24           // tipo: number\nlet tags = ['react']   // tipo: string[]\n\n// Tipar explícitamente solo cuando es necesario\nlet data: unknown = await fetchFromAPI()"
+    },
+    {
+      "type": "heading",
+      "text": "Interfaces y Types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Para objetos más complejos, usa `interface` o `type`. La diferencia práctica es mínima — usa `interface` para objetos y `type` para unions y tipos compuestos:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Interface — para objetos\ninterface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n  avatar?: string // campo opcional\n}\n\n// Type — para unions y composiciones\ntype Status = 'pending' | 'confirmed' | 'failed' | 'refunded'\n\ntype ApiResponse<T> = {\n  data: T\n  success: boolean\n  error: string | null\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Las interfaces pueden extenderse, lo que es útil para herencia de tipos:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface BaseEntity {\n  id: string\n  createdAt: Date\n  updatedAt: Date\n}\n\ninterface User extends BaseEntity {\n  name: string\n  email: string\n}\n\ninterface Order extends BaseEntity {\n  userId: string\n  total: number\n  status: Status\n}\n\n// User ahora tiene id, createdAt, updatedAt, name, email"
+    },
+    {
+      "type": "heading",
+      "text": "Funciones tipadas",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tipar funciones es donde TypeScript más brilla. El compilador valida los argumentos y el retorno:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Parámetros y retorno tipados\nfunction createUser(name: string, email: string): User {\n  return {\n    id: crypto.randomUUID(),\n    name,\n    email,\n    role: 'user',\n    createdAt: new Date(),\n    updatedAt: new Date()\n  }\n}\n\n// Arrow function\nconst formatPrice = (cents: number): string => {\n  return `R$ ${(cents / 100).toFixed(2)}`\n}\n\n// Función asíncrona\nasync function getUser(id: string): Promise<User | null> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return null\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Generics: tipos reutilizables",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Generics permiten crear funciones y tipos que funcionan con **cualquier tipo**, manteniendo la seguridad. Es el concepto más poderoso de TypeScript:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Sin generics — necesitaría una función por tipo\nfunction getFirstString(arr: string[]): string | undefined {\n  return arr[0]\n}\nfunction getFirstNumber(arr: number[]): number | undefined {\n  return arr[0]\n}\n\n// Con generics — una función para todos los tipos\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0]\n}\n\ngetFirst(['a', 'b', 'c']) // tipo: string | undefined\ngetFirst([1, 2, 3])       // tipo: number | undefined\ngetFirst<User>(users)     // tipo: User | undefined"
+    },
+    {
+      "type": "paragraph",
+      "text": "Generics son esenciales para funciones de API, hooks de React y cualquier código reutilizable:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Respuesta de API genérica\nasync function fetchAPI<T>(endpoint: string): Promise<ApiResponse<T>> {\n  const res = await fetch(`/api${endpoint}`)\n  const data = await res.json()\n  return data as ApiResponse<T>\n}\n\n// Uso — TS sabe el tipo del retorno\nconst { data: user } = await fetchAPI<User>('/users/123')\n// user es de tipo User\n\nconst { data: orders } = await fetchAPI<Order[]>('/orders')\n// orders es de tipo Order[]"
+    },
+    {
+      "type": "heading",
+      "text": "Utility Types: transformando tipos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript viene con utility types que transforman tipos existentes. Estos son los que uso diariamente:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n}\n\n// Partial — todos los campos se vuelven opcionales\ntype UpdateUser = Partial<User>\n// { id?: string; name?: string; email?: string; role?: ... }\n\n// Pick — selecciona campos específicos\ntype UserPreview = Pick<User, 'id' | 'name'>\n// { id: string; name: string }\n\n// Omit — remueve campos específicos\ntype CreateUser = Omit<User, 'id'>\n// { name: string; email: string; role: 'admin' | 'user' }\n\n// Record — crea objeto tipado\ntype UserMap = Record<string, User>\n// { [key: string]: User }"
+    },
+    {
+      "type": "paragraph",
+      "text": "El uso más común es en formularios y APIs — donde necesitas variaciones del mismo tipo:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// API: crear usuario (sin id, la base de datos lo genera)\nasync function createUser(data: Omit<User, 'id'>): Promise<User> {\n  const res = await fetch('/api/users', {\n    method: 'POST',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}\n\n// API: actualizar parcialmente (todos los campos opcionales)\nasync function updateUser(id: string, data: Partial<User>): Promise<User> {\n  const res = await fetch(`/api/users/${id}`, {\n    method: 'PATCH',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Enums vs Union Types",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Los enums existen en TypeScript pero en la práctica, los **union types** son más simples y no generan código JavaScript extra:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ❌ Enum — genera código JS extra, más complejo\nenum PaymentStatus {\n  PENDING = 'pending',\n  CONFIRMED = 'confirmed',\n  FAILED = 'failed',\n}\n\n// ✅ Union type — más simple, zero overhead\ntype PaymentStatus = 'pending' | 'confirmed' | 'failed'\n\n// Ambos funcionan igual para validación:\nfunction processPayment(status: PaymentStatus) {\n  switch (status) {\n    case 'pending':\n      return 'Esperando...'\n    case 'confirmed':\n      return '¡Confirmado!'\n    case 'failed':\n      return 'Falló.'\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Type guards: refinando tipos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cuando un valor puede ser de varios tipos, los type guards ayudan a TypeScript a entender cuál tipo es en cada momento:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "type Result = { success: true; data: User } | { success: false; error: string }\n\nfunction handleResult(result: Result) {\n  if (result.success) {\n    // TS sabe que result.data existe aquí\n    console.log(result.data.name)\n  } else {\n    // TS sabe que result.error existe aquí\n    console.error(result.error)\n  }\n}\n\n// Type guard personalizado\nfunction isUser(value: unknown): value is User {\n  return (\n    typeof value === 'object' &&\n    value !== null &&\n    'name' in value &&\n    'email' in value\n  )\n}\n\nconst data: unknown = await fetchSomething()\nif (isUser(data)) {\n  // TS sabe que data es User aquí\n  console.log(data.email)\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Configuración: tsconfig.json",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El `tsconfig.json` define cómo TypeScript se comporta en el proyecto. Para proyectos modernos con Next.js o Node.js, esta es la base que recomiendo:"
+    },
+    {
+      "type": "code",
+      "language": "json",
+      "code": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": true,\n    \"paths\": {\n      \"@/*\": [\"./*\"]\n    }\n  },\n  \"include\": [\"**/*.ts\", \"**/*.tsx\"],\n  \"exclude\": [\"node_modules\"]\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo más importante es `\"strict\": true` — activa todas las verificaciones de tipo. Proyectos sin strict mode pierden la mayor parte del valor de TypeScript."
+    },
+    {
+      "type": "heading",
+      "text": "Patrones que uso en producción",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Después de usar TypeScript en todos los proyectos, estos son los patrones que más aplico día a día:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Nunca usar `any`** — usa `unknown` cuando no sabes el tipo y haz type guard para validar",
+        "**Inferencia primero** — deja que TS infiera el tipo siempre que sea posible, tipar explícitamente solo cuando es necesario",
+        "**Interfaces para props de componentes** — toda prop de componente React debe tener una interface",
+        "**Utility types para APIs** — `Omit<User, 'id'>` para creación, `Partial<User>` para updates",
+        "**Union types en lugar de enums** — más simples, sin overhead de runtime",
+        "**`as const`** — para arrays y objetos literales que no deben cambiar"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// as const — convierte valores en tipos literales\nconst ROLES = ['admin', 'user', 'moderator'] as const\ntype Role = typeof ROLES[number] // 'admin' | 'user' | 'moderator'\n\n// Props de componente React\ninterface ButtonProps {\n  label: string\n  variant?: 'primary' | 'secondary' | 'ghost'\n  onClick: () => void\n  disabled?: boolean\n}\n\nfunction Button({ label, variant = 'primary', onClick, disabled }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled} className={variant}>\n      {label}\n    </button>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Conclusión",
+      "level": 2
+    },
     {
       "type": "paragraph",
       "text": "TypeScript no se trata de escribir más código — se trata de **escribir código que el compilador pueda validar**. Los tipos documentan la intención, las interfaces definen contratos entre módulos, y los generics permiten reutilización sin perder seguridad. Si vienes de JavaScript, la curva de aprendizaje es suave: empieza tipando funciones y props, después avanza a generics y utility types. La ganancia en productividad y confianza en el código aparece rápido."
+    }
+  ],
+  "title_jp": "TypeScript をはじめる: JavaScript 開発者のための実践ガイド",
+  "description_jp": "実際のプロジェクトで TypeScript を使い始めるために知っておくべきことのすべて — 型付け、インターフェース、ジェネリクス、ユーティリティ型、そして設定。",
+  "date_jp": "2026年4月16日",
+  "readTime_jp": "12分で読めます",
+  "tag_jp": "TypeScript",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "JavaScript を書いていてまだ TypeScript を使っていないなら、本番環境のバグを防ぐ最も効果的なツールを手放していることになります。TypeScript は別の言語ではありません — **静的型付け**を備えた JavaScript です。コンパイラはコードを実行する前にエラーを知らせてくれます。実行した後ではありません。本ガイドでは、実際のプロジェクトで TypeScript を使い始めるために必要なことをすべて紹介します。"
+    },
+    {
+      "type": "heading",
+      "text": "なぜ TypeScript なのか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "JavaScript は動的です — どの変数も、いつでも何にでもなり得ます。これは柔軟ですが危険です。エラーに気づくのは、コードが実行されてユーザーがそのエラーを目にしたときだけです。"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "code": "// JavaScript: これはエラーなく実行される\nfunction calculateTotal(price, quantity) {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // 20 ではなく '102'（文字列）を返す\ncalculateTotal(10)      // 警告なしで NaN を返す"
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript はこうしたエラーを実行**前**に検出します。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// TypeScript: コンパイラが警告する\nfunction calculateTotal(price: number, quantity: number): number {\n  return price * quantity\n}\n\ncalculateTotal('10', 2) // ✗ Erro: Argument of type 'string' is not assignable to 'number'\ncalculateTotal(10)      // ✗ Erro: Expected 2 arguments, but got 1"
+    },
+    {
+      "type": "heading",
+      "text": "基本的な型",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript のプリミティブ型は、JavaScript の型に直接対応しています。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// プリミティブ\nlet name: string = 'Vinicius'\nlet age: number = 24\nlet isActive: boolean = true\n\n// 配列\nlet tags: string[] = ['react', 'next', 'typescript']\nlet scores: number[] = [95, 87, 92]\n\n// インラインオブジェクト\nlet user: { name: string; email: string } = {\n  name: 'Vinicius',\n  email: 'vini@email.com'\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "実際には、変数を明示的に型付けする必要はほとんどありません — TypeScript が型を自動的に**推論**します。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 自動推論 — TS は文字列だとわかっている\nlet name = 'Vinicius' // 型: string\nlet age = 24           // 型: number\nlet tags = ['react']   // 型: string[]\n\n// 必要なときだけ明示的に型付けする\nlet data: unknown = await fetchFromAPI()"
+    },
+    {
+      "type": "heading",
+      "text": "インターフェースと型",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "より複雑なオブジェクトには `interface` または `type` を使います。実用上の違いはごくわずかです — オブジェクトには `interface` を、ユニオンや合成型には `type` を使いましょう。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Interface — オブジェクト用\ninterface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n  avatar?: string // オプションのフィールド\n}\n\n// Type — ユニオンや合成用\ntype Status = 'pending' | 'confirmed' | 'failed' | 'refunded'\n\ntype ApiResponse<T> = {\n  data: T\n  success: boolean\n  error: string | null\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "インターフェースは拡張できます。これは型の継承に便利です。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface BaseEntity {\n  id: string\n  createdAt: Date\n  updatedAt: Date\n}\n\ninterface User extends BaseEntity {\n  name: string\n  email: string\n}\n\ninterface Order extends BaseEntity {\n  userId: string\n  total: number\n  status: Status\n}\n\n// User は id, createdAt, updatedAt, name, email を持つようになった"
+    },
+    {
+      "type": "heading",
+      "text": "型付けされた関数",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "関数の型付けは、TypeScript が最も真価を発揮する場面です。コンパイラが引数と戻り値を検証します。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 型付けされたパラメータと戻り値\nfunction createUser(name: string, email: string): User {\n  return {\n    id: crypto.randomUUID(),\n    name,\n    email,\n    role: 'user',\n    createdAt: new Date(),\n    updatedAt: new Date()\n  }\n}\n\n// アロー関数\nconst formatPrice = (cents: number): string => {\n  return `R$ ${(cents / 100).toFixed(2)}`\n}\n\n// 非同期関数\nasync function getUser(id: string): Promise<User | null> {\n  const res = await fetch(`/api/users/${id}`)\n  if (!res.ok) return null\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "ジェネリクス: 再利用可能な型",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ジェネリクスを使うと、安全性を保ちながら**任意の型**で動作する関数や型を作成できます。これは TypeScript で最も強力な概念です。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ジェネリクスなし — 型ごとに関数が必要になる\nfunction getFirstString(arr: string[]): string | undefined {\n  return arr[0]\n}\nfunction getFirstNumber(arr: number[]): number | undefined {\n  return arr[0]\n}\n\n// ジェネリクスあり — すべての型に対して1つの関数\nfunction getFirst<T>(arr: T[]): T | undefined {\n  return arr[0]\n}\n\ngetFirst(['a', 'b', 'c']) // 型: string | undefined\ngetFirst([1, 2, 3])       // 型: number | undefined\ngetFirst<User>(users)     // 型: User | undefined"
+    },
+    {
+      "type": "paragraph",
+      "text": "ジェネリクスは、API 関数、React のフック、その他あらゆる再利用可能なコードに不可欠です。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ジェネリックな API レスポンス\nasync function fetchAPI<T>(endpoint: string): Promise<ApiResponse<T>> {\n  const res = await fetch(`/api${endpoint}`)\n  const data = await res.json()\n  return data as ApiResponse<T>\n}\n\n// 使用例 — TS は戻り値の型を知っている\nconst { data: user } = await fetchAPI<User>('/users/123')\n// user は User 型\n\nconst { data: orders } = await fetchAPI<Order[]>('/orders')\n// orders は Order[] 型"
+    },
+    {
+      "type": "heading",
+      "text": "ユーティリティ型: 型を変換する",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript には、既存の型を変換するユーティリティ型が用意されています。私が日常的に使っているものを挙げます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "interface User {\n  id: string\n  name: string\n  email: string\n  role: 'admin' | 'user'\n}\n\n// Partial — すべてのフィールドがオプションになる\ntype UpdateUser = Partial<User>\n// { id?: string; name?: string; email?: string; role?: ... }\n\n// Pick — 特定のフィールドを選択する\ntype UserPreview = Pick<User, 'id' | 'name'>\n// { id: string; name: string }\n\n// Omit — 特定のフィールドを除外する\ntype CreateUser = Omit<User, 'id'>\n// { name: string; email: string; role: 'admin' | 'user' }\n\n// Record — 型付けされたオブジェクトを作成する\ntype UserMap = Record<string, User>\n// { [key: string]: User }"
+    },
+    {
+      "type": "paragraph",
+      "text": "最も一般的な用途はフォームと API です — そこでは同じ型のバリエーションが必要になります。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// API: ユーザーを作成する（id なし、データベースが生成する）\nasync function createUser(data: Omit<User, 'id'>): Promise<User> {\n  const res = await fetch('/api/users', {\n    method: 'POST',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}\n\n// API: 部分的に更新する（すべてのフィールドがオプション）\nasync function updateUser(id: string, data: Partial<User>): Promise<User> {\n  const res = await fetch(`/api/users/${id}`, {\n    method: 'PATCH',\n    body: JSON.stringify(data)\n  })\n  return res.json()\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Enum vs ユニオン型",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Enum は TypeScript に存在しますが、実際には**ユニオン型**のほうがシンプルで、余分な JavaScript コードを生成しません。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ❌ Enum — 余分な JS コードを生成し、より複雑\nenum PaymentStatus {\n  PENDING = 'pending',\n  CONFIRMED = 'confirmed',\n  FAILED = 'failed',\n}\n\n// ✅ ユニオン型 — よりシンプルで、オーバーヘッドゼロ\ntype PaymentStatus = 'pending' | 'confirmed' | 'failed'\n\n// どちらも検証では同じように動作する:\nfunction processPayment(status: PaymentStatus) {\n  switch (status) {\n    case 'pending':\n      return '待機中...'\n    case 'confirmed':\n      return '確定しました！'\n    case 'failed':\n      return '失敗しました。'\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "型ガード: 型を絞り込む",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "値が複数の型を取り得る場合、型ガードは TypeScript がそれぞれの時点でどの型なのかを理解する手助けをします。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "type Result = { success: true; data: User } | { success: false; error: string }\n\nfunction handleResult(result: Result) {\n  if (result.success) {\n    // ここでは TS は result.data が存在することを知っている\n    console.log(result.data.name)\n  } else {\n    // ここでは TS は result.error が存在することを知っている\n    console.error(result.error)\n  }\n}\n\n// カスタム型ガード\nfunction isUser(value: unknown): value is User {\n  return (\n    typeof value === 'object' &&\n    value !== null &&\n    'name' in value &&\n    'email' in value\n  )\n}\n\nconst data: unknown = await fetchSomething()\nif (isUser(data)) {\n  // ここでは TS は data が User であることを知っている\n  console.log(data.email)\n}"
+    },
+    {
+      "type": "heading",
+      "text": "設定: tsconfig.json",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "`tsconfig.json` は、プロジェクトで TypeScript がどのように振る舞うかを定義します。Next.js や Node.js を使うモダンなプロジェクトでは、これが私の推奨するベースです。"
+    },
+    {
+      "type": "code",
+      "language": "json",
+      "code": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\"dom\", \"dom.iterable\", \"esnext\"],\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": true,\n    \"paths\": {\n      \"@/*\": [\"./*\"]\n    }\n  },\n  \"include\": [\"**/*.ts\", \"**/*.tsx\"],\n  \"exclude\": [\"node_modules\"]\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "最も重要なのは `\"strict\": true` です — これがすべての型チェックを有効にします。strict モードのないプロジェクトは、TypeScript の価値のほとんどを失います。"
+    },
+    {
+      "type": "heading",
+      "text": "本番で私が使っているパターン",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "すべてのプロジェクトで TypeScript を使ってきた結果、日々の作業で最もよく適用するパターンは次のとおりです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**`any` を決して使わない** — 型がわからないときは `unknown` を使い、型ガードで検証する",
+        "**推論を優先する** — 可能な限り TS に型を推論させ、必要なときだけ明示的に型付けする",
+        "**コンポーネントの props にはインターフェースを** — すべての React コンポーネントの prop はインターフェースを持つべき",
+        "**API にはユーティリティ型を** — 作成には `Omit<User, 'id'>`、更新には `Partial<User>`",
+        "**enum の代わりにユニオン型を** — よりシンプルで、ランタイムのオーバーヘッドがない",
+        "**`as const`** — 変更すべきでないリテラルの配列やオブジェクトに使う"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// as const — 値をリテラル型に変換する\nconst ROLES = ['admin', 'user', 'moderator'] as const\ntype Role = typeof ROLES[number] // 'admin' | 'user' | 'moderator'\n\n// React コンポーネントの props\ninterface ButtonProps {\n  label: string\n  variant?: 'primary' | 'secondary' | 'ghost'\n  onClick: () => void\n  disabled?: boolean\n}\n\nfunction Button({ label, variant = 'primary', onClick, disabled }: ButtonProps) {\n  return (\n    <button onClick={onClick} disabled={disabled} className={variant}>\n      {label}\n    </button>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "まとめ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "TypeScript は、より多くのコードを書くことではありません — **コンパイラが検証できるコードを書くこと**です。型は意図を文書化し、インターフェースはモジュール間の契約を定義し、ジェネリクスは安全性を失わずに再利用を可能にします。JavaScript から来たなら、学習曲線はなだらかです。まず関数と props に型を付けることから始め、その後ジェネリクスやユーティリティ型へ進みましょう。生産性とコードへの信頼の向上は、すぐに表れます。"
     }
   ]
 }

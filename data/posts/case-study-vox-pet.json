@@ -591,5 +591,202 @@
       "type": "paragraph",
       "text": "---\n\n¿Quieres conocer más sobre el proyecto? [Accede a la página dedicada de Vox Pet Digital](/projetos/vox-pet-digital)."
     }
+  ],
+  "title_jp": "ケーススタディ: Vox Pet Digital — 動物病院向け SaaS を Express から NestJS へダウンタイムなしで移行",
+  "description_jp": "Prisma モデル 95 個、マルチテナント + マルチ支店、RAG と Whisper を備えた WhatsApp の AI、v1→v2 の段階的移行、フォールバック付きの電子インボイス発行。",
+  "date_jp": "2026年4月16日",
+  "readTime_jp": "14分で読めます",
+  "tag_jp": "ケーススタディ",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "Vox Pet Digital は、ペットショップと動物病院向けの垂直型 SaaS です。決して小規模なプロジェクトではありません。**Prisma モデル 95 個**、**フロントエンド 91 ページ**、**機能モジュール 22 個**、**OpenAI、WhatsApp、Stripe、Mercado Pago、Asaas、NF-e** との連携、そして同一プロセス上で稼働する Express から NestJS への進行中の移行があります。本ケーススタディでは、私が直面した 4 つの最大の技術的課題を詳しく説明します。"
+    },
+    {
+      "type": "heading",
+      "text": "システム概要",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vox Pet は、動物病院の業務サイクル全体をカバーします。予約、診療記録、ワクチン、処方、入院、販売、レジ、在庫、コミッション、NF-e、そして WhatsApp 経由の自動応対まで対応します。マルチテナント（各クリニックが独立したテナント）であり、マルチ支店（クリニックチェーンが拠点間でデータを共有し、きめ細かい制御を行う）でもあります。"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**バックエンド:** Node.js — Express (v1) + NestJS (v2) が同一プロセスで共存",
+        "**フロントエンド:** Next.js 16 + React 19（App Router 使用）、MUI v7 + shadcn/ui + Tailwind v4",
+        "**データベース:** Prisma 経由の PostgreSQL 16 — 95 モデル、うち 93 が tenant_id、76 が branch_id を持つ",
+        "**AI:** OpenAI（GPT-4o-mini + embeddings + Whisper）+ Baileys（セルフホスト型 WhatsApp）",
+        "**決済:** Stripe（SaaS サブスクリプション）+ Mercado Pago + Asaas（ブラジル国内決済）",
+        "**電子インボイス:** Focus NFe + NFe.io（フォールバック付きの 2 つのプロバイダー）",
+        "**ストレージ:** Firebase Admin",
+        "**リード:** Meta/Facebook 連携"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "課題 #1: 同一プロセスでの Express → NestJS 段階的移行",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "私がプロジェクトに参加したとき、バックエンドは 41 個のコントローラーを持つ Express モノリスでした。強い型付けも、DTO も、一貫したバリデーションもありませんでした。一度にすべてを書き直すのは現実的ではありませんでした。システムは本番稼働中で、クリニックが日々それに依存していたからです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策は **strangler fig** パターンでした。Express と NestJS を同一の Node.js プロセスで稼働させます。v2 のルートは `/api/v2` に存在し、一方で v1 はこれまで通り正常に動作し続けます。両者は同じ Prisma インスタンス、同じ認証システム、同じトレーサーを共有します。"
+    },
+    {
+      "type": "paragraph",
+      "text": "あらゆる v2 コードに対するルールは厳格です:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "TypeScript strict — `any` 禁止、`// @ts-ignore` 禁止",
+        "Thin controllers — ビジネスロジックは service に置き、コントローラーはルーティングのみ",
+        "バリデーション付き DTO — すべての入力は class-validator を通す",
+        "tenant_id 必須 — テナントフィルターのないクエリは存在しない",
+        "`console.log` ゼロ — すべてコンテキスト付きの構造化ロガー経由"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "これまでに 12 個のモジュールが v2 へ移行されました。**pets**（17 エンドポイント）、**hospitalizations**（8）、**procedures**（6）、**branches**、**stock-transfers**（5 + approve/reject/complete ワークフロー）、**reminders**、**fiscal/NF-e**（11）、**imports**（NF-e XML）、**公開予約（booking）**、そして **analytics** です。残り — 顧客、販売、予約、診療記録、ワクチン、レジ、WhatsApp、admin — はまだ v1 で稼働しており、段階的に移行されていきます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// bootstrap.ts — Express と NestJS が共存\nconst expressApp = express()\n\n// v1 ルート（レガシー）\nexpressApp.use('/api/v1', authMiddleware, v1Router)\n\n// v2 ルート（NestJS）\nconst nestApp = await NestFactory.create(AppModule)\nnestApp.setGlobalPrefix('api/v2')\nconst nestAdapter = nestApp.getHttpAdapter().getInstance()\nexpressApp.use(nestAdapter)\n\n// 共有: Prisma、認証、トレーサー\nexpressApp.listen(PORT)"
+    },
+    {
+      "type": "heading",
+      "text": "課題 #2: 24 時間稼働のセルフホスト型 WhatsApp + AI",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "WhatsApp 経由の応対は、Vox Pet の最大の差別化要素の 1 つです。単純なチャットボットではありません。**10 個のツールを持つ AI エージェント**であり、RAG（ビジネスのナレッジベース）、会話メモリ、メディア処理（Whisper による音声）、そして自動フォローアップを備えています。"
+    },
+    {
+      "type": "paragraph",
+      "text": "アーキテクチャは次のとおりです:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**接続:** Baileys（セルフホスト型 WhatsApp Web）を Railway 上で永続ディスク付きで稼働させ、セッションを維持",
+        "**Orchestrator:** メッセージを受信し、テナントを特定し、コンテキスト（履歴 + ナレッジベース）をロードし、どのツールを使うか判断する",
+        "**利用可能な 10 個のツール:** 予約の登録、空き時間の確認、価格の照会、商品の推薦、診療記録の検索、リマインダー送信など",
+        "**RAG:** テナントごとのナレッジベースに OpenAI embeddings を使用し、回答を文脈づけるためのセマンティック検索",
+        "**Whisper:** 顧客が音声を送ってきた場合、自動的に文字起こしし、テキストとして処理する",
+        "**メモリ:** 顧客ごとの会話履歴を保持し、メッセージ間でコンテキストを維持する",
+        "**フォローアップ:** 毎分実行される cron が 15〜240 分のウィンドウ内で返信のない会話を確認し、自動フォローアップを送信する"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 簡略化した Orchestrator\nasync function handleMessage(tenantId: string, message: WAMessage) {\n  const tenant = await loadTenantConfig(tenantId)\n  const history = await getConversationHistory(message.from, tenantId)\n  const knowledge = await ragSearch(message.text, tenantId)\n\n  // 音声の場合は、まず Whisper で文字起こしする\n  const text = message.type === 'audio'\n    ? await whisperTranscribe(message.media)\n    : message.text\n\n  const response = await openai.chat({\n    model: 'gpt-4o-mini',\n    messages: [\n      { role: 'system', content: buildSystemPrompt(tenant, knowledge) },\n      ...history,\n      { role: 'user', content: text },\n    ],\n    tools: getAvailableTools(tenant),\n  })\n\n  // tool call があれば実行する\n  if (response.tool_calls) {\n    for (const call of response.tool_calls) {\n      await executeToolCall(call, tenantId)\n    }\n  }\n\n  await sendWhatsAppMessage(message.from, response.content)\n  await saveToHistory(message.from, tenantId, text, response.content)\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "ここでの最大の課題は AI ではありませんでした。**信頼性**でした。Baileys は自動的に再接続しますが、Railway がコンテナを再起動するとセッションが失われることがあります。ボットが通知なしにオフラインになることが決してないよう、永続ディスク + ヘルスチェック + アラートを実装しました。"
+    },
+    {
+      "type": "heading",
+      "text": "課題 #3: 一貫したマルチテナント + マルチ支店",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "SaaS におけるマルチテナントは一般的です。テナント内のマルチ支店はさらに高い複雑さのレベルです。Vox Pet では、クリニックチェーンが 3 つの支店を持ち、顧客とペットの登録情報を共有できますが、各支店はそれぞれ独自の在庫、レジ、スケジュール、コミッションを持ちます。"
+    },
+    {
+      "type": "paragraph",
+      "text": "Prisma の 95 モデルのうち:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**93 モデル**が `tenant_id` を持つ — クリニック間の完全な分離",
+        "**76 モデル**が `branch_id` を持つ — テナント内での支店ごとの分離",
+        "**15 回のマイグレーション**で、既存データを壊さずにこの構造に到達"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "最も複雑なケースは、**支店間の在庫移動**です。このフローには 3 つの状態（保留中 → 承認/却下 → 完了）があり、専用の 5 エンドポイントと承認ワークフローを備えています。移動元の支店が要求し、移動先の支店が承認または却下し、その後初めて在庫がアトミックに移動されます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 支店間の在庫移動 — アトミックなトランザクション\nasync function completeTransfer(transferId: string, tenantId: string) {\n  return prisma.$transaction(async (tx) => {\n    const transfer = await tx.stockTransfer.findUnique({\n      where: { id: transferId, tenantId },\n      include: { items: true },\n    })\n\n    if (transfer.status !== 'APPROVED') {\n      throw new BadRequestException('Transfer must be approved first')\n    }\n\n    for (const item of transfer.items) {\n      // 移動元の支店から減算\n      await tx.stock.update({\n        where: { productId_branchId: { productId: item.productId, branchId: transfer.fromBranchId } },\n        data: { quantity: { decrement: item.quantity } },\n      })\n      // 移動先の支店へ追加\n      await tx.stock.upsert({\n        where: { productId_branchId: { productId: item.productId, branchId: transfer.toBranchId } },\n        create: { productId: item.productId, branchId: transfer.toBranchId, tenantId, quantity: item.quantity },\n        update: { quantity: { increment: item.quantity } },\n      })\n    }\n\n    await tx.stockTransfer.update({\n      where: { id: transferId },\n      data: { status: 'COMPLETED', completedAt: new Date() },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "課題 #4: 2 つのプロバイダーとフォールバックを備えた電子インボイス発行",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ブラジルでの NF-e（電子インボイス）発行は重要です。インボイスのプロバイダーがダウンすると、クリニックは販売できなくなります。私たちは 2 つのプロバイダー（**Focus NFe** と **NFe.io**）を自動フォールバック付きで統合しました。v2 の cron ジョブが 30 秒ごとにキューを処理します。"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**11 エンドポイント**を v2 モジュールで NF-e 専用に用意",
+        "**XML インポート** — クリニックは仕入先から受領したインボイスをインポートできる",
+        "**回復力のあるキュー** — プライマリのプロバイダーが失敗すると、自動的にセカンダリを試す",
+        "**30 秒ごとの処理** — バースト的な呼び出しを避け、プロバイダーのレート制限を尊重する"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "システムの規模",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "システムの実際の複雑さを示すいくつかの数字です:"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Prisma に **95 モデル**（複雑なリレーショナルデータベース）",
+        "フロントエンドに **91 ページ**（うち 86 が稼働中）",
+        "フロントエンドに **22 個**の機能モジュール",
+        "**41 個の Express コントローラー**（v1）+ **12 個の NestJS モジュール**（v2）",
+        "外部連携の **14 サービス**",
+        "稼働中の **4 つの cron ジョブ**（WhatsApp フォローアップ、NF-e、リマインダー、analytics）",
+        "WhatsApp の AI エージェントの **10 個のツール**"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "学んだ教訓",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**strangler fig は機能する。** 同一プロセス内で段階的に移行することは、ビッグバン方式よりも安全です。鍵は、新しいコードに対して厳格なルールを設け、決して緩めないことです",
+        "**セルフホスト型 WhatsApp は脆い。** Baileys で解決できますが、永続ディスクと監視を備えた専用インフラが必要です。もう一度ゼロから始められるなら、より大きなテナント向けには公式の WhatsApp Business API を検討するでしょう",
+        "**マルチ支店はマルチテナントより 3 倍複雑。** 単に branch_id を追加するだけではありません。モデルごとに異なるビジネスルールがあります。在庫は支店ごと、顧客はテナントごと、コミッションは支店ごと、ペットはテナントごとです",
+        "**重要な連携におけるフォールバックは任意ではない。** Focus NFe が 2 時間ダウンし、誰も気づかないうちに NFe.io が引き継いだ日が、この投資が報われた日でした"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nプロジェクトについてもっと知りたいですか？ [Vox Pet Digital の専用ページにアクセスしてください](/projetos/vox-pet-digital)。"
+    }
   ]
 }

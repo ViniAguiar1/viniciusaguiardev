@@ -49,8 +49,8 @@ export function ExperienceItem({
                 className="text-sm text-primary hover:underline"
             >
                 {open
-                    ? locale === "en" ? "Read less" : locale === "es" ? "Leer menos" : "Ler menos"
-                    : locale === "en" ? "Read more" : locale === "es" ? "Leer más" : "Ler mais"}
+                    ? locale === "en" ? "Read less" : locale === "es" ? "Leer menos" : locale === "jp" ? "閉じる" : "Ler menos"
+                    : locale === "en" ? "Read more" : locale === "es" ? "Leer más" : locale === "jp" ? "もっと見る" : "Ler mais"}
             </button>
         </div>
     )

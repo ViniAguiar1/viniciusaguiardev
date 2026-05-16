@@ -169,8 +169,50 @@ const es: Dictionary = {
   },
 }
 
+const jp: Dictionary = {
+  nav: {
+    home: "ホーム",
+    about: "プロフィール",
+    projects: "プロジェクト",
+    engineering: "エンジニアリング",
+    uses: "ツール",
+    search: "検索",
+    curriculum: "履歴書",
+  },
+
+  home: {
+    title: "Vinicius Aguiar",
+
+    subtitle:
+      "本番環境でSaaSプラットフォームを構築するソフトウェアエンジニア — 決済システムからWhatsApp上のAIエージェントまで。",
+
+    description:
+      "React、Next.js、TypeScript。実プロダクトで稼働する決済連携、マルチテナントアーキテクチャ、AI自動化。",
+
+    ctaAbout: "プロフィール",
+    ctaResume: "CVをダウンロード",
+    ctaContact: "お問い合わせ",
+  },
+
+  about: {
+    title: "プロフィール",
+    subtitle: "経歴、スキル、興味について少しご紹介します。",
+  },
+
+  projects: {
+    title: "プロジェクト",
+    subtitle:
+      "ソフトウェアエンジニアとして携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。",
+  },
+
+  ui: {
+    search: "検索",
+  },
+}
+
 export function getDictionary(locale: Locale): Dictionary {
   if (locale === "en") return en
   if (locale === "es") return es
+  if (locale === "jp") return jp
   return pt
 }

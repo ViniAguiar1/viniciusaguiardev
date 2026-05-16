@@ -11,7 +11,7 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 - **5 curated projects** — SaaS platforms, e-commerce and health systems with dedicated pages, case studies and real metrics
 - **9 technical articles** — case studies (X-Drop, Vox Pet), multi-tenant architecture, webhook design, circuit breaker, RAG pipelines, Docker, design systems
 - **Engineering page** — architecture decisions, trade-offs and problems solved in production (SaaS, multi-tenant, payments)
-- **Trilingual** — PT-BR, English and Spanish (cookie-based i18n)
+- **Quadrilingual** — PT-BR, English, Spanish and Japanese (cookie-based i18n)
 - **Dark/Light mode** — system preference with manual toggle
 - **Mobile-first** — responsive layout with hamburger menu for tablets and phones
 - **Custom 404** — animated astronaut illustration with navigation CTAs
@@ -35,7 +35,7 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS 4, Shadcn UI (Radix UI primitives)
 - **Themes:** next-themes (light/dark/system)
-- **i18n:** PT-BR / EN / ES (cookie-based, trilingual)
+- **i18n:** PT-BR / EN / ES / JA (cookie-based, quadrilingual)
 - **SEO:** Open Graph, Twitter Cards, JSON-LD schemas, sitemap, robots.txt, llms.txt
 - **Deploy:** Vercel
 - **CI:** GitHub Actions (lint, typecheck, build, AEO check 100/100)

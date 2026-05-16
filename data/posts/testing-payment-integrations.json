@@ -642,5 +642,219 @@
         "Reconciliación periódica implementada (verificar con el gateway si todo coincide)"
       ]
     }
+  ],
+  "title_jp": "Node.js における決済連携のテスト戦略",
+  "description_jp": "実際に課金せずに webhook、冪等性、PIX、複数ゲートウェイ（Stripe、Asaas、Mercado Pago）をテストする方法 — サンドボックス、モック、契約テスト、レジリエンステスト。",
+  "date_jp": "2026年4月17日",
+  "readTime_jp": "11分で読めます",
+  "tag_jp": "エンジニアリング",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "決済連携はあらゆる SaaS でもっともクリティカルな部分です。テストが漏れると、本番で発覚します — そして本番では、それは実際のお金、誤って課金された顧客、そしてパンク状態のサポートを意味します。**Stripe**、**Asaas**、**Mercado Pago** を本番システムに連携してきた経験から、決済のテストは CRUD のテストとはまったく別物だと学びました。専用の戦略が必要です。"
+    },
+    {
+      "type": "paragraph",
+      "text": "この記事では、Node.js で決済連携をテストするために私が使っている戦略を共有します — 何をテストし、何をモックし、いつサンドボックスを使い、webhook・冪等性・非同期フロー（PIX、ボレト）が本当に動作することをどう保証するか、です。"
+    },
+    {
+      "type": "heading",
+      "text": "問題：決済は CRUD ではない",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "CRUD のテストは、データが正しくデータベースに入って出てくることを検証します。決済には次のものが関わります："
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**非同期フロー** — PIX とボレトは即時に確定しません。ステータスは数分後、あるいは数時間後に webhook 経由で変わります",
+        "**外部システム** — ゲートウェイは遅くなったり、エラーを返したり、予告なくレスポンスのフォーマットを変えたりします",
+        "**冪等性** — 同じ webhook が 2 回、3 回、5 回届くことがあります。システムは 1 回だけ処理しなければなりません",
+        "**実際のお金** — バグがあると顧客に二重に課金したり、まったく課金しなかったりします。簡単な「ロールバック」はありません",
+        "**複数のプロバイダー** — 各ゲートウェイには独自の API、webhook フォーマット、サンドボックスの挙動があります"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "うまくいく戦略は、**4 つのレイヤー**でテストすることです：ユニット、契約、サンドボックスとの結合、レジリエンス。"
+    },
+    {
+      "type": "heading",
+      "text": "レイヤー 1：ユニットテスト — 隔離されたビジネスロジック",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "最初のレイヤーは、どのゲートウェイにも触れずにロジックをテストします。ここでテストするのは、金額の計算、ステータスの検証、ビジネスルール（キャンセルできるか？返金できるか？）、そして冪等性のロジックです。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// ユニットテスト — 冪等性のロジック\ndescribe('PaymentEventProcessor', () => {\n  it('should process a new event', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    const event = createPaymentEvent({ externalId: 'evt_123', type: 'payment.confirmed' })\n\n    const result = await processor.handle(event)\n\n    expect(result.status).toBe('processed')\n    expect(mockDb.paymentEvent.create).toHaveBeenCalledWith(\n      expect.objectContaining({ idempotencyKey: 'evt_123:payment.confirmed' })\n    )\n  })\n\n  it('should skip duplicate events', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    mockDb.paymentEvent.findUnique.mockResolvedValue({ id: 'existing' })\n\n    const event = createPaymentEvent({ externalId: 'evt_123', type: 'payment.confirmed' })\n    const result = await processor.handle(event)\n\n    expect(result.status).toBe('already_processed')\n    expect(mockDb.order.update).not.toHaveBeenCalled()\n  })\n\n  it('should reject invalid status transitions', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    mockDb.order.findUnique.mockResolvedValue({ paymentStatus: 'REFUNDED' })\n\n    const event = createPaymentEvent({ type: 'payment.confirmed' })\n\n    await expect(processor.handle(event)).rejects.toThrow('Invalid transition: REFUNDED → CONFIRMED')\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "ここでのモックは**データベース**であって、ゲートウェイではありません。処理するかどうかの判断、ステータス遷移が妥当かどうか、idempotency key がすでに存在するかどうか — それらはすべて自分のコードであり、カバーされている必要があります。"
+    },
+    {
+      "type": "heading",
+      "text": "レイヤー 2：契約テスト — ゲートウェイのアダプター",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "**adapter pattern** を使っているなら（複数のゲートウェイと連携するなら使うべきです）、各アダプターには契約テストが必要です。このテストは、アダプターがゲートウェイのペイロードを正しい内部フォーマットに変換することを保証します。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 契約テスト — 各アダプターは同じ出力フォーマットに従う\ndescribe('AsaasWebhookAdapter', () => {\n  it('should parse a PIX payment confirmation', () => {\n    const rawPayload = {\n      event: 'PAYMENT_CONFIRMED',\n      payment: {\n        id: 'pay_abc123',\n        value: 99.90,\n        billingType: 'PIX',\n        status: 'CONFIRMED',\n        externalReference: 'order_456',\n      },\n    }\n\n    const adapter = new AsaasWebhookAdapter()\n    const event = adapter.parse(rawPayload)\n\n    expect(event).toEqual({\n      provider: 'asaas',\n      externalId: 'pay_abc123',\n      type: 'payment.confirmed',\n      amount: 99.90,\n      method: 'PIX',\n      orderId: 'order_456',\n    })\n  })\n})\n\ndescribe('MercadoPagoWebhookAdapter', () => {\n  it('should parse a PIX payment confirmation', () => {\n    const rawPayload = {\n      action: 'payment.updated',\n      data: { id: '12345' },\n    }\n    // Mercado Pago は ID だけを送る — 詳細を取得する必要がある\n    const paymentDetails = {\n      id: 12345,\n      status: 'approved',\n      transaction_amount: 99.90,\n      payment_method_id: 'pix',\n      external_reference: 'order_456',\n    }\n\n    const adapter = new MercadoPagoWebhookAdapter()\n    const event = adapter.parse(rawPayload, paymentDetails)\n\n    expect(event).toEqual({\n      provider: 'mercadopago',\n      externalId: '12345',\n      type: 'payment.confirmed',\n      amount: 99.90,\n      method: 'PIX',\n      orderId: 'order_456',\n    })\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "重要なポイント：どのゲートウェイが送信したかに関係なく、出力は**常に同じフォーマット**です。明日 4 つ目のゲートウェイを追加しても、契約テストがアダプターは同じ形を生成することを保証します。"
+    },
+    {
+      "type": "heading",
+      "text": "レイヤー 3：サンドボックスとの結合テスト",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ここではゲートウェイの本物の API を叩きます — ただしサンドボックス環境で。各プロバイダーには独自のものがあります："
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Stripe：** `sk_test_*` キーを使ったテストモード。特別なカード（成功用の `4242...`、拒否用の `4000000000000002`）であらゆるシナリオをシミュレートできます",
+        "**Asaas：** `sandbox.asaas.com` のサンドボックス環境。お金を動かさずに PIX、ボレト、カードをシミュレートします",
+        "**Mercado Pago：** テストユーザーを使ったテスト用クレデンシャル。より制約が多く — 一部の PIX フローはサンドボックスで完全には動作しません"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "サンドボックスとの結合テストは**フロー全体**を検証します：請求の作成 → webhook の受信 → 決済の処理 → 注文の更新。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// サンドボックスとの結合テスト — フロー全体\ndescribe('Payment Flow (Sandbox)', () => {\n  it('should create a PIX charge and process the webhook', async () => {\n    // 1. サンドボックスで請求を作成する\n    const charge = await paymentService.createCharge({\n      provider: 'asaas',\n      amount: 49.90,\n      method: 'PIX',\n      orderId: 'test_order_001',\n    })\n\n    expect(charge.externalId).toBeDefined()\n    expect(charge.pixQrCode).toBeDefined()\n    expect(charge.status).toBe('PENDING')\n\n    // 2. 確認 webhook をシミュレートする（サンドボックスはこれを許可する）\n    const webhookPayload = buildSandboxWebhook('asaas', {\n      paymentId: charge.externalId,\n      event: 'PAYMENT_CONFIRMED',\n    })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .set('asaas-access-token', SANDBOX_WEBHOOK_TOKEN)\n      .send(webhookPayload)\n\n    expect(response.status).toBe(200)\n\n    // 3. 注文が更新されたことを検証する\n    const order = await db.order.findUnique({ where: { id: 'test_order_001' } })\n    expect(order.paymentStatus).toBe('CONFIRMED')\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "**CI でのサンドボックステストには注意してください。** これらはネットワークと外部サービスに依存します。Asaas のサンドボックスが落ちていれば、CI が壊れます。解決策は、これらのテストを別ジョブで、リトライと余裕のあるタイムアウト付きで実行し、それらでマージをブロックしないことです。"
+    },
+    {
+      "type": "heading",
+      "text": "レイヤー 4：レジリエンステスト — うまくいかないときに何が起きるか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "これはほとんどの人が無視するレイヤーです。ハッピーパスをテストするだけでは足りません — 次のような場合に何が起きるかをテストする必要があります："
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "ゲートウェイが請求の途中で**タイムアウト**を返す",
+        "webhook が請求作成のレスポンスより**先に**届く（本物のレースコンディション）",
+        "webhook が**重複して**届く — 2 秒間に 3 回",
+        "webhook が**無効な署名**で届く（不正アクセスの試み）",
+        "ゲートウェイが予告なく**ペイロードのフォーマット**を変える（Mercado Pago で実際に起きました）",
+        "PIX が**期限切れ**になり、顧客が後から支払おうとする"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// レジリエンステスト\ndescribe('Payment Resilience', () => {\n  it('should handle duplicate webhooks gracefully', async () => {\n    const webhook = buildWebhook({ externalId: 'pay_dup', type: 'payment.confirmed' })\n\n    // 連続して 3 回送信する\n    const results = await Promise.all([\n      request(app).post('/api/webhooks/asaas').send(webhook),\n      request(app).post('/api/webhooks/asaas').send(webhook),\n      request(app).post('/api/webhooks/asaas').send(webhook),\n    ])\n\n    // すべて 200 を返す（ack）\n    results.forEach(r => expect(r.status).toBe(200))\n\n    // しかし注文は 1 回だけ更新された\n    const events = await db.paymentEvent.findMany({\n      where: { externalId: 'pay_dup' },\n    })\n    expect(events).toHaveLength(1)\n  })\n\n  it('should reject webhooks with invalid signature', async () => {\n    const webhook = buildWebhook({ externalId: 'pay_fake' })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .set('asaas-access-token', 'invalid_token')\n      .send(webhook)\n\n    expect(response.status).toBe(401)\n  })\n\n  it('should handle expired PIX without crashing', async () => {\n    const webhook = buildWebhook({\n      externalId: 'pay_expired',\n      type: 'payment.expired',\n    })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .send(webhook)\n\n    expect(response.status).toBe(200)\n\n    const order = await db.order.findUnique({ where: { externalPaymentId: 'pay_expired' } })\n    expect(order.paymentStatus).toBe('EXPIRED')\n  })\n})"
+    },
+    {
+      "type": "heading",
+      "text": "署名の検証：絶対に飛ばさない",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "各ゲートウェイは webhook を異なる方法で署名します。検証しなければ、あなたの webhook URL を見つけた誰もが決済を偽装できます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// プロバイダーごとの署名検証\nfunction validateWebhookSignature(provider: string, req: Request): boolean {\n  switch (provider) {\n    case 'stripe': {\n      // Stripe は 'stripe-signature' ヘッダーで HMAC-SHA256 を使う\n      const sig = req.headers['stripe-signature'] as string\n      try {\n        stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)\n        return true\n      } catch {\n        return false\n      }\n    }\n    case 'asaas': {\n      // Asaas は 'asaas-access-token' ヘッダーで固定トークンを使う\n      return req.headers['asaas-access-token'] === ASAAS_WEBHOOK_TOKEN\n    }\n    case 'mercadopago': {\n      // Mercado Pago は 'x-signature' ヘッダーで HMAC-SHA256 を使う\n      const xSignature = req.headers['x-signature'] as string\n      const xRequestId = req.headers['x-request-id'] as string\n      const dataId = req.query['data.id'] as string\n      const computed = crypto\n        .createHmac('sha256', MP_WEBHOOK_SECRET)\n        .update(`id:${dataId};request-id:${xRequestId};ts:${extractTs(xSignature)};`)\n        .digest('hex')\n      return extractHash(xSignature) === computed\n    }\n    default:\n      return false\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "各検証を、正しい署名と誤った署名の両方でテストしてください。それが最初の防衛線です。"
+    },
+    {
+      "type": "heading",
+      "text": "モックしてはいけないもの",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "私が使っている実践的なルール："
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "ユニットテストと契約テストでは**ゲートウェイをモックする** — テストしているのは自分のロジックです",
+        "結合テストでは**ゲートウェイをモックしない** — サンドボックスを使います。ゲートウェイのモックは誤った安心感を与えます",
+        "結合テストでは**データベースを決してモックしない** — 本物のデータベース（テスト用 PostgreSQL）を使います。データベースのモックはトランザクション、制約、レースコンディションのバグを隠します",
+        "期限切れのテストでは**時間をモックする** — 30 分待たずに PIX の期限切れをシミュレートするために `jest.useFakeTimers()` を使います"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "本番で使っているテスト構成",
+      "level": 2
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "tests/\n├── unit/\n│   ├── payment-event-processor.test.ts    # 冪等性のロジック\n│   ├── status-machine.test.ts             # 状態遷移\n│   └── charge-calculator.test.ts          # 金額の計算\n├── contract/\n│   ├── asaas-adapter.test.ts              # Asaas の webhook フォーマット\n│   ├── mercadopago-adapter.test.ts        # MP の webhook フォーマット\n│   └── stripe-adapter.test.ts             # Stripe の webhook フォーマット\n├── integration/\n│   ├── payment-flow.test.ts               # サンドボックスでのフロー全体\n│   └── webhook-endpoint.test.ts           # 本物の HTTP エンドポイント\n└── resilience/\n    ├── duplicate-webhook.test.ts           # 負荷下での冪等性\n    ├── invalid-signature.test.ts           # 不正の拒否\n    └── expired-payment.test.ts            # 期限切れの PIX/ボレト"
+    },
+    {
+      "type": "heading",
+      "text": "本番からの教訓",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**サンドボックスは本番ではない。** Mercado Pago は PIX のシナリオでサンドボックスと本番で挙動が異なります。webhook のフォーマットが変わったために、サンドボックスで通っていたテストが本番で失敗した経験があります。解決策：本物のペイロードのスナップショットを使った契約テスト",
+        "**webhook の重複は例外ではなくルールである。** Stripe は「at least once delivery」を保証します。Asaas も同様です。重複をテストしなければ、顧客に二重に課金します。実際に起きるのを見ました",
+        "**webhook のレースコンディション。** webhook は請求作成のレスポンスが返ってくる前に届くことがあります。コードがまだ存在しないデータベースのレコードに依存していると、エラーになります。解決策：webhook 処理でのバックオフ付きリトライ",
+        "**すべてをログに記録する。** 本番で決済がうまくいかなかったとき、タイムラインを再構築する必要があります。受信したペイロード、署名の有効/無効、idempotency key、以前のステータス、新しいステータス、トランザクションの結果をログに記録します。これがなければ、デバッグは不可能です",
+        "**webhook のレスポンス時間を監視する。** エンドポイントが応答に 5 秒以上かかると、ゲートウェイはリトライします。即座の ack + バックグラウンドでの処理が、うまくいくパターンです"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "本番に出る前のチェックリスト",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "各プロバイダーに対して署名の検証を実装した",
+        "重複した webhook で冪等性をテストした",
+        "状態遷移を検証した（すでに 'refunded' なら 'confirmed' を受け付けない）",
+        "PIX/ボレトのフローをサンドボックスでエンドツーエンドにテストした",
+        "決済の期限切れを処理した（PIX が期限切れ、ボレトが支払期限超過）",
+        "コンテキスト付きの構造化ログ（orderId、provider、externalId）",
+        "webhook エンドポイントが 1 秒未満で応答する（ack + バックグラウンド処理）",
+        "定期的なリコンサイル（reconciliation）を実装した（ゲートウェイとすべて一致するか確認する）"
+      ]
+    }
   ]
 }

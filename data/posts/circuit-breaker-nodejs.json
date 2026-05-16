@@ -681,5 +681,232 @@
       "type": "paragraph",
       "text": "La diferencia entre un sistema que cae junto con sus dependencias y uno que degrada graciosamente es casi siempre un Circuit Breaker bien configurado."
     }
+  ],
+  "title_jp": "Node.js における Circuit Breaker：システムを連鎖障害から守る",
+  "description_jp": "不安定な外部 API に対処するために Node.js アプリケーションで Circuit Breaker パターンを実装する方法 — state machine、フォールバック、リトライ、本番での監視。",
+  "date_jp": "2026年4月16日",
+  "readTime_jp": "9分で読めます",
+  "tag_jp": "アーキテクチャ",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "アプリケーションが外部 API — 決済プロバイダー、マーケットプレイス、配送サービス — に依存しているとき、システムの一部が自分のコントロール外にあることを受け入れていることになります。これらの依存先は遅くなったり、エラーを返したり、単に応答しなくなったりします。保護がなければ、不安定な外部 API がシステム全体を落とす可能性があります。**Circuit Breaker** はそれを防ぐパターンです。"
+    },
+    {
+      "type": "heading",
+      "text": "問題：連鎖障害",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "現実的なシナリオを想像してください：チェックアウト中に、アプリケーションがマーケットプレイスの API を呼び出します。通常この呼び出しは 200ms かかります。しかしマーケットプレイスに問題があり、応答に 30 秒かかり始めます — あるいは単に応答しません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "保護がない場合に起きること："
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "ユーザーのチェックアウトがマーケットプレイスの応答を待ってフリーズする",
+        "待っている間に新しいリクエストが届き、それらもフリーズする",
+        "サーバーのコネクションプールが枯渇する",
+        "サーバーが**すべての**ユーザーへの応答を停止する — マーケットプレイスに依存しているユーザーだけではなく",
+        "ひとつの外部依存先のせいでシステム全体がダウンする"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "これが**連鎖障害**です。不安定な依存先が障害をシステム全体に伝播させます。Circuit Breaker はこの伝播を断ち切ります。"
+    },
+    {
+      "type": "heading",
+      "text": "Circuit Breaker の仕組み",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "このパターンは電気のブレーカーのように機能します。外部依存先への呼び出しを監視し、3 つの状態を持ちます："
+    },
+    {
+      "type": "list",
+      "items": [
+        "**CLOSED（閉）** — 通常の状態。リクエストは外部 API へ通ります。失敗が threshold を超えて蓄積すると、OPEN へ遷移します。",
+        "**OPEN（開）** — 保護の状態。リクエストは API へ**行きません**。即座にフォールバックを返します。クールダウン期間の後、HALF-OPEN へ遷移します。",
+        "**HALF-OPEN（半開）** — テストの状態。テストとして**1 つ**のリクエストを通します。成功すれば CLOSED に戻ります。失敗すれば OPEN に戻ります。"
+      ]
+    },
+    {
+      "type": "image",
+      "src": "/circut-break.png",
+      "alt": "Circuit Breaker の state machine の図 — CLOSED、OPEN、HALF-OPEN の状態と遷移"
+    },
+    {
+      "type": "heading",
+      "text": "TypeScript での実装",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "任意の外部呼び出しをラップできる汎用的な Circuit Breaker を実装します。異なる依存先に対して再利用できるようにするのが狙いです。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN'\n\ninterface CircuitBreakerOptions {\n  failureThreshold: number  // 開く前の失敗回数\n  cooldownMs: number        // テストする前の OPEN での時間\n  timeoutMs: number         // リクエストごとのタイムアウト\n}\n\nclass CircuitBreaker {\n  private state: CircuitState = 'CLOSED'\n  private failureCount = 0\n  private lastFailureTime = 0\n  private readonly options: CircuitBreakerOptions\n\n  constructor(options: Partial<CircuitBreakerOptions> = {}) {\n    this.options = {\n      failureThreshold: options.failureThreshold ?? 5,\n      cooldownMs: options.cooldownMs ?? 60_000,\n      timeoutMs: options.timeoutMs ?? 10_000,\n    }\n  }\n\n  async execute<T>(fn: () => Promise<T>, fallback: () => T): Promise<T> {\n    if (this.state === 'OPEN') {\n      if (Date.now() - this.lastFailureTime >= this.options.cooldownMs) {\n        this.state = 'HALF_OPEN'\n      } else {\n        return fallback()\n      }\n    }\n\n    try {\n      const result = await this.withTimeout(fn())\n      this.onSuccess()\n      return result\n    } catch (error) {\n      this.onFailure()\n      return fallback()\n    }\n  }\n\n  private onSuccess() {\n    this.failureCount = 0\n    this.state = 'CLOSED'\n  }\n\n  private onFailure() {\n    this.failureCount++\n    this.lastFailureTime = Date.now()\n\n    if (this.failureCount >= this.options.failureThreshold) {\n      this.state = 'OPEN'\n    }\n  }\n\n  private withTimeout<T>(promise: Promise<T>): Promise<T> {\n    return Promise.race([\n      promise,\n      new Promise<never>((_, reject) =>\n        setTimeout(() => reject(new Error('Timeout')), this.options.timeoutMs)\n      ),\n    ])\n  }\n\n  getState(): CircuitState {\n    return this.state\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "実践的な使い方：API 呼び出しを守る",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "クラスができたので、任意の外部呼び出しをラップするのは簡単です："
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// 依存先ごとに 1 つの circuit breaker\nconst marketplaceBreaker = new CircuitBreaker({\n  failureThreshold: 3,   // 3 回の失敗で開く\n  cooldownMs: 30_000,    // テストする前に 30 秒待つ\n  timeoutMs: 5_000,      // 呼び出しごとに 5 秒のタイムアウト\n})\n\nconst paymentBreaker = new CircuitBreaker({\n  failureThreshold: 2,   // より敏感に — 決済だから\n  cooldownMs: 60_000,    // 長めのクールダウン\n  timeoutMs: 10_000,     // 長めのタイムアウト — 決済プロバイダーは遅い\n})\n\n// 保護された呼び出し\nasync function getProductFromMarketplace(productId: string) {\n  return marketplaceBreaker.execute(\n    // 実際の呼び出し\n    () => fetch(`https://api.marketplace.com/products/${productId}`)\n      .then(res => res.json()),\n    // circuit が開いているときのフォールバック\n    () => getCachedProduct(productId)\n  )\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "重要なポイント：**各外部依存先は独自の Circuit Breaker を持つべきです**。マーケットプレイスが落ちると、マーケットプレイスの circuit が開きます — しかし決済プロバイダーの circuit は閉じたまま、通常どおり動作し続けます。"
+    },
+    {
+      "type": "heading",
+      "text": "フォールバック戦略",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "フォールバックとは、circuit が開いているときにシステムが返すものです。これはもっともプロダクト的な判断を要する部分です。なぜなら、ユーザーが劣化に気づかないように、フォールバックは**十分に役立つ**必要があるからです。いくつかの戦略："
+    },
+    {
+      "type": "list",
+      "items": [
+        "**キャッシュ** — 最後の有効なレスポンスを返す。変化の少ないデータ（商品カタログ、設定）に向いています。",
+        "**デフォルト値** — 事前に定義された安全な値を返す。配送計算（「送料は後ほど確定」）や在庫（「在庫状況をご確認ください」）に向いています。",
+        "**機能の縮退** — チェックアウトはマーケットプレイスの検証なしで動作するが、価格は後で確定されるとユーザーに通知する。",
+        "**後でリトライするためのキュー** — サービスが復旧したときに再試行するために操作を保存する。即時のレスポンスを必要としない操作に向いています。"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// キャッシュを使ったフォールバック\nconst productCache = new Map<string, Product>()\n\nasync function getProduct(id: string): Promise<Product> {\n  return marketplaceBreaker.execute(\n    async () => {\n      const product = await fetchFromMarketplace(id)\n      productCache.set(id, product) // 成功時にキャッシュを更新する\n      return product\n    },\n    () => {\n      const cached = productCache.get(id)\n      if (cached) return cached\n      // キャッシュなし — 在庫なしフラグ付きの商品を返す\n      return { id, name: 'Produto indisponível', available: false }\n    }\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "リトライと組み合わせる",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Circuit Breaker とリトライは異なる問題を解決します："
+    },
+    {
+      "type": "list",
+      "items": [
+        "**リトライ** — 単発の失敗向け（あるリクエストが失敗したが、次はおそらく成功する）。指数バックオフを使います。",
+        "**Circuit Breaker** — 継続的な失敗向け（サービスがダウンしていて、試し続けても無意味）。システム全体を守ります。"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "正しい組み合わせ：**circuit breaker の内側でリトライする**。circuit はリトライが機能しているかを監視します。リトライしても呼び出しが失敗し続けるなら、circuit が開きます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function fetchWithRetry<T>(\n  fn: () => Promise<T>,\n  maxRetries = 3\n): Promise<T> {\n  let lastError: Error | null = null\n\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    try {\n      return await fn()\n    } catch (error) {\n      lastError = error as Error\n      // 指数バックオフ：1s、2s、4s\n      await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000))\n    }\n  }\n\n  throw lastError\n}\n\n// circuit breaker の内側でリトライ\nasync function getProductReliably(id: string) {\n  return marketplaceBreaker.execute(\n    () => fetchWithRetry(() => fetchFromMarketplace(id), 3),\n    () => getCachedProduct(id)\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "監視：circuit がいつ開いたかを知る",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "静かに開く circuit breaker は危険です — 外部サービスがいつ不安定になっているかを知る必要があります。状態遷移のイベントを追加することでこれが解決します："
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "class ObservableCircuitBreaker extends CircuitBreaker {\n  private name: string\n\n  constructor(name: string, options?: Partial<CircuitBreakerOptions>) {\n    super(options)\n    this.name = name\n  }\n\n  async execute<T>(fn: () => Promise<T>, fallback: () => T): Promise<T> {\n    const previousState = this.getState()\n    const result = await super.execute(fn, fallback)\n    const currentState = this.getState()\n\n    if (previousState !== currentState) {\n      this.logTransition(previousState, currentState)\n    }\n\n    return result\n  }\n\n  private logTransition(from: string, to: string) {\n    const message = `[CircuitBreaker:${this.name}] ${from} → ${to}`\n\n    if (to === 'OPEN') {\n      console.error(message) // 開いたときにアラートを出す\n      // monitoring へ送る（Datadog、Sentry など）\n    } else if (to === 'CLOSED') {\n      console.info(message) // 復旧したときに通知する\n    } else {\n      console.warn(message) // half-open は遷移\n    }\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "これにより、外部サービスがいつ失敗し始め、いつ復旧するかが正確に分かります。本番では、これらのログはアラートシステムへ送るべきです — 決済プロバイダーの circuit が開いたら、誰かに通知される必要があります。"
+    },
+    {
+      "type": "heading",
+      "text": "現実のシナリオ：一貫性のないマーケットプレイス API",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "私が直面したシナリオ：あるマーケットプレイスの API が商品データを一貫性なく返していました。あるときは 200ms で動作し、あるときは 15 秒かかり、あるときは 500 を返しました。チェックアウトはこの API に価格と在庫の検証を依存していました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策はこうでした："
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "失敗 3 回の threshold とクールダウン 30 秒の **Circuit Breaker**",
+        "3 秒の**アグレッシブなタイムアウト**（3 秒で応答しなければ失敗とみなす）",
+        "**フォールバックとしてのキャッシュ** — 商品の最後の有効なレスポンス、「価格は確定待ち」のフラグ付き",
+        "**後でのリコンサイル** — キャッシュの価格がまだ正しいかを 5 分ごとに確認するジョブ"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "結果：チェックアウトはマーケットプレイスのせいで二度とフリーズしませんでした。API が不安定なとき、ユーザーはさりげない注意書きとともにキャッシュの価格を見ていました。正常に戻ると、circuit が閉じ、すべてがリアルタイムで動作するようになりました。"
+    },
+    {
+      "type": "heading",
+      "text": "Circuit Breaker を使わないとき",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "すべての外部呼び出しに circuit breaker が必要なわけではありません："
+    },
+    {
+      "type": "list",
+      "items": [
+        "**すでにレジリエントな呼び出し** — 依存先がネイティブのリトライと高い SLA を持つ場合（例：AWS S3）、circuit のオーバーヘッドは不要かもしれません。",
+        "**キュー付きの冪等な操作** — すでにリトライ付きのキューを使っている場合（例：webhook 処理）、キューがすでに circuit の役割を果たしています。",
+        "**クリティカルでない呼び出し** — analytics、外部ロギング、トラッキング。失敗してもユーザーに影響しません。"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "まとめ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Circuit Breaker は、外部サービスに依存するアプリケーションにとってもっとも重要なツールのひとつです。パターン自体はシンプルです — 3 つの状態を持つ state machine です。エンジニアリングを要するのは次の点です："
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**threshold を調整する** — 開く前に何回の失敗を許すか、クールダウンをどれだけにするか",
+        "**役立つフォールバックを設計する** — キャッシュ、デフォルト値、機能の縮退",
+        "**遷移を監視する** — いつ開いていつ閉じたかを知る",
+        "**依存先ごとに 1 つの breaker** — 障害を隔離し、ひとつの不安定な API が他に影響しないようにする",
+        "**リトライと組み合わせる** — 単発の失敗にはリトライ、継続的な失敗には circuit"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "依存先とともにダウンするシステムと、優雅に劣化するシステムの違いは、ほとんど常に、適切に設定された Circuit Breaker です。"
+    }
   ]
 }

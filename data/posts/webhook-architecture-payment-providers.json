@@ -449,48 +449,440 @@
     }
   ],
   "blocks_es": [
-    { "type": "paragraph", "text": "Integrar pagos en un producto real va mucho más allá de seguir la documentación del proveedor. Cuando hay dinero real fluyendo por el sistema, cada falla silenciosa es un problema — cobros duplicados, estados inconsistentes o ventas que nunca fueron confirmadas. En este artículo presento la arquitectura que utilizo para recibir y procesar webhooks de proveedores como Stripe, Mercado Pago y Asaas en aplicaciones Node.js." },
-    { "type": "heading", "text": "El problema real", "level": 2 },
-    { "type": "paragraph", "text": "Los webhooks son la forma en que los proveedores de pago notifican a tu aplicación sobre eventos — un PIX confirmado, una suscripción cancelada, una disputa abierta. El problema es que este mecanismo es **inherentemente no confiable**: los webhooks pueden llegar duplicados, fuera de orden, con atraso o simplemente no llegar." },
-    { "type": "paragraph", "text": "Si tu aplicación no está preparada para manejar estos escenarios, vas a descubrir el problema cuando un cliente reclame que pagó pero no recibió acceso — o peor, cuando finanzas note que los números no cuadran." },
-    { "type": "paragraph", "text": "El diagrama a continuación muestra el flujo completo que vamos a construir en este artículo:" },
-    { "type": "image", "src": "/payment-webhook.png", "alt": "Diagrama del ciclo de vida de un webhook de pago — validación, idempotencia, cola, worker, retry y reconciliación" },
-    { "type": "heading", "text": "Validación de firma", "level": 2 },
-    { "type": "paragraph", "text": "La primera capa de seguridad es validar que el webhook realmente vino del proveedor. Cada proveedor implementa esto de forma diferente:" },
-    { "type": "list", "items": ["**Stripe:** envía un header `Stripe-Signature` con timestamp + HMAC-SHA256 del body", "**Mercado Pago:** envía `x-signature` con hash y query params, requiere validación vía API", "**Asaas:** envía un token en el header que debe compararse con el configurado en el panel"] },
-    { "type": "paragraph", "text": "La regla es simple: **nunca procese un webhook sin validar la firma**. Sin esto, cualquier persona puede enviar un POST a tu endpoint y simular una confirmación de pago." },
-    { "type": "code", "language": "typescript", "code": "import Stripe from 'stripe'\n\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\n\nexport async function POST(req: Request) {\n  const body = await req.text()\n  const signature = req.headers.get('stripe-signature')!\n\n  let event: Stripe.Event\n  try {\n    event = stripe.webhooks.constructEvent(\n      body,\n      signature,\n      process.env.STRIPE_WEBHOOK_SECRET!\n    )\n  } catch (err) {\n    return new Response('Invalid signature', { status: 400 })\n  }\n\n  // Procesar evento validado\n  await processEvent(event)\n  return new Response('OK', { status: 200 })\n}" },
-    { "type": "heading", "text": "Idempotencia: evitando procesamiento duplicado", "level": 2 },
-    { "type": "paragraph", "text": "Los proveedores de pago reenvían webhooks cuando no reciben un 2xx de respuesta. Esto significa que el mismo evento puede llegar **múltiples veces**. Si tu handler no es idempotente, puedes acreditar el saldo de un cliente dos veces o enviar dos emails de confirmación." },
-    { "type": "paragraph", "text": "La solución es almacenar el ID del evento y verificar antes de procesar:" },
-    { "type": "code", "language": "typescript", "code": "async function processEvent(event: PaymentEvent) {\n  // Verificar si ya fue procesado\n  const existing = await db.webhookEvents.findUnique({\n    where: { eventId: event.id }\n  })\n\n  if (existing) {\n    return // Ya procesado, ignorar\n  }\n\n  // Registrar evento antes de procesar\n  await db.webhookEvents.create({\n    data: {\n      eventId: event.id,\n      provider: 'stripe',\n      type: event.type,\n      processedAt: new Date()\n    }\n  })\n\n  // Procesar con seguridad\n  switch (event.type) {\n    case 'payment_intent.succeeded':\n      await handlePaymentSuccess(event.data)\n      break\n    case 'payment_intent.payment_failed':\n      await handlePaymentFailure(event.data)\n      break\n  }\n}" },
-    { "type": "heading", "text": "Procesamiento asíncrono: ack inmediato", "level": 2 },
-    { "type": "paragraph", "text": "Una regla crítica: **responda 200 lo más rápido posible**. Si tu handler demora en responder (porque está actualizando la base, enviando email, llamando otra API), el proveedor va a considerar que falló y reenviará — causando más carga y posibles duplicados." },
-    { "type": "paragraph", "text": "El patrón correcto es **ack inmediato + procesamiento en background**:" },
-    { "type": "code", "language": "typescript", "code": "export async function POST(req: Request) {\n  const event = await validateAndParse(req)\n  if (!event) {\n    return new Response('Invalid', { status: 400 })\n  }\n\n  // Guardar en cola para procesamiento async\n  await db.webhookQueue.create({\n    data: {\n      eventId: event.id,\n      payload: JSON.stringify(event),\n      status: 'pending'\n    }\n  })\n\n  // Responder inmediatamente\n  return new Response('OK', { status: 200 })\n}\n\n// Worker separado procesa la cola\nasync function processQueue() {\n  const pending = await db.webhookQueue.findMany({\n    where: { status: 'pending' },\n    orderBy: { createdAt: 'asc' }\n  })\n\n  for (const item of pending) {\n    try {\n      await processEvent(JSON.parse(item.payload))\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: { status: 'processed' }\n      })\n    } catch (err) {\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: {\n          status: 'failed',\n          retryCount: { increment: 1 },\n          lastError: err.message\n        }\n      })\n    }\n  }\n}" },
-    { "type": "heading", "text": "Webhooks fuera de orden", "level": 2 },
-    { "type": "paragraph", "text": "Un escenario real que ocurre con frecuencia: el webhook de `payment.failed` llega **antes** del `payment.created`. O el proveedor envía `refund.completed` antes de `payment.succeeded`. Si tu sistema depende de un orden específico, va a fallar." },
-    { "type": "paragraph", "text": "Dos enfoques para manejar esto:" },
-    { "type": "list", "items": ["**State machine:** defina transiciones válidas para cada estado de pago. Si un evento intenta una transición inválida (ej: refund antes de success), encolar para reprocesamiento posterior.", "**Timestamp del proveedor:** use el timestamp del evento (no el de recepción) para determinar cuál estado es más reciente. Ignore eventos más antiguos que el estado actual."] },
-    { "type": "code", "language": "typescript", "code": "async function handlePaymentUpdate(event: PaymentEvent) {\n  const payment = await db.payments.findUnique({\n    where: { providerPaymentId: event.paymentId }\n  })\n\n  if (!payment) {\n    // Pago aún no existe, encolar para retry\n    await enqueueForRetry(event)\n    return\n  }\n\n  // Ignorar eventos más antiguos que el estado actual\n  if (event.timestamp <= payment.lastEventTimestamp) {\n    return\n  }\n\n  // Validar transición de estado\n  const validTransitions: Record<string, string[]> = {\n    pending: ['confirmed', 'failed', 'cancelled'],\n    confirmed: ['refunded', 'disputed'],\n    failed: ['pending'] // retry del proveedor\n  }\n\n  if (!validTransitions[payment.status]?.includes(event.newStatus)) {\n    await enqueueForRetry(event)\n    return\n  }\n\n  await db.payments.update({\n    where: { id: payment.id },\n    data: {\n      status: event.newStatus,\n      lastEventTimestamp: event.timestamp\n    }\n  })\n}" },
-    { "type": "heading", "text": "PIX: diferencias entre proveedores", "level": 2 },
-    { "type": "paragraph", "text": "PIX es el medio de pago más utilizado en Brasil, pero cada proveedor implementa la confirmación de forma diferente:" },
-    { "type": "list", "items": ["**Stripe:** no ofrece PIX nativamente en Brasil (usa transferencias bancarias como alternativa)", "**Mercado Pago:** la confirmación de PIX generalmente llega en segundos vía webhook, pero puede atrasar hasta minutos en horarios pico", "**Asaas:** la confirmación puede tomar de segundos a minutos, y el webhook de confirmación a veces llega antes del webhook de creación"] },
-    { "type": "paragraph", "text": "En la práctica, esto significa que **no puedes confiar en un orden específico** de eventos para PIX. El sistema necesita ser resiliente a confirmaciones que llegan antes de la creación, atrasos largos y casos donde el webhook simplemente no llega." },
-    { "type": "heading", "text": "Reconciliación: cuando el estado diverge", "level": 2 },
-    { "type": "paragraph", "text": "Incluso con todas las protecciones anteriores, habrá momentos en que el estado local de tu aplicación y el estado en el proveedor van a divergir. Un webhook que nunca llegó, un bug en el handler, un deploy que tumbó el worker por algunos minutos." },
-    { "type": "paragraph", "text": "La solución es un **job de reconciliación** que corre periódicamente:" },
-    { "type": "code", "language": "typescript", "code": "async function reconcilePayments() {\n  // Buscar pagos pendientes hace más de 30 minutos\n  const stalePayments = await db.payments.findMany({\n    where: {\n      status: 'pending',\n      createdAt: {\n        lt: new Date(Date.now() - 30 * 60 * 1000)\n      }\n    }\n  })\n\n  for (const payment of stalePayments) {\n    // Consultar estado directamente en el proveedor\n    const providerStatus = await getProviderStatus(\n      payment.provider,\n      payment.providerPaymentId\n    )\n\n    if (providerStatus !== payment.status) {\n      await db.payments.update({\n        where: { id: payment.id },\n        data: { status: providerStatus }\n      })\n\n      // Log para auditoría\n      await db.reconciliationLog.create({\n        data: {\n          paymentId: payment.id,\n          previousStatus: payment.status,\n          newStatus: providerStatus,\n          reason: 'reconciliation_job'\n        }\n      })\n    }\n  }\n}" },
-    { "type": "paragraph", "text": "Este job es la **red de seguridad final**. Garantiza que incluso cuando todo falla — webhooks perdidos, bugs en el handler, proveedor caído — el sistema eventualmente converge al estado correcto." },
-    { "type": "heading", "text": "Dead letter queue: qué hacer cuando falla", "level": 2 },
-    { "type": "paragraph", "text": "Cuando el procesamiento de un webhook falla repetidamente (3-5 intentos), debe ir a una **dead letter queue** — una tabla separada para eventos que necesitan intervención manual o investigación." },
-    { "type": "code", "language": "typescript", "code": "async function processWithRetry(item: WebhookQueueItem) {\n  const MAX_RETRIES = 5\n\n  if (item.retryCount >= MAX_RETRIES) {\n    // Mover a dead letter queue\n    await db.deadLetterQueue.create({\n      data: {\n        eventId: item.eventId,\n        payload: item.payload,\n        lastError: item.lastError,\n        failedAt: new Date()\n      }\n    })\n\n    await db.webhookQueue.delete({\n      where: { id: item.id }\n    })\n\n    // Alertar al equipo\n    await notify(`Webhook ${item.eventId} falló ${MAX_RETRIES}x y fue movido a DLQ`)\n    return\n  }\n\n  // Intentar procesar con backoff exponencial\n  try {\n    await processEvent(JSON.parse(item.payload))\n  } catch (err) {\n    const nextRetry = new Date(\n      Date.now() + Math.pow(2, item.retryCount) * 1000\n    )\n    await db.webhookQueue.update({\n      where: { id: item.id },\n      data: {\n        retryCount: { increment: 1 },\n        lastError: err.message,\n        nextRetryAt: nextRetry\n      }\n    })\n  }\n}" },
-    { "type": "heading", "text": "Degradación graciosa", "level": 2 },
-    { "type": "paragraph", "text": "Cuando un proveedor de pagos está caído, tu aplicación no puede simplemente fallar. El usuario necesita saber que el pago está siendo procesado, aunque la confirmación demore. Algunas prácticas:" },
-    { "type": "list", "items": ["**Estado intermedio:** use un estado como `awaiting_confirmation` que el usuario ve mientras espera la confirmación del proveedor", "**Timeouts configurables:** si la confirmación no llega en X minutos, marque como `requires_review` en lugar de fallar silenciosamente", "**Fallback entre proveedores:** si un proveedor está caído, ofrezca otro medio de pago como alternativa", "**Comunicación clara:** notifique al usuario sobre el estado real en lugar de mostrar un loading eterno"] },
-    { "type": "heading", "text": "Resumen de la arquitectura", "level": 2 },
-    { "type": "paragraph", "text": "La arquitectura completa para webhooks de pago en producción se resume en estas capas:" },
-    { "type": "list", "ordered": true, "items": ["**Validación de firma** — rechazar cualquier webhook no autenticado", "**Idempotencia** — almacenar IDs de eventos e ignorar duplicados", "**Ack inmediato** — responder 200 y procesar en background", "**State machine** — validar transiciones de estado y manejar eventos fuera de orden", "**Reconciliación** — job periódico que sincroniza con el proveedor", "**Dead letter queue** — eventos que fallaron repetidamente van a investigación", "**Degradación graciosa** — el sistema sigue funcionando cuando el proveedor falla"] },
-    { "type": "paragraph", "text": "Cada capa es una **red de seguridad** para la anterior. Ninguna de ellas sola resuelve el problema — es la combinación lo que hace al sistema lo suficientemente confiable para manejar dinero real en producción." }
+    {
+      "type": "paragraph",
+      "text": "Integrar pagos en un producto real va mucho más allá de seguir la documentación del proveedor. Cuando hay dinero real fluyendo por el sistema, cada falla silenciosa es un problema — cobros duplicados, estados inconsistentes o ventas que nunca fueron confirmadas. En este artículo presento la arquitectura que utilizo para recibir y procesar webhooks de proveedores como Stripe, Mercado Pago y Asaas en aplicaciones Node.js."
+    },
+    {
+      "type": "heading",
+      "text": "El problema real",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Los webhooks son la forma en que los proveedores de pago notifican a tu aplicación sobre eventos — un PIX confirmado, una suscripción cancelada, una disputa abierta. El problema es que este mecanismo es **inherentemente no confiable**: los webhooks pueden llegar duplicados, fuera de orden, con atraso o simplemente no llegar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Si tu aplicación no está preparada para manejar estos escenarios, vas a descubrir el problema cuando un cliente reclame que pagó pero no recibió acceso — o peor, cuando finanzas note que los números no cuadran."
+    },
+    {
+      "type": "paragraph",
+      "text": "El diagrama a continuación muestra el flujo completo que vamos a construir en este artículo:"
+    },
+    {
+      "type": "image",
+      "src": "/payment-webhook.png",
+      "alt": "Diagrama del ciclo de vida de un webhook de pago — validación, idempotencia, cola, worker, retry y reconciliación"
+    },
+    {
+      "type": "heading",
+      "text": "Validación de firma",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La primera capa de seguridad es validar que el webhook realmente vino del proveedor. Cada proveedor implementa esto de forma diferente:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Stripe:** envía un header `Stripe-Signature` con timestamp + HMAC-SHA256 del body",
+        "**Mercado Pago:** envía `x-signature` con hash y query params, requiere validación vía API",
+        "**Asaas:** envía un token en el header que debe compararse con el configurado en el panel"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La regla es simple: **nunca procese un webhook sin validar la firma**. Sin esto, cualquier persona puede enviar un POST a tu endpoint y simular una confirmación de pago."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "import Stripe from 'stripe'\n\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\n\nexport async function POST(req: Request) {\n  const body = await req.text()\n  const signature = req.headers.get('stripe-signature')!\n\n  let event: Stripe.Event\n  try {\n    event = stripe.webhooks.constructEvent(\n      body,\n      signature,\n      process.env.STRIPE_WEBHOOK_SECRET!\n    )\n  } catch (err) {\n    return new Response('Invalid signature', { status: 400 })\n  }\n\n  // Procesar evento validado\n  await processEvent(event)\n  return new Response('OK', { status: 200 })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Idempotencia: evitando procesamiento duplicado",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Los proveedores de pago reenvían webhooks cuando no reciben un 2xx de respuesta. Esto significa que el mismo evento puede llegar **múltiples veces**. Si tu handler no es idempotente, puedes acreditar el saldo de un cliente dos veces o enviar dos emails de confirmación."
+    },
+    {
+      "type": "paragraph",
+      "text": "La solución es almacenar el ID del evento y verificar antes de procesar:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function processEvent(event: PaymentEvent) {\n  // Verificar si ya fue procesado\n  const existing = await db.webhookEvents.findUnique({\n    where: { eventId: event.id }\n  })\n\n  if (existing) {\n    return // Ya procesado, ignorar\n  }\n\n  // Registrar evento antes de procesar\n  await db.webhookEvents.create({\n    data: {\n      eventId: event.id,\n      provider: 'stripe',\n      type: event.type,\n      processedAt: new Date()\n    }\n  })\n\n  // Procesar con seguridad\n  switch (event.type) {\n    case 'payment_intent.succeeded':\n      await handlePaymentSuccess(event.data)\n      break\n    case 'payment_intent.payment_failed':\n      await handlePaymentFailure(event.data)\n      break\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Procesamiento asíncrono: ack inmediato",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Una regla crítica: **responda 200 lo más rápido posible**. Si tu handler demora en responder (porque está actualizando la base, enviando email, llamando otra API), el proveedor va a considerar que falló y reenviará — causando más carga y posibles duplicados."
+    },
+    {
+      "type": "paragraph",
+      "text": "El patrón correcto es **ack inmediato + procesamiento en background**:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "export async function POST(req: Request) {\n  const event = await validateAndParse(req)\n  if (!event) {\n    return new Response('Invalid', { status: 400 })\n  }\n\n  // Guardar en cola para procesamiento async\n  await db.webhookQueue.create({\n    data: {\n      eventId: event.id,\n      payload: JSON.stringify(event),\n      status: 'pending'\n    }\n  })\n\n  // Responder inmediatamente\n  return new Response('OK', { status: 200 })\n}\n\n// Worker separado procesa la cola\nasync function processQueue() {\n  const pending = await db.webhookQueue.findMany({\n    where: { status: 'pending' },\n    orderBy: { createdAt: 'asc' }\n  })\n\n  for (const item of pending) {\n    try {\n      await processEvent(JSON.parse(item.payload))\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: { status: 'processed' }\n      })\n    } catch (err) {\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: {\n          status: 'failed',\n          retryCount: { increment: 1 },\n          lastError: err.message\n        }\n      })\n    }\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Webhooks fuera de orden",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un escenario real que ocurre con frecuencia: el webhook de `payment.failed` llega **antes** del `payment.created`. O el proveedor envía `refund.completed` antes de `payment.succeeded`. Si tu sistema depende de un orden específico, va a fallar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Dos enfoques para manejar esto:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**State machine:** defina transiciones válidas para cada estado de pago. Si un evento intenta una transición inválida (ej: refund antes de success), encolar para reprocesamiento posterior.",
+        "**Timestamp del proveedor:** use el timestamp del evento (no el de recepción) para determinar cuál estado es más reciente. Ignore eventos más antiguos que el estado actual."
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentUpdate(event: PaymentEvent) {\n  const payment = await db.payments.findUnique({\n    where: { providerPaymentId: event.paymentId }\n  })\n\n  if (!payment) {\n    // Pago aún no existe, encolar para retry\n    await enqueueForRetry(event)\n    return\n  }\n\n  // Ignorar eventos más antiguos que el estado actual\n  if (event.timestamp <= payment.lastEventTimestamp) {\n    return\n  }\n\n  // Validar transición de estado\n  const validTransitions: Record<string, string[]> = {\n    pending: ['confirmed', 'failed', 'cancelled'],\n    confirmed: ['refunded', 'disputed'],\n    failed: ['pending'] // retry del proveedor\n  }\n\n  if (!validTransitions[payment.status]?.includes(event.newStatus)) {\n    await enqueueForRetry(event)\n    return\n  }\n\n  await db.payments.update({\n    where: { id: payment.id },\n    data: {\n      status: event.newStatus,\n      lastEventTimestamp: event.timestamp\n    }\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "PIX: diferencias entre proveedores",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "PIX es el medio de pago más utilizado en Brasil, pero cada proveedor implementa la confirmación de forma diferente:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Stripe:** no ofrece PIX nativamente en Brasil (usa transferencias bancarias como alternativa)",
+        "**Mercado Pago:** la confirmación de PIX generalmente llega en segundos vía webhook, pero puede atrasar hasta minutos en horarios pico",
+        "**Asaas:** la confirmación puede tomar de segundos a minutos, y el webhook de confirmación a veces llega antes del webhook de creación"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "En la práctica, esto significa que **no puedes confiar en un orden específico** de eventos para PIX. El sistema necesita ser resiliente a confirmaciones que llegan antes de la creación, atrasos largos y casos donde el webhook simplemente no llega."
+    },
+    {
+      "type": "heading",
+      "text": "Reconciliación: cuando el estado diverge",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Incluso con todas las protecciones anteriores, habrá momentos en que el estado local de tu aplicación y el estado en el proveedor van a divergir. Un webhook que nunca llegó, un bug en el handler, un deploy que tumbó el worker por algunos minutos."
+    },
+    {
+      "type": "paragraph",
+      "text": "La solución es un **job de reconciliación** que corre periódicamente:"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function reconcilePayments() {\n  // Buscar pagos pendientes hace más de 30 minutos\n  const stalePayments = await db.payments.findMany({\n    where: {\n      status: 'pending',\n      createdAt: {\n        lt: new Date(Date.now() - 30 * 60 * 1000)\n      }\n    }\n  })\n\n  for (const payment of stalePayments) {\n    // Consultar estado directamente en el proveedor\n    const providerStatus = await getProviderStatus(\n      payment.provider,\n      payment.providerPaymentId\n    )\n\n    if (providerStatus !== payment.status) {\n      await db.payments.update({\n        where: { id: payment.id },\n        data: { status: providerStatus }\n      })\n\n      // Log para auditoría\n      await db.reconciliationLog.create({\n        data: {\n          paymentId: payment.id,\n          previousStatus: payment.status,\n          newStatus: providerStatus,\n          reason: 'reconciliation_job'\n        }\n      })\n    }\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Este job es la **red de seguridad final**. Garantiza que incluso cuando todo falla — webhooks perdidos, bugs en el handler, proveedor caído — el sistema eventualmente converge al estado correcto."
+    },
+    {
+      "type": "heading",
+      "text": "Dead letter queue: qué hacer cuando falla",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cuando el procesamiento de un webhook falla repetidamente (3-5 intentos), debe ir a una **dead letter queue** — una tabla separada para eventos que necesitan intervención manual o investigación."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function processWithRetry(item: WebhookQueueItem) {\n  const MAX_RETRIES = 5\n\n  if (item.retryCount >= MAX_RETRIES) {\n    // Mover a dead letter queue\n    await db.deadLetterQueue.create({\n      data: {\n        eventId: item.eventId,\n        payload: item.payload,\n        lastError: item.lastError,\n        failedAt: new Date()\n      }\n    })\n\n    await db.webhookQueue.delete({\n      where: { id: item.id }\n    })\n\n    // Alertar al equipo\n    await notify(`Webhook ${item.eventId} falló ${MAX_RETRIES}x y fue movido a DLQ`)\n    return\n  }\n\n  // Intentar procesar con backoff exponencial\n  try {\n    await processEvent(JSON.parse(item.payload))\n  } catch (err) {\n    const nextRetry = new Date(\n      Date.now() + Math.pow(2, item.retryCount) * 1000\n    )\n    await db.webhookQueue.update({\n      where: { id: item.id },\n      data: {\n        retryCount: { increment: 1 },\n        lastError: err.message,\n        nextRetryAt: nextRetry\n      }\n    })\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Degradación graciosa",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cuando un proveedor de pagos está caído, tu aplicación no puede simplemente fallar. El usuario necesita saber que el pago está siendo procesado, aunque la confirmación demore. Algunas prácticas:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Estado intermedio:** use un estado como `awaiting_confirmation` que el usuario ve mientras espera la confirmación del proveedor",
+        "**Timeouts configurables:** si la confirmación no llega en X minutos, marque como `requires_review` en lugar de fallar silenciosamente",
+        "**Fallback entre proveedores:** si un proveedor está caído, ofrezca otro medio de pago como alternativa",
+        "**Comunicación clara:** notifique al usuario sobre el estado real en lugar de mostrar un loading eterno"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Resumen de la arquitectura",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La arquitectura completa para webhooks de pago en producción se resume en estas capas:"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Validación de firma** — rechazar cualquier webhook no autenticado",
+        "**Idempotencia** — almacenar IDs de eventos e ignorar duplicados",
+        "**Ack inmediato** — responder 200 y procesar en background",
+        "**State machine** — validar transiciones de estado y manejar eventos fuera de orden",
+        "**Reconciliación** — job periódico que sincroniza con el proveedor",
+        "**Dead letter queue** — eventos que fallaron repetidamente van a investigación",
+        "**Degradación graciosa** — el sistema sigue funcionando cuando el proveedor falla"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada capa es una **red de seguridad** para la anterior. Ninguna de ellas sola resuelve el problema — es la combinación lo que hace al sistema lo suficientemente confiable para manejar dinero real en producción."
+    }
+  ],
+  "title_jp": "Node.js における決済プロバイダー向け Webhook アーキテクチャ",
+  "description_jp": "本番環境での決済 Webhook の受信をどのように構成するか — 署名検証、冪等性、非同期処理、リコンシリエーション、そして実際の障害への対処。",
+  "date_jp": "2026年4月15日",
+  "readTime_jp": "10分で読めます",
+  "tag_jp": "アーキテクチャ",
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "実際のプロダクトに決済を組み込むことは、プロバイダーのドキュメントに従うだけでは到底済みません。実際のお金がシステムを流れているとき、サイレントな障害はすべて問題になります — 二重請求、不整合なステータス、あるいは確定されなかった売上です。本記事では、Node.js アプリケーションで Stripe、Mercado Pago、Asaas といったプロバイダーの Webhook を受信・処理するために私が使っているアーキテクチャを紹介します。"
+    },
+    {
+      "type": "heading",
+      "text": "本当の問題",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Webhook は、決済プロバイダーがアプリケーションにイベントを通知する仕組みです — PIX の確定、サブスクリプションのキャンセル、ディスピュート（異議申し立て）の発生など。問題は、この仕組みが**本質的に信頼できない**ということです。Webhook は重複して届いたり、順序が前後したり、遅延したり、あるいは単に届かないことがあります。"
+    },
+    {
+      "type": "paragraph",
+      "text": "アプリケーションがこうしたシナリオに備えていなければ、顧客から「支払ったのにアクセスできない」とクレームが来たとき — あるいはもっと悪いことに、財務が数字が合わないと気づいたときに、ようやく問題に気づくことになります。"
+    },
+    {
+      "type": "paragraph",
+      "text": "下の図は、本記事で構築していく完全なフローを示しています。"
+    },
+    {
+      "type": "image",
+      "src": "/payment-webhook.png",
+      "alt": "決済 Webhook のライフサイクル図 — 検証、冪等性、キュー、ワーカー、リトライ、リコンシリエーション"
+    },
+    {
+      "type": "heading",
+      "text": "署名検証",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "最初のセキュリティ層は、その Webhook が本当にプロバイダーから来たものかを検証することです。各プロバイダーはこれを異なる方法で実装しています。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Stripe:** タイムスタンプとボディの HMAC-SHA256 を含む `Stripe-Signature` ヘッダーを送信します",
+        "**Mercado Pago:** ハッシュとクエリパラメータを含む `x-signature` を送信し、API 経由での検証が必要です",
+        "**Asaas:** ヘッダーにトークンを送信し、ダッシュボードで設定したものと照合する必要があります"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "ルールはシンプルです。**署名を検証せずに Webhook を処理してはいけません**。これがなければ、誰でもあなたのエンドポイントに POST を送って決済確定を偽装できてしまいます。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "import Stripe from 'stripe'\n\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)\n\nexport async function POST(req: Request) {\n  const body = await req.text()\n  const signature = req.headers.get('stripe-signature')!\n\n  let event: Stripe.Event\n  try {\n    event = stripe.webhooks.constructEvent(\n      body,\n      signature,\n      process.env.STRIPE_WEBHOOK_SECRET!\n    )\n  } catch (err) {\n    return new Response('Invalid signature', { status: 400 })\n  }\n\n  // 検証済みイベントを処理する\n  await processEvent(event)\n  return new Response('OK', { status: 200 })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "冪等性: 重複処理を避ける",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "決済プロバイダーは、2xx のレスポンスを受け取れなかった場合に Webhook を再送します。つまり、同じイベントが**複数回**届くことがあります。ハンドラーが冪等でなければ、顧客の残高を二重に加算したり、確認メールを2通送ってしまったりするかもしれません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策は、イベント ID を保存し、処理する前にチェックすることです。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function processEvent(event: PaymentEvent) {\n  // すでに処理済みかどうかを確認する\n  const existing = await db.webhookEvents.findUnique({\n    where: { eventId: event.id }\n  })\n\n  if (existing) {\n    return // 処理済みのためスキップ\n  }\n\n  // 処理前にイベントを記録する\n  await db.webhookEvents.create({\n    data: {\n      eventId: event.id,\n      provider: 'stripe',\n      type: event.type,\n      processedAt: new Date()\n    }\n  })\n\n  // 安全に処理する\n  switch (event.type) {\n    case 'payment_intent.succeeded':\n      await handlePaymentSuccess(event.data)\n      break\n    case 'payment_intent.payment_failed':\n      await handlePaymentFailure(event.data)\n      break\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "非同期処理: 即時 ack",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "重要なルールがひとつあります。**できるだけ速く 200 を返すこと**です。ハンドラーの応答に時間がかかると（データベースの更新、メール送信、別の API の呼び出しなどのため）、プロバイダーは失敗したとみなして再送します — これがさらなる負荷と重複の可能性を引き起こします。"
+    },
+    {
+      "type": "paragraph",
+      "text": "正しいパターンは、**即時 ack + バックグラウンド処理**です。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "export async function POST(req: Request) {\n  const event = await validateAndParse(req)\n  if (!event) {\n    return new Response('Invalid', { status: 400 })\n  }\n\n  // 非同期処理のためにキューへ保存する\n  await db.webhookQueue.create({\n    data: {\n      eventId: event.id,\n      payload: JSON.stringify(event),\n      status: 'pending'\n    }\n  })\n\n  // 即座にレスポンスを返す\n  return new Response('OK', { status: 200 })\n}\n\n// 別のワーカーがキューを処理する\nasync function processQueue() {\n  const pending = await db.webhookQueue.findMany({\n    where: { status: 'pending' },\n    orderBy: { createdAt: 'asc' }\n  })\n\n  for (const item of pending) {\n    try {\n      await processEvent(JSON.parse(item.payload))\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: { status: 'processed' }\n      })\n    } catch (err) {\n      await db.webhookQueue.update({\n        where: { id: item.id },\n        data: {\n          status: 'failed',\n          retryCount: { increment: 1 },\n          lastError: err.message\n        }\n      })\n    }\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "順序が前後する Webhook",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "実際に頻繁に起こるシナリオがあります。`payment.failed` の Webhook が `payment.created` よりも**先に**届くというものです。あるいはプロバイダーが `payment.succeeded` より前に `refund.completed` を送ってくることもあります。システムが特定の順序に依存していると、壊れてしまいます。"
+    },
+    {
+      "type": "paragraph",
+      "text": "これに対処する方法は2つあります。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**ステートマシン:** 各決済ステータスに対して有効な遷移を定義します。イベントが無効な遷移を試みた場合（例: success より前の refund）、後で再処理するためにキューへ入れます。",
+        "**プロバイダーのタイムスタンプ:** （受信時刻ではなく）イベントのタイムスタンプを使って、どの状態がより新しいかを判断します。現在の状態より古いイベントは無視します。"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function handlePaymentUpdate(event: PaymentEvent) {\n  const payment = await db.payments.findUnique({\n    where: { providerPaymentId: event.paymentId }\n  })\n\n  if (!payment) {\n    // 決済がまだ存在しないため、リトライ用にキューへ入れる\n    await enqueueForRetry(event)\n    return\n  }\n\n  // 現在の状態より古いイベントは無視する\n  if (event.timestamp <= payment.lastEventTimestamp) {\n    return\n  }\n\n  // 状態遷移を検証する\n  const validTransitions: Record<string, string[]> = {\n    pending: ['confirmed', 'failed', 'cancelled'],\n    confirmed: ['refunded', 'disputed'],\n    failed: ['pending'] // プロバイダーによるリトライ\n  }\n\n  if (!validTransitions[payment.status]?.includes(event.newStatus)) {\n    await enqueueForRetry(event)\n    return\n  }\n\n  await db.payments.update({\n    where: { id: payment.id },\n    data: {\n      status: event.newStatus,\n      lastEventTimestamp: event.timestamp\n    }\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "PIX: プロバイダー間の違い",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "PIX はブラジルで最も広く使われている決済手段ですが、各プロバイダーは確定処理を異なる方法で実装しています。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Stripe:** ブラジルでは PIX をネイティブには提供していません（代替として銀行振込を使用します）",
+        "**Mercado Pago:** PIX の確定は通常 Webhook 経由で数秒以内に届きますが、ピーク時には数分まで遅延することがあります",
+        "**Asaas:** 確定には数秒から数分かかることがあり、確定の Webhook が作成の Webhook よりも先に届くことがあります"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "実際のところ、これは PIX において**特定のイベント順序に依存できない**ことを意味します。システムは、作成より前に届く確定、長い遅延、そして Webhook が単に届かないケースに対して耐性を持つ必要があります。"
+    },
+    {
+      "type": "heading",
+      "text": "リコンシリエーション: 状態が乖離したとき",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "上記のすべての保護策を講じても、アプリケーションのローカルの状態とプロバイダー側の状態が乖離する瞬間は出てきます。届かなかった Webhook、ハンドラーのバグ、ワーカーを数分間ダウンさせたデプロイなどです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "解決策は、定期的に実行される**リコンシリエーションジョブ**です。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function reconcilePayments() {\n  // 30分以上 pending のままの決済を探す\n  const stalePayments = await db.payments.findMany({\n    where: {\n      status: 'pending',\n      createdAt: {\n        lt: new Date(Date.now() - 30 * 60 * 1000)\n      }\n    }\n  })\n\n  for (const payment of stalePayments) {\n    // プロバイダーに直接ステータスを問い合わせる\n    const providerStatus = await getProviderStatus(\n      payment.provider,\n      payment.providerPaymentId\n    )\n\n    if (providerStatus !== payment.status) {\n      await db.payments.update({\n        where: { id: payment.id },\n        data: { status: providerStatus }\n      })\n\n      // 監査用のログ\n      await db.reconciliationLog.create({\n        data: {\n          paymentId: payment.id,\n          previousStatus: payment.status,\n          newStatus: providerStatus,\n          reason: 'reconciliation_job'\n        }\n      })\n    }\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "このジョブは**最後のセーフティネット**です。Webhook の喪失、ハンドラーのバグ、プロバイダーのダウンなど、すべてが失敗したときでも、システムが最終的に正しい状態へ収束することを保証します。"
+    },
+    {
+      "type": "heading",
+      "text": "デッドレターキュー: 失敗したときどうするか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Webhook の処理が繰り返し失敗した場合（3〜5回の試行）、それは**デッドレターキュー**へ送られるべきです — 手動での介入や調査を必要とするイベントのための別テーブルです。"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function processWithRetry(item: WebhookQueueItem) {\n  const MAX_RETRIES = 5\n\n  if (item.retryCount >= MAX_RETRIES) {\n    // デッドレターキューへ移動する\n    await db.deadLetterQueue.create({\n      data: {\n        eventId: item.eventId,\n        payload: item.payload,\n        lastError: item.lastError,\n        failedAt: new Date()\n      }\n    })\n\n    await db.webhookQueue.delete({\n      where: { id: item.id }\n    })\n\n    // チームへアラートを送る\n    await notify(`Webhook ${item.eventId} failed ${MAX_RETRIES}x and was moved to DLQ`)\n    return\n  }\n\n  // 指数バックオフで処理を試みる\n  try {\n    await processEvent(JSON.parse(item.payload))\n  } catch (err) {\n    const nextRetry = new Date(\n      Date.now() + Math.pow(2, item.retryCount) * 1000\n    )\n    await db.webhookQueue.update({\n      where: { id: item.id },\n      data: {\n        retryCount: { increment: 1 },\n        lastError: err.message,\n        nextRetryAt: nextRetry\n      }\n    })\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "グレースフルデグラデーション",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "決済プロバイダーがダウンしているとき、アプリケーションが単に壊れるわけにはいきません。ユーザーは、確定に時間がかかっても、決済が処理中であることを知る必要があります。いくつかのプラクティスを挙げます。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**中間ステータス:** プロバイダーの確定を待っている間にユーザーに表示する `awaiting_confirmation` のような状態を使います",
+        "**設定可能なタイムアウト:** 確定が X 分以内に届かない場合は、サイレントに失敗させるのではなく `requires_review` としてマークします",
+        "**プロバイダー間のフォールバック:** あるプロバイダーがダウンしている場合は、代替として別の決済手段を提供します",
+        "**明確なコミュニケーション:** 永遠に続くローディングを表示するのではなく、ユーザーに実際のステータスを通知します"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "アーキテクチャのまとめ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "本番環境での決済 Webhook の完全なアーキテクチャは、次のレイヤーに集約されます。"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**署名検証** — 認証されていない Webhook はすべて拒否する",
+        "**冪等性** — イベント ID を保存し、重複を無視する",
+        "**即時 ack** — 200 を返してバックグラウンドで処理する",
+        "**ステートマシン** — 状態遷移を検証し、順序が前後するイベントに対処する",
+        "**リコンシリエーション** — プロバイダーと同期する定期ジョブ",
+        "**デッドレターキュー** — 繰り返し失敗したイベントは調査へ回す",
+        "**グレースフルデグラデーション** — プロバイダーが失敗してもシステムは動き続ける"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "各レイヤーは、その前のレイヤーに対する**セーフティネット**です。どれか単体で問題を解決するものはありません — 本番環境で実際のお金を扱うのに十分な信頼性をシステムにもたらすのは、その組み合わせです。"
+    }
   ]
 }

@@ -148,6 +148,49 @@ export default async function XDropPage() {
       visitCta: "Acceder a X-Drop",
       screenshotsTitle: "La plataforma",
     },
+    jp: {
+      back: "プロジェクト一覧へ戻る",
+      badge: "本番稼働中のSaaS",
+      title: "X-Drop",
+      subtitle:
+        "信頼できるサプライヤーと、オンライン販売を始めたいセラーをつなぎます。",
+      purposeTitle: "目的",
+      purposeText1:
+        "ブラジルのドロップシッピング市場は急成長していますが、構造的な問題を抱えています。初心者のセラーは誰を信頼すればよいか分かりません。サプライヤーは数千社存在しますが、納期どおりに、品質を保ち、採算の取れるマージンで届けてくれる信頼できる相手を見つけることは、手間がかかり時間を要し、リスクの多いプロセスです。",
+      purposeText2:
+        "X-Dropはこの課題を解決するために生まれました。本プラットフォームは、検証済みのサプライヤーと、Mercado LivreやShopeeといったマーケットプレイスで事業を開始または拡大したいセラーをつなぎ、参入障壁を取り除き、販売者に必要なすべての管理基盤を提供します。",
+      purposeText3:
+        "これは単なる管理ツールではなく、エコシステムです。サプライヤーは流通チャネルを獲得します。セラーは、公開準備の整ったカタログ、マーケットプレイスとの直接連携、そして一元化された財務管理とともに、信頼できる商品へのアクセスを得られます。",
+      howTitle: "仕組み",
+      howItems: [
+        "サプライヤーが価格、写真、発送リードタイムとともに商品を登録します",
+        "セラーが商品を選び、ワンクリックでマーケットプレイスに出品し、マージンを設定します",
+        "注文が入ると、X-Dropが自動的にサプライヤーへ振り分け、サプライヤーが直接発送します",
+        "セラーは注文、支払い、コミッション、利益のすべてを単一のダッシュボードで把握できます",
+      ],
+      numbersTitle: "2か月間の成果",
+      revenue: "R$ 30k+",
+      revenueLabel: "処理した売上",
+      users: "100+",
+      usersLabel: "アクティブユーザー",
+      orders: "400+",
+      ordersLabel: "処理した注文",
+      mrr: "R$ 20k",
+      mrrLabel: "MRR",
+      stackTitle: "技術スタック",
+      stackItems: [
+        "React + Next.js + TypeScript",
+        "Swift UI (iOS nativo)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase",
+        "Docker + AWS",
+        "Asaas + Mercado Pago",
+        "Mercado Livre API + Shopee API",
+      ],
+      caseStudyCta: "技術ケーススタディを読む",
+      visitCta: "X-Dropを開く",
+      screenshotsTitle: "プラットフォーム",
+    },
   }
 
   const c = content[locale as keyof typeof content] ?? content.pt
@@ -302,7 +345,7 @@ export default async function XDropPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
                 </svg>
                 <span className="text-sm font-medium">
-                  {locale === "en" ? "iOS App — Swift UI (native)" : locale === "es" ? "App iOS — Swift UI (nativo)" : "App iOS — Swift UI (nativo)"}
+                  {locale === "en" ? "iOS App — Swift UI (native)" : locale === "es" ? "App iOS — Swift UI (nativo)" : locale === "jp" ? "iOSアプリ — Swift UI（ネイティブ）" : "App iOS — Swift UI (nativo)"}
                 </span>
                 <a
                   href="https://apps.apple.com/us/app/xdrop/id6749638204"

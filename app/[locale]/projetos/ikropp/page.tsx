@@ -208,6 +208,69 @@ export default async function IKroppPage() {
       visitCta: "Acceder a iKropp",
       screenshotsTitle: "La plataforma",
     },
+    jp: {
+      back: "プロジェクト一覧に戻る",
+      badge: "5万人以上のユーザー",
+      title: "iKropp",
+      subtitle:
+        "エステクリニックと医療従事者向けの管理SaaSプラットフォームです — 予約からカルテ作成まで対応します。",
+      purposeTitle: "目的",
+      purposeText1:
+        "エステクリニック、生体医療従事者、エステティシャンは複雑な業務に直面しています。複数スタッフの予約管理、施術履歴を含む顧客管理、詳細な問診、サービスや商品の管理などです。多くの現場では業界のワークフローに対応していない汎用ツールが使われています。",
+      purposeText2:
+        "iKroppはバーティカルなプラットフォームでこの課題を解決します。エステ・ヘルスケア業界のために専用設計され、業務サイクル全体を単一のシステムでカバーします。5万人を超えるアクティブユーザーが日々このプラットフォームを利用しています。",
+      purposeText3:
+        "その結果、真の運用コントロールが実現します。スタッフは表計算ではなく接客に集中でき、管理者はツールを切り替えることなく予約、売上、生産性を可視化できます。",
+      roleTitle: "私の役割",
+      roleText:
+        "フルスタックのソフトウェアエンジニアとして、5万人以上のユーザーを抱える本番環境で、フロントエンド、ユーザー体験、プロダクトの進化に重点を置いて従事しました。",
+      roleItems: [
+        "重要モジュールの開発と進化：予約、顧客・患者、スタッフ、業務フロー",
+        "複雑なビジネスルールを伴う機能の実装、特に予約モジュール",
+        "レガシーシステム（PHP 5.3）から React、Next.js、TypeScript を用いたモダンアーキテクチャへのモダナイゼーション",
+        "デザインシステムの構築と標準化 — コンポーネントの再利用と視覚的一貫性",
+        "外部APIおよび決済システムとの連携",
+        "システム設計の意思決定：関心の分離、スケーラビリティ、保守性",
+        "重要モジュールに対する Cypress を用いたエンドツーエンドテスト",
+      ],
+      challengesTitle: "技術的な課題",
+      challenges: [
+        {
+          title: "レガシーのモダナイゼーション",
+          desc: "PHP 5.3 から React + Next.js + TypeScript への段階的な移行を行い、5万人以上のユーザーの運用を中断させずに維持しました。",
+        },
+        {
+          title: "予約モジュール",
+          desc: "複雑なビジネスルール：複数スタッフ、時間枠の重複、ブロック、繰り返し予約、日・週・月単位の表示。",
+        },
+        {
+          title: "スケールするデザインシステム",
+          desc: "多数のモジュールを持つプロダクト全体で視覚とコンポーネントを標準化し、一貫性と開発スピードを確保しました。",
+        },
+        {
+          title: "5万人以上のユーザーを抱える本番運用",
+          desc: "継続的なメンテナンス、実稼働中モジュールの機能進化、実スケールでの信頼性とパフォーマンス。",
+        },
+      ],
+      statsTitle: "スケール",
+      stats: [
+        { value: "50k+", label: "アクティブユーザー" },
+        { value: "Web + Mobile", label: "マルチプラットフォーム" },
+      ],
+      stackTitle: "技術スタック",
+      stackItems: [
+        "React + Next.js + TypeScript",
+        "React Native (mobile)",
+        "Laravel (API backend)",
+        "PHP 5.3 (legado en migración)",
+        "Docker + AWS",
+        "WebSockets",
+        "Cypress (E2E)",
+        "Design System",
+      ],
+      visitCta: "iKropp にアクセス",
+      screenshotsTitle: "プラットフォーム",
+    },
   }
 
   const c = content[locale as keyof typeof content] ?? content.pt

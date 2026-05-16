@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias" }),
-    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial." }),
+    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias", jp: "Vox Pet Digital — 動物病院向けSaaS" }),
+    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial.", jp: "95のPrismaモデルを持つバーティカルSaaS、WhatsApp上のAI、Express→NestJSへの移行、マルチテナント + マルチ拠点。" }),
     alternates: buildAlternates("/projetos/vox-pet-digital", locale),
   }
 }
@@ -163,9 +163,57 @@ export default async function VoxPetPage() {
       caseStudyCta: "Leer case study técnico",
       visitCta: "Acceder a Vox Pet",
     },
+    jp: {
+      back: "プロジェクト一覧に戻る",
+      badge: "本番稼働中のSaaS",
+      title: "Vox Pet Digital",
+      subtitle:
+        "ペットショップと動物病院向けのバーティカルSaaS — 予約管理から請求書発行まで、WhatsApp上のAIを備えています。",
+      purposeTitle: "目的",
+      purposeText1:
+        "動物病院やペットショップは複雑なビジネスです。予約、カルテ、ワクチン、販売、在庫、コミッション、請求書、顧客対応をすべて同時に扱います。多くの事業者は、この業界の業務フローを理解していない表計算ソフトや汎用システムを使っています。",
+      purposeText2:
+        "Vox Pet Digitalは、このビジネスのライフサイクル全体をカバーするシステムとして生まれました。運用管理、財務、WhatsAppを介した自動顧客対応を統合する単一のプラットフォームであり、これにより動物病院は表計算ではなく動物のケアに集中できます。",
+      purposeText3:
+        "差別化のポイントは、プラットフォームがビジネスとともに成長することです。1拠点の動物病院も、5拠点を持つチェーンも、同じモジュールを使用します。回避策ではなく、真のマルチテナント + マルチ拠点対応です。",
+      challengesTitle: "技術的な課題",
+      challenges: [
+        {
+          title: "Express → NestJS への移行",
+          desc: "Strangler fig パターン: v1（41のコントローラー）と v2（12のNestJSモジュール）を同一プロセス内で共存させ、新しいコードには厳格なルールを適用しています。",
+        },
+        {
+          title: "24時間稼働の WhatsApp + AI",
+          desc: "10個のツールを備えたエージェント、テナントごとのRAG、音声用のWhisper、会話メモリ、cronによる自動フォローアップ。",
+        },
+        {
+          title: "マルチテナント + マルチ拠点",
+          desc: "95のPrismaモデル、うち93がtenant_id、76がbranch_idを持ちます。承認ワークフロー付きの拠点間在庫移動。",
+        },
+        {
+          title: "フォールバック付きのNF-e",
+          desc: "2つのプロバイダー（Focus NFe + NFe.io）、30秒ごとに処理する耐障害性キュー、サプライヤーのXMLインポート。",
+        },
+      ],
+      screenshotsTitle: "プラットフォーム",
+      stackTitle: "技術スタック",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "技術ケーススタディを読む",
+      visitCta: "Vox Pet にアクセス",
+    },
   }
 
-  const c = content[locale]
+  const c = content[locale as keyof typeof content] ?? content.pt
 
   return (
     <SlideInPage>

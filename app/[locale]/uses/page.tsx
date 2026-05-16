@@ -1,13 +1,13 @@
 import { getLocale, t } from "@/lib/i18n-server"
-import { buildAlternates } from "@/lib/i18n"
+import { buildAlternates, type Locale } from "@/lib/i18n"
 import Link from "next/link"
 import { EditorConfigSheet } from "@/components/editor-config-sheet"
 
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Ferramentas", en: "Uses", es: "Herramientas" }),
-    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como engenheiro de software.", en: "Tools, apps and setup I use daily as a Software Engineer.", es: "Herramientas, apps y setup que uso día a día como ingeniero de software." }),
+    title: t(locale, { pt: "Ferramentas", en: "Uses", es: "Herramientas", jp: "ツール" }),
+    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como engenheiro de software.", en: "Tools, apps and setup I use daily as a Software Engineer.", es: "Herramientas, apps y setup que uso día a día como ingeniero de software.", jp: "ソフトウェアエンジニアとして日常的に使用するツール、アプリ、セットアップ。" }),
     alternates: buildAlternates("/uses", locale),
   }
 }
@@ -15,17 +15,17 @@ export async function generateMetadata() {
 type UsesItem = {
   name: string
   url?: string
-  desc: { pt: string; en: string; es: string }
+  desc: Partial<Record<Locale, string>> & { pt: string }
 }
 
 type UsesCategory = {
-  title: { pt: string; en: string; es: string }
+  title: Partial<Record<Locale, string>> & { pt: string }
   items: UsesItem[]
 }
 
 const categories: UsesCategory[] = [
   {
-    title: { pt: "Editor e Coding", en: "Editor & Coding", es: "Editor y Coding" },
+    title: { pt: "Editor e Coding", en: "Editor & Coding", es: "Editor y Coding", jp: "エディタとコーディング" },
     items: [
       {
         name: "VS Code",
@@ -34,6 +34,7 @@ const categories: UsesCategory[] = [
           pt: "Editor principal. Extensões: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
           en: "Main editor. Extensions: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
           es: "Editor principal. Extensiones: ESLint, Tailwind IntelliSense, Prettier, GitLens.",
+          jp: "メインエディタ。拡張機能：ESLint、Tailwind IntelliSense、Prettier、GitLens。",
         },
       },
       {
@@ -43,6 +44,7 @@ const categories: UsesCategory[] = [
           pt: "Editor com IA integrada. Uso como segundo editor para tarefas que exigem contexto de codebase.",
           en: "AI-powered editor. I use it as a secondary editor for tasks that require codebase context.",
           es: "Editor con IA integrada. Lo uso como segundo editor para tareas que requieren contexto de codebase.",
+          jp: "AI統合エディタ。コードベースの文脈が必要なタスク用のセカンドエディタとして使用。",
         },
       },
       {
@@ -52,6 +54,7 @@ const categories: UsesCategory[] = [
           pt: "Tema principal na IDE. Clean, bom contraste e familiar.",
           en: "Main IDE theme. Clean, good contrast and familiar.",
           es: "Tema principal en la IDE. Clean, buen contraste y familiar.",
+          jp: "IDEのメインテーマ。クリーンで、コントラストが良く、馴染みやすい。",
         },
       },
       {
@@ -61,6 +64,7 @@ const categories: UsesCategory[] = [
           pt: "Assistente de IA para engenharia — implementação, review e exploração de codebase.",
           en: "AI assistant for engineering — implementation, review and codebase exploration.",
           es: "Asistente de IA para ingeniería — implementación, review y exploración de codebase.",
+          jp: "エンジニアリング向けのAIアシスタント — 実装、レビュー、コードベースの探索。",
         },
       },
       {
@@ -70,6 +74,7 @@ const categories: UsesCategory[] = [
           pt: "Agente de código da OpenAI. Uso para tarefas assíncronas e geração de código.",
           en: "OpenAI's coding agent. I use it for async tasks and code generation.",
           es: "Agente de código de OpenAI. Lo uso para tareas asíncronas y generación de código.",
+          jp: "OpenAIのコーディングエージェント。非同期タスクとコード生成に使用。",
         },
       },
       {
@@ -79,12 +84,13 @@ const categories: UsesCategory[] = [
           pt: "Fonte monospace no editor e terminal. Ligatures que facilitam leitura de código.",
           en: "Monospace font in editor and terminal. Ligatures that make code easier to read.",
           es: "Fuente monospace en editor y terminal. Ligatures que facilitan la lectura de código.",
+          jp: "エディタとターミナルの等幅フォント。コードを読みやすくするリガチャ付き。",
         },
       },
     ],
   },
   {
-    title: { pt: "Terminal", en: "Terminal", es: "Terminal" },
+    title: { pt: "Terminal", en: "Terminal", es: "Terminal", jp: "ターミナル" },
     items: [
       {
         name: "Warp",
@@ -93,6 +99,7 @@ const categories: UsesCategory[] = [
           pt: "Terminal principal. Rápido, com autocomplete inteligente e blocos de comando.",
           en: "Main terminal. Fast, with smart autocomplete and command blocks.",
           es: "Terminal principal. Rápido, con autocomplete inteligente y bloques de comando.",
+          jp: "メインターミナル。高速で、スマートな自動補完とコマンドブロックを備える。",
         },
       },
       {
@@ -102,6 +109,7 @@ const categories: UsesCategory[] = [
           pt: "Terminal secundário. Split panes e perfis por projeto.",
           en: "Secondary terminal. Split panes and per-project profiles.",
           es: "Terminal secundario. Split panes y perfiles por proyecto.",
+          jp: "セカンドターミナル。分割ペインとプロジェクトごとのプロファイル。",
         },
       },
       {
@@ -111,6 +119,7 @@ const categories: UsesCategory[] = [
           pt: "Shell com autosugestões e syntax highlighting out of the box. Sem configuração.",
           en: "Shell with autosuggestions and syntax highlighting out of the box. Zero config.",
           es: "Shell con autosugerencias y syntax highlighting listo para usar. Sin configuración.",
+          jp: "自動補完とシンタックスハイライトを標準装備したシェル。設定不要。",
         },
       },
       {
@@ -120,6 +129,7 @@ const categories: UsesCategory[] = [
           pt: "Shell alternativo com plugins e aliases para git e navegação.",
           en: "Alternative shell with plugins and aliases for git and navigation.",
           es: "Shell alternativo con plugins y aliases para git y navegación.",
+          jp: "git とナビゲーション用のプラグインとエイリアスを備えた代替シェル。",
         },
       },
       {
@@ -129,12 +139,13 @@ const categories: UsesCategory[] = [
           pt: "Gerenciador de versões do Node.js. Troco entre Node 20 e 24 dependendo do projeto.",
           en: "Node.js version manager. I switch between Node 20 and 24 depending on the project.",
           es: "Gestor de versiones de Node.js. Cambio entre Node 20 y 24 dependiendo del proyecto.",
+          jp: "Node.js のバージョン管理ツール。プロジェクトに応じて Node 20 と 24 を切り替え。",
         },
       },
     ],
   },
   {
-    title: { pt: "Stack de desenvolvimento", en: "Development Stack", es: "Stack de desarrollo" },
+    title: { pt: "Stack de desenvolvimento", en: "Development Stack", es: "Stack de desarrollo", jp: "開発スタック" },
     items: [
       {
         name: "Next.js",
@@ -143,6 +154,7 @@ const categories: UsesCategory[] = [
           pt: "Framework principal para web. App Router, Server Components, Turbopack.",
           en: "Main web framework. App Router, Server Components, Turbopack.",
           es: "Framework principal para web. App Router, Server Components, Turbopack.",
+          jp: "Web のメインフレームワーク。App Router、Server Components、Turbopack。",
         },
       },
       {
@@ -152,6 +164,7 @@ const categories: UsesCategory[] = [
           pt: "Base de todos os projetos web e mobile. Hooks, Context, Server Components.",
           en: "Foundation of all web and mobile projects. Hooks, Context, Server Components.",
           es: "Base de todos los proyectos web y móviles. Hooks, Context, Server Components.",
+          jp: "すべての Web・モバイルプロジェクトの基盤。Hooks、Context、Server Components。",
         },
       },
       {
@@ -161,6 +174,7 @@ const categories: UsesCategory[] = [
           pt: "Uso em 100% dos projetos. Tipagem forte que evita bugs em produção.",
           en: "Used in 100% of projects. Strong typing that prevents production bugs.",
           es: "Uso en 100% de los proyectos. Tipado fuerte que evita bugs en producción.",
+          jp: "全プロジェクトで使用。本番のバグを防ぐ強い型付け。",
         },
       },
       {
@@ -170,6 +184,7 @@ const categories: UsesCategory[] = [
           pt: "Utility-first CSS. Produtividade alta e consistência visual sem CSS custom.",
           en: "Utility-first CSS. High productivity and visual consistency without custom CSS.",
           es: "Utility-first CSS. Alta productividad y consistencia visual sin CSS custom.",
+          jp: "ユーティリティファースト CSS。カスタム CSS なしで高い生産性と視覚的一貫性。",
         },
       },
       {
@@ -179,6 +194,7 @@ const categories: UsesCategory[] = [
           pt: "Componentes Radix UI com controle total do código. Base do design system.",
           en: "Radix UI components with full code ownership. Design system foundation.",
           es: "Componentes Radix UI con control total del código. Base del design system.",
+          jp: "コードを完全に所有できる Radix UI コンポーネント。デザインシステムの基盤。",
         },
       },
       {
@@ -188,6 +204,7 @@ const categories: UsesCategory[] = [
           pt: "Runtime para backend e APIs. Express, Fastify ou API routes do Next.js.",
           en: "Backend and API runtime. Express, Fastify or Next.js API routes.",
           es: "Runtime para backend y APIs. Express, Fastify o API routes de Next.js.",
+          jp: "バックエンドと API のランタイム。Express、Fastify、または Next.js の API ルート。",
         },
       },
       {
@@ -197,6 +214,7 @@ const categories: UsesCategory[] = [
           pt: "Banco principal. Multi-tenant com RLS, pgVector para IA, transações atômicas.",
           en: "Main database. Multi-tenant with RLS, pgVector for AI, atomic transactions.",
           es: "Base de datos principal. Multi-tenant con RLS, pgVector para IA, transacciones atómicas.",
+          jp: "メインデータベース。RLS によるマルチテナント、AI 用の pgVector、アトミックトランザクション。",
         },
       },
       {
@@ -206,6 +224,7 @@ const categories: UsesCategory[] = [
           pt: "Banco NoSQL para projetos com dados flexíveis e alta velocidade de leitura.",
           en: "NoSQL database for projects with flexible data and high read speed.",
           es: "Base de datos NoSQL para proyectos con datos flexibles y alta velocidad de lectura.",
+          jp: "柔軟なデータと高速な読み取りが必要なプロジェクト向けの NoSQL データベース。",
         },
       },
       {
@@ -215,12 +234,13 @@ const categories: UsesCategory[] = [
           pt: "Auth, Firestore, Cloud Functions e push notifications em projetos mobile.",
           en: "Auth, Firestore, Cloud Functions and push notifications in mobile projects.",
           es: "Auth, Firestore, Cloud Functions y push notifications en proyectos mobile.",
+          jp: "モバイルプロジェクトでの認証、Firestore、Cloud Functions、プッシュ通知。",
         },
       },
     ],
   },
   {
-    title: { pt: "Apps", en: "Apps", es: "Apps" },
+    title: { pt: "Apps", en: "Apps", es: "Apps", jp: "アプリ" },
     items: [
       {
         name: "Google Chrome",
@@ -229,6 +249,7 @@ const categories: UsesCategory[] = [
           pt: "Browser principal. DevTools, perfis separados e extensões para dev.",
           en: "Main browser. DevTools, separate profiles and dev extensions.",
           es: "Navegador principal. DevTools, perfiles separados y extensiones para dev.",
+          jp: "メインブラウザ。DevTools、分離したプロファイル、開発用拡張機能。",
         },
       },
       {
@@ -238,6 +259,7 @@ const categories: UsesCategory[] = [
           pt: "Uso para pesquisa, brainstorm e geração de conteúdo fora do código.",
           en: "Used for research, brainstorming and content generation outside of code.",
           es: "Lo uso para investigación, brainstorm y generación de contenido fuera del código.",
+          jp: "コード以外のリサーチ、ブレインストーミング、コンテンツ生成に使用。",
         },
       },
       {
@@ -247,6 +269,7 @@ const categories: UsesCategory[] = [
           pt: "Design e prototipação. Consulto designs antes de implementar.",
           en: "Design and prototyping. I review designs before implementing.",
           es: "Diseño y prototipado. Consulto diseños antes de implementar.",
+          jp: "デザインとプロトタイピング。実装前にデザインを確認。",
         },
       },
       {
@@ -256,6 +279,7 @@ const categories: UsesCategory[] = [
           pt: "Base de conhecimento pessoal, notas de projetos e documentação.",
           en: "Personal knowledge base, project notes and documentation.",
           es: "Base de conocimiento personal, notas de proyectos y documentación.",
+          jp: "個人のナレッジベース、プロジェクトメモ、ドキュメント。",
         },
       },
       {
@@ -265,6 +289,7 @@ const categories: UsesCategory[] = [
           pt: "Teste de APIs REST. Collections organizadas por projeto.",
           en: "REST API testing. Collections organized by project.",
           es: "Testing de APIs REST. Collections organizadas por proyecto.",
+          jp: "REST API のテスト。プロジェクトごとに整理したコレクション。",
         },
       },
       {
@@ -273,12 +298,13 @@ const categories: UsesCategory[] = [
           pt: "Comunicação com times e comunidades de dev.",
           en: "Communication with teams and dev communities.",
           es: "Comunicación con equipos y comunidades de dev.",
+          jp: "チームや開発コミュニティとのコミュニケーション。",
         },
       },
     ],
   },
   {
-    title: { pt: "Serviços e infra", en: "Services & Infra", es: "Servicios e infra" },
+    title: { pt: "Serviços e infra", en: "Services & Infra", es: "Servicios e infra", jp: "サービスとインフラ" },
     items: [
       {
         name: "Vercel",
@@ -287,6 +313,7 @@ const categories: UsesCategory[] = [
           pt: "Deploy de projetos Next.js. Preview automático em PRs, zero config.",
           en: "Next.js project deploys. Automatic preview on PRs, zero config.",
           es: "Deploy de proyectos Next.js. Preview automático en PRs, zero config.",
+          jp: "Next.js プロジェクトのデプロイ。PR で自動プレビュー、設定不要。",
         },
       },
       {
@@ -296,6 +323,7 @@ const categories: UsesCategory[] = [
           pt: "Deploy de APIs, workers e serviços backend. Alternativa simples ao AWS para projetos menores.",
           en: "API, worker and backend service deploys. Simple AWS alternative for smaller projects.",
           es: "Deploy de APIs, workers y servicios backend. Alternativa simple a AWS para proyectos menores.",
+          jp: "API、ワーカー、バックエンドサービスのデプロイ。小規模プロジェクト向けのシンプルな AWS 代替。",
         },
       },
       {
@@ -305,6 +333,7 @@ const categories: UsesCategory[] = [
           pt: "Repositórios, PRs, Actions (CI/CD), code review. Centro de tudo.",
           en: "Repositories, PRs, Actions (CI/CD), code review. Center of everything.",
           es: "Repositorios, PRs, Actions (CI/CD), code review. Centro de todo.",
+          jp: "リポジトリ、PR、Actions（CI/CD）、コードレビュー。すべての中心。",
         },
       },
       {
@@ -314,6 +343,7 @@ const categories: UsesCategory[] = [
           pt: "EC2, S3, CloudFront para projetos que precisam de infra própria.",
           en: "EC2, S3, CloudFront for projects that need custom infrastructure.",
           es: "EC2, S3, CloudFront para proyectos que necesitan infraestructura propia.",
+          jp: "独自インフラが必要なプロジェクト向けの EC2、S3、CloudFront。",
         },
       },
       {
@@ -323,6 +353,7 @@ const categories: UsesCategory[] = [
           pt: "DNS, CDN e proteção. Uso para domínios e performance de entrega.",
           en: "DNS, CDN and protection. Used for domains and delivery performance.",
           es: "DNS, CDN y protección. Uso para dominios y rendimiento de entrega.",
+          jp: "DNS、CDN、保護。ドメインと配信パフォーマンスに使用。",
         },
       },
       {
@@ -332,6 +363,7 @@ const categories: UsesCategory[] = [
           pt: "Hospedagem e domínios para projetos de clientes e sites institucionais.",
           en: "Hosting and domains for client projects and institutional sites.",
           es: "Hosting y dominios para proyectos de clientes y sitios institucionales.",
+          jp: "クライアントプロジェクトや企業サイト向けのホスティングとドメイン。",
         },
       },
       {
@@ -341,6 +373,7 @@ const categories: UsesCategory[] = [
           pt: "Containerização para ambientes de dev consistentes e deploy em produção.",
           en: "Containerization for consistent dev environments and production deploys.",
           es: "Containerización para ambientes de dev consistentes y deploy en producción.",
+          jp: "一貫した開発環境と本番デプロイのためのコンテナ化。",
         },
       },
       {
@@ -350,6 +383,7 @@ const categories: UsesCategory[] = [
           pt: "API de email transacional. Simples, moderna e com boa DX.",
           en: "Transactional email API. Simple, modern and great DX.",
           es: "API de email transaccional. Simple, moderna y con buena DX.",
+          jp: "トランザクションメール API。シンプルでモダン、優れた DX。",
         },
       },
       {
@@ -358,12 +392,13 @@ const categories: UsesCategory[] = [
           pt: "Provedores de pagamento. PIX, cartão, assinaturas recorrentes.",
           en: "Payment providers. PIX, card, recurring subscriptions.",
           es: "Proveedores de pago. PIX, tarjeta, suscripciones recurrentes.",
+          jp: "決済プロバイダー。PIX、カード、定期サブスクリプション。",
         },
       },
     ],
   },
   {
-    title: { pt: "Hardware", en: "Hardware", es: "Hardware" },
+    title: { pt: "Hardware", en: "Hardware", es: "Hardware", jp: "ハードウェア" },
     items: [
       {
         name: "MacBook Air M2",
@@ -372,6 +407,7 @@ const categories: UsesCategory[] = [
           pt: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso e leve.",
           en: "Main machine. Apple Silicon M2, 16GB RAM, 256GB SSD. Silent and lightweight.",
           es: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso y liviano.",
+          jp: "メインマシン。Apple Silicon M2、16GB RAM、256GB SSD。静かで軽量。",
         },
       },
     ],
@@ -385,10 +421,10 @@ export default async function UsesPage() {
     <div className="w-full max-w-5xl mx-auto px-4 py-12">
       <header className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
-          {t(locale, { pt: "Ferramentas. Apps. Setup.", en: "Tools. Apps. Setup.", es: "Herramientas. Apps. Setup." })}
+          {t(locale, { pt: "Ferramentas. Apps. Setup.", en: "Tools. Apps. Setup.", es: "Herramientas. Apps. Setup.", jp: "ツール。アプリ。セットアップ。" })}
         </h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
-          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como engenheiro de software.", en: "This is not a static page — it's a living document with everything I currently use as a Software Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como ingeniero de software." })}
+          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como engenheiro de software.", en: "This is not a static page — it's a living document with everything I currently use as a Software Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como ingeniero de software.", jp: "これは静的なページではなく、ソフトウェアエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。" })}
         </p>
       </header>
 
@@ -430,8 +466,8 @@ export default async function UsesPage() {
                 <div className="flex items-start gap-3">
                   <span className="text-muted-foreground mt-0.5 select-none">-</span>
                   <EditorConfigSheet
-                    label={t(locale, { pt: "Ver meu settings.json", en: "View my settings.json", es: "Ver mi settings.json" })}
-                    description={t(locale, { pt: "Configurações do VS Code que uso no dia a dia.", en: "VS Code settings I use daily.", es: "Configuraciones de VS Code que uso día a día." })}
+                    label={t(locale, { pt: "Ver meu settings.json", en: "View my settings.json", es: "Ver mi settings.json", jp: "settings.jsonを見る" })}
+                    description={t(locale, { pt: "Configurações do VS Code que uso no dia a dia.", en: "VS Code settings I use daily.", es: "Configuraciones de VS Code que uso día a día.", jp: "日常的に使用しているVS Codeの設定。" })}
                   />
                 </div>
               )}

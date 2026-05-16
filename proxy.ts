@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 
-const LOCALES = ["pt", "en", "es"] as const
+const LOCALES = ["pt", "en", "es", "jp"] as const
 type Locale = (typeof LOCALES)[number]
 const DEFAULT_LOCALE: Locale = "pt"
 

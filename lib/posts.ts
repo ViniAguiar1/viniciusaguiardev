@@ -50,6 +50,10 @@ export type Post = {
   draft?: boolean
   // Ordenação editorial entre posts featured (menor = primeiro)
   order?: number
+  // Imagem Open Graph própria do post (fallback: /og-image.png do site)
+  ogImage?: string
+  // false => fora da grid da home (continua em busca, sitemap e URL direta)
+  showOnHome?: boolean
 }
 
 const postsDir = path.join(process.cwd(), "data", "posts")
@@ -93,6 +97,8 @@ function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
     featured: Boolean(data.featured),
     draft: Boolean(data.draft),
     order: typeof data.order === "number" ? data.order : undefined,
+    ogImage: typeof data.ogImage === "string" ? data.ogImage : undefined,
+    showOnHome: data.showOnHome !== false,
   }
 }
 

@@ -23,12 +23,28 @@ export async function generateMetadata({ params }: PageProps) {
   const locale: Locale = isLocale(rawLocale) ? rawLocale : await getLocale()
   const post = getPostBySlug(slug, locale)
   if (!post) return { title: "Post não encontrado" }
+  const url = `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`
+  const ogImage = post.ogImage || "/og-image.png"
   return {
     title: `${post.title} | Blog`,
     description: post.description ?? undefined,
     alternates: buildAlternates(`/posts/${slug}`, locale),
     // Drafts ficam acessíveis pela URL para preview, mas fora dos buscadores
     robots: post.draft ? { index: false, follow: false } : undefined,
+    openGraph: {
+      type: "article",
+      url,
+      siteName: "Vinicius Aguiar",
+      title: post.title,
+      description: post.description ?? undefined,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description ?? undefined,
+      images: [ogImage],
+    },
   }
 }
 

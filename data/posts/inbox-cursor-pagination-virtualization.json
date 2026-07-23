@@ -2,6 +2,7 @@
   "slug": "inbox-cursor-pagination-virtualization",
   "featured": true,
   "order": 1,
+  "ogImage": "/og/inbox-cursor-pagination-virtualization.png",
   "title": "De 6,7 MB para 19 KB: paginação cursor-based e virtualização em um inbox React",
   "title_en": "From 6.7 MB to 19 KB: cursor-based pagination and virtualization in a React inbox",
   "title_es": "De 6,7 MB a 19 KB: paginación cursor-based y virtualización en un inbox React",

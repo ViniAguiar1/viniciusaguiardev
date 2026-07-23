@@ -1,6 +1,6 @@
 {
   "slug": "case-study-chattie-inbox",
-  "draft": true,
+  "draft": false,
   "featured": true,
   "title": "Case Study: reconstruindo o inbox da Chattie — de 6,7 MB a 19 KB por requisição",
   "title_en": "Case Study: rebuilding Chattie's inbox — from 6.7 MB to 19 KB per request",

@@ -32,10 +32,10 @@ Notas importantes:
 ## Experiência profissional
 
 - **Chattie** (Jul 2026 — presente): Frontend Engineer. Lidera a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas. Reconstrução do inbox principal com paginação cursor-based e virtualização de lista (payload inicial de ~6,7 MB para ~19 KB, ~400x). Atuação adicional em backend, IA (Anthropic Claude, Vercel AI SDK) e confiabilidade.
-- **Holy Solutions** (Nov 2025 — Jul 2026): Mid-level Software Engineer. React, Next.js, React Native, AWS, integrações com IA e pagamentos.
+- **Holy Solutions** (Nov 2025 — Jul 2026, contrato): Mid-level Software Engineer. React, Next.js, React Native, AWS, integrações com IA e pagamentos.
 - **Vox Pet Digital** (Ago 2025 — presente): Software Engineer. SaaS para pet shops/clínicas. WhatsApp AI, Mercado Pago, Stripe.
 - **Stack Labs** (Abr 2025 — Jan 2026): Software Engineer. Desenvolvimento web/mobile para múltiplos clientes.
-- **MovePro** (Mai 2025 — Nov 2025): Software Engineer. Plataforma de saúde/fitness web + mobile. Stripe, Firebase, Crashlytics.
+- **MovePro** (Mai 2025 — Nov 2025, contrato): Software Engineer. Plataforma de saúde/fitness web + mobile. Stripe, Firebase, Crashlytics.
 - **EasyToGo** (Mai 2024 — Jun 2025): Web/Mobile Developer. React, Next.js, React Native, Flutter.
 
 ## Tech Stack

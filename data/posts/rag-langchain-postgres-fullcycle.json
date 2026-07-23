@@ -1,5 +1,6 @@
 {
   "slug": "rag-langchain-postgres-fullcycle",
+  "order": 9,
   "title": "Construindo um sistema RAG com LangChain e PostgreSQL",
   "title_en": "Building a RAG system with LangChain and PostgreSQL",
   "description": "Um estudo prático sobre como implementar um sistema de busca semântica (RAG) com Python, LangChain e pgVector — integrando IA generativa a dados empresariais.",

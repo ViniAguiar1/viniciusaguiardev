@@ -14,7 +14,7 @@ export type Experience = {
 export const experiences: Experience[] = [
   {
     company: "Chattie",
-    role: { pt: "Frontend Engineer", en: "Frontend Engineer", es: "Frontend Engineer", jp: "フロントエンドエンジニア" },
+    role: { pt: "Product Engineer (Frontend)", en: "Product Engineer (Frontend)", es: "Product Engineer (Frontend)", jp: "プロダクトエンジニア（フロントエンド）" },
     period: {
       pt: "Jul 2026 — atual · Tempo integral · Remoto",
       en: "Jul 2026 — present · Full-time · Remote",
@@ -30,17 +30,17 @@ export const experiences: Experience[] = [
       jp: "インボックス：ペイロード 約6.7MB → 約19KB（約1/400）",
     },
     summary: {
-      pt: "Lidero a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance, escalabilidade e entrega de ponta a ponta.",
-      en: "Leading the frontend of an AI outreach platform used by 100+ companies, focused on performance, scalability and end-to-end delivery.",
-      es: "Lidero el frontend de una plataforma de outreach con IA usada por 100+ empresas, con foco en performance, escalabilidad y entrega end-to-end.",
-      jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード。パフォーマンス、スケーラビリティ、エンドツーエンドの提供に注力。",
+      pt: "Atuo diretamente na evolução da frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance, escalabilidade e experiência do usuário.",
+      en: "Working directly on the evolution of the frontend of an AI outreach platform used by 100+ companies, focused on performance, scalability and user experience.",
+      es: "Actúo directamente en la evolución del frontend de una plataforma de outreach con IA usada por 100+ empresas, con foco en performance, escalabilidad y experiencia de usuario.",
+      jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドの進化に直接携わる。パフォーマンス、スケーラビリティ、ユーザー体験に注力。",
     },
     details: [
       {
-        pt: "Liderança da frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas",
-        en: "Leading the frontend of an AI-powered outreach platform used by 100+ companies",
-        es: "Liderazgo del frontend de una plataforma de outreach con IA usada por 100+ empresas",
-        jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード",
+        pt: "Responsável por iniciativas de performance e escalabilidade no frontend da plataforma",
+        en: "Responsible for performance and scalability initiatives across the platform's frontend",
+        es: "Responsable de iniciativas de performance y escalabilidad en el frontend de la plataforma",
+        jp: "プラットフォームのフロントエンドにおけるパフォーマンスとスケーラビリティ施策を担当",
       },
       {
         pt: "Reconstrução do inbox principal (~20.000 registros por workspace) com paginação cursor-based e virtualização de lista — payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface e carregamentos de vários segundos",

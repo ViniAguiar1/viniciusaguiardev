@@ -1,5 +1,6 @@
 {
   "slug": "multi-tenant-architecture-postgresql",
+  "order": 6,
   "title": "Arquitetura multi-tenant com PostgreSQL em aplicações SaaS",
   "title_en": "Multi-tenant architecture with PostgreSQL in SaaS applications",
   "description": "Um guia prático sobre como estruturar aplicações SaaS multi-tenant utilizando PostgreSQL — abordando isolamento de dados, modelagem de banco e boas práticas de arquitetura.",

@@ -1,5 +1,6 @@
 {
   "slug": "starting-typescript",
+  "showOnHome": false,
   "title": "Iniciando no TypeScript: guia prático para devs JavaScript",
   "title_en": "Getting started with TypeScript: a practical guide for JS developers",
   "title_es": "Iniciando en TypeScript: guía práctica para devs JavaScript",

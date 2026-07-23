@@ -1,6 +1,7 @@
 import type { Locale } from "@/lib/i18n"
 
 export type ProjectCategory =
+  | "AI SaaS"
   | "SaaS"
   | "E-commerce"
   | "Health"
@@ -21,6 +22,26 @@ export type Project = {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "chattie",
+    name: "Chattie",
+    logo: "/images/chattie-logo.png",
+    tagline: {
+      pt: "Outreach e customer engagement com IA — 100+ empresas",
+      en: "AI-powered outreach and customer engagement — 100+ companies",
+      es: "Outreach y customer engagement con IA — 100+ empresas",
+      jp: "AIによるアウトリーチ＆カスタマーエンゲージメント — 100社以上",
+    },
+    description: {
+      pt: "Plataforma de outreach e customer engagement com IA usada por 100+ empresas. Atuo como Product Engineer (Frontend) na evolução da frente de frontend, com foco em performance e escalabilidade — incluindo a reconstrução do inbox principal com paginação cursor-based e virtualização, reduzindo o payload de ~6,7 MB para ~19 KB por requisição e eliminando travamentos com milhares de conversas. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude e Vercel AI SDK.",
+      en: "AI-powered outreach and customer engagement platform used by 100+ companies. I work as a Product Engineer (Frontend) on the evolution of the frontend, focused on performance and scalability — including rebuilding the main inbox with cursor-based pagination and virtualization, cutting the payload from ~6.7 MB to ~19 KB per request and eliminating freezes with thousands of conversations. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude and Vercel AI SDK.",
+      es: "Plataforma de outreach y customer engagement con IA usada por 100+ empresas. Actúo como Product Engineer (Frontend) en la evolución del frontend, con foco en performance y escalabilidad — incluyendo la reconstrucción del inbox principal con paginación cursor-based y virtualización, reduciendo el payload de ~6,7 MB a ~19 KB por request y eliminando bloqueos con miles de conversaciones. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude y Vercel AI SDK.",
+      jp: "100社以上が利用するAIアウトリーチ＆カスタマーエンゲージメントプラットフォーム。プロダクトエンジニア（フロントエンド）としてフロントエンドの進化に携わり、パフォーマンスとスケーラビリティに注力 — カーソルベースのページネーションと仮想化によるメインインボックスの再構築を含み、リクエストあたりのペイロードを約6.7MBから約19KBへ削減、数千件の会話でのフリーズを解消。スタック：React、Next.js、TypeScript、Supabase、TanStack Query、TanStack Virtual、Anthropic Claude、Vercel AI SDK。",
+    },
+    category: "AI SaaS",
+    url: "https://trychattie.com",
+    detailPage: "/posts/inbox-cursor-pagination-virtualization",
+  },
   {
     slug: "termai",
     name: "termAI",

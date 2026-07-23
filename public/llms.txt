@@ -14,7 +14,7 @@ Notas importantes:
 
 - [Home](https://viniciusaguiardev.com.br/): Página inicial com seção de engenharia, artigos técnicos e apresentação profissional.
 - [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Chattie, Holy Solutions, Vox Pet Digital, Stack Labs, MovePro, EasyToGo), habilidades, tech stack e conceitos-chave.
-- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 5 projetos em produção — FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em SaaS, e-commerce e health.
+- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 7 projetos — Chattie, termAI, FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em AI SaaS, e-commerce e health.
 - [X-Drop — Página dedicada](https://viniciusaguiardev.com.br/projetos/x-drop): Case de produto com propósito, métricas reais (R$ 30k+ faturados, 100+ usuários, 400+ pedidos, MRR R$ 20k em 2 meses), screenshots do dashboard web e app iOS nativo (Swift UI), stack técnica e links para App Store e site.
 - [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: performance de frontend (paginação cursor-based, virtualização de lista), arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
 
@@ -32,7 +32,7 @@ Notas importantes:
 
 ## Experiência profissional
 
-- **Chattie** (Jul 2026 — presente): Frontend Engineer. Lidera a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas. Reconstrução do inbox principal com paginação cursor-based e virtualização de lista (payload inicial de ~6,7 MB para ~19 KB, ~400x). Atuação adicional em backend, IA (Anthropic Claude, Vercel AI SDK) e confiabilidade.
+- **Chattie** (Jul 2026 — presente): Product Engineer (Frontend). Atua diretamente na evolução do frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance e escalabilidade. Reconstrução do inbox principal com paginação cursor-based e virtualização de lista (payload inicial de ~6,7 MB para ~19 KB, ~400x). Atuação adicional em backend, IA (Anthropic Claude, Vercel AI SDK) e confiabilidade.
 - **Holy Solutions** (Nov 2025 — Jul 2026, contrato): Mid-level Software Engineer. React, Next.js, React Native, AWS, integrações com IA e pagamentos.
 - **Vox Pet Digital** (Ago 2025 — presente): Software Engineer. SaaS para pet shops/clínicas. WhatsApp AI, Mercado Pago, Stripe.
 - **Stack Labs** (Abr 2025 — Jan 2026): Software Engineer. Desenvolvimento web/mobile para múltiplos clientes.

@@ -10,6 +10,7 @@ import type { Project } from "@/data/projects"
 import { localePath, type Locale } from "@/lib/i18n"
 
 const categoryColors: Record<string, string> = {
+  "AI SaaS": "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",
   SaaS: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
   Marketplace: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
   ERP: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",

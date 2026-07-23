@@ -26,6 +26,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
 
   const faq = locale === "en"
     ? [
+        { q: "What is cursor-based pagination and when should you use it?", a: "Instead of OFFSET/LIMIT, each page is fetched from a cursor — a stable pointer to the last loaded record (e.g., created_at + id). This keeps read cost constant on large lists and prevents duplicated or skipped items when new records arrive mid-navigation. It's the right choice for feeds and inboxes; the trade-off is losing direct jumps to an arbitrary page." },
         { q: "What is multi-tenant architecture?", a: "A design pattern where multiple organizations share the same application and database, but each tenant's data is isolated. The most common approach in modern SaaS is shared database with tenant_id column and PostgreSQL Row Level Security (RLS) as a safety net." },
         { q: "How to handle payment webhooks reliably?", a: "Use a layered approach: validate signatures on every event, enforce idempotency with stored event IDs, ack immediately and process in background, validate state transitions with a state machine, run periodic reconciliation jobs, and route failed events to a dead letter queue." },
         { q: "How to integrate AI into production systems?", a: "Treat AI as a system component, not a standalone feature. Process messages asynchronously, register data back into your database, implement fallbacks for when the LLM is unavailable, and monitor response quality. The key is reliability — the system must work even when the AI provider has issues." },
@@ -33,6 +34,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       ]
     : locale === "es"
     ? [
+        { q: "¿Qué es la paginación cursor-based y cuándo usarla?", a: "En lugar de OFFSET/LIMIT, cada página se busca a partir de un cursor — un puntero estable al último registro cargado (ej.: created_at + id). Esto mantiene el costo de lectura constante en listas grandes y evita ítems duplicados o saltados cuando llegan nuevos registros durante la navegación. Es la elección correcta para feeds e inboxes; el trade-off es perder el salto directo a una página arbitraria." },
         { q: "¿Qué es la arquitectura multi-tenant?", a: "Un patrón de diseño donde múltiples organizaciones comparten la misma aplicación y base de datos, pero los datos de cada tenant están aislados. El enfoque más común en SaaS moderno es base de datos compartida con columna tenant_id y Row Level Security (RLS) de PostgreSQL como red de seguridad." },
         { q: "¿Cómo manejar webhooks de pago de forma confiable?", a: "Use un enfoque en capas: valide firmas en cada evento, garantice idempotencia con IDs de eventos almacenados, responda inmediatamente y procese en background, valide transiciones de estado con state machine, ejecute jobs de reconciliación periódicos y dirija eventos fallidos a una dead letter queue." },
         { q: "¿Cómo integrar IA en sistemas de producción?", a: "Trate la IA como un componente del sistema, no una feature aislada. Procese mensajes de forma asíncrona, registre datos de vuelta en la base de datos, implemente fallbacks para cuando el LLM no esté disponible y monitoree la calidad de las respuestas. El punto central es confiabilidad — el sistema debe funcionar incluso cuando el proveedor de IA tiene problemas." },
@@ -40,12 +42,14 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       ]
     : locale === "jp"
     ? [
+        { q: "カーソルベースのページネーションとは何ですか？いつ使うべきですか？", a: "OFFSET/LIMITの代わりに、各ページはカーソル — 最後に読み込んだレコードへの安定したポインタ（例：created_at + id）— から取得します。大きなリストでも読み取りコストが一定に保たれ、ナビゲーション中に新しいレコードが追加されても項目の重複や抜けを防げます。フィードやインボックスに最適な選択です。トレードオフは任意のページへ直接ジャンプできなくなることです。" },
         { q: "マルチテナントアーキテクチャとは何ですか？", a: "複数の組織が同じアプリケーションとデータベースを共有しながら、各テナントのデータは分離される設計パターンです。最近のSaaSで最も一般的なアプローチは、tenant_id カラムを持つ共有データベースと、セーフティネットとしての PostgreSQL の Row Level Security（RLS）です。" },
         { q: "決済Webhookを信頼性高く処理するには？", a: "多層的なアプローチを使います：すべてのイベントで署名を検証し、保存したイベントIDで冪等性を担保し、即座にackを返してバックグラウンドで処理し、ステートマシンで状態遷移を検証し、定期的な照合ジョブを実行し、失敗したイベントはデッドレターキューへ振り分けます。" },
         { q: "本番システムにAIを統合するには？", a: "AIを単独の機能ではなく、システムの一部として扱います。メッセージを非同期で処理し、データをデータベースへ書き戻し、LLMが利用できないときのフォールバックを実装し、応答品質を監視します。要点は信頼性です — AIプロバイダーに問題があってもシステムは動作し続けなければなりません。" },
         { q: "サーキットブレーカーパターンとは何ですか？", a: "サードパーティAPI連携のためのレジリエンスパターンです。外部APIが失敗し始めると、サーキットブレーカーが「開き」、障害をシステム全体に波及させる代わりにフォールバック応答を返します。クールダウン期間の後、サービスが回復したかを確認するためのテストリクエストを許可します。" },
       ]
     : [
+        { q: "O que é paginação cursor-based e quando usar?", a: "Em vez de OFFSET/LIMIT, cada página é buscada a partir de um cursor — um ponteiro estável para o último registro carregado (ex.: created_at + id). Isso mantém o custo de leitura constante em listas grandes e evita itens duplicados ou pulados quando novos registros chegam durante a navegação. É a escolha certa para feeds e inboxes; o trade-off é perder o salto direto para uma página arbitrária." },
         { q: "O que é arquitetura multi-tenant?", a: "Um padrão de design onde múltiplas organizações compartilham a mesma aplicação e banco de dados, mas os dados de cada tenant são isolados. A abordagem mais comum em SaaS moderno é banco compartilhado com coluna tenant_id e Row Level Security (RLS) do PostgreSQL como rede de segurança." },
         { q: "Como lidar com webhooks de pagamento de forma confiável?", a: "Use uma abordagem em camadas: valide assinaturas em cada evento, garanta idempotência com IDs de eventos armazenados, responda imediatamente e processe em background, valide transições de estado com state machine, execute jobs de reconciliação periódicos e direcione eventos com falha para uma dead letter queue." },
         { q: "Como integrar IA em sistemas de produção?", a: "Trate a IA como um componente do sistema, não uma feature isolada. Processe mensagens de forma assíncrona, registre dados de volta no banco, implemente fallbacks para quando o LLM estiver indisponível e monitore a qualidade das respostas. O ponto central é confiabilidade — o sistema precisa funcionar mesmo quando o provedor de IA tem problemas." },
@@ -91,6 +95,46 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* Expandable topics */}
       <FadeIn delay={100}>
       <section className="space-y-3 mb-12">
+        <EngineeringTopic
+          id="frontend-performance"
+          defaultOpen={topic === "frontend-performance"}
+          title={t(locale, { pt: "Performance de Frontend — Inbox em escala", en: "Frontend Performance — Inbox at Scale", es: "Performance de Frontend — Inbox a escala", jp: "フロントエンドパフォーマンス — スケールするインボックス" })}
+          subtitle={t(locale, { pt: "Paginação cursor-based + virtualização — payload de 6,7 MB para 19 KB (~400x)", en: "Cursor-based pagination + virtualization — payload from 6.7 MB to 19 KB (~400x)", es: "Paginación cursor-based + virtualización — payload de 6,7 MB a 19 KB (~400x)", jp: "カーソルベースのページネーション + 仮想化 — ペイロードを6.7MBから19KBへ（約1/400）" })}
+        >
+          <div className="space-y-5">
+            <p className="text-sm leading-relaxed">
+              {t(locale, { pt: "Reconstruí o inbox principal de uma plataforma de outreach com IA usada por 100+ empresas. Workspaces acumulam ~20.000 registros, e o fetch inicial carregava tudo de uma vez: payload de ~6,7 MB, travamentos de interface e carregamentos de vários segundos.", en: "I rebuilt the main inbox of an AI outreach platform used by 100+ companies. Workspaces accumulate ~20,000 records, and the initial fetch loaded everything at once: a ~6.7 MB payload, UI freezes and multi-second loads.", es: "Reconstruí el inbox principal de una plataforma de outreach con IA usada por 100+ empresas. Los workspaces acumulan ~20.000 registros, y el fetch inicial cargaba todo de una vez: payload de ~6,7 MB, bloqueos de interfaz y cargas de varios segundos.", jp: "100社以上が利用するAIアウトリーチプラットフォームのメインインボックスを再構築しました。ワークスペースには約20,000件のレコードが蓄積され、初期フェッチはすべてを一度に読み込んでいました：約6.7MBのペイロード、UIのフリーズ、数秒かかる読み込み。" })}
+            </p>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+                {t(locale, { pt: "Decisões-chave", en: "Key Decisions", es: "Decisiones clave", jp: "重要な判断" })}
+              </h4>
+              <ul className="text-sm space-y-1.5">
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Paginação cursor-based em vez de offset — custo de leitura constante e sem itens duplicados ou pulados quando novas conversas chegam", en: "Cursor-based pagination instead of offset — constant read cost and no duplicated or skipped items when new conversations arrive", es: "Paginación cursor-based en lugar de offset — costo de lectura constante y sin ítems duplicados o saltados cuando llegan nuevas conversaciones", jp: "オフセットではなくカーソルベースのページネーション — 読み取りコストが一定で、新しい会話が届いても項目の重複や抜けが発生しない" })}</li>
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Virtualização de lista — só as linhas visíveis são renderizadas, mantendo o DOM pequeno mesmo com milhares de registros", en: "List virtualization — only visible rows are rendered, keeping the DOM small even with thousands of records", es: "Virtualización de lista — solo se renderizan las filas visibles, manteniendo el DOM pequeño incluso con miles de registros", jp: "リスト仮想化 — 表示中の行だけをレンダリングし、数千件でもDOMを小さく保つ" })}</li>
+                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Resultado: payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface", en: "Result: initial payload from ~6.7 MB to ~19 KB (~400x), eliminating UI freezes", es: "Resultado: payload inicial de ~6,7 MB a ~19 KB (~400x), eliminando bloqueos de interfaz", jp: "結果：初期ペイロードを約6.7MBから約19KBへ（約1/400）削減し、UIフリーズを解消" })}</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Stack</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {["React", "Next.js", "TypeScript"].map((tech) => (
+                  <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-md border border-border bg-muted/20 p-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
+              <p className="text-sm leading-relaxed">
+                {t(locale, { pt: "Cursor-based abre mão do salto direto para uma página arbitrária — aceitável para um inbox, que é navegado como um fluxo cronológico, não como uma tabela paginada. A virtualização adicionou complexidade (medição de alturas, scroll restoration), mas era a única forma de manter a interface fluida: paginação sozinha reduz o payload, e não o custo de renderizar milhares de linhas acumuladas no DOM.", en: "Cursor-based gives up direct jumps to an arbitrary page — acceptable for an inbox, which is navigated as a chronological stream, not a paginated table. Virtualization added complexity (height measurement, scroll restoration), but it was the only way to keep the interface fluid: pagination alone reduces the payload, not the cost of rendering thousands of accumulated rows in the DOM.", es: "Cursor-based renuncia al salto directo a una página arbitraria — aceptable para un inbox, que se navega como un flujo cronológico, no como una tabla paginada. La virtualización agregó complejidad (medición de alturas, scroll restoration), pero era la única forma de mantener la interfaz fluida: la paginación sola reduce el payload, no el costo de renderizar miles de filas acumuladas en el DOM.", jp: "カーソルベースでは任意のページへの直接ジャンプができなくなります — インボックスはページ番号付きのテーブルではなく時系列のストリームとして閲覧されるため、許容できるトレードオフです。仮想化は複雑さ（高さの計測、スクロール位置の復元）を増やしましたが、インターフェースを滑らかに保つ唯一の方法でした：ページネーションだけではペイロードは減っても、DOMに蓄積された数千行のレンダリングコストは減らないためです。" })}
+              </p>
+            </div>
+            <Link href={localePath(locale, "/posts/inbox-cursor-pagination-virtualization")} className="text-sm text-primary hover:underline inline-block">
+              {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →", jp: "実装の詳細を読む →" })}
+            </Link>
+          </div>
+        </EngineeringTopic>
+
         <EngineeringTopic
           id="saas-architecture"
           defaultOpen={topic === "saas-architecture"}
@@ -291,6 +335,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
+            { title: t(locale, { pt: "Inbox React em escala", en: "React Inbox at Scale", es: "Inbox React a escala", jp: "スケールするReactインボックス" }), desc: t(locale, { pt: "Cursor, virtualização, 6,7 MB → 19 KB por requisição", en: "Cursor, virtualization, 6.7 MB → 19 KB per request", es: "Cursor, virtualización, 6,7 MB → 19 KB por request", jp: "カーソル、仮想化、リクエストあたり6.7MB → 19KB" }), href: "/posts/inbox-cursor-pagination-virtualization" },
             { title: t(locale, { pt: "Circuit Breaker em Node.js", en: "Circuit Breaker in Node.js", es: "Circuit Breaker en Node.js", jp: "Node.jsのサーキットブレーカー" }), desc: t(locale, { pt: "State machine, fallbacks, retry e monitoramento", en: "State machine, fallbacks, retry and monitoring", es: "State machine, fallbacks, retry y monitoreo", jp: "ステートマシン、フォールバック、リトライ、モニタリング" }), href: "/posts/circuit-breaker-nodejs" },
             { title: t(locale, { pt: "Arquitetura de Webhooks para Pagamentos", en: "Webhook Architecture for Payments", es: "Arquitectura de Webhooks para Pagos", jp: "決済向けWebhookアーキテクチャ" }), desc: t(locale, { pt: "Idempotência, reconciliação, fluxos PIX", en: "Idempotency, reconciliation, PIX flows", es: "Idempotencia, reconciliación, flujos PIX", jp: "冪等性、照合、PIXフロー" }), href: "/posts/webhook-architecture-payment-providers" },
             { title: t(locale, { pt: "Arquitetura Multi-tenant", en: "Multi-tenant Architecture", es: "Arquitectura Multi-tenant", jp: "マルチテナントアーキテクチャ" }), desc: t(locale, { pt: "Banco compartilhado, RLS, particionamento", en: "Shared DB, RLS, partitioning", es: "Base compartida, RLS, particionamiento", jp: "共有DB、RLS、パーティショニング" }), href: "/posts/multi-tenant-architecture-postgresql" },

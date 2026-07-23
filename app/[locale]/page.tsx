@@ -23,7 +23,7 @@ export default async function Home() {
           author: {
             "@type": "Person",
             name: "Vinicius Aguiar",
-            jobTitle: "Software Engineer",
+            jobTitle: "Frontend Engineer",
             url: "https://viniciusaguiardev.com.br",
             sameAs: [
               "https://github.com/ViniAguiar1",
@@ -108,10 +108,10 @@ export default async function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {[
               {
-                topicId: "saas-architecture",
-                title: t(locale, { pt: "Arquitetura SaaS", en: "SaaS Architecture", es: "Arquitectura SaaS", jp: "SaaSアーキテクチャ" }),
-                desc: t(locale, { pt: "Multi-módulo com pipeline WhatsApp → LLM → PostgreSQL e transações atômicas para vendas e pagamentos.", en: "Multi-module with WhatsApp → LLM → PostgreSQL pipeline and atomic transactions for sales and payments.", es: "Multi-módulo con pipeline WhatsApp → LLM → PostgreSQL y transacciones atómicas para ventas y pagos.", jp: "WhatsApp → LLM → PostgreSQLパイプラインを持つマルチモジュール構成、販売と決済のためのアトミックトランザクション。" }),
-                icon: "M2.25 7.125C2.25 6.504 2.754 6 3.375 6h6c.621 0 1.125.504 1.125 1.125v3.75c0 .621-.504 1.125-1.125 1.125h-6a1.125 1.125 0 01-1.125-1.125v-3.75zM14.25 8.625c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-8.25zM3.75 16.125c0-.621.504-1.125 1.125-1.125h5.25c.621 0 1.125.504 1.125 1.125v2.25c0 .621-.504 1.125-1.125 1.125h-5.25a1.125 1.125 0 01-1.125-1.125v-2.25z",
+                topicId: "frontend-performance",
+                title: t(locale, { pt: "Performance de Frontend", en: "Frontend Performance", es: "Performance de Frontend", jp: "フロントエンドパフォーマンス" }),
+                desc: t(locale, { pt: "Reconstrução de inbox com paginação cursor-based e virtualização de lista — payload de 6,7 MB para 19 KB (~400x), sem travamentos com milhares de registros.", en: "Inbox rebuild with cursor-based pagination and list virtualization — payload from 6.7 MB down to 19 KB (~400x), no UI freezes with thousands of records.", es: "Reconstrucción de inbox con paginación cursor-based y virtualización de lista — payload de 6,7 MB a 19 KB (~400x), sin bloqueos con miles de registros.", jp: "カーソルベースのページネーションとリスト仮想化によるインボックス再構築 — ペイロードを6.7MBから19KBへ（約1/400）、数千件でもUIフリーズなし。" }),
+                icon: "M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z",
               },
               {
                 topicId: "multi-tenant",

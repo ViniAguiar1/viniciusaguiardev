@@ -1,0 +1,335 @@
+export type Localized = { pt: string; en: string; es: string; jp: string }
+
+export type Experience = {
+  company: string
+  role: Localized
+  period: Localized
+  current?: boolean
+  stack: string[]
+  summary: Localized
+  highlight?: Localized
+  details: Localized[]
+}
+
+export const experiences: Experience[] = [
+  {
+    company: "Chattie",
+    role: { pt: "Frontend Engineer", en: "Frontend Engineer", es: "Frontend Engineer", jp: "フロントエンドエンジニア" },
+    period: {
+      pt: "Jul 2026 — atual · Tempo integral · Remoto",
+      en: "Jul 2026 — present · Full-time · Remote",
+      es: "Jul 2026 — presente · Tiempo completo · Remoto",
+      jp: "2026年7月 — 現在 · フルタイム · リモート",
+    },
+    current: true,
+    stack: ["React", "Next.js", "TypeScript", "Anthropic Claude", "Vercel AI SDK"],
+    highlight: {
+      pt: "Inbox: payload ~6,7 MB → ~19 KB (~400x)",
+      en: "Inbox: payload ~6.7 MB → ~19 KB (~400x)",
+      es: "Inbox: payload ~6,7 MB → ~19 KB (~400x)",
+      jp: "インボックス：ペイロード 約6.7MB → 約19KB（約1/400）",
+    },
+    summary: {
+      pt: "Lidero a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance, escalabilidade e entrega de ponta a ponta.",
+      en: "Leading the frontend of an AI outreach platform used by 100+ companies, focused on performance, scalability and end-to-end delivery.",
+      es: "Lidero el frontend de una plataforma de outreach con IA usada por 100+ empresas, con foco en performance, escalabilidad y entrega end-to-end.",
+      jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード。パフォーマンス、スケーラビリティ、エンドツーエンドの提供に注力。",
+    },
+    details: [
+      {
+        pt: "Liderança da frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas",
+        en: "Leading the frontend of an AI-powered outreach platform used by 100+ companies",
+        es: "Liderazgo del frontend de una plataforma de outreach con IA usada por 100+ empresas",
+        jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード",
+      },
+      {
+        pt: "Reconstrução do inbox principal (~20.000 registros por workspace) com paginação cursor-based e virtualização de lista — payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface e carregamentos de vários segundos",
+        en: "Rebuilt the platform's main inbox (~20,000 records per workspace) with cursor-based pagination and list virtualization — initial payload from ~6.7 MB to ~19 KB (~400x), eliminating UI freezes and multi-second loads",
+        es: "Reconstrucción del inbox principal (~20.000 registros por workspace) con paginación cursor-based y virtualización de lista — payload inicial de ~6,7 MB a ~19 KB (~400x), eliminando bloqueos de interfaz y cargas de varios segundos",
+        jp: "メインインボックス（ワークスペースあたり約20,000件）をカーソルベースのページネーションとリスト仮想化で再構築 — 初期ペイロードを約6.7MBから約19KBへ（約1/400）削減し、UIのフリーズと数秒かかる読み込みを解消",
+      },
+      {
+        pt: "Contribuição em decisões de arquitetura voltadas a escalabilidade e manutenibilidade, entregando features de ponta a ponta (design → produção)",
+        en: "Contributing to architecture decisions focused on scalability and maintainability, shipping features end to end (design → production)",
+        es: "Contribución en decisiones de arquitectura orientadas a escalabilidad y mantenibilidad, entregando features de punta a punta (diseño → producción)",
+        jp: "スケーラビリティと保守性を重視したアーキテクチャの意思決定に貢献し、機能をエンドツーエンド（デザイン → 本番）で提供",
+      },
+      {
+        pt: "Atuação adicional em backend, sistemas de IA (Anthropic Claude, Vercel AI SDK) e confiabilidade, além do escopo principal de frontend",
+        en: "Additional work on backend, AI systems (Anthropic Claude, Vercel AI SDK) and reliability, beyond the core frontend scope",
+        es: "Trabajo adicional en backend, sistemas de IA (Anthropic Claude, Vercel AI SDK) y confiabilidad, más allá del alcance principal de frontend",
+        jp: "主担当のフロントエンドに加え、バックエンド、AIシステム（Anthropic Claude、Vercel AI SDK）、信頼性にも従事",
+      },
+      {
+        pt: "90%+ de cobertura de testes automatizados (unitários e de integração) nas features entregues",
+        en: "Maintaining 90%+ automated test coverage (unit and integration) on shipped features",
+        es: "90%+ de cobertura de tests automatizados (unitarios y de integración) en las features entregadas",
+        jp: "提供する機能で90%以上の自動テストカバレッジ（ユニット・統合）を維持",
+      },
+    ],
+  },
+  {
+    company: "Holy Solutions",
+    role: { pt: "Mid-level Software Engineer", en: "Mid-level Software Engineer", es: "Mid-level Software Engineer", jp: "ミドルレベル ソフトウェアエンジニア" },
+    period: {
+      pt: "Nov 2025 — Jul 2026 · Contrato · Minas Gerais, Brasil · Remoto",
+      en: "Nov 2025 — Jul 2026 · Contract · Minas Gerais, Brazil · Remote",
+      es: "Nov 2025 — Jul 2026 · Contrato · Minas Gerais, Brasil · Remoto",
+      jp: "2025年11月 — 2026年7月 · 業務委託 · ブラジル・ミナスジェライス州 · リモート",
+    },
+    stack: ["React", "Next.js", "React Native", "AWS", "Asaas"],
+    summary: {
+      pt: "Desenvolvimento de aplicações web e mobile utilizando React, Next.js e React Native, com foco em interfaces escaláveis e experiências centradas no usuário.",
+      en: "Development of web and mobile applications using React, Next.js and React Native, focused on building scalable interfaces and user-centric experiences.",
+      es: "Desarrollo de aplicaciones web y móviles con React, Next.js y React Native, enfocado en interfaces escalables y experiencias centradas en el usuario.",
+      jp: "React、Next.js、React Native によるWeb・モバイルアプリケーション開発。スケーラブルなインターフェースとユーザー中心の体験に注力。",
+    },
+    details: [
+      {
+        pt: "Desenvolvimento end-to-end de features com APIs externas, pagamentos e serviços com IA",
+        en: "End-to-end feature development with external APIs, payment systems and AI-powered services",
+        es: "Desarrollo end-to-end de features con APIs externas, pagos y servicios con IA",
+        jp: "外部API、決済、AIサービスを用いた機能のエンドツーエンド開発",
+      },
+      {
+        pt: "Desenvolvimento de interfaces web e mobile com React, Next.js e React Native",
+        en: "Development of web and mobile interfaces with React, Next.js and React Native",
+        es: "Desarrollo de interfaces web y móviles con React, Next.js y React Native",
+        jp: "React、Next.js、React Native によるWeb・モバイルインターフェースの開発",
+      },
+      {
+        pt: "Integração com APIs externas e sistemas de pagamento (Asaas)",
+        en: "Integration with external APIs and payment systems (Asaas)",
+        es: "Integración con APIs externas y sistemas de pago (Asaas)",
+        jp: "外部APIおよび決済システム（Asaas）との連携",
+      },
+      {
+        pt: "Criação de componentes reutilizáveis e padronização de Design System",
+        en: "Creation of reusable components and Design System standardization",
+        es: "Creación de componentes reutilizables y estandarización de Design System",
+        jp: "再利用可能なコンポーネントの作成とデザインシステムの標準化",
+      },
+      {
+        pt: "Participação em decisões técnicas de arquitetura frontend e integrações de sistemas",
+        en: "Participation in technical decisions for frontend architecture and system integrations",
+        es: "Participación en decisiones técnicas de arquitectura frontend e integraciones de sistemas",
+        jp: "フロントエンドアーキテクチャおよびシステム連携の技術的意思決定への参加",
+      },
+      {
+        pt: "Deploy e operação de aplicações em ambientes AWS",
+        en: "Deployment and operation of applications in AWS cloud environments",
+        es: "Deploy y operación de aplicaciones en ambientes AWS",
+        jp: "AWS環境でのアプリケーションのデプロイと運用",
+      },
+    ],
+  },
+  {
+    company: "Vox Pet Digital",
+    role: { pt: "Software Engineer", en: "Software Engineer", es: "Software Engineer", jp: "ソフトウェアエンジニア" },
+    period: {
+      pt: "Ago 2025 — atual · Meio período · Remoto",
+      en: "Aug 2025 — present · Part-time · Remote",
+      es: "Ago 2025 — presente · Medio tiempo · Remoto",
+      jp: "2025年8月 — 現在 · パートタイム · リモート",
+    },
+    current: true,
+    stack: ["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "OpenAI"],
+    summary: {
+      pt: "Atuação como Software Engineer no SaaS Vox Pet Digital para pet shops e clínicas veterinárias, participando diretamente da evolução do produto.",
+      en: "Software Engineer at Vox Pet Digital (SaaS for pet shops and veterinary clinics), contributing directly to product evolution across core business modules.",
+      es: "Software Engineer en el SaaS Vox Pet Digital para pet shops y clínicas veterinarias, participando directamente en la evolución del producto.",
+      jp: "ペットショップおよび動物病院向けSaaS「Vox Pet Digital」のソフトウェアエンジニアとして、プロダクトの進化に直接関与。",
+    },
+    details: [
+      {
+        pt: "Implementação de módulos de agenda, vendas, financeiro e comissões",
+        en: "Implementation of modules such as scheduling, sales, finance and commissions",
+        es: "Implementación de módulos de agenda, ventas, financiero y comisiones",
+        jp: "予約、販売、財務、手数料モジュールの実装",
+      },
+      {
+        pt: "Desenvolvimento de automações via WhatsApp conectadas ao fluxo operacional",
+        en: "Development of WhatsApp automation workflows connected to operations",
+        es: "Desarrollo de automatizaciones vía WhatsApp conectadas al flujo operacional",
+        jp: "業務フローと連携したWhatsApp自動化の開発",
+      },
+      {
+        pt: "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos/serviços",
+        en: "AI integration in WhatsApp for automated support, recommendations and sales completion",
+        es: "Integración de IA en WhatsApp para atención automatizada y recomendación de productos/servicios",
+        jp: "自動応対と商品・サービス推薦のためのWhatsAppへのAI統合",
+      },
+      {
+        pt: "Fluxos de finalização de vendas com registro dos dados no sistema",
+        en: "Data registration from AI-assisted flows back into the SaaS platform",
+        es: "Flujos de cierre de ventas con registro de datos en el sistema",
+        jp: "システムへのデータ登録を伴う販売完了フロー",
+      },
+      {
+        pt: "Integrações: WhatsApp, OpenAI, Mercado Pago e Stripe",
+        en: "Integrations: WhatsApp, OpenAI, Mercado Pago and Stripe",
+        es: "Integraciones: WhatsApp, OpenAI, Mercado Pago y Stripe",
+        jp: "連携：WhatsApp、OpenAI、Mercado Pago、Stripe",
+      },
+      {
+        pt: "Acompanhamento de deploy e operação do sistema em produção",
+        en: "Follow-up on system deployment and production operation",
+        es: "Seguimiento de deploy y operación del sistema en producción",
+        jp: "本番環境でのデプロイと運用のフォローアップ",
+      },
+    ],
+  },
+  {
+    company: "Stack Labs",
+    role: { pt: "Software Engineer", en: "Software Engineer", es: "Software Engineer", jp: "ソフトウェアエンジニア" },
+    period: {
+      pt: "Abr 2025 — Jan 2026 · Tempo integral · São Paulo, Brasil · Remoto",
+      en: "Apr 2025 — Jan 2026 · Full-time · São Paulo, Brazil · Remote",
+      es: "Abr 2025 — Ene 2026 · Tiempo completo · São Paulo, Brasil · Remoto",
+      jp: "2025年4月 — 2026年1月 · フルタイム · ブラジル・サンパウロ · リモート",
+    },
+    stack: ["React", "Next.js", "React Native"],
+    summary: {
+      pt: "Atuei no desenvolvimento de aplicações web e mobile para diferentes clientes, entregando interfaces performáticas e escaláveis com React, Next.js e React Native.",
+      en: "Development of web and mobile applications for different clients, delivering scalable and high-performance interfaces with React, Next.js and React Native.",
+      es: "Desarrollo de aplicaciones web y móviles para diferentes clientes, entregando interfaces performantes y escalables con React, Next.js y React Native.",
+      jp: "さまざまなクライアント向けのWeb・モバイルアプリケーション開発。React、Next.js、React Native で高性能かつスケーラブルなインターフェースを提供。",
+    },
+    details: [
+      {
+        pt: "Criação de interfaces responsivas e performáticas com React, React Native e Next.js",
+        en: "Creation of responsive and high-performance interfaces with React, React Native and Next.js",
+        es: "Creación de interfaces responsivas y performantes con React, React Native y Next.js",
+        jp: "React、React Native、Next.js によるレスポンシブで高性能なインターフェースの作成",
+      },
+      {
+        pt: "Construção de componentes reutilizáveis e arquitetura frontend orientada a escalabilidade",
+        en: "Reusable components and frontend architecture focused on scalability",
+        es: "Componentes reutilizables y arquitectura frontend orientada a escalabilidad",
+        jp: "再利用可能なコンポーネントとスケーラビリティを重視したフロントエンドアーキテクチャ",
+      },
+      {
+        pt: "Integração com APIs REST e serviços externos (pagamentos, notificações, autenticação, analytics)",
+        en: "Integration with REST APIs and external services (payments, notifications, auth, analytics)",
+        es: "Integración con APIs REST y servicios externos (pagos, notificaciones, autenticación, analytics)",
+        jp: "REST APIおよび外部サービス（決済、通知、認証、分析）との連携",
+      },
+      {
+        pt: "Otimização de performance, experiência do usuário e redução de erros em produção",
+        en: "Performance and UX optimization with reduction of production errors",
+        es: "Optimización de performance, experiencia de usuario y reducción de errores en producción",
+        jp: "パフォーマンス最適化、ユーザー体験の向上、本番環境のエラー削減",
+      },
+      {
+        pt: "Acompanhamento de deploys, monitoramento de logs e colaboração em todo o ciclo de desenvolvimento",
+        en: "Follow-up on deployments, log monitoring and full-cycle collaboration",
+        es: "Seguimiento de deploys, monitoreo de logs y colaboración en todo el ciclo de desarrollo",
+        jp: "デプロイのフォローアップ、ログ監視、開発サイクル全体での協働",
+      },
+    ],
+  },
+  {
+    company: "MovePro",
+    role: { pt: "Software Engineer", en: "Software Engineer", es: "Software Engineer", jp: "ソフトウェアエンジニア" },
+    period: {
+      pt: "Mai 2025 — Nov 2025 · Contrato · São Paulo, Brasil · Remoto",
+      en: "May 2025 — Nov 2025 · Contract · São Paulo, Brazil · Remote",
+      es: "May 2025 — Nov 2025 · Contrato · São Paulo, Brasil · Remoto",
+      jp: "2025年5月 — 2025年11月 · 業務委託 · ブラジル・サンパウロ · リモート",
+    },
+    stack: ["React", "Next.js", "React Native", "Expo", "Stripe", "Firebase"],
+    summary: {
+      pt: "Participei do desenvolvimento completo da plataforma MovePro (web + mobile), contribuindo para interfaces críticas usadas por milhares de usuários e liderando integrações essenciais.",
+      en: "Contributed to end-to-end development of the MovePro platform (web + mobile), building critical interfaces used by thousands of users and leading key integrations.",
+      es: "Participé en el desarrollo completo de la plataforma MovePro (web + móvil), contribuyendo en interfaces críticas usadas por miles de usuarios y liderando integraciones esenciales.",
+      jp: "MovePro プラットフォーム（Web + モバイル）の全面的な開発に参加。数千人のユーザーが利用する重要なインターフェースに貢献し、主要な連携をリード。",
+    },
+    details: [
+      {
+        pt: "Desenvolvimento das interfaces web com React e Next.js, com foco em performance e escalabilidade",
+        en: "Development of web interfaces with React and Next.js focused on performance and scalability",
+        es: "Desarrollo de interfaces web con React y Next.js, enfocado en performance y escalabilidad",
+        jp: "React と Next.js によるWebインターフェース開発。パフォーマンスとスケーラビリティに注力",
+      },
+      {
+        pt: "Criação e manutenção do aplicativo mobile com React Native e Expo",
+        en: "Creation and maintenance of the mobile app using React Native and Expo",
+        es: "Creación y mantenimiento de la app móvil con React Native y Expo",
+        jp: "React Native と Expo によるモバイルアプリの開発と保守",
+      },
+      {
+        pt: "Integração com serviços externos como Stripe, FatSecret, Google e Firebase",
+        en: "Integration with Stripe, FatSecret, Google and Firebase services",
+        es: "Integración con servicios externos como Stripe, FatSecret, Google y Firebase",
+        jp: "Stripe、FatSecret、Google、Firebase などの外部サービスとの連携",
+      },
+      {
+        pt: "Otimização de queries e consumo de APIs, reduzindo tempo de carregamento e latência",
+        en: "Query and API consumption optimization to reduce loading time and latency",
+        es: "Optimización de queries y consumo de APIs, reduciendo tiempo de carga y latencia",
+        jp: "クエリとAPI呼び出しの最適化による読み込み時間とレイテンシの削減",
+      },
+      {
+        pt: "Implementação de monitoramento com Crashlytics, logs e métricas",
+        en: "Monitoring implementation with Crashlytics, logs and product metrics",
+        es: "Implementación de monitoreo con Crashlytics, logs y métricas de producto",
+        jp: "Crashlytics、ログ、プロダクトメトリクスによる監視の実装",
+      },
+      {
+        pt: "Desenvolvimento de componentes e UX consistente para todo o ecossistema MovePro",
+        en: "UX-consistent component development across the MovePro ecosystem",
+        es: "Desarrollo de componentes y UX consistente en todo el ecosistema MovePro",
+        jp: "MovePro エコシステム全体で一貫したコンポーネントとUXの開発",
+      },
+      {
+        pt: "Participação em decisões técnicas, ciclos de release e evolução do produto",
+        en: "Participation in technical decisions, release cycles and product evolution",
+        es: "Participación en decisiones técnicas, ciclos de release y evolución del producto",
+        jp: "技術的意思決定、リリースサイクル、プロダクトの進化への参加",
+      },
+    ],
+  },
+  {
+    company: "Easytogo",
+    role: { pt: "Web Developer / Mobile Developer", en: "Web Developer / Mobile Developer", es: "Web Developer / Mobile Developer", jp: "Web開発者 / モバイル開発者" },
+    period: {
+      pt: "Mai 2024 — Jun 2025 · Híbrido",
+      en: "May 2024 — Jun 2025 · Hybrid",
+      es: "May 2024 — Jun 2025 · Híbrido",
+      jp: "2024年5月 — 2025年6月 · ハイブリッド",
+    },
+    stack: ["React", "Next.js", "React Native", "Flutter"],
+    summary: {
+      pt: "Desenvolvimento de interfaces web e mobile com React, Next.js, React Native e Flutter em ambiente ágil e orientado a produto.",
+      en: "Development of responsive web and mobile interfaces using React, Next.js, React Native and Flutter in an agile and product-oriented environment.",
+      es: "Desarrollo de interfaces web y móviles con React, Next.js, React Native y Flutter en ambiente ágil y orientado a producto.",
+      jp: "アジャイルかつプロダクト志向の環境で、React、Next.js、React Native、Flutter によるWeb・モバイルインターフェースの開発。",
+    },
+    details: [
+      {
+        pt: "Desenvolvimento com React e Next.js",
+        en: "Development with React and Next.js",
+        es: "Desarrollo con React y Next.js",
+        jp: "React と Next.js による開発",
+      },
+      {
+        pt: "Aplicações mobile com React Native e Flutter",
+        en: "Mobile applications with React Native and Flutter",
+        es: "Aplicaciones móviles con React Native y Flutter",
+        jp: "React Native と Flutter によるモバイルアプリケーション",
+      },
+      {
+        pt: "Integração com APIs conectadas a fluxos reais de usuário",
+        en: "API integrations connected to real-world user workflows",
+        es: "Integración con APIs conectadas a flujos reales de usuario",
+        jp: "実際のユーザーフローに接続されたAPIとの連携",
+      },
+      {
+        pt: "Trabalho em ambiente ágil com Scrum",
+        en: "Agile teamwork using Scrum",
+        es: "Trabajo en ambiente ágil con Scrum",
+        jp: "Scrum によるアジャイル環境での業務",
+      },
+    ],
+  },
+]

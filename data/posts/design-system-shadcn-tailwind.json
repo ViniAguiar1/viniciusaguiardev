@@ -1,5 +1,7 @@
 {
   "slug": "design-system-shadcn-tailwind",
+  "featured": true,
+  "order": 2,
   "title": "Construindo um Design System com Shadcn UI e Tailwind",
   "title_en": "Building a Design System with Shadcn UI and Tailwind",
   "description": "Um guia prático sobre como estruturar um design system escalável utilizando Shadcn UI, Tailwind CSS e React — garantindo consistência visual e produtividade em aplicações modernas.",

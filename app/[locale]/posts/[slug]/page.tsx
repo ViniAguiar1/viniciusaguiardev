@@ -27,6 +27,8 @@ export async function generateMetadata({ params }: PageProps) {
     title: `${post.title} | Blog`,
     description: post.description ?? undefined,
     alternates: buildAlternates(`/posts/${slug}`, locale),
+    // Drafts ficam acessíveis pela URL para preview, mas fora dos buscadores
+    robots: post.draft ? { index: false, follow: false } : undefined,
   }
 }
 

@@ -1,0 +1,70 @@
+<svg width="900" height="560" viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="List virtualization: out of ~20,000 items, only the rows inside the viewport plus a small overscan exist in the DOM">
+
+<style>
+.ghost { fill: none; stroke: #d1d5db; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.rendered { fill: #ecfdf5; stroke: #047857; stroke-width: 1.5; }
+.overscan { fill: #f8fafc; stroke: #047857; stroke-width: 1.5; stroke-dasharray: 5 4; }
+.frame { fill: none; stroke: #111827; stroke-width: 2.5; }
+.frameLabel { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: #111827; }
+.label { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #111827; }
+.subLabel { font-family: system-ui, -apple-system, sans-serif; font-size: 12.5px; fill: #6b7280; }
+.leader { stroke: #9ca3af; stroke-width: 1.2; }
+</style>
+
+<!-- full list (data, not DOM): ghost rows above -->
+<rect class="ghost" x="140" y="30"  width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="54"  width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="78"  width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="102" width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="126" width="240" height="18" rx="4"/>
+
+<!-- overscan above viewport -->
+<rect class="overscan" x="140" y="162" width="240" height="18" rx="4"/>
+<rect class="overscan" x="140" y="186" width="240" height="18" rx="4"/>
+
+<!-- viewport frame -->
+<rect class="frame" x="120" y="212" width="280" height="188" rx="8"/>
+<text class="frameLabel" x="424" y="228">viewport</text>
+
+<!-- rendered rows inside viewport -->
+<rect class="rendered" x="140" y="222" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="246" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="270" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="294" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="318" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="342" width="240" height="18" rx="4"/>
+<rect class="rendered" x="140" y="366" width="240" height="18" rx="4"/>
+
+<!-- scrollbar -->
+<rect x="408" y="212" width="6" height="188" rx="3" fill="#e5e7eb"/>
+<rect x="408" y="296" width="6" height="9" rx="3" fill="#6b7280"/>
+
+<!-- overscan below viewport -->
+<rect class="overscan" x="140" y="412" width="240" height="18" rx="4"/>
+<rect class="overscan" x="140" y="436" width="240" height="18" rx="4"/>
+
+<!-- ghost rows below -->
+<rect class="ghost" x="140" y="472" width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="496" width="240" height="18" rx="4"/>
+<rect class="ghost" x="140" y="520" width="240" height="18" rx="4"/>
+
+<!-- annotations -->
+<line class="leader" x1="466" y1="108" x2="386" y2="112"/>
+<text class="label" x="474" y="104">not rendered — zero DOM nodes</text>
+<text class="subLabel" x="474" y="124">items live only in the React Query cache</text>
+
+<line class="leader" x1="466" y1="288" x2="420" y2="292"/>
+<text class="label" x="474" y="284">rendered rows — the entire DOM</text>
+<text class="subLabel" x="474" y="304">~10–15 nodes, absolutely positioned</text>
+<text class="subLabel" x="474" y="322">with transform: translateY(offset)</text>
+
+<line class="leader" x1="466" y1="424" x2="386" y2="424"/>
+<text class="label" x="474" y="420">overscan</text>
+<text class="subLabel" x="474" y="440">a few extra rows so fast scrolling</text>
+<text class="subLabel" x="474" y="458">never flashes blank</text>
+
+<text class="label" x="474" y="506">total height = count × estimated size</text>
+<text class="subLabel" x="474" y="526">the container keeps its full scroll height,</text>
+<text class="subLabel" x="474" y="544">so the scrollbar stays honest</text>
+
+</svg>

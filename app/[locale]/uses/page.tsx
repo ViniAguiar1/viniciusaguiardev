@@ -7,7 +7,7 @@ export async function generateMetadata() {
   const locale = await getLocale()
   return {
     title: t(locale, { pt: "Ferramentas", en: "Uses", es: "Herramientas", jp: "ツール" }),
-    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como engenheiro de software.", en: "Tools, apps and setup I use daily as a Software Engineer.", es: "Herramientas, apps y setup que uso día a día como ingeniero de software.", jp: "ソフトウェアエンジニアとして日常的に使用するツール、アプリ、セットアップ。" }),
+    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como Frontend Engineer.", en: "Tools, apps and setup I use daily as a Frontend Engineer.", es: "Herramientas, apps y setup que uso día a día como Frontend Engineer.", jp: "フロントエンドエンジニアとして日常的に使用するツール、アプリ、セットアップ。" }),
     alternates: buildAlternates("/uses", locale),
   }
 }
@@ -424,7 +424,7 @@ export default async function UsesPage() {
           {t(locale, { pt: "Ferramentas. Apps. Setup.", en: "Tools. Apps. Setup.", es: "Herramientas. Apps. Setup.", jp: "ツール。アプリ。セットアップ。" })}
         </h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
-          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como engenheiro de software.", en: "This is not a static page — it's a living document with everything I currently use as a Software Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como ingeniero de software.", jp: "これは静的なページではなく、ソフトウェアエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。" })}
+          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como Frontend Engineer.", en: "This is not a static page — it's a living document with everything I currently use as a Frontend Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como Frontend Engineer.", jp: "これは静的なページではなく、フロントエンドエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。" })}
         </p>
       </header>
 

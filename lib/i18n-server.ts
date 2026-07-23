@@ -61,10 +61,10 @@ const pt: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Software Engineer que constrói plataformas SaaS em produção — do sistema de pagamentos ao agente de IA no WhatsApp.",
+      "Frontend Engineer que constrói interfaces rápidas e escaláveis para SaaS em produção — React, Next.js e performance engineering.",
 
     description:
-      "React, Next.js e TypeScript. Integrações de pagamento, arquitetura multi-tenant e automações com IA operando em produtos reais.",
+      "TypeScript de ponta a ponta. Capacidade full-stack como diferencial: pagamentos, arquitetura multi-tenant e IA operando em produtos reais.",
 
     ctaAbout: "Sobre mim",
     ctaResume: "Download CV",
@@ -79,7 +79,7 @@ const pt: Dictionary = {
   projects: {
     title: "Projetos",
     subtitle:
-      "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.",
+      "Empresas e produtos onde atuei — SaaS, marketplaces, ERPs e plataformas digitais.",
   },
 
   ui: {
@@ -102,10 +102,10 @@ const en: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Software Engineer building production SaaS platforms — from payment systems to AI-powered WhatsApp agents.",
+      "Frontend Engineer building fast, scalable interfaces for production SaaS — React, Next.js and performance engineering.",
 
     description:
-      "React, Next.js and TypeScript. Payment integrations, multi-tenant architecture and AI automation running in real products.",
+      "TypeScript end to end. Full-stack range as a differentiator: payments, multi-tenant architecture and AI running in real products.",
 
     ctaAbout: "About me",
     ctaResume: "Download Resume",
@@ -120,7 +120,7 @@ const en: Dictionary = {
   projects: {
     title: "Projects",
     subtitle:
-      "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.",
+      "Companies and products I've worked on — SaaS, marketplaces, ERPs and digital platforms.",
   },
 
   ui: {
@@ -143,10 +143,10 @@ const es: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Software Engineer que construye plataformas SaaS en producción — desde sistemas de pago hasta agentes de IA en WhatsApp.",
+      "Frontend Engineer que construye interfaces rápidas y escalables para SaaS en producción — React, Next.js y performance engineering.",
 
     description:
-      "React, Next.js y TypeScript. Integraciones de pago, arquitectura multi-tenant y automatizaciones con IA operando en productos reales.",
+      "TypeScript de punta a punta. Capacidad full-stack como diferencial: pagos, arquitectura multi-tenant e IA operando en productos reales.",
 
     ctaAbout: "Sobre mí",
     ctaResume: "Descargar CV",
@@ -161,7 +161,7 @@ const es: Dictionary = {
   projects: {
     title: "Proyectos",
     subtitle:
-      "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales.",
+      "Empresas y productos donde trabajé — SaaS, marketplaces, ERPs y plataformas digitales.",
   },
 
   ui: {
@@ -184,10 +184,10 @@ const jp: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "本番環境でSaaSプラットフォームを構築するソフトウェアエンジニア — 決済システムからWhatsApp上のAIエージェントまで。",
+      "本番SaaSのための高速でスケーラブルなインターフェースを構築するフロントエンドエンジニア — React、Next.js、パフォーマンスエンジニアリング。",
 
     description:
-      "React、Next.js、TypeScript。実プロダクトで稼働する決済連携、マルチテナントアーキテクチャ、AI自動化。",
+      "TypeScriptをエンドツーエンドで。フルスタック対応力が強み — 実プロダクトで稼働する決済、マルチテナントアーキテクチャ、AI。",
 
     ctaAbout: "プロフィール",
     ctaResume: "CVをダウンロード",
@@ -202,7 +202,7 @@ const jp: Dictionary = {
   projects: {
     title: "プロジェクト",
     subtitle:
-      "ソフトウェアエンジニアとして携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。",
+      "携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。",
   },
 
   ui: {

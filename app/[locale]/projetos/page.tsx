@@ -8,7 +8,7 @@ export async function generateMetadata() {
   const locale = await getLocale()
   return {
     title: t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト" }),
-    description: t(locale, { pt: "Empresas e produtos onde atuei como Software Engineer — SaaS, marketplaces, ERPs e plataformas digitais.", en: "Companies and products where I worked as a Software Engineer — SaaS, marketplaces, ERPs and digital platforms.", es: "Empresas y productos donde trabajé como Software Engineer — SaaS, marketplaces, ERPs y plataformas digitales.", jp: "ソフトウェアエンジニアとして携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。" }),
+    description: t(locale, { pt: "Empresas e produtos onde atuei — SaaS, marketplaces, ERPs e plataformas digitais.", en: "Companies and products I've worked on — SaaS, marketplaces, ERPs and digital platforms.", es: "Empresas y productos donde trabajé — SaaS, marketplaces, ERPs y plataformas digitales.", jp: "携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。" }),
     alternates: buildAlternates("/projetos", locale),
   }
 }

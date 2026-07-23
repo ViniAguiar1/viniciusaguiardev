@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next"
-import fs from "fs"
-import path from "path"
+import { getAllPosts } from "@/lib/posts"
 import { LOCALES, DEFAULT_LOCALE, SITE_URL, localePath, localeToHtmlLang, type Locale } from "@/lib/i18n"
 
 type StaticEntry = {
@@ -42,11 +41,8 @@ function entriesFor(path: string, changeFrequency: "weekly" | "monthly", priorit
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const postsDir = path.join(process.cwd(), "data", "posts")
-  const postSlugs = fs
-    .readdirSync(postsDir)
-    .filter((f) => f.endsWith(".json") && !f.startsWith("."))
-    .map((f) => f.replace(/\.json$/, ""))
+  // getAllPosts já exclui drafts — eles não devem aparecer no sitemap
+  const postSlugs = getAllPosts("pt").map((p) => p.slug)
 
   const staticEntries = STATIC_ENTRIES.flatMap((e) => entriesFor(e.path, e.changeFrequency, e.priority))
   const postEntries = postSlugs.flatMap((slug) => entriesFor(`/posts/${slug}`, "monthly", 0.7))

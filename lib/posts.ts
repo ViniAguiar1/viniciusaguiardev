@@ -46,6 +46,8 @@ export type Post = {
   tagColor?: string
   content?: string
   blocks?: ContentBlock[]
+  featured?: boolean
+  draft?: boolean
 }
 
 const postsDir = path.join(process.cwd(), "data", "posts")
@@ -86,6 +88,8 @@ function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
     tagColor: data.tagColor ?? "",
     content: data.content ?? "",
     blocks: normalizeBlocks(data),
+    featured: Boolean(data.featured),
+    draft: Boolean(data.draft),
   }
 }
 
@@ -105,13 +109,21 @@ export const getAllPosts = cache((locale: Locale = "pt"): Post[] => {
   for (const file of files) {
     const raw = readRawPost(file)
     if (!raw) continue
-    posts.push(buildPost(file, raw, locale))
+    const post = buildPost(file, raw, locale)
+    // Drafts ficam fora de qualquer listagem (home, busca, sitemap) até publicar
+    if (post.draft) continue
+    posts.push(post)
   }
+
+  // Featured primeiro; sort estável preserva a ordem alfabética dentro de cada grupo
+  posts.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
 
   if (isProd) localePostsCache.set(locale, posts)
   return posts
 })
 
+// Acesso direto por slug inclui drafts — permite pré-visualizar pela URL
+// enquanto o post não aparece em listagens (a página aplica noindex).
 export const getPostBySlug = cache((slug: string, locale: Locale = "pt"): Post | null => {
   const directFile = `${slug}.json`
   const directPath = path.join(postsDir, directFile)

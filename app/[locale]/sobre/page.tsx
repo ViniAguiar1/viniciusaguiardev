@@ -7,14 +7,27 @@ export async function generateMetadata() {
   const locale = await getLocale()
   return {
     title: t(locale, { pt: "Sobre", en: "About", es: "Acerca", jp: "プロフィール" }),
-    description: t(locale, { pt: "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Software Engineer.", en: "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Software Engineer.", es: "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Software Engineer.", jp: "Vinicius Aguiar（ソフトウェアエンジニア）の経歴、実務経験、スキル、技術スタック。" }),
+    description: t(locale, { pt: "Trajetória, experiência profissional, habilidades e tech stack de Vinicius Aguiar — Frontend Engineer.", en: "Journey, professional experience, skills and tech stack of Vinicius Aguiar — Frontend Engineer.", es: "Trayectoria, experiencia profesional, habilidades y tech stack de Vinicius Aguiar — Frontend Engineer.", jp: "Vinicius Aguiar（フロントエンドエンジニア）の経歴、実務経験、スキル、技術スタック。" }),
     alternates: buildAlternates("/sobre", locale),
   }
 }
 
 const experiencesPt = [
   {
-    period: "Nov 2025 — atual · Tempo integral · Minas Gerais, Brasil · Remoto",
+    period: "Jul 2026 — atual · Tempo integral · Remoto",
+    title: "Frontend Engineer · Chattie",
+    summary:
+      "Lidero a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance, escalabilidade e entrega de ponta a ponta.",
+    details: [
+      "Liderança da frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas",
+      "Reconstrução do inbox principal (~20.000 registros por workspace) com paginação cursor-based e virtualização de lista — payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface e carregamentos de vários segundos",
+      "Contribuição em decisões de arquitetura voltadas a escalabilidade e manutenibilidade, entregando features de ponta a ponta (design → produção)",
+      "Atuação adicional em backend, sistemas de IA (Anthropic Claude, Vercel AI SDK) e confiabilidade, além do escopo principal de frontend",
+      "90%+ de cobertura de testes automatizados (unitários e de integração) nas features entregues",
+    ],
+  },
+  {
+    period: "Nov 2025 — Jul 2026 · Tempo integral · Minas Gerais, Brasil · Remoto",
     title: "Mid-level Software Engineer · Holy Solutions",
     summary:
       "Desenvolvimento de aplicações web e mobile utilizando React, Next.js e React Native, com foco em interfaces escaláveis e experiências centradas no usuário.",
@@ -86,7 +99,20 @@ const experiencesPt = [
 
 const experiencesEn = [
   {
-    period: "Nov 2025 — present · Full-time · Minas Gerais, Brazil · Remote",
+    period: "Jul 2026 — present · Full-time · Remote",
+    title: "Frontend Engineer · Chattie",
+    summary:
+      "Leading the frontend of an AI outreach platform used by 100+ companies, focused on performance, scalability and end-to-end delivery.",
+    details: [
+      "Leading the frontend of an AI-powered outreach platform used by 100+ companies",
+      "Rebuilt the platform's main inbox (~20,000 records per workspace) with cursor-based pagination and list virtualization — initial payload from ~6.7 MB to ~19 KB (~400x), eliminating UI freezes and multi-second loads",
+      "Contributing to architecture decisions focused on scalability and maintainability, shipping features end to end (design → production)",
+      "Additional work on backend, AI systems (Anthropic Claude, Vercel AI SDK) and reliability, beyond the core frontend scope",
+      "Maintaining 90%+ automated test coverage (unit and integration) on shipped features",
+    ],
+  },
+  {
+    period: "Nov 2025 — Jul 2026 · Full-time · Minas Gerais, Brazil · Remote",
     title: "Mid-level Software Engineer · Holy Solutions",
     summary:
       "Development of web and mobile applications using React, Next.js and React Native, focused on building scalable interfaces and user-centric experiences.",
@@ -158,7 +184,20 @@ const experiencesEn = [
 
 const experiencesEs = [
   {
-    period: "Nov 2025 — presente · Tiempo completo · Minas Gerais, Brasil · Remoto",
+    period: "Jul 2026 — presente · Tiempo completo · Remoto",
+    title: "Frontend Engineer · Chattie",
+    summary:
+      "Lidero el frontend de una plataforma de outreach con IA usada por 100+ empresas, con foco en performance, escalabilidad y entrega end-to-end.",
+    details: [
+      "Liderazgo del frontend de una plataforma de outreach con IA usada por 100+ empresas",
+      "Reconstrucción del inbox principal (~20.000 registros por workspace) con paginación cursor-based y virtualización de lista — payload inicial de ~6,7 MB a ~19 KB (~400x), eliminando bloqueos de interfaz y cargas de varios segundos",
+      "Contribución en decisiones de arquitectura orientadas a escalabilidad y mantenibilidad, entregando features de punta a punta (diseño → producción)",
+      "Trabajo adicional en backend, sistemas de IA (Anthropic Claude, Vercel AI SDK) y confiabilidad, más allá del alcance principal de frontend",
+      "90%+ de cobertura de tests automatizados (unitarios y de integración) en las features entregadas",
+    ],
+  },
+  {
+    period: "Nov 2025 — Jul 2026 · Tiempo completo · Minas Gerais, Brasil · Remoto",
     title: "Mid-level Software Engineer · Holy Solutions",
     summary:
       "Desarrollo de aplicaciones web y móviles con React, Next.js y React Native, enfocado en interfaces escalables y experiencias centradas en el usuario.",
@@ -230,7 +269,20 @@ const experiencesEs = [
 
 const experiencesJp = [
   {
-    period: "2025年11月 — 現在 · フルタイム · ブラジル・ミナスジェライス州 · リモート",
+    period: "2026年7月 — 現在 · フルタイム · リモート",
+    title: "フロントエンドエンジニア · Chattie",
+    summary:
+      "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード。パフォーマンス、スケーラビリティ、エンドツーエンドの提供に注力。",
+    details: [
+      "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリード",
+      "メインインボックス（ワークスペースあたり約20,000件）をカーソルベースのページネーションとリスト仮想化で再構築 — 初期ペイロードを約6.7MBから約19KBへ（約1/400）削減し、UIのフリーズと数秒かかる読み込みを解消",
+      "スケーラビリティと保守性を重視したアーキテクチャの意思決定に貢献し、機能をエンドツーエンド（デザイン → 本番）で提供",
+      "主担当のフロントエンドに加え、バックエンド、AIシステム（Anthropic Claude、Vercel AI SDK）、信頼性にも従事",
+      "提供する機能で90%以上の自動テストカバレッジ（ユニット・統合）を維持",
+    ],
+  },
+  {
+    period: "2025年11月 — 2026年7月 · フルタイム · ブラジル・ミナスジェライス州 · リモート",
     title: "ミドルレベル ソフトウェアエンジニア · Holy Solutions",
     summary:
       "React、Next.js、React Native によるWeb・モバイルアプリケーション開発。スケーラブルなインターフェースとユーザー中心の体験に注力。",
@@ -318,15 +370,15 @@ export default async function SobrePage() {
             <h2 className="text-2xl font-semibold leading-tight">Vinicius Aguiar</h2>
 
             <p className="mt-4 leading-relaxed">
-              {t(locale, { pt: "Frontend Software Engineer especializado no desenvolvimento de aplicações web e mobile modernas com o ecossistema JavaScript/TypeScript, com forte atuação em React, Next.js e React Native.", en: "Frontend Software Engineer specialized in building modern web and mobile applications using the JavaScript/TypeScript ecosystem, with strong focus on React, Next.js and React Native.", es: "Frontend Software Engineer especializado en el desarrollo de aplicaciones web y móviles modernas con el ecosistema JavaScript/TypeScript, con fuerte enfoque en React, Next.js y React Native.", jp: "JavaScript/TypeScriptエコシステムを用いたモダンなWeb・モバイルアプリケーション開発に特化したフロントエンドソフトウェアエンジニア。React、Next.js、React Nativeでの実績が豊富。" })}
+              {t(locale, { pt: "Frontend Engineer com mentalidade de produto, especializado em construir aplicações web e mobile rápidas e escaláveis com React, Next.js e React Native — com foco em performance e experiência do usuário.", en: "Frontend Engineer with a product mindset, specialized in building fast, scalable web and mobile applications with React, Next.js and React Native — focused on performance and user experience.", es: "Frontend Engineer con mentalidad de producto, especializado en construir aplicaciones web y móviles rápidas y escalables con React, Next.js y React Native — con foco en performance y experiencia de usuario.", jp: "プロダクト思考のフロントエンドエンジニア。React、Next.js、React Nativeによる高速でスケーラブルなWeb・モバイルアプリケーション構築を専門とし、パフォーマンスとユーザー体験に注力。" })}
             </p>
 
             <p className="mt-3 leading-relaxed text-sm text-muted-foreground">
-              {t(locale, { pt: "Experiência no desenvolvimento e operação de produtos SaaS em produção, incluindo integrações com APIs, sistemas de autenticação, serviços de pagamento e fluxos reais de usuários.", en: "Experience developing and operating SaaS products in production, including API integrations, authentication systems, payment services and real-world user workflows.", es: "Experiencia en el desarrollo y operación de productos SaaS en producción, incluyendo integraciones con APIs, sistemas de autenticación, servicios de pago y flujos reales de usuarios.", jp: "本番環境におけるSaaSプロダクトの開発・運用経験 — API連携、認証システム、決済サービス、実ユーザーフローを含む。" })}
+              {t(locale, { pt: "Na Chattie, lidero a frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas. Reconstruí o inbox principal (~20.000 registros por workspace) com paginação cursor-based e virtualização de lista — reduzindo o payload inicial de ~6,7 MB para ~19 KB (~400x) e eliminando travamentos de interface.", en: "At Chattie, I lead the frontend of an AI outreach platform used by 100+ companies. I rebuilt the main inbox (~20,000 records per workspace) with cursor-based pagination and list virtualization — cutting the initial payload from ~6.7 MB to ~19 KB (~400x) and eliminating UI freezes.", es: "En Chattie, lidero el frontend de una plataforma de outreach con IA usada por 100+ empresas. Reconstruí el inbox principal (~20.000 registros por workspace) con paginación cursor-based y virtualización de lista — reduciendo el payload inicial de ~6,7 MB a ~19 KB (~400x) y eliminando bloqueos de interfaz.", jp: "Chattieでは、100社以上が利用するAIアウトリーチプラットフォームのフロントエンドをリードしています。メインインボックス（ワークスペースあたり約20,000件）をカーソルベースのページネーションとリスト仮想化で再構築し、初期ペイロードを約6.7MBから約19KBへ（約1/400）削減、UIのフリーズを解消しました。" })}
             </p>
 
             <p className="mt-3 leading-relaxed text-sm text-muted-foreground">
-              {t(locale, { pt: "Execução orientada a produto com entrega em cloud (AWS, CI/CD e serviços em contêineres), além de automações com IA integradas a aplicações reais.", en: "Product-driven execution with cloud-based delivery (AWS, CI/CD and containerized services), plus AI-augmented automation flows integrated into real applications.", es: "Ejecución orientada a producto con entrega en cloud (AWS, CI/CD y servicios en contenedores), además de automatizaciones con IA integradas a aplicaciones reales.", jp: "クラウドデリバリー（AWS、CI/CD、コンテナ化サービス）を伴うプロダクト志向の実行、および実アプリケーションに統合されたAI自動化。" })}
+              {t(locale, { pt: "Capacidade full-stack como diferencial: integrações de pagamento, arquitetura multi-tenant, sistemas de IA (Anthropic Claude, Vercel AI SDK) e entrega em cloud (AWS, CI/CD) — sempre operando produtos SaaS reais em produção.", en: "Full-stack range as a differentiator: payment integrations, multi-tenant architecture, AI systems (Anthropic Claude, Vercel AI SDK) and cloud delivery (AWS, CI/CD) — always operating real SaaS products in production.", es: "Capacidad full-stack como diferencial: integraciones de pago, arquitectura multi-tenant, sistemas de IA (Anthropic Claude, Vercel AI SDK) y entrega en cloud (AWS, CI/CD) — siempre operando productos SaaS reales en producción.", jp: "フルスタック対応力が強み：決済連携、マルチテナントアーキテクチャ、AIシステム（Anthropic Claude、Vercel AI SDK）、クラウドデリバリー（AWS、CI/CD） — 常に実際のSaaSプロダクトを本番環境で運用。" })}
             </p>
           </div>
         </div>
@@ -415,6 +467,7 @@ export default async function SobrePage() {
         </h2>
 
         <ul className="mt-4 list-disc pl-5 space-y-2 text-sm">
+          <li>{t(locale, { pt: "Performance de frontend — paginação cursor-based, virtualização de listas e otimização de payload", en: "Frontend performance — cursor-based pagination, list virtualization and payload optimization", es: "Performance de frontend — paginación cursor-based, virtualización de listas y optimización de payload", jp: "フロントエンドパフォーマンス — カーソルベースのページネーション、リスト仮想化、ペイロード最適化" })}</li>
           <li>{t(locale, { pt: "Arquitetura SaaS e desenho de sistemas prontos para produção", en: "SaaS Architecture and production-ready system design", es: "Arquitectura SaaS y diseño de sistemas listos para producción", jp: "SaaSアーキテクチャと本番環境向けシステム設計" })}</li>
           <li>{t(locale, { pt: "REST APIs, integrações, autenticação e serviços de pagamento", en: "REST APIs, system integrations, authentication and payment services", es: "REST APIs, integraciones, autenticación y servicios de pago", jp: "REST API、連携、認証、決済サービス" })}</li>
           <li>{t(locale, { pt: "Agentes de IA e fluxos de automação integrados a produtos reais", en: "AI Agents and automation workflows integrated into real products", es: "Agentes de IA y flujos de automatización integrados a productos reales", jp: "実プロダクトに統合されたAIエージェントと自動化フロー" })}</li>

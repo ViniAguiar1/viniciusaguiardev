@@ -46,9 +46,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) return {}
   const locale: Locale = rawLocale
 
-  const title = t(locale, { pt: "Vinicius Aguiar — Software Engineer | SaaS, Pagamentos, IA em Produção", en: "Vinicius Aguiar — Software Engineer | SaaS, Payments, AI in Production", es: "Vinicius Aguiar — Software Engineer | SaaS, Pagos, IA en Producción", jp: "Vinicius Aguiar — ソフトウェアエンジニア | SaaS、決済、本番環境のAI" })
+  const title = t(locale, { pt: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", en: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", es: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", jp: "Vinicius Aguiar — フロントエンドエンジニア | React・Next.js・パフォーマンスエンジニアリング" })
 
-  const description = t(locale, { pt: "Software Engineer que constrói plataformas SaaS em produção — integrações de pagamento, arquitetura multi-tenant e automações com IA. React, Next.js, TypeScript.", en: "Software Engineer building production SaaS platforms — payment integrations, multi-tenant architecture and AI automation. React, Next.js, TypeScript.", es: "Software Engineer que construye plataformas SaaS en producción — integraciones de pago, arquitectura multi-tenant y automatizaciones con IA. React, Next.js, TypeScript.", jp: "本番環境でSaaSプラットフォームを構築するソフトウェアエンジニア — 決済連携、マルチテナントアーキテクチャ、AI自動化。React、Next.js、TypeScript。" })
+  const description = t(locale, { pt: "Frontend Engineer — React, Next.js, TypeScript e performance engineering em SaaS de produção. Capacidade full-stack como diferencial: pagamentos, multi-tenant e IA.", en: "Frontend Engineer — React, Next.js, TypeScript and performance engineering on production SaaS. Full-stack range as a differentiator: payments, multi-tenant and AI.", es: "Frontend Engineer — React, Next.js, TypeScript y performance engineering en SaaS de producción. Capacidad full-stack como diferencial: pagos, multi-tenant e IA.", jp: "フロントエンドエンジニア — React、Next.js、TypeScript、本番SaaSのパフォーマンスエンジニアリング。決済、マルチテナント、AIまで扱えるフルスタック力が強み。" })
 
   const ogLocale = locale === "en" ? "en_US" : locale === "es" ? "es_ES" : locale === "jp" ? "ja_JP" : "pt_BR"
 
@@ -75,14 +75,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
           url: "/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Vinicius Aguiar — Software Engineer | React, Next.js, TypeScript",
+          alt: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: t(locale, { pt: "Software Engineer — plataformas SaaS, pagamentos e IA em produção.", en: "Software Engineer — SaaS platforms, payments and AI in production.", es: "Software Engineer — plataformas SaaS, pagos e IA en producción.", jp: "ソフトウェアエンジニア — 本番環境のSaaSプラットフォーム、決済、AI。" }),
+      description: t(locale, { pt: "Frontend Engineer — React, Next.js e performance engineering em SaaS de produção.", en: "Frontend Engineer — React, Next.js and performance engineering on production SaaS.", es: "Frontend Engineer — React, Next.js y performance engineering en SaaS de producción.", jp: "フロントエンドエンジニア — React、Next.js、本番SaaSのパフォーマンスエンジニアリング。" }),
       images: ["/og-image.png"],
     },
   }

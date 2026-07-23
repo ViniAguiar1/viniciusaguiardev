@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { applyLocaleToData, normalizeBlocks, getPostBySlug, type RawPostData } from "./posts"
+import { applyLocaleToData, normalizeBlocks, getAllPosts, getPostBySlug, type RawPostData } from "./posts"
 
 describe("applyLocaleToData", () => {
   const base: RawPostData = {
@@ -138,5 +138,25 @@ describe("normalizeBlocks", () => {
 describe("getPostBySlug", () => {
   it("returns null for an unknown slug", () => {
     expect(getPostBySlug("__definitely-not-a-real-slug__", "pt")).toBeNull()
+  })
+
+  it("still resolves draft posts by direct slug (preview)", () => {
+    const draft = getPostBySlug("case-study-chattie-inbox", "pt")
+    expect(draft).not.toBeNull()
+  })
+})
+
+describe("getAllPosts", () => {
+  it("never includes draft posts", () => {
+    const posts = getAllPosts("pt")
+    expect(posts.length).toBeGreaterThan(0)
+    expect(posts.every((p) => !p.draft)).toBe(true)
+  })
+
+  it("sorts featured posts before non-featured ones", () => {
+    const posts = getAllPosts("pt")
+    const firstNonFeatured = posts.findIndex((p) => !p.featured)
+    if (firstNonFeatured === -1) return
+    expect(posts.slice(firstNonFeatured).every((p) => !p.featured)).toBe(true)
   })
 })

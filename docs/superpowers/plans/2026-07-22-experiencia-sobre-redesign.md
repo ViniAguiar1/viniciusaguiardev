@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- **Sem commits por enquanto:** o usuário pediu para não commitar nada ainda. Os passos de commit abaixo ficam REGISTRADOS mas são PULADOS até o usuário liberar (a árvore já tem o reposicionamento não commitado).
+- **Commits locais liberados, sem push:** o usuário autorizou commits locais na branch `feat/frontend-repositioning`; nada é enviado ao remoto. Mensagens de commit terminam com o trailer `Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>`.
 - Node 24 obrigatório: prefixar comandos com `source ~/.nvm/nvm.sh && nvm use 24 >/dev/null &&`.
 - 4 idiomas sempre (pt/en/es/jp) — nenhuma string de UI nova sem as 4 versões.
 - Nenhum fato novo sobre as experiências: summaries/details migram verbatim; só mudam os campos explicitados neste plano.
@@ -206,7 +206,7 @@ Nota sobre períodos: os valores acima já são os finais — MovePro e Holy tê
 Run: `source ~/.nvm/nvm.sh && nvm use 24 >/dev/null && pnpm test 2>&1 | tail -10`
 Expected: PASS — 22 testes (17 existentes + 5 novos).
 
-- [ ] **Step 5: Commit** *(PULADO — ver Global Constraints)*
+- [ ] **Step 5: Commit**
 
 ```bash
 git add data/experiences.ts data/experiences.test.ts
@@ -334,7 +334,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 Run: `source ~/.nvm/nvm.sh && nvm use 24 >/dev/null && pnpm typecheck && pnpm test 2>&1 | tail -5 && pnpm lint 2>&1 | tail -3`
 Expected: typecheck sem erros; 22 testes PASS; lint limpo.
 
-- [ ] **Step 4: Commit** *(PULADO — ver Global Constraints)*
+- [ ] **Step 4: Commit**
 
 ```bash
 git add components/experience-item.tsx "app/[locale]/sobre/page.tsx"
@@ -382,7 +382,7 @@ Expected: cada grep retorna ocorrências ≥ 1 ("Atual"/"Current"/"Actual"/"現�
 
 - [ ] **Step 4: Conferir critérios de aceite da spec** — os 7 itens da seção "Critérios de aceite" em `docs/superpowers/specs/2026-07-22-experiencia-sobre-redesign-design.md`.
 
-- [ ] **Step 5: Commit** *(PULADO — ver Global Constraints)*
+- [ ] **Step 5: Commit**
 
 ```bash
 git add public/llms.txt

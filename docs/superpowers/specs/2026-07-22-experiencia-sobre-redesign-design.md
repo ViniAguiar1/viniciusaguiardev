@@ -1,7 +1,7 @@
 # Redesign da seção Experiência (página Sobre)
 
 **Data:** 2026-07-22
-**Status:** Aguardando revisão
+**Status:** Implementado (2026-07-22)
 
 ## Contexto
 
@@ -19,7 +19,7 @@ Timeline vertical com hierarquia clara (atual em destaque), chips de stack, prov
 
 - Logos de empresas (não há assets para Chattie, Holy, Stack Labs, Easytogo).
 - Mudanças em outras seções da página Sobre.
-- Commits/PR (usuário pediu para não commitar por enquanto).
+- Push/PR (commits locais autorizados; push aguardando liberação do usuário).
 
 ## 1. Modelo de dados — `data/experiences.ts` (novo)
 

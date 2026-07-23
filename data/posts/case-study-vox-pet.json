@@ -1,5 +1,6 @@
 {
   "slug": "case-study-vox-pet",
+  "order": 4,
   "title": "Case Study: Vox Pet Digital — migrando um SaaS veterinário de Express para NestJS sem downtime",
   "title_en": "Case Study: Vox Pet Digital — migrating a veterinary SaaS from Express to NestJS with zero downtime",
   "title_es": "Case Study: Vox Pet Digital — migrando un SaaS veterinario de Express a NestJS sin downtime",

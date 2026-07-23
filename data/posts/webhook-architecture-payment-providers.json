@@ -1,5 +1,6 @@
 {
   "slug": "webhook-architecture-payment-providers",
+  "order": 7,
   "title": "Arquitetura de webhooks para provedores de pagamento em Node.js",
   "title_en": "Webhook architecture for payment providers in Node.js",
   "description": "Como estruturar o recebimento de webhooks de pagamento em produção — validação de assinatura, idempotência, processamento assíncrono, reconciliação e tratamento de falhas reais.",

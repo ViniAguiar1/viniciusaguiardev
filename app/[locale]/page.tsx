@@ -8,7 +8,8 @@ import { FadeIn } from "@/components/fade-in"
 
 export default async function Home() {
   const locale = await getLocale()
-  const articles = getAllPosts(locale)
+  // Curadoria: a home mostra só os posts com showOnHome (todos seguem na busca e no sitemap)
+  const articles = getAllPosts(locale).filter((article) => article.showOnHome)
   const dict = getDictionary(locale)
 
   return (

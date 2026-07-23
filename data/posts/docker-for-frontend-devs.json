@@ -1,5 +1,6 @@
 {
   "slug": "docker-for-frontend-devs",
+  "showOnHome": false,
   "title": "Docker para devs frontend: do zero ao deploy",
   "title_en": "Docker for frontend devs: from zero to deploy",
   "title_es": "Docker para devs frontend: de cero al deploy",

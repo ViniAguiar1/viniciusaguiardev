@@ -160,6 +160,12 @@ describe("getAllPosts", () => {
     expect(posts.slice(firstNonFeatured).every((p) => !p.featured)).toBe(true)
   })
 
+  it("keeps home-hidden posts available in the full listing", () => {
+    const posts = getAllPosts("pt")
+    const hidden = posts.filter((p) => !p.showOnHome).map((p) => p.slug).sort()
+    expect(hidden).toEqual(["docker-for-frontend-devs", "starting-typescript"])
+  })
+
   it("orders featured posts by their order field", () => {
     const featuredOrders = getAllPosts("pt")
       .filter((p) => p.featured)

@@ -1,5 +1,6 @@
 {
   "slug": "circuit-breaker-nodejs",
+  "order": 8,
   "title": "Circuit Breaker em Node.js: protegendo sistemas contra falhas em cascata",
   "title_en": "Circuit Breaker in Node.js: protecting systems against cascading failures",
   "title_es": "Circuit Breaker en Node.js: protegiendo sistemas contra fallas en cascada",

@@ -20,6 +20,7 @@ Notas importantes:
 
 ## Artigos técnicos (Blog)
 
+- [De 6,7 MB para 19 KB: paginação cursor-based e virtualização em um inbox React](https://viniciusaguiardev.com.br/posts/inbox-cursor-pagination-virtualization): Reconstrução de um inbox React que carregava ~20.000 conversas de uma vez — contrato de API cursor-based, React Query (useInfiniteQuery), virtualização com TanStack Virtual, trade-offs e resultados (~6,7 MB → ~19 KB por requisição, ~400x).
 - [Case Study: X-Drop](https://viniciusaguiardev.com.br/posts/case-study-xdrop): Como construí um SaaS de dropshipping que faturou R$ 30k+ em 2 meses — arquitetura com NestJS + Firebase, adapter pattern para multi-marketplace (Mercado Livre, Shopee), multi-gateway de pagamento (Asaas, Mercado Pago), idempotência, observabilidade e RBAC.
 - [Circuit Breaker em Node.js](https://viniciusaguiardev.com.br/posts/circuit-breaker-nodejs): Padrão de resiliência para APIs externas — state machine, fallbacks, retry e monitoramento em produção.
 - [Arquitetura multi-tenant com PostgreSQL](https://viniciusaguiardev.com.br/posts/multi-tenant-architecture-postgresql): Guia prático sobre multi-tenancy em SaaS — três estratégias avaliadas (DB per tenant, schema per tenant, shared DB + tenant_id), Row Level Security (RLS), indexação e particionamento.

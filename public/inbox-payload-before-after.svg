@@ -1,0 +1,74 @@
+<svg width="900" height="440" viewBox="0 0 900 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Payload per request: 6.7 MB before, 19 KB after — about 400 times smaller, shown to scale">
+
+<style>
+.panel { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; }
+.kicker { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 2px; fill: #6b7280; }
+.big { font-family: system-ui, -apple-system, sans-serif; font-size: 40px; font-weight: 700; fill: #111827; text-anchor: middle; }
+.bigAccent { font-family: system-ui, -apple-system, sans-serif; font-size: 40px; font-weight: 700; fill: #047857; text-anchor: middle; }
+.sub { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; fill: #6b7280; text-anchor: middle; }
+.caption { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: #6b7280; }
+.badgeText { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #047857; text-anchor: middle; }
+.scaleLabel { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: #111827; }
+.scaleAccent { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #047857; }
+.rowGray { fill: #9ca3af; stroke: #6b7280; stroke-width: 1; }
+.rowGreen { fill: #ecfdf5; stroke: #047857; stroke-width: 1.5; }
+.arrow { stroke: #374151; stroke-width: 2; marker-end: url(#arrowhead); }
+</style>
+
+<defs>
+<marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+</marker>
+</defs>
+
+<!-- BEFORE panel -->
+<rect class="panel" x="40" y="40" width="330" height="280" rx="14"/>
+<text class="kicker" x="60" y="74">BEFORE</text>
+
+<rect class="rowGray" x="60" y="92"  width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="106" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="120" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="134" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="148" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="162" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="176" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="190" width="130" height="10" rx="3"/>
+<rect class="rowGray" x="60" y="204" width="130" height="10" rx="3"/>
+<text class="sub" x="125" y="232">⋮</text>
+
+<text class="big" x="280" y="150">6.7 MB</text>
+<text class="sub" x="280" y="178">per request</text>
+
+<text class="sub" x="205" y="266">all ~20,000 conversations</text>
+<text class="sub" x="205" y="286">serialized in one response</text>
+
+<!-- arrow + badge -->
+<rect x="392" y="140" width="116" height="30" rx="15" fill="#ecfdf5" stroke="#047857" stroke-width="1.5"/>
+<text class="badgeText" x="450" y="160">~400× smaller</text>
+<line class="arrow" x1="386" y1="196" x2="512" y2="196"/>
+
+<!-- AFTER panel -->
+<rect class="panel" x="530" y="40" width="330" height="280" rx="14"/>
+<text class="kicker" x="550" y="74">AFTER</text>
+
+<rect class="rowGreen" x="550" y="92"  width="130" height="10" rx="3"/>
+<rect class="rowGreen" x="550" y="106" width="130" height="10" rx="3"/>
+<rect class="rowGreen" x="550" y="120" width="130" height="10" rx="3"/>
+
+<text class="bigAccent" x="770" y="150">19 KB</text>
+<text class="sub" x="770" y="178">per request</text>
+
+<text class="sub" x="695" y="266">one cursor page,</text>
+<text class="sub" x="695" y="286">fetched on demand</text>
+
+<!-- to-scale strip -->
+<text class="caption" x="40" y="362">Same numbers, to scale:</text>
+
+<rect x="40" y="374" width="820" height="18" rx="3" fill="#9ca3af" stroke="#6b7280" stroke-width="1"/>
+<text class="scaleLabel" x="52" y="387">6.7 MB</text>
+
+<rect x="40" y="402" width="2.5" height="18" fill="#047857"/>
+<line x1="46" y1="411" x2="86" y2="411" stroke="#047857" stroke-width="1"/>
+<text class="scaleAccent" x="92" y="415">19 KB — ~0.3% of the original payload</text>
+
+</svg>

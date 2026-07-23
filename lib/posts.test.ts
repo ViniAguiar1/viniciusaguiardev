@@ -140,9 +140,9 @@ describe("getPostBySlug", () => {
     expect(getPostBySlug("__definitely-not-a-real-slug__", "pt")).toBeNull()
   })
 
-  it("still resolves draft posts by direct slug (preview)", () => {
-    const draft = getPostBySlug("case-study-chattie-inbox", "pt")
-    expect(draft).not.toBeNull()
+  it("resolves a post directly by its filename slug", () => {
+    const post = getPostBySlug("inbox-cursor-pagination-virtualization", "pt")
+    expect(post).not.toBeNull()
   })
 })
 
@@ -158,5 +158,12 @@ describe("getAllPosts", () => {
     const firstNonFeatured = posts.findIndex((p) => !p.featured)
     if (firstNonFeatured === -1) return
     expect(posts.slice(firstNonFeatured).every((p) => !p.featured)).toBe(true)
+  })
+
+  it("orders featured posts by their order field", () => {
+    const featuredOrders = getAllPosts("pt")
+      .filter((p) => p.featured)
+      .map((p) => p.order ?? Infinity)
+    expect([...featuredOrders].sort((a, b) => a - b)).toEqual(featuredOrders)
   })
 })

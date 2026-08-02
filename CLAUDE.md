@@ -30,7 +30,13 @@ Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
 - `t(locale, { pt: "...", en: "...", es: "...", jp: "...", fr: "..." })` helper for inline strings in server components — takes an object keyed by locale, not positional args; only `pt` is required
 - Blog posts use suffix pattern: base fields are PT, other locales use `_${locale}` suffix (e.g., `title_en`, `blocks_jp`, `description_fr`) — derived uniformly in `lib/posts.ts`, not a hardcoded list per locale
 - Project taglines/descriptions use `LocalizedString` (`data/projects.ts`): `Partial<Record<Locale, string>> & { pt: string }` — only `pt` is required, so a missing locale is not a compile error, it silently falls back to Portuguese (this is what `lib/i18n-coverage.test.ts` guards against)
-- Adding a locale: append it to `LOCALES` in `lib/i18n.ts` and to the `HTML_LANGS`/`OG_LOCALES` maps. Everything else (proxy, sitemap, hreflang, `generateStaticParams`) derives from `LOCALES`. `lib/i18n-coverage.test.ts` then fails until every translation object, dictionary and post covers the new locale.
+- Adding a locale — the routing layer (proxy, sitemap, hreflang, `generateStaticParams`) derives from `LOCALES`, so it needs no edit. Four code sites do:
+  1. `lib/i18n.ts` — append to `LOCALES` and to the `HTML_LANGS`/`OG_LOCALES` maps
+  2. `lib/i18n-server.ts` — write the new `Dictionary` and add its branch to `getDictionary()` (an if-chain, not a map: a missing branch silently returns the PT dictionary)
+  3. `components/language-toggle.tsx` — add the entry to `flags` and `labels`
+  4. `data/experiences.test.ts` — add the locale to the `contractWord` map
+
+  Nothing else is manual. Sites 1, 3 and 4 are `Record<Locale, …>`, so `pnpm typecheck` fails until they are filled; site 2's fallback is caught by `lib/i18n-coverage.test.ts`, which also fails until every translation object and post covers the new locale. Verified empirically by adding a sixth locale with only step 1 applied: `tsc` flagged sites 3 and 4 (plus every `Localized` in `data/experiences.ts`), and the guard flagged the dictionary fallback, 294 incomplete objects and 66 missing post fields.
 
 ### Blog Posts
 

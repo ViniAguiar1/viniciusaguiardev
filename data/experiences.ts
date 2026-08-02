@@ -1,4 +1,6 @@
-export type Localized = { pt: string; en: string; es: string; jp: string; fr: string }
+import type { Locale } from "@/lib/i18n"
+
+export type Localized = Record<Locale, string>
 
 export type Experience = {
   company: string

@@ -406,7 +406,7 @@ const categories: UsesCategory[] = [
           en: "Containerization for consistent dev environments and production deploys.",
           es: "Containerización para ambientes de dev consistentes y deploy en producción.",
           jp: "一貫した開発環境と本番デプロイのためのコンテナ化。",
-          fr: "Conteneurisation pour des environnements de dev cohérents et déploiement en production.",
+          fr: "Conteneurisation pour des environnements de dev cohérents et deploy en production.",
         },
       },
       {

@@ -34,11 +34,11 @@ Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
 
 ### Blog Posts
 
-JSON files in `data/posts/`. Each has `blocks` (array of paragraph/code/heading/list/image) for PT, `blocks_en` for EN, `blocks_es` for ES. Post loader in `lib/posts.ts` applies locale suffix automatically via `applyLocaleToData()`.
+JSON files in `data/posts/`. Each has `blocks` (array of paragraph/code/heading/list/image) for PT, plus `blocks_${locale}` for every other locale. Post loader in `lib/posts.ts` applies the locale suffix automatically via `applyLocaleToData()`.
 
 ### Projects
 
-Typed array in `data/projects.ts`. Each project has slug, name, logo path, trilingual tagline/description, category, and optional URL. Displayed via `ProjectsGrid` client component with floating modal (Radix Dialog).
+Typed array in `data/projects.ts`. Each project has slug, name, logo path, tagline/description, category, and optional URL. Displayed via `ProjectsGrid` client component with floating modal (Radix Dialog).
 
 ### Layout Structure
 

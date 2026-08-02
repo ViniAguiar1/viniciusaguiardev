@@ -9,7 +9,7 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 ## What's inside
 
 - **5 curated projects** — SaaS platforms, e-commerce and health systems with dedicated pages, case studies and real metrics
-- **9 technical articles** — case studies (X-Drop, Vox Pet), multi-tenant architecture, webhook design, circuit breaker, RAG pipelines, Docker, design systems
+- **11 technical articles** — case studies (X-Drop, Vox Pet), multi-tenant architecture, webhook design, circuit breaker, RAG pipelines, Docker, design systems
 - **Engineering page** — architecture decisions, trade-offs and problems solved in production (SaaS, multi-tenant, payments)
 - **Five languages** — PT-BR, English, Spanish, Japanese and French (path-based i18n)
 - **Dark/Light mode** — system preference with manual toggle

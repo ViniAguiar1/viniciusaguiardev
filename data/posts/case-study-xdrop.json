@@ -879,7 +879,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Chaque request passe par un middleware qui valide le tenant (seller) et le role de l'utilisateur. Les données sont filtrées par `sellerId` dans toute query — il n'existe pas d'appel à la base qui ne passe pas par ce filtre. Cela garantit une isolation totale entre les vendeurs."
+      "text": "Chaque request passe par un middleware qui valide le tenant (seller) et le rôle de l'utilisateur. Les données sont filtrées par `sellerId` dans toute query — il n'existe pas d'appel à la base qui ne passe pas par ce filtre. Cela garantit une isolation totale entre les vendeurs."
     },
     {
       "type": "heading",

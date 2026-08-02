@@ -1023,7 +1023,7 @@
     {
       "type": "code",
       "language": "typescript",
-      "code": "// Fallback avec cache\nconst productCache = new Map<string, Product>()\n\nasync function getProduct(id: string): Promise<Product> {\n  return marketplaceBreaker.execute(\n    async () => {\n      const product = await fetchFromMarketplace(id)\n      productCache.set(id, product) // met à jour le cache en cas de succès\n      return product\n    },\n    () => {\n      const cached = productCache.get(id)\n      if (cached) return cached\n      // Sans cache — renvoie un produit avec un flag d'indisponibilité\n      return { id, name: 'Produto indisponível', available: false }\n    }\n  )\n}"
+      "code": "// Fallback avec cache\nconst productCache = new Map<string, Product>()\n\nasync function getProduct(id: string): Promise<Product> {\n  return marketplaceBreaker.execute(\n    async () => {\n      const product = await fetchFromMarketplace(id)\n      productCache.set(id, product) // met à jour le cache en cas de succès\n      return product\n    },\n    () => {\n      const cached = productCache.get(id)\n      if (cached) return cached\n      // Sans cache — renvoie un produit avec un flag d'indisponibilité\n      return { id, name: 'Produit indisponible', available: false }\n    }\n  )\n}"
     },
     {
       "type": "heading",
@@ -1134,7 +1134,7 @@
     },
     {
       "type": "paragraph",
-      "text": "La différence entre un système qui tombe en même temps que ses dépendances et un système qui se dégrade gracieusement, c'est presque toujours un Circuit Breaker bien configuré."
+      "text": "La différence entre un système qui tombe en même temps que ses dépendances et un système qui se dégrade élégamment, c'est presque toujours un Circuit Breaker bien configuré."
     }
   ]
 }

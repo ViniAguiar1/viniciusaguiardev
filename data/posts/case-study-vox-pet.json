@@ -878,7 +878,7 @@
       "ordered": true,
       "items": [
         "**Connexion :** Baileys (WhatsApp Web self-hosted) qui tourne sur Railway avec un persistent disk pour maintenir la session",
-        "**Orchestrator :** reçoit le message, identifie le tenant, charge le contexte (historique + knowledge base) et décide quelle tool utiliser",
+        "**Orchestrator :** reçoit le message, identifie le tenant, charge le contexte (historique + knowledge base) et décide quel tool utiliser",
         "**10 tools disponibles :** prendre un rendez-vous, vérifier les créneaux, consulter un prix, recommander un produit, chercher un dossier médical, envoyer un rappel, entre autres",
         "**RAG :** knowledge base par tenant avec des embeddings OpenAI, recherche sémantique pour contextualiser les réponses",
         "**Whisper :** quand le client envoie un audio, le système le transcrit automatiquement et le traite comme du texte",
@@ -933,7 +933,7 @@
     },
     {
       "type": "paragraph",
-      "text": "L'émission de NF-e au Brésil est critique — si le provider de facture tombe, la clinique ne peut plus vendre. Nous avons intégré deux providers (**Focus NFe** et **NFe.io**) avec un fallback automatique. Un cron job v2 traite la file toutes les 30 secondes."
+      "text": "L'émission de NF-e au Brésil est critique — si le provider de facturation tombe, la clinique ne peut plus vendre. Nous avons intégré deux providers (**Focus NFe** et **NFe.io**) avec un fallback automatique. Un cron job v2 traite la file toutes les 30 secondes."
     },
     {
       "type": "list",

@@ -545,7 +545,7 @@
     {
       "type": "code",
       "language": "python",
-      "code": "context = build_context(results)\nchain = prompt | llm | StrOutputParser()\nresponse = chain.invoke({\"contexto\": context, \"pergunta\": question})"
+      "code": "context = build_context(results)\nchain = prompt | llm | StrOutputParser()\nresponse = chain.invoke({\"contexte\": context, \"question\": question})"
     },
     {
       "type": "heading",

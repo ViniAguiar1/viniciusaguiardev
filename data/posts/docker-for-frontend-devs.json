@@ -1033,7 +1033,7 @@
     {
       "type": "code",
       "language": "bash",
-      "code": "# Construire l'image\ndocker build -t meu-app .\n\n# Exécuter le container\ndocker run -p 3000:3000 meu-app\n\n# Accéder : http://localhost:3000"
+      "code": "# Construire l'image\ndocker build -t mon-app .\n\n# Exécuter le container\ndocker run -p 3000:3000 mon-app\n\n# Accéder : http://localhost:3000"
     },
     {
       "type": "heading",
@@ -1166,7 +1166,7 @@
     {
       "type": "code",
       "language": "bash",
-      "code": "# Build et tag\ndocker build -t meu-app:latest .\n\n# Push vers Docker Hub (ou ECR, GCR, etc.)\ndocker tag meu-app:latest usuario/meu-app:latest\ndocker push usuario/meu-app:latest\n\n# Sur le serveur (pull et run)\ndocker pull usuario/meu-app:latest\ndocker run -d -p 3000:3000 --env-file .env usuario/meu-app:latest"
+      "code": "# Build et tag\ndocker build -t mon-app:latest .\n\n# Push vers Docker Hub (ou ECR, GCR, etc.)\ndocker tag mon-app:latest utilisateur/mon-app:latest\ndocker push utilisateur/mon-app:latest\n\n# Sur le serveur (pull et run)\ndocker pull utilisateur/mon-app:latest\ndocker run -d -p 3000:3000 --env-file .env utilisateur/mon-app:latest"
     },
     {
       "type": "paragraph",

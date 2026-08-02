@@ -292,7 +292,7 @@ export default async function IKroppPage() {
         "Implémentation de fonctionnalités avec des règles métier complexes, notamment dans le module de planning",
         "Modernisation du système legacy (PHP 5.3) vers une architecture moderne avec React, Next.js et TypeScript",
         "Mise en place et standardisation du Design System — réutilisation de composants et cohérence visuelle",
-        "Intégration avec des APIs externes et des systèmes de paiement",
+        "Intégration avec des API externes et des systèmes de paiement",
         "Décisions de system design : séparation des responsabilités, scalabilité et maintenabilité",
         "Tests end-to-end avec Cypress pour les modules critiques",
       ],

@@ -221,7 +221,7 @@ const categories: UsesCategory[] = [
           en: "Backend and API runtime. Express, Fastify or Next.js API routes.",
           es: "Runtime para backend y APIs. Express, Fastify o API routes de Next.js.",
           jp: "バックエンドと API のランタイム。Express、Fastify、または Next.js の API ルート。",
-          fr: "Runtime pour backend et APIs. Express, Fastify ou API routes de Next.js.",
+          fr: "Runtime pour backend et API. Express, Fastify ou API routes de Next.js.",
         },
       },
       {
@@ -314,7 +314,7 @@ const categories: UsesCategory[] = [
           en: "REST API testing. Collections organized by project.",
           es: "Testing de APIs REST. Collections organizadas por proyecto.",
           jp: "REST API のテスト。プロジェクトごとに整理したコレクション。",
-          fr: "Test d'APIs REST. Collections organisées par projet.",
+          fr: "Test d'API REST. Collections organisées par projet.",
         },
       },
       {
@@ -351,7 +351,7 @@ const categories: UsesCategory[] = [
           en: "API, worker and backend service deploys. Simple AWS alternative for smaller projects.",
           es: "Deploy de APIs, workers y servicios backend. Alternativa simple a AWS para proyectos menores.",
           jp: "API、ワーカー、バックエンドサービスのデプロイ。小規模プロジェクト向けのシンプルな AWS 代替。",
-          fr: "Deploy d'APIs, workers et services backend. Alternative simple à AWS pour les petits projets.",
+          fr: "Deploy d'API, workers et services backend. Alternative simple à AWS pour les petits projets.",
         },
       },
       {

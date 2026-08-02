@@ -36,7 +36,7 @@ Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
   3. `components/language-toggle.tsx` — add the entry to `flags` and `labels`
   4. `data/experiences.test.ts` — add the locale to the `contractWord` map
 
-  Nothing else is manual. Sites 1, 3 and 4 are `Record<Locale, …>`, so `pnpm typecheck` fails until they are filled; site 2's fallback is caught by `lib/i18n-coverage.test.ts`, which also fails until every translation object and post covers the new locale. Verified empirically by adding a sixth locale with only step 1 applied: `tsc` flagged sites 3 and 4 (plus every `Localized` in `data/experiences.ts`), and the guard flagged the dictionary fallback, 294 incomplete objects and 66 missing post fields.
+  Also update the locale list in `README.md` and `public/llms.txt` — prose, unguarded. Sites 1 and 3 are `Record<Locale, …>`, so `pnpm typecheck` fails until they are filled; site 4 is a bare object literal, caught by `strict: true` in tsconfig (TS7053); site 2's fallback is caught by `lib/i18n-coverage.test.ts`, which also fails until every translation object and post covers the new locale. Verified empirically by adding a sixth locale with only step 1 applied: `tsc` flagged sites 3 and 4 (plus every `Localized` in `data/experiences.ts`), and the guard flagged the dictionary fallback, 294 incomplete objects and 66 missing post fields.
 
 ### Blog Posts
 

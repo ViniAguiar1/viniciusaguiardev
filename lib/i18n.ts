@@ -1,4 +1,4 @@
-export const LOCALES = ["pt", "en", "es", "jp"] as const
+export const LOCALES = ["pt", "en", "es", "jp", "fr"] as const
 export type Locale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: Locale = "pt"
 
@@ -25,11 +25,29 @@ export function stripLocale(pathname: string): string {
 }
 
 /** HTML lang attribute mapping (more specific than the locale code) */
+const HTML_LANGS: Record<Locale, string> = {
+  pt: "pt-BR",
+  en: "en-US",
+  es: "es-ES",
+  jp: "ja-JP",
+  fr: "fr-FR",
+}
+
 export function localeToHtmlLang(locale: Locale): string {
-  if (locale === "en") return "en-US"
-  if (locale === "es") return "es-ES"
-  if (locale === "jp") return "ja-JP"
-  return "pt-BR"
+  return HTML_LANGS[locale]
+}
+
+/** Open Graph locale mapping */
+const OG_LOCALES: Record<Locale, string> = {
+  pt: "pt_BR",
+  en: "en_US",
+  es: "es_ES",
+  jp: "ja_JP",
+  fr: "fr_FR",
+}
+
+export function localeToOgLocale(locale: Locale): string {
+  return OG_LOCALES[locale]
 }
 
 /**

@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { cache } from "react"
-import type { Locale } from "@/lib/i18n-server"
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 export type ParagraphBlock = {
   type: "paragraph"
@@ -219,6 +219,13 @@ export type RawPostData = Partial<Post> & {
   date_jp?: string
   readTime_jp?: string
   tag_jp?: string
+  title_fr?: string
+  description_fr?: string
+  content_fr?: string
+  blocks_fr?: unknown[]
+  date_fr?: string
+  readTime_fr?: string
+  tag_fr?: string
   blocks?: unknown[]
 }
 
@@ -226,7 +233,7 @@ export function applyLocaleToData(original: RawPostData, locale: Locale) {
   type LocalizedData = Omit<Partial<Post>, "blocks"> & { blocks?: unknown[] }
   const data = { ...(original as Record<string, unknown>) } as LocalizedData
 
-  const suffix = locale === "en" ? "_en" : locale === "es" ? "_es" : locale === "jp" ? "_jp" : null
+  const suffix = locale === DEFAULT_LOCALE ? null : `_${locale}`
 
   if (suffix) {
     const raw = original as Record<string, unknown>

@@ -13,6 +13,7 @@ import {
   LOCALES,
   isLocale,
   localeToHtmlLang,
+  localeToOgLocale,
   buildAlternates,
   SITE_URL,
   t,
@@ -50,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
   const description = t(locale, { pt: "Frontend Engineer — React, Next.js, TypeScript e performance engineering em SaaS de produção. Capacidade full-stack como diferencial: pagamentos, multi-tenant e IA.", en: "Frontend Engineer — React, Next.js, TypeScript and performance engineering on production SaaS. Full-stack range as a differentiator: payments, multi-tenant and AI.", es: "Frontend Engineer — React, Next.js, TypeScript y performance engineering en SaaS de producción. Capacidad full-stack como diferencial: pagos, multi-tenant e IA.", jp: "フロントエンドエンジニア — React、Next.js、TypeScript、本番SaaSのパフォーマンスエンジニアリング。決済、マルチテナント、AIまで扱えるフルスタック力が強み。" })
 
-  const ogLocale = locale === "en" ? "en_US" : locale === "es" ? "es_ES" : locale === "jp" ? "ja_JP" : "pt_BR"
+  const ogLocale = localeToOgLocale(locale)
 
   return {
     title: {
@@ -63,9 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     openGraph: {
       type: "website",
       locale: ogLocale,
-      alternateLocale: LOCALES.filter((l) => l !== locale).map((l) =>
-        l === "en" ? "en_US" : l === "es" ? "es_ES" : l === "jp" ? "ja_JP" : "pt_BR",
-      ),
+      alternateLocale: LOCALES.filter((l) => l !== locale).map(localeToOgLocale),
       siteName: "Vinicius Aguiar",
       title,
       description,

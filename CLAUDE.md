@@ -27,9 +27,9 @@ Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
 
 - `Locale` type: `"pt" | "en" | "es" | "jp" | "fr"` — resolved from the `x-locale` request header (set by `proxy.ts` from the URL's locale prefix) via `getLocale()` in `lib/i18n-server.ts`
 - `getDictionary(locale)` returns typed UI translations (nav, home, about, projects, etc.)
-- `t(locale, pt, en, es)` helper for inline trilingual strings in server components
-- Blog posts use suffix pattern: base fields are PT, `_en` suffix for English, `_es` for Spanish (e.g., `title_en`, `blocks_es`)
-- Project taglines/descriptions use `{ pt: string; en: string; es?: string }` objects
+- `t(locale, { pt: "...", en: "...", es: "...", jp: "...", fr: "..." })` helper for inline strings in server components — takes an object keyed by locale, not positional args; only `pt` is required
+- Blog posts use suffix pattern: base fields are PT, other locales use `_${locale}` suffix (e.g., `title_en`, `blocks_jp`, `description_fr`) — derived uniformly in `lib/posts.ts`, not a hardcoded list per locale
+- Project taglines/descriptions use `LocalizedString` (`data/projects.ts`): `Partial<Record<Locale, string>> & { pt: string }` — only `pt` is required, so a missing locale is not a compile error, it silently falls back to Portuguese (this is what `lib/i18n-coverage.test.ts` guards against)
 - Adding a locale: append it to `LOCALES` in `lib/i18n.ts` and to the `HTML_LANGS`/`OG_LOCALES` maps. Everything else (proxy, sitemap, hreflang, `generateStaticParams`) derives from `LOCALES`. `lib/i18n-coverage.test.ts` then fails until every translation object, dictionary and post covers the new locale.
 
 ### Blog Posts

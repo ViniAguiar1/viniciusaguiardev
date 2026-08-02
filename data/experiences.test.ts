@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { experiences } from "./experiences"
-
-const LOCALES = ["pt", "en", "es", "jp"] as const
+import { LOCALES } from "@/lib/i18n"
 
 describe("experiences data", () => {
   it("has the 6 companies in timeline order", () => {
@@ -23,7 +22,7 @@ describe("experiences data", () => {
   })
 
   it("labels MovePro and Holy Solutions as contract work in every locale", () => {
-    const contractWord = { pt: "Contrato", en: "Contract", es: "Contrato", jp: "業務委託" }
+    const contractWord = { pt: "Contrato", en: "Contract", es: "Contrato", jp: "業務委託", fr: "Contrat" }
     for (const company of ["MovePro", "Holy Solutions"]) {
       const exp = experiences.find((e) => e.company === company)!
       for (const locale of LOCALES) {
@@ -32,7 +31,7 @@ describe("experiences data", () => {
     }
   })
 
-  it("fills every localized field in all four locales", () => {
+  it("fills every localized field in every locale", () => {
     for (const exp of experiences) {
       const fields = [exp.role, exp.period, exp.summary, ...(exp.highlight ? [exp.highlight] : []), ...exp.details]
       for (const field of fields) {

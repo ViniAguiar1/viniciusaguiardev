@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias", jp: "Vox Pet Digital — 動物病院向けSaaS" }),
-    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial.", jp: "95のPrismaモデルを持つバーティカルSaaS、WhatsApp上のAI、Express→NestJSへの移行、マルチテナント + マルチ拠点。" }),
+    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias", jp: "Vox Pet Digital — 動物病院向けSaaS", fr: "Vox Pet Digital — SaaS pour cliniques vétérinaires" }),
+    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial.", jp: "95のPrismaモデルを持つバーティカルSaaS、WhatsApp上のAI、Express→NestJSへの移行、マルチテナント + マルチ拠点。", fr: "SaaS vertical avec 95 modèles Prisma, IA sur WhatsApp, migration Express→NestJS, multi-tenant + multi-filiale." }),
     alternates: buildAlternates("/projetos/vox-pet-digital", locale),
   }
 }
@@ -210,6 +210,54 @@ export default async function VoxPetPage() {
       ],
       caseStudyCta: "技術ケーススタディを読む",
       visitCta: "Vox Pet にアクセス",
+    },
+    fr: {
+      back: "Retour aux projets",
+      badge: "SaaS en production",
+      title: "Vox Pet Digital",
+      subtitle:
+        "SaaS vertical pour animaleries et cliniques vétérinaires — de la prise de rendez-vous à la facturation, avec l'IA sur WhatsApp.",
+      purposeTitle: "L'objectif",
+      purposeText1:
+        "Les cliniques vétérinaires et les animaleries sont des activités complexes : elles gèrent les rendez-vous, les dossiers médicaux, les vaccins, les ventes, les stocks, les commissions, les factures et le service client — tout en même temps. La plupart utilisent des tableurs ou des systèmes génériques qui ne comprennent pas le fonctionnement du secteur.",
+      purposeText2:
+        "Vox Pet Digital est né pour être le système qui couvre le cycle complet de cette activité. Une plateforme unique qui intègre la gestion opérationnelle, financière et le service client automatisé via WhatsApp — permettant aux cliniques de se concentrer sur le soin des animaux, et non sur les tableurs.",
+      purposeText3:
+        "La différence, c'est que la plateforme grandit avec l'activité : une clinique avec 1 établissement utilise les mêmes modules qu'un réseau avec 5 filiales. Un véritable multi-tenant + multi-filiale, pas un contournement.",
+      challengesTitle: "Défis techniques",
+      challenges: [
+        {
+          title: "Migration Express → NestJS",
+          desc: "Strangler fig pattern : v1 (41 controllers) et v2 (12 modules NestJS) coexistant dans le même processus, avec des règles strictes pour le nouveau code.",
+        },
+        {
+          title: "WhatsApp + IA 24h/24",
+          desc: "Agent avec 10 tools, RAG par tenant, Whisper pour l'audio, mémoire de conversation et follow-up automatique via cron.",
+        },
+        {
+          title: "Multi-tenant + multi-filiale",
+          desc: "95 modèles Prisma, 93 avec tenant_id, 76 avec branch_id. Transferts de stock entre filiales avec workflow d'approbation.",
+        },
+        {
+          title: "Facturation avec fallback",
+          desc: "Deux providers (Focus NFe + NFe.io), file résiliente traitée toutes les 30s, import XML des fournisseurs.",
+        },
+      ],
+      screenshotsTitle: "La plateforme",
+      stackTitle: "Stack technique",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "Lire l'étude de cas technique",
+      visitCta: "Accéder à Vox Pet",
     },
   }
 

@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "X-Drop — Plataforma SaaS de Dropshipping", en: "X-Drop — Dropshipping SaaS Platform", es: "X-Drop — Plataforma SaaS de Dropshipping", jp: "X-Drop — ドロップシッピングSaaSプラットフォーム" }),
-    description: t(locale, { pt: "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.", en: "How I built a platform connecting trusted suppliers with sellers entering the online sales world.", es: "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online.", jp: "信頼できるサプライヤーと、オンライン販売を始めたいセラーをつなぐプラットフォームをどう構築したか。" }),
+    title: t(locale, { pt: "X-Drop — Plataforma SaaS de Dropshipping", en: "X-Drop — Dropshipping SaaS Platform", es: "X-Drop — Plataforma SaaS de Dropshipping", jp: "X-Drop — ドロップシッピングSaaSプラットフォーム", fr: "X-Drop — Plateforme SaaS de Dropshipping" }),
+    description: t(locale, { pt: "Como construí uma plataforma que conecta fornecedores de confiança com sellers que querem entrar no mundo de vendas online.", en: "How I built a platform connecting trusted suppliers with sellers entering the online sales world.", es: "Cómo construí una plataforma que conecta proveedores de confianza con sellers que quieren entrar al mundo de ventas online.", jp: "信頼できるサプライヤーと、オンライン販売を始めたいセラーをつなぐプラットフォームをどう構築したか。", fr: "Comment j'ai construit une plateforme qui connecte des fournisseurs de confiance avec des sellers qui veulent se lancer dans la vente en ligne." }),
     alternates: buildAlternates("/projetos/x-drop", locale),
   }
 }
@@ -191,6 +191,49 @@ export default async function XDropPage() {
       visitCta: "X-Dropを開く",
       screenshotsTitle: "プラットフォーム",
     },
+    fr: {
+      back: "Retour aux projets",
+      badge: "SaaS en production",
+      title: "X-Drop",
+      subtitle:
+        "Connecter des fournisseurs de confiance avec des sellers qui veulent se lancer dans la vente en ligne.",
+      purposeTitle: "L'objectif",
+      purposeText1:
+        "Le marché du dropshipping au Brésil croît rapidement, mais il a un problème structurel : les sellers débutants ne savent pas à qui faire confiance. Il existe des milliers de fournisseurs, mais trouver ceux qui sont fiables — qui livrent à temps, avec qualité et des marges viables — est un processus manuel, long et plein de risques.",
+      purposeText2:
+        "X-Drop est né pour résoudre ce problème. La plateforme connecte des fournisseurs vérifiés avec des sellers qui veulent démarrer ou faire évoluer leurs activités sur des marketplaces comme Mercado Livre et Shopee, en éliminant la barrière à l'entrée et en offrant toute l'infrastructure de gestion dont un seller a besoin.",
+      purposeText3:
+        "Ce n'est pas seulement un outil de gestion — c'est un écosystème. Le fournisseur gagne un canal de distribution. Le seller gagne accès à des produits fiables, avec un catalogue prêt à publier, une intégration directe avec les marketplaces et une gestion financière centralisée.",
+      howTitle: "Comment ça marche",
+      howItems: [
+        "Le fournisseur enregistre ses produits avec prix, photos et délais d'expédition",
+        "Le seller choisit les produits, les publie sur les marketplaces en un clic et définit sa marge",
+        "Quand une commande arrive, X-Drop la route automatiquement vers le fournisseur, qui expédie directement",
+        "Le seller suit tout — commandes, paiements, commissions et profit — dans un seul tableau de bord",
+      ],
+      numbersTitle: "Résultats en 2 mois",
+      revenue: "R$ 30k+",
+      revenueLabel: "chiffre d'affaires traité",
+      users: "100+",
+      usersLabel: "utilisateurs actifs",
+      orders: "400+",
+      ordersLabel: "commandes traitées",
+      mrr: "R$ 20k",
+      mrrLabel: "MRR",
+      stackTitle: "Stack technique",
+      stackItems: [
+        "React + Next.js + TypeScript",
+        "Swift UI (iOS natif)",
+        "NestJS (API backend)",
+        "PostgreSQL + Firebase",
+        "Docker + AWS",
+        "Asaas + Mercado Pago",
+        "Mercado Livre API + Shopee API",
+      ],
+      caseStudyCta: "Lire l'étude de cas technique",
+      visitCta: "Accéder à X-Drop",
+      screenshotsTitle: "La plateforme",
+    },
   }
 
   const c = content[locale as keyof typeof content] ?? content.pt
@@ -345,7 +388,7 @@ export default async function XDropPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
                 </svg>
                 <span className="text-sm font-medium">
-                  {locale === "en" ? "iOS App — Swift UI (native)" : locale === "es" ? "App iOS — Swift UI (nativo)" : locale === "jp" ? "iOSアプリ — Swift UI（ネイティブ）" : "App iOS — Swift UI (nativo)"}
+                  {t(locale, { pt: "App iOS — Swift UI (nativo)", en: "iOS App — Swift UI (native)", es: "App iOS — Swift UI (nativo)", jp: "iOSアプリ — Swift UI（ネイティブ）", fr: "App iOS — Swift UI (natif)" })}
                 </span>
                 <a
                   href="https://apps.apple.com/us/app/xdrop/id6749638204"

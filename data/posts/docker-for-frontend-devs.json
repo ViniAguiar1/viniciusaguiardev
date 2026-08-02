@@ -957,5 +957,244 @@
       "type": "paragraph",
       "text": "Docker は DevOps だけのものではありません — あらゆる開発者にとっての **生産性** ツールです。Dockerfile と docker-compose があれば、開発からデプロイまで環境が一貫していることを保証できます。学習への投資はリターンに比べて小さいです：環境起因のバグの減少、より速いオンボーディング、そして予測可能なデプロイ。"
     }
+  ],
+  "title_fr": "Docker pour les devs frontend : de zéro au deploy",
+  "description_fr": "Guide pratique de Docker pour ceux qui viennent du frontend — Dockerfile, docker-compose, environnements de dev, multi-stage builds et deploy en production.",
+  "date_fr": "16 avril 2026",
+  "readTime_fr": "10 min de lecture",
+  "tag_fr": "DevOps",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Si vous êtes dev frontend et que vous n'avez jamais utilisé Docker, vous avez probablement déjà entendu « ça marche sur ma machine ». Docker résout exactement cela — il empaquette votre application avec toutes ses dépendances dans un **container** qui tourne de la même façon partout : sur votre Mac, sur le PC du collègue, dans le CI et en production. Dans ce guide, je vais de zéro au deploy en me concentrant sur des projets frontend réels."
+    },
+    {
+      "type": "heading",
+      "text": "Qu'est-ce que Docker (sans blabla)",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Docker est un outil qui crée des environnements isolés (containers) pour exécuter des applications. Contrairement à une machine virtuelle, un container est léger — il partage le kernel du système et démarre en quelques secondes."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Image** — le « moule ». Elle contient le système d'exploitation de base, Node.js, vos dépendances et votre code.",
+        "**Container** — l'« instance » de l'image en cours d'exécution. Vous pouvez avoir plusieurs containers de la même image.",
+        "**Dockerfile** — la « recette » qui définit comment construire l'image.",
+        "**docker-compose** — orchestre plusieurs containers (app + base de données + redis) en une seule commande."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Installation",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Installez Docker Desktop pour votre système d'exploitation. Il inclut Docker Engine, Docker CLI et Docker Compose :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**macOS :** téléchargez sur docker.com/products/docker-desktop ou utilisez `brew install --cask docker`",
+        "**Windows :** téléchargez Docker Desktop (nécessite WSL2)",
+        "**Linux :** installez via apt/yum ou suivez la documentation officielle"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Vérifiez l'installation :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "docker --version\n# Docker version 24.x.x\n\ndocker compose version\n# Docker Compose version v2.x.x"
+    },
+    {
+      "type": "heading",
+      "text": "Premier Dockerfile : application Next.js",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Créons un Dockerfile pour une application Next.js. Le plus basique possible pour comprendre le concept :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Dockerfile\nFROM node:20-alpine\n\nWORKDIR /app\n\n# Copier les dépendances d'abord (cache de layers)\nCOPY package.json pnpm-lock.yaml ./\nRUN corepack enable && pnpm install --frozen-lockfile\n\n# Copier le code\nCOPY . .\n\n# Build\nRUN pnpm build\n\n# Exécuter\nEXPOSE 3000\nCMD [\"pnpm\", \"start\"]"
+    },
+    {
+      "type": "paragraph",
+      "text": "Chaque ligne est une **layer**. Docker met en cache chaque layer — si le `package.json` n'a pas changé, il saute l'installation des dépendances. C'est pour cela que l'on copie les dépendances **avant** le code."
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Construire l'image\ndocker build -t meu-app .\n\n# Exécuter le container\ndocker run -p 3000:3000 meu-app\n\n# Accéder : http://localhost:3000"
+    },
+    {
+      "type": "heading",
+      "text": ".dockerignore : ce qui n'entre pas dans l'image",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tout comme le `.gitignore`, le `.dockerignore` définit ce qui ne doit pas être copié dans l'image. Cela réduit la taille et accélère le build :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# .dockerignore\nnode_modules\n.next\n.git\n.env\n.env.local\nREADME.md\n.vscode\n.claude"
+    },
+    {
+      "type": "heading",
+      "text": "Multi-stage build : image de production optimisée",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le Dockerfile de base fonctionne, mais l'image finale est lourde — elle contient toutes les devDependencies, le code source et les fichiers de build. En production, vous n'avez besoin que de l'output du build. Le multi-stage build résout cela :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Dockerfile (multi-stage)\n\n# Stage 1 : Installer les dépendances\nFROM node:20-alpine AS deps\nWORKDIR /app\nCOPY package.json pnpm-lock.yaml ./\nRUN corepack enable && pnpm install --frozen-lockfile\n\n# Stage 2 : Build\nFROM node:20-alpine AS builder\nWORKDIR /app\nCOPY --from=deps /app/node_modules ./node_modules\nCOPY . .\nRUN corepack enable && pnpm build\n\n# Stage 3 : Production (uniquement le nécessaire)\nFROM node:20-alpine AS runner\nWORKDIR /app\n\nENV NODE_ENV=production\n\n# Copier uniquement le nécessaire depuis le build\nCOPY --from=builder /app/public ./public\nCOPY --from=builder /app/.next/standalone ./\nCOPY --from=builder /app/.next/static ./.next/static\n\nEXPOSE 3000\nCMD [\"node\", \"server.js\"]"
+    },
+    {
+      "type": "paragraph",
+      "text": "La différence est significative :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Dockerfile de base :** ~1GB (node_modules complet, code source, devDependencies)",
+        "**Multi-stage :** ~150MB (uniquement Node.js + output du build + fichiers statiques)"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Docker Compose : environnement de dev complet",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Pour le développement local, docker-compose orchestre plusieurs services. Un scénario réel : app Next.js + PostgreSQL + Redis :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# docker-compose.yml\nversion: '3.8'\n\nservices:\n  app:\n    build: .\n    ports:\n      - '3000:3000'\n    volumes:\n      - .:/app\n      - /app/node_modules\n    environment:\n      - DATABASE_URL=postgresql://user:pass@db:5432/myapp\n      - REDIS_URL=redis://cache:6379\n    depends_on:\n      - db\n      - cache\n\n  db:\n    image: postgres:16-alpine\n    ports:\n      - '5432:5432'\n    environment:\n      POSTGRES_USER: user\n      POSTGRES_PASSWORD: pass\n      POSTGRES_DB: myapp\n    volumes:\n      - pgdata:/var/lib/postgresql/data\n\n  cache:\n    image: redis:7-alpine\n    ports:\n      - '6379:6379'\n\nvolumes:\n  pgdata:"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Tout démarrer avec une seule commande\ndocker compose up -d\n\n# Voir les logs\ndocker compose logs -f app\n\n# Tout arrêter\ndocker compose down\n\n# Arrêter et nettoyer les volumes (reset de la base de données)\ndocker compose down -v"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le `volumes: - .:/app` monte votre code local dans le container — les changements dans le code se reflètent immédiatement sans rebuild. Le `- /app/node_modules` évite que le node_modules local n'écrase celui du container."
+    },
+    {
+      "type": "heading",
+      "text": "Environnement de dev vs production",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Il est courant d'avoir deux Dockerfiles ou d'utiliser target dans le compose :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# docker-compose.dev.yml\nservices:\n  app:\n    build:\n      context: .\n      dockerfile: Dockerfile.dev\n    ports:\n      - '3000:3000'\n    volumes:\n      - .:/app\n      - /app/node_modules\n    command: pnpm dev"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Dockerfile.dev (simple, sans multi-stage)\nFROM node:20-alpine\nWORKDIR /app\nCOPY package.json pnpm-lock.yaml ./\nRUN corepack enable && pnpm install\nCOPY . .\nEXPOSE 3000\nCMD [\"pnpm\", \"dev\"]"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Dev\ndocker compose -f docker-compose.dev.yml up\n\n# Production\ndocker compose up --build"
+    },
+    {
+      "type": "heading",
+      "text": "Variables d'environnement",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ne mettez jamais de secrets dans le Dockerfile. Utilisez des variables d'environnement via `.env` ou docker-compose :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# .env (ne pas commiter)\nDATABASE_URL=postgresql://user:pass@db:5432/myapp\nSTRIPE_SECRET_KEY=sk_test_...\nNEXT_PUBLIC_API_URL=http://localhost:3000/api"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# docker-compose.yml\nservices:\n  app:\n    env_file:\n      - .env\n    # ou individuellement :\n    environment:\n      - NODE_ENV=production"
+    },
+    {
+      "type": "heading",
+      "text": "Commandes essentielles",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Les commandes que j'utilise au quotidien :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Images\ndocker build -t app .          # Construire l'image\ndocker images                  # Lister les images\ndocker rmi app                 # Supprimer l'image\n\n# Containers\ndocker ps                      # Containers en cours d'exécution\ndocker ps -a                   # Tous (y compris arrêtés)\ndocker logs -f <container>     # Logs en temps réel\ndocker exec -it <container> sh # Entrer dans le container\ndocker stop <container>        # Arrêter\ndocker rm <container>          # Supprimer\n\n# Compose\ndocker compose up -d           # Démarrer en background\ndocker compose down            # Arrêter\ndocker compose down -v         # Arrêter + nettoyer les volumes\ndocker compose logs -f         # Logs de tous les services\ndocker compose build --no-cache # Rebuild sans cache\n\n# Nettoyage\ndocker system prune -a         # Supprimer tout ce qui n'est pas utilisé"
+    },
+    {
+      "type": "heading",
+      "text": "Deploy en production",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une fois l'image multi-stage prête, le deploy consiste à l'envoyer vers un registry et à l'exécuter sur le serveur :"
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "# Build et tag\ndocker build -t meu-app:latest .\n\n# Push vers Docker Hub (ou ECR, GCR, etc.)\ndocker tag meu-app:latest usuario/meu-app:latest\ndocker push usuario/meu-app:latest\n\n# Sur le serveur (pull et run)\ndocker pull usuario/meu-app:latest\ndocker run -d -p 3000:3000 --env-file .env usuario/meu-app:latest"
+    },
+    {
+      "type": "paragraph",
+      "text": "Des services comme **Render**, **Railway** et **Fly.io** détectent le Dockerfile automatiquement et font build + deploy sans configuration supplémentaire."
+    },
+    {
+      "type": "heading",
+      "text": "Erreurs courantes",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**node_modules dans l'image + volume local** — le volume écrase le node_modules du container. Solution : ajouter `- /app/node_modules` dans volumes.",
+        "**Image trop lourde** — utiliser `node:20` au lieu de `node:20-alpine`. Alpine est ~5x plus petite.",
+        "**Build lent** — vous ne profitez pas du cache de layers. Copiez `package.json` avant le code.",
+        "**Port non accessible** — vous avez oublié l'`EXPOSE` ou le mapping de port dans `docker run -p`.",
+        "**Les variables d'environnement n'arrivent pas** — dans Next.js, les variables `NEXT_PUBLIC_*` doivent être disponibles au **build time**, pas seulement au runtime."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Résumé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Docker n'est pas réservé au DevOps — c'est un outil de **productivité** pour n'importe quel dev. Avec un Dockerfile et un docker-compose, vous garantissez que l'environnement reste cohérent du dev au deploy. L'investissement en apprentissage est faible comparé au retour : moins de bugs d'environnement, un onboarding plus rapide et un deploy prévisible."
+    }
   ]
 }

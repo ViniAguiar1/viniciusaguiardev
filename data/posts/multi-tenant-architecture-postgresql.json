@@ -545,5 +545,141 @@
       "type": "paragraph",
       "text": "マルチテナントアーキテクチャは、多くのモダンな SaaS 製品の基盤です。PostgreSQL と tenant_id をベースとした一貫した設計を用いれば、スケーラブルで安全、かつ比較的メンテナンスしやすいシステムを構築できます。バックエンドのベストプラクティスとデータベースのセキュリティと組み合わせることで、このアプローチはマルチクライアントプラットフォームのための堅牢なソリューションになります。"
     }
+  ],
+  "title_fr": "Architecture multi-tenant avec PostgreSQL dans les applications SaaS",
+  "description_fr": "Un guide pratique sur la façon de structurer des applications SaaS multi-tenant avec PostgreSQL — isolation des données, modélisation de la base de données et bonnes pratiques d'architecture.",
+  "date_fr": "3 février 2026",
+  "readTime_fr": "8 min de lecture",
+  "tag_fr": "Architecture",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Les applications SaaS modernes doivent généralement servir plusieurs clients avec la même infrastructure. Ce modèle est connu sous le nom de **multi-tenant architecture** — où différentes organisations (tenants) partagent le même système, mais avec leurs données complètement isolées. Dans cet article, je présente comment structurer ce pattern avec PostgreSQL, en mettant l'accent sur la simplicité, la scalabilité et la sécurité."
+    },
+    {
+      "type": "heading",
+      "text": "Qu'est-ce qu'une architecture multi-tenant",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans une application multi-tenant, plusieurs clients utilisent la même application et la même base de données, mais chaque client possède ses propres données isolées. Le système doit garantir que les utilisateurs d'une entreprise n'aient jamais accès aux informations d'une autre. Ce modèle est largement utilisé dans les produits SaaS comme les plateformes de gestion, les CRM, les marketplaces et les systèmes d'entreprise."
+    },
+    {
+      "type": "heading",
+      "text": "Principales stratégies de multi-tenancy",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Il existe trois approches courantes pour implémenter le multi-tenancy dans les bases de données :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Database per tenant :** chaque client possède une base de données séparée.",
+        "**Schema per tenant :** chaque client possède son propre schema à l'intérieur de la même base.",
+        "**Shared database avec tenant_id :** toutes les données se trouvent dans la même base et les mêmes tables, mais chaque enregistrement possède un identifiant de tenant."
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans la plupart des produits SaaS modernes, l'approche la plus utilisée est la troisième : **shared database avec tenant_id**. Elle offre le meilleur équilibre entre scalabilité, simplicité opérationnelle et coût d'infrastructure."
+    },
+    {
+      "type": "heading",
+      "text": "Modélisation de la base de données",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le principe de base est simple : pratiquement toutes les tables liées aux données métier doivent posséder une colonne **tenant_id**. Ce champ identifie à quelle organisation cette donnée appartient."
+    },
+    {
+      "type": "code",
+      "language": "sql",
+      "code": "CREATE TABLE tenants (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  name TEXT NOT NULL,\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nCREATE TABLE users (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  tenant_id UUID NOT NULL REFERENCES tenants(id),\n  name TEXT NOT NULL,\n  email TEXT UNIQUE NOT NULL,\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nCREATE TABLE orders (\n  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n  tenant_id UUID NOT NULL REFERENCES tenants(id),\n  total NUMERIC NOT NULL,\n  created_at TIMESTAMP DEFAULT NOW()\n);"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce pattern garantit que toutes les données sont liées à un tenant spécifique. À partir de là, toutes les requêtes doivent toujours filtrer sur le **tenant_id**."
+    },
+    {
+      "type": "code",
+      "language": "sql",
+      "code": "SELECT * FROM orders\nWHERE tenant_id = 'tenant-uuid';"
+    },
+    {
+      "type": "heading",
+      "text": "Appliquer l'isolation dans le backend",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans le backend de l'application, le **tenant_id** est normalement identifié à partir de l'utilisateur authentifié. Cela signifie que toutes les queries exécutées par le système doivent appliquer automatiquement ce filtre."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "const orders = await db.orders.findMany({\n  where: {\n    tenantId: session.tenantId\n  }\n});"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce pattern empêche les utilisateurs d'accéder aux données d'autres organisations et maintient le système cohérent."
+    },
+    {
+      "type": "heading",
+      "text": "Row Level Security dans PostgreSQL",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une couche de sécurité supplémentaire peut être implémentée avec le **Row Level Security (RLS)** de PostgreSQL. Avec RLS, la base de données elle-même garantit que seuls les enregistrements du bon tenant sont accessibles."
+    },
+    {
+      "type": "code",
+      "language": "sql",
+      "code": "ALTER TABLE orders ENABLE ROW LEVEL SECURITY;\n\nCREATE POLICY tenant_isolation_policy\nON orders\nUSING (tenant_id = current_setting('app.current_tenant')::uuid);"
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec cette approche, même si une query est exécutée sans le filtre approprié dans le backend, la base de données protégera encore l'accès aux données."
+    },
+    {
+      "type": "heading",
+      "text": "Scalabilité dans les systèmes multi-tenant",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'architecture basée sur tenant_id facilite aussi la montée en charge du système. Quelques stratégies courantes incluent :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Indexation par tenant_id pour améliorer la performance des requêtes.",
+        "Partitionnement de tables basé sur tenant_id.",
+        "Séparation des plus gros tenants dans des bases dédiées à mesure que la plateforme grandit.",
+        "Utilisation de caches par tenant pour réduire la charge sur la base de données."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Applications réelles dans les produits SaaS",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce pattern est utilisé dans de nombreux types de produits SaaS, comme les plateformes de gestion d'entreprise, les systèmes de prise de rendez-vous, les marketplaces et les CRM. Dans des projets que j'ai développés récemment, l'architecture multi-tenant a permis de servir plusieurs clients tout en maintenant l'isolation des données et en réduisant les coûts opérationnels."
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Les architectures multi-tenant sont la base de nombreux produits SaaS modernes. En utilisant PostgreSQL et un design cohérent basé sur tenant_id, il est possible de construire des systèmes scalables, sûrs et relativement simples à maintenir. Combinée à de bonnes pratiques de backend et à de la sécurité au niveau de la base de données, cette approche devient une solution robuste pour les plateformes multi-clients."
+    }
   ]
 }

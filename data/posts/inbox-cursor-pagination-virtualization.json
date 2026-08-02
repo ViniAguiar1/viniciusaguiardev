@@ -219,5 +219,185 @@
     { "type": "heading", "text": "二周目で注意すべきこと", "level": 2 },
     { "type": "paragraph", "text": "このアーキテクチャを実装するなら必ず気を配りたい 2 点：**ナビゲーション間のスクロール復元** — 会話からリストに戻ったとき、ユーザーは元いた場所に正確に戻るべきで、仮想化はアンマウントを生き延びないため、オフセットをコンポーネントの外に永続化する必要があります。そして**リアルタイム更新の外科的な無効化**：WebSocket で届く新着メッセージは `setQueryData` でキャッシュの正しいページを更新すべきで、クエリ全体を無効化してページネーションが節約したばかりの仕事をやり直させてはいけません。" },
     { "type": "paragraph", "text": "残る教訓はライブラリの話というより、コストを分けて考える話です：ネットワーク、シリアライズ、レンダリングはそれぞれ異なるメカニズムで劣化し、異なる道具で解決されます。カーソルベースのページネーションは「何が流れるか」を、仮想化は「何が描画されるか」を受け持つ。この 2 つが組み合わさって、プロダクトで最も重い画面は最も安定した画面になり — そのコストは顧客の成長に比例しなくなりました。" }
+  ],
+  "title_fr": "De 6,7 MB à 19 KB : pagination cursor-based et virtualisation dans une inbox React",
+  "description_fr": "Comment j'ai reconstruit l'inbox d'un SaaS B2B qui chargeait ~20 000 conversations d'un coup — pagination cursor-based avec React Query, virtualisation avec TanStack Virtual et les trade-offs de chaque décision. Payload par requête : de ~6,7 MB à ~19 KB (~400x).",
+  "date_fr": "23 juillet 2026",
+  "readTime_fr": "12 min de lecture",
+  "tag_fr": "Frontend",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Tout SaaS B2B a un écran où tout le produit se joue. Dans le cas de ce post — une plateforme de messagerie utilisée par des équipes commerciales — cet écran est l'inbox : la liste de conversations que les utilisateurs gardent ouverte toute la journée. Dans les workspaces matures, cette liste accumule ~20 000 conversations. Et la version originale les chargeait toutes d'un coup."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce post documente la reconstruction de cet écran du point de vue frontend : pourquoi la pagination offset-based ne suffisait pas, à quoi ressemble le contrat d'API cursor-based, l'implémentation avec React Query et TanStack Virtual, et les trade-offs assumés. Le résultat : le payload est passé de ~6,7 MB à ~19 KB par requête (~400x), et les blocages de l'interface ont disparu."
+    },
+    {
+      "type": "image",
+      "src": "/inbox-payload-before-after.svg",
+      "alt": "Payload par requête avant et après : 6,7 MB contre 19 KB (~400x), avec une comparaison à l'échelle réelle",
+      "width": 900,
+      "height": 440
+    },
+    {
+      "type": "heading",
+      "text": "Le problème : tout charger d'un coup",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le symptôme était visible à l'œil nu : ouvrir l'inbox dans un gros workspace prenait plusieurs secondes, et l'interface se figeait pendant le rendu. Le DevTools racontait le reste de l'histoire : une seule réponse JSON de ~6,7 MB, et le Performance profiler montrant des long tasks qui bloquaient la main thread pendant que React montait des milliers de lignes."
+    },
+    {
+      "type": "paragraph",
+      "text": "La cause racine était un endpoint sans pagination : le listing renvoyait toutes les conversations du workspace, et le client rendait la liste entière. Ce design a une propriété traître : **il se dégrade silencieusement à mesure que le produit réussit**. Avec 500 conversations, personne ne le remarque. Avec 20 000, l'écran le plus important du produit devient le plus lent."
+    },
+    {
+      "type": "paragraph",
+      "text": "Il y avait deux coûts distincts mélangés, et il vaut la peine de les séparer parce que les solutions sont différentes : le **coût de réseau et de sérialisation** (télécharger et parser 6,7 MB) et le **coût de rendu** (garder ~20 000 composants montés dans le DOM). La pagination résout le premier. Seule la virtualisation résout le second."
+    },
+    {
+      "type": "heading",
+      "text": "Pourquoi pas offset-based",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La première idée évidente serait `?page=3&limit=50`. Pour une inbox, la pagination offset-based échoue sur deux points :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Coût de lecture croissant** — `OFFSET 10000` oblige la base de données à parcourir et à écarter 10 000 lignes avant de renvoyer les 50 suivantes. Les pages deviennent plus lentes à mesure que l'utilisateur navigue en profondeur.",
+        "**Instabilité sous écritures concurrentes** — une inbox reçoit de nouveaux messages en permanence, et chaque insertion décale l'offset : des éléments apparaissent en double ou disparaissent entre une page et la suivante. C'est exactement le type de bug intermittent que personne n'arrive à reproduire."
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La pagination cursor-based (keyset) résout les deux : au lieu de compter des lignes, chaque page part d'un pointeur stable vers le dernier enregistrement chargé. Le coût de lecture reste constant et les nouvelles insertions ne décalent rien."
+    },
+    {
+      "type": "heading",
+      "text": "Le contrat de l'API",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le cursor est opaque pour le client : une string encodée que seul le backend sait interpréter — en pratique, la paire ordonnable `(updated_at, id)`, où l'`id` départage les enregistrements ayant le même timestamp. Le contrat que consomme le frontend :"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// GET /conversations?workspaceId=...&cursor=...&limit=50\ntype ConversationsPage = {\n  items: ConversationPreview[]\n  nextCursor: string | null // null => last page\n}\n\n// The list never receives the full conversation:\n// only the fields the row actually renders\ntype ConversationPreview = {\n  id: string\n  contactName: string\n  lastMessageSnippet: string\n  lastMessageAt: string\n  unreadCount: number\n  status: \"open\" | \"closed\" | \"snoozed\"\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Un détail à l'impact disproportionné : la liste ne reçoit pas la conversation complète, seulement les champs que la ligne affiche. Le type `ConversationPreview` existe pour cela — empêcher que le payload du listing ne grossisse en même temps que le modèle complet de conversation. C'est le payload shaping et la pagination, combinés, qui produisent les ~19 KB par page."
+    },
+    {
+      "type": "heading",
+      "text": "Data fetching avec React Query",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le `useInfiniteQuery` a été fait exactement pour ce format : chaque page déclare d'où vient la suivante via `getNextPageParam`, et la bibliothèque s'occupe du cache, de la déduplication et des états de chargement :"
+    },
+    {
+      "type": "code",
+      "language": "tsx",
+      "code": "function useConversations(workspaceId: string) {\n  return useInfiniteQuery({\n    queryKey: [\"conversations\", workspaceId],\n    queryFn: ({ pageParam }) =>\n      fetchConversations({ workspaceId, cursor: pageParam, limit: 50 }),\n    initialPageParam: null as string | null,\n    getNextPageParam: (lastPage) => lastPage.nextCursor,\n  })\n}\n\n// Pages arrive as an array of arrays;\n// the list consumes a single flat array\nconst allRows = data ? data.pages.flatMap((page) => page.items) : []"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le point central de ce design est que l'accumulation se produit dans le cache, pas dans le DOM : naviguer en profondeur dans l'inbox ajoute des pages à React Query, mais — comme le montre la section suivante — le nombre d'éléments rendus reste le même."
+    },
+    {
+      "type": "heading",
+      "text": "Virtualisation avec TanStack Virtual",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La pagination seule réduit le payload, pas le coût de rendu : si l'utilisateur scrolle suffisamment, les pages accumulées reconstruisent le problème original, ligne par ligne, à l'intérieur du DOM. La réponse est le windowing — ne rendre que les lignes visibles dans le viewport (plus une marge d'overscan), positionnées de façon absolue à l'intérieur d'un conteneur qui conserve la hauteur totale de la liste, ce qui garde la barre de défilement honnête."
+    },
+    {
+      "type": "image",
+      "src": "/inbox-list-virtualization.svg",
+      "alt": "Diagramme de virtualisation : sur les ~20 000 conversations, seules les lignes à l'intérieur du viewport (plus l'overscan) existent dans le DOM",
+      "width": 900,
+      "height": 560
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec `@tanstack/react-virtual`, le `useVirtualizer` devient aussi le déclencheur naturel de la pagination : quand le dernier item virtuel s'approche de la fin de la liste chargée, on demande la page suivante :"
+    },
+    {
+      "type": "code",
+      "language": "tsx",
+      "code": "const parentRef = useRef<HTMLDivElement>(null)\n\nconst virtualizer = useVirtualizer({\n  count: hasNextPage ? allRows.length + 1 : allRows.length,\n  getScrollElement: () => parentRef.current,\n  estimateSize: () => 88, // row height estimate; measureElement refines it\n  overscan: 8,\n})\n\nconst virtualItems = virtualizer.getVirtualItems()\n\nuseEffect(() => {\n  const last = virtualItems.at(-1)\n  if (!last) return\n  if (last.index >= allRows.length - 1 && hasNextPage && !isFetchingNextPage) {\n    fetchNextPage()\n  }\n}, [virtualItems, allRows.length, hasNextPage, isFetchingNextPage, fetchNextPage])\n\nreturn (\n  <div ref={parentRef} className=\"h-full overflow-auto\">\n    <div style={{ height: virtualizer.getTotalSize(), position: \"relative\" }}>\n      {virtualItems.map((row) => (\n        <ConversationRow\n          key={allRows[row.index]?.id ?? \"loader\"}\n          ref={virtualizer.measureElement}\n          data-index={row.index}\n          conversation={allRows[row.index]}\n          style={{\n            position: \"absolute\",\n            top: 0,\n            transform: `translateY(${row.start}px)`,\n          }}\n        />\n      ))}\n    </div>\n  </div>\n)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Deux décisions dans cet extrait méritent un commentaire. Le `count` inclut une ligne supplémentaire lorsqu'il y a une page suivante — elle devient le squelette de chargement à la fin de la liste. Et le `measureElement` mesure la hauteur réelle de chaque ligne une fois montée, parce que les lignes d'une inbox n'ont pas de hauteur fixe (snippets d'une ou deux lignes, badges, états). L'`estimateSize` a seulement besoin d'être assez bon pour le premier paint."
+    },
+    {
+      "type": "heading",
+      "text": "Résultats",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Payload par requête : de ~6,7 MB à ~19 KB (~400x)",
+        "Fin des blocages de l'interface — avec un DOM stable de ~10–15 lignes, les long tasks de rendu ont disparu du profiler",
+        "L'ouverture de l'inbox ne prend plus plusieurs secondes, même dans les plus gros workspaces",
+        "Le coût de l'écran a cessé de croître avec la taille du workspace : 500 ou 20 000 conversations, le même travail par frame"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Trade-offs assumés",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Aucun de ces choix n'est gratuit, et il vaut la peine de noter ce que l'on perd :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Pas de saut vers une page arbitraire** — un cursor ne sait pas répondre à « emmène-moi à la page 37 ». Pour une inbox, parcourue comme un flux chronologique avec de la recherche et des filtres par-dessus, cela n'a pas manqué ; pour un tableau d'administration, ce serait un vrai problème.",
+        "**La virtualisation ajoute une complexité réelle** — mesure des hauteurs dynamiques, restauration du scroll, overscan calibré. C'est un coût d'ingénierie qui ne se rentabilise que lorsque la liste est vraiment grande.",
+        "**Ce qui n'est pas dans le DOM n'existe pas pour le navigateur** — le Cmd+F de la page ne trouve pas les lignes non rendues, et les lecteurs d'écran demandent une attention supplémentaire (`aria-setsize`/`aria-posinset` pour les comptages). La recherche du produit devient la vraie recherche."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Quand ne rien utiliser de tout cela",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si votre liste contient quelques centaines d'éléments, arrêtez-vous au payload shaping et à une pagination simple — la virtualisation est une réponse pour des milliers de lignes, pas un pattern par défaut. La règle que j'ai adoptée : pagination cursor-based quand la liste croît sans plafond au rythme de l'usage du produit ; virtualisation quand une seule liste menace de dépasser ~1 000 nœuds dans le DOM."
+    },
+    {
+      "type": "heading",
+      "text": "Ce qui mérite attention lors d'une deuxième passe",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Deux points qui méritent du soin dans toute implémentation de cette architecture : **la restauration du scroll entre les navigations** — revenir d'une conversation vers la liste doit ramener l'utilisateur exactement là où il était, et cela exige de persister l'offset en dehors du composant, puisque le virtualiseur ne survit pas à l'unmount — et **l'invalidation chirurgicale en temps réel** : les nouveaux messages qui arrivent via WebSocket doivent mettre à jour la bonne page du cache avec `setQueryData`, et non invalider la query entière et refaire le travail que la pagination venait d'économiser."
+    },
+    {
+      "type": "paragraph",
+      "text": "La leçon qui reste porte moins sur les bibliothèques que sur la séparation des coûts : réseau, sérialisation et rendu se dégradent par des mécanismes différents et se résolvent avec des outils différents. La pagination cursor-based s'occupe de ce qui transite ; la virtualisation s'occupe de ce qui est rendu. Ensemble, elles ont fait de l'écran le plus lourd du produit le plus stable — et son coût a cessé de suivre la croissance des clients."
+    }
   ]
 }

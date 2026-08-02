@@ -469,5 +469,122 @@
       "type": "paragraph",
       "text": "LangChain を pgVector と統合することは、文脈に応じた AI をモダンな企業アプリケーションにもたらす、最もエレガントでスケーラブルな方法の一つです。データをインテリジェンスに変える堅実な道筋です。"
     }
+  ],
+  "title_fr": "Construire un système RAG avec LangChain et PostgreSQL",
+  "description_fr": "Une étude pratique sur la façon d'implémenter un système de recherche sémantique (RAG) avec Python, LangChain et pgVector — en intégrant l'IA générative aux données d'entreprise.",
+  "date_fr": "11 octobre 2025",
+  "readTime_fr": "9 min de lecture",
+  "tag_fr": "IA",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Ces dernières années, l'intégration entre l'intelligence artificielle générative et les données d'entreprise structurées est devenue l'un des domaines les plus prometteurs du génie logiciel. Ce projet — développé dans le cadre du MBA en génie logiciel avec IA de Full Cycle — présente une architecture RAG (Retrieval-Augmented Generation) pratique utilisant Python, LangChain et PostgreSQL avec l'extension pgVector."
+    },
+    {
+      "type": "heading",
+      "text": "Le concept de RAG (Retrieval-Augmented Generation)",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le RAG est une approche qui combine la **recherche d'informations (retrieval)** avec la **génération de langage naturel (generation)**. Contrairement à une IA pure, qui ne dépend que des connaissances intégrées dans son modèle, le RAG va chercher des informations dans des sources externes (bases de données, PDF, documents d'entreprise) et les insère dans le contexte avant de générer une réponse. Cela garantit la précision, la traçabilité et la mise à jour continue des données."
+    },
+    {
+      "type": "heading",
+      "text": "Architecture et composants principaux",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'architecture a été conçue pour être modulaire et extensible, basée sur trois couches principales :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Ingestion :** charge le contenu d'un PDF, le découpe en chunks (1000 caractères avec un overlap de 150) et génère des embeddings en utilisant des fournisseurs comme HuggingFace, OpenAI ou Gemini.",
+        "**Stockage :** enregistre les vecteurs générés dans PostgreSQL en utilisant l'extension **pgVector**, ce qui permet des requêtes de similarité basées sur la distance vectorielle.",
+        "**Recherche et Réponse :** interroge la base vectorielle, récupère les contextes les plus pertinents et les envoie au modèle de langage, qui génère une réponse basée exclusivement sur le contenu trouvé."
+      ]
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "├── docker-compose.yml\n├── requirements.txt\n├── .env.example\n├── document.pdf\n└── src/\n    ├── ingest.py      # Pipeline d'ingestion et de vectorisation du PDF\n    ├── search.py      # Recherche sémantique et assemblage du contexte\n    └── chat.py        # CLI interactif avec fallback rule-based"
+    },
+    {
+      "type": "heading",
+      "text": "Pipeline d'ingestion",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'étape d'ingestion est responsable de la transformation du contenu textuel en représentations numériques vectorielles. Cela se fait via des embeddings, qui projettent le sens sémantique dans des espaces de grande dimension. Le système supporte trois fournisseurs :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "🧠 **HuggingFace (Local) :** modèle all-MiniLM-L6-v2, idéal pour les environnements sans connexion aux API.",
+        "☁️ **OpenAI (text-embedding-3-small) :** rapide et optimisé pour le rapport coût-bénéfice.",
+        "⚡ **Gemini (models/embedding-001) :** alternative Google avec une intégration directe à l'écosystème Generative AI."
+      ]
+    },
+    {
+      "type": "code",
+      "language": "python",
+      "code": "from langchain_community.embeddings import HuggingFaceEmbeddings\nfrom langchain_postgres import PGVector\n\nembeddings = HuggingFaceEmbeddings(model_name='sentence-transformers/all-MiniLM-L6-v2')\nPGVector.from_documents(\n    documents=chunks,\n    embedding=embeddings,\n    connection=engine,\n    collection_name='pdf_chunks'\n)"
+    },
+    {
+      "type": "heading",
+      "text": "Recherche sémantique et génération de réponses",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Lors de la phase de consultation, le système reçoit une question, génère son embedding et effectue une recherche de similarité dans la base vectorielle. Les 10 chunks les plus pertinents sont concaténés et utilisés pour former le contexte de la réponse. Si le modèle LLM est indisponible, le système applique un fallback rule-based qui recherche des motifs explicites (comme des valeurs monétaires ou des noms d'entreprises)."
+    },
+    {
+      "type": "code",
+      "language": "python",
+      "code": "context = build_context(results)\nchain = prompt | llm | StrOutputParser()\nresponse = chain.invoke({\"contexte\": context, \"question\": question})"
+    },
+    {
+      "type": "heading",
+      "text": "Applications pratiques dans d'autres projets",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Cette architecture peut être réutilisée dans de nombreux scénarios d'entreprise et de produits SaaS. Quelques exemples d'application réelle incluent :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "📚 **Assistants de support interne :** des bots capables de répondre à des questions à partir de manuels techniques et de politiques d'entreprise.",
+        "🏥 **Santé et nutrition :** intégration avec des rapports médicaux ou des bases d'aliments pour des recommandations personnalisées (comme dans le projet MovePro).",
+        "🏢 **Compliance et juridique :** recherche sémantique dans des documents juridiques pour accélérer les due diligences et les audits.",
+        "🛒 **E-commerce :** recommandation contextualisée de produits à partir de descriptions et de catalogues.",
+        "📊 **Data Intelligence :** combinaison avec des pipelines ETL pour l'analyse de données non structurées et des requêtes hybrides SQL + embeddings."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Leçons apprises et prochaines étapes",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le projet a démontré la puissance de la combinaison entre l'IA générative et les bases de données relationnelles traditionnelles. Parmi les principales leçons : maintenir la cohérence entre les dimensions vectorielles, utiliser un fallback logique pour les environnements offline et modulariser le code pour faciliter le changement de fournisseur. Comme évolution naturelle, la prochaine étape sera d'exposer cette architecture comme une API REST avec FastAPI et de construire une interface web interactive en Next.js."
+    },
+    {
+      "type": "image",
+      "src": "/langchain.png",
+      "alt": "Architecture RAG avec LangChain, PostgreSQL et pgVector",
+      "width": 900,
+      "height": 550
+    },
+    {
+      "type": "paragraph",
+      "text": "Intégrer LangChain avec pgVector est l'une des façons les plus élégantes et les plus scalables d'apporter une IA contextualisée aux applications d'entreprise modernes. C'est une voie solide pour transformer les données en intelligence."
+    }
   ]
 }

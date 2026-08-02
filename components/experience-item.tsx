@@ -19,7 +19,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
         <span>{t(locale, period)}</span>
         {current ? (
           <span className="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 text-[10px] font-medium px-2 py-0.5">
-            {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職" })}
+            {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職", fr: "Actuel" })}
           </span>
         ) : null}
       </div>
@@ -56,8 +56,8 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
         className="text-sm text-primary hover:underline"
       >
         {open
-          ? t(locale, { pt: "Ler menos", en: "Read less", es: "Leer menos", jp: "閉じる" })
-          : t(locale, { pt: "Ler mais", en: "Read more", es: "Leer más", jp: "もっと見る" })}
+          ? t(locale, { pt: "Ler menos", en: "Read less", es: "Leer menos", jp: "閉じる", fr: "Lire moins" })
+          : t(locale, { pt: "Ler mais", en: "Read more", es: "Leer más", jp: "もっと見る", fr: "Lire plus" })}
       </button>
     </div>
   )

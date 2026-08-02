@@ -909,5 +909,232 @@
       "type": "paragraph",
       "text": "依存先とともにダウンするシステムと、優雅に劣化するシステムの違いは、ほとんど常に、適切に設定された Circuit Breaker です。"
     }
+  ],
+  "title_fr": "Circuit Breaker en Node.js : protéger les systèmes contre les défaillances en cascade",
+  "description_fr": "Comment implémenter le pattern Circuit Breaker dans des applications Node.js pour gérer des API externes instables — state machine, fallbacks, retry et monitoring en production.",
+  "date_fr": "16 avril 2026",
+  "readTime_fr": "9 min de lecture",
+  "tag_fr": "Architecture",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Quand votre application dépend d'API externes — fournisseurs de paiement, marketplaces, services d'expédition — vous acceptez qu'une partie de votre système soit hors de votre contrôle. Ces dépendances peuvent devenir lentes, renvoyer des erreurs ou tout simplement cesser de répondre. Sans protection, une API externe instable peut faire tomber tout votre système. Le **Circuit Breaker** est le pattern qui évite ça."
+    },
+    {
+      "type": "heading",
+      "text": "Le problème : les défaillances en cascade",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Imaginez un scénario réel : votre application appelle l'API d'un marketplace pendant le checkout. Normalement cet appel prend 200ms. Mais le marketplace a des problèmes et commence à mettre 30 secondes à répondre — ou ne répond tout simplement pas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce qui se passe sans protection :"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "Le checkout de l'utilisateur se bloque en attendant la réponse du marketplace",
+        "Pendant l'attente, de nouvelles requêtes arrivent et se bloquent elles aussi",
+        "Le pool de connexions de votre serveur s'épuise",
+        "Votre serveur cesse de répondre à **tous** les utilisateurs — pas seulement à ceux qui dépendent du marketplace",
+        "Le système entier tombe à cause d'une dépendance externe"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est une **défaillance en cascade**. Une dépendance instable propage la panne à tout le système. Le Circuit Breaker interrompt cette propagation."
+    },
+    {
+      "type": "heading",
+      "text": "Comment fonctionne le Circuit Breaker",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le pattern fonctionne comme un disjoncteur électrique. Il surveille les appels vers une dépendance externe et possède trois états :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**CLOSED (fermé)** — état normal. Les requêtes passent vers l'API externe. Si les échecs s'accumulent au-delà du threshold, il passe à OPEN.",
+        "**OPEN (ouvert)** — état de protection. Les requêtes **n'atteignent pas** l'API. Il renvoie un fallback immédiatement. Après une période de cooldown, il passe à HALF-OPEN.",
+        "**HALF-OPEN (semi-ouvert)** — état de test. Il laisse passer **une** requête en guise de test. En cas de succès, il revient à CLOSED. En cas d'échec, il revient à OPEN."
+      ]
+    },
+    {
+      "type": "image",
+      "src": "/circut-break.png",
+      "alt": "Diagramme de la state machine du Circuit Breaker — états CLOSED, OPEN et HALF-OPEN avec les transitions"
+    },
+    {
+      "type": "heading",
+      "text": "Implémentation en TypeScript",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Je vais implémenter un Circuit Breaker générique capable d'envelopper n'importe quel appel externe. L'idée est qu'il soit réutilisable pour différentes dépendances."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN'\n\ninterface CircuitBreakerOptions {\n  failureThreshold: number  // échecs avant ouverture\n  cooldownMs: number        // temps en OPEN avant de tester\n  timeoutMs: number         // timeout par requête\n}\n\nclass CircuitBreaker {\n  private state: CircuitState = 'CLOSED'\n  private failureCount = 0\n  private lastFailureTime = 0\n  private readonly options: CircuitBreakerOptions\n\n  constructor(options: Partial<CircuitBreakerOptions> = {}) {\n    this.options = {\n      failureThreshold: options.failureThreshold ?? 5,\n      cooldownMs: options.cooldownMs ?? 60_000,\n      timeoutMs: options.timeoutMs ?? 10_000,\n    }\n  }\n\n  async execute<T>(fn: () => Promise<T>, fallback: () => T): Promise<T> {\n    if (this.state === 'OPEN') {\n      if (Date.now() - this.lastFailureTime >= this.options.cooldownMs) {\n        this.state = 'HALF_OPEN'\n      } else {\n        return fallback()\n      }\n    }\n\n    try {\n      const result = await this.withTimeout(fn())\n      this.onSuccess()\n      return result\n    } catch (error) {\n      this.onFailure()\n      return fallback()\n    }\n  }\n\n  private onSuccess() {\n    this.failureCount = 0\n    this.state = 'CLOSED'\n  }\n\n  private onFailure() {\n    this.failureCount++\n    this.lastFailureTime = Date.now()\n\n    if (this.failureCount >= this.options.failureThreshold) {\n      this.state = 'OPEN'\n    }\n  }\n\n  private withTimeout<T>(promise: Promise<T>): Promise<T> {\n    return Promise.race([\n      promise,\n      new Promise<never>((_, reject) =>\n        setTimeout(() => reject(new Error('Timeout')), this.options.timeoutMs)\n      ),\n    ])\n  }\n\n  getState(): CircuitState {\n    return this.state\n  }\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Usage pratique : protéger un appel d'API",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une fois la classe créée, envelopper n'importe quel appel externe est simple :"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Un circuit breaker par dépendance\nconst marketplaceBreaker = new CircuitBreaker({\n  failureThreshold: 3,   // s'ouvre après 3 échecs\n  cooldownMs: 30_000,    // attend 30s avant de tester\n  timeoutMs: 5_000,      // timeout de 5s par appel\n})\n\nconst paymentBreaker = new CircuitBreaker({\n  failureThreshold: 2,   // plus sensible — c'est du paiement\n  cooldownMs: 60_000,    // cooldown plus long\n  timeoutMs: 10_000,     // timeout plus long — les fournisseurs de paiement sont lents\n})\n\n// Appel protégé\nasync function getProductFromMarketplace(productId: string) {\n  return marketplaceBreaker.execute(\n    // Appel réel\n    () => fetch(`https://api.marketplace.com/products/${productId}`)\n      .then(res => res.json()),\n    // Fallback quand le circuit est ouvert\n    () => getCachedProduct(productId)\n  )\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le point important : **chaque dépendance externe doit avoir son propre Circuit Breaker**. Si le marketplace tombe, le circuit du marketplace s'ouvre — mais le circuit du fournisseur de paiement reste fermé et continue de fonctionner normalement."
+    },
+    {
+      "type": "heading",
+      "text": "Stratégies de fallback",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le fallback est ce que votre système renvoie quand le circuit est ouvert. C'est la partie qui demande le plus de décisions produit, parce que le fallback doit être **suffisamment utile** pour que l'utilisateur ne perçoive pas la dégradation. Quelques stratégies :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Cache** — renvoyer la dernière réponse valide. Fonctionne bien pour des données qui changent peu (catalogue de produits, configurations).",
+        "**Valeur par défaut** — renvoyer une valeur sûre prédéfinie. Fonctionne pour les calculs de frais de port (« frais de port à confirmer ») ou pour le stock (« vérifiez la disponibilité »).",
+        "**Fonctionnalité réduite** — le checkout fonctionne sans la validation du marketplace, mais prévient l'utilisateur que le prix sera confirmé plus tard.",
+        "**File pour retry ultérieur** — sauvegarder l'opération pour réessayer quand le service revient. Fonctionne pour les opérations qui n'ont pas besoin d'une réponse immédiate."
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Fallback avec cache\nconst productCache = new Map<string, Product>()\n\nasync function getProduct(id: string): Promise<Product> {\n  return marketplaceBreaker.execute(\n    async () => {\n      const product = await fetchFromMarketplace(id)\n      productCache.set(id, product) // met à jour le cache en cas de succès\n      return product\n    },\n    () => {\n      const cached = productCache.get(id)\n      if (cached) return cached\n      // Sans cache — renvoie un produit avec un flag d'indisponibilité\n      return { id, name: 'Produit indisponible', available: false }\n    }\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Combiner avec le retry",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Circuit Breaker et retry résolvent des problèmes différents :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Retry** — pour les défaillances ponctuelles (une request a échoué, la suivante fonctionnera probablement). Utilise un backoff exponentiel.",
+        "**Circuit Breaker** — pour les défaillances durables (le service est en panne, ça ne sert à rien de continuer à essayer). Protège le système entier."
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La bonne combinaison : **le retry à l'intérieur du circuit breaker**. Le circuit surveille si les retries fonctionnent. Si même avec retry l'appel continue d'échouer, le circuit s'ouvre."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "async function fetchWithRetry<T>(\n  fn: () => Promise<T>,\n  maxRetries = 3\n): Promise<T> {\n  let lastError: Error | null = null\n\n  for (let attempt = 0; attempt < maxRetries; attempt++) {\n    try {\n      return await fn()\n    } catch (error) {\n      lastError = error as Error\n      // Backoff exponentiel : 1s, 2s, 4s\n      await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000))\n    }\n  }\n\n  throw lastError\n}\n\n// Retry à l'intérieur du circuit breaker\nasync function getProductReliably(id: string) {\n  return marketplaceBreaker.execute(\n    () => fetchWithRetry(() => fetchFromMarketplace(id), 3),\n    () => getCachedProduct(id)\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Monitoring : savoir quand le circuit s'ouvre",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un circuit breaker qui s'ouvre silencieusement est dangereux — vous devez savoir quand un service externe est instable. Ajouter des événements de transition d'état règle le problème :"
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "class ObservableCircuitBreaker extends CircuitBreaker {\n  private name: string\n\n  constructor(name: string, options?: Partial<CircuitBreakerOptions>) {\n    super(options)\n    this.name = name\n  }\n\n  async execute<T>(fn: () => Promise<T>, fallback: () => T): Promise<T> {\n    const previousState = this.getState()\n    const result = await super.execute(fn, fallback)\n    const currentState = this.getState()\n\n    if (previousState !== currentState) {\n      this.logTransition(previousState, currentState)\n    }\n\n    return result\n  }\n\n  private logTransition(from: string, to: string) {\n    const message = `[CircuitBreaker:${this.name}] ${from} → ${to}`\n\n    if (to === 'OPEN') {\n      console.error(message) // alerter quand il s'ouvre\n      // Envoyer vers le monitoring (Datadog, Sentry, etc.)\n    } else if (to === 'CLOSED') {\n      console.info(message) // informer quand il se rétablit\n    } else {\n      console.warn(message) // half-open est une transition\n    }\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec ça, vous savez exactement quand un service externe commence à échouer et quand il se rétablit. En production, ces logs doivent aller vers un système d'alertes — si le circuit du fournisseur de paiement s'ouvre, quelqu'un doit être notifié."
+    },
+    {
+      "type": "heading",
+      "text": "Scénario réel : API de marketplace incohérente",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un scénario que j'ai rencontré : une API de marketplace renvoyait les données produits de façon incohérente. Parfois elle répondait en 200ms, parfois elle mettait 15 secondes, parfois elle renvoyait 500. Le checkout dépendait de cette API pour valider le prix et le stock."
+    },
+    {
+      "type": "paragraph",
+      "text": "La solution a été :"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Circuit Breaker** avec un threshold de 3 échecs et un cooldown de 30s",
+        "**Timeout agressif** de 3s (si l'API n'a pas répondu en 3s, c'est considéré comme un échec)",
+        "**Cache en fallback** — dernière réponse valide du produit, avec un flag « prix sujet à confirmation »",
+        "**Réconciliation ultérieure** — un job qui tourne toutes les 5 minutes en vérifiant si les prix du cache sont toujours corrects"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Le résultat : le checkout ne s'est plus jamais bloqué à cause du marketplace. Quand l'API était instable, les utilisateurs voyaient les prix du cache avec un avertissement discret. Quand elle revenait à la normale, le circuit se fermait et tout se remettait à fonctionner en temps réel."
+    },
+    {
+      "type": "heading",
+      "text": "Quand ne pas utiliser un Circuit Breaker",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tous les appels externes n'ont pas besoin d'un circuit breaker :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Les appels déjà résilients** — si la dépendance a un retry natif et un SLA élevé (ex : AWS S3), l'overhead du circuit peut être inutile.",
+        "**Les opérations idempotentes avec file** — si vous utilisez déjà une file avec retry (ex : webhook processing), la file joue déjà le rôle du circuit.",
+        "**Les appels qui ne sont pas critiques** — analytics, logging externe, tracking. En cas d'échec, l'utilisateur n'est pas affecté."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Résumé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le Circuit Breaker est l'un des outils les plus importants pour les applications qui dépendent de services externes. Le pattern en lui-même est simple — une state machine avec trois états. Ce qui demande de l'ingénierie, c'est :"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Calibrer les thresholds** — combien d'échecs avant d'ouvrir, combien de temps de cooldown",
+        "**Concevoir des fallbacks utiles** — cache, valeur par défaut, fonctionnalité réduite",
+        "**Surveiller les transitions** — savoir quand il s'est ouvert et quand il s'est fermé",
+        "**Un breaker par dépendance** — isoler les défaillances pour qu'une API instable n'affecte pas les autres",
+        "**Combiner avec le retry** — le retry pour les défaillances ponctuelles, le circuit pour les défaillances durables"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La différence entre un système qui tombe en même temps que ses dépendances et un système qui se dégrade élégamment, c'est presque toujours un Circuit Breaker bien configuré."
+    }
   ]
 }

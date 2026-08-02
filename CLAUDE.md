@@ -21,23 +21,30 @@ Runs on every PR to `main`: lint → typecheck → build → AEO check. Deploy i
 
 ## Architecture
 
-Next.js 16 App Router portfolio with trilingual support (PT-BR / EN / ES).
+Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
 
 ### i18n System
 
-- `Locale` type: `"pt" | "en" | "es"` — read from `lang` cookie via `getLocale()` in `lib/i18n-server.ts`
+- `Locale` type: `"pt" | "en" | "es" | "jp" | "fr"` — resolved from the `x-locale` request header (set by `proxy.ts` from the URL's locale prefix) via `getLocale()` in `lib/i18n-server.ts`
 - `getDictionary(locale)` returns typed UI translations (nav, home, about, projects, etc.)
-- `t(locale, pt, en, es)` helper for inline trilingual strings in server components
-- Blog posts use suffix pattern: base fields are PT, `_en` suffix for English, `_es` for Spanish (e.g., `title_en`, `blocks_es`)
-- Project taglines/descriptions use `{ pt: string; en: string; es?: string }` objects
+- `t(locale, { pt: "...", en: "...", es: "...", jp: "...", fr: "..." })` helper for inline strings in server components — takes an object keyed by locale, not positional args; only `pt` is required
+- Blog posts use suffix pattern: base fields are PT, other locales use `_${locale}` suffix (e.g., `title_en`, `blocks_jp`, `description_fr`) — derived uniformly in `lib/posts.ts`, not a hardcoded list per locale
+- Project taglines/descriptions use `LocalizedString` (`data/projects.ts`): `Partial<Record<Locale, string>> & { pt: string }` — only `pt` is required, so a missing locale is not a compile error, it silently falls back to Portuguese (this is what `lib/i18n-coverage.test.ts` guards against)
+- Adding a locale — the routing layer (proxy, sitemap, hreflang, `generateStaticParams`) derives from `LOCALES`, so it needs no edit. Four code sites do:
+  1. `lib/i18n.ts` — append to `LOCALES` and to the `HTML_LANGS`/`OG_LOCALES` maps
+  2. `lib/i18n-server.ts` — write the new `Dictionary` and add its branch to `getDictionary()` (an if-chain, not a map: a missing branch silently returns the PT dictionary)
+  3. `components/language-toggle.tsx` — add the entry to `flags` and `labels`
+  4. `data/experiences.test.ts` — add the locale to the `contractWord` map
+
+  Also update the locale list in `README.md` and `public/llms.txt` — prose, unguarded. Sites 1 and 3 are `Record<Locale, …>`, so `pnpm typecheck` fails until they are filled; site 4 is a bare object literal, caught by `strict: true` in tsconfig (TS7053); site 2's fallback is caught by `lib/i18n-coverage.test.ts`, which also fails until every translation object and post covers the new locale. Verified empirically by adding a sixth locale with only step 1 applied: `tsc` flagged sites 3 and 4 (plus every `Localized` in `data/experiences.ts`), and the guard flagged the dictionary fallback, 294 incomplete objects and 66 missing post fields.
 
 ### Blog Posts
 
-JSON files in `data/posts/`. Each has `blocks` (array of paragraph/code/heading/list/image) for PT, `blocks_en` for EN, `blocks_es` for ES. Post loader in `lib/posts.ts` applies locale suffix automatically via `applyLocaleToData()`.
+JSON files in `data/posts/`. Each has `blocks` (array of paragraph/code/heading/list/image) for PT, plus `blocks_${locale}` for every other locale. Post loader in `lib/posts.ts` applies the locale suffix automatically via `applyLocaleToData()`.
 
 ### Projects
 
-Typed array in `data/projects.ts`. Each project has slug, name, logo path, trilingual tagline/description, category, and optional URL. Displayed via `ProjectsGrid` client component with floating modal (Radix Dialog).
+Typed array in `data/projects.ts`. Each project has slug, name, logo path, tagline/description, category, and optional URL. Displayed via `ProjectsGrid` client component with floating modal (Radix Dialog).
 
 ### Layout Structure
 

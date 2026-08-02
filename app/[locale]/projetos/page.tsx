@@ -7,8 +7,8 @@ import { FadeIn } from "@/components/fade-in"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト" }),
-    description: t(locale, { pt: "Empresas e produtos onde atuei — SaaS, marketplaces, ERPs e plataformas digitais.", en: "Companies and products I've worked on — SaaS, marketplaces, ERPs and digital platforms.", es: "Empresas y productos donde trabajé — SaaS, marketplaces, ERPs y plataformas digitales.", jp: "携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。" }),
+    title: t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" }),
+    description: t(locale, { pt: "Empresas e produtos onde atuei — SaaS, marketplaces, ERPs e plataformas digitais.", en: "Companies and products I've worked on — SaaS, marketplaces, ERPs and digital platforms.", es: "Empresas y productos donde trabajé — SaaS, marketplaces, ERPs y plataformas digitales.", jp: "携わった企業とプロダクト — SaaS、マーケットプレイス、ERP、デジタルプラットフォーム。", fr: "Entreprises et produits sur lesquels j'ai travaillé — SaaS, marketplaces, ERP et plateformes digitales." }),
     alternates: buildAlternates("/projetos", locale),
   }
 }
@@ -45,19 +45,19 @@ export default async function ProjectsPage() {
           <div>
             <div className="text-2xl font-bold">{projects.length}</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト" })}
+              {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" })}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">SaaS + E-commerce</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Foco principal", en: "Main focus", es: "Enfoque principal", jp: "主な専門領域" })}
+              {t(locale, { pt: "Foco principal", en: "Main focus", es: "Enfoque principal", jp: "主な専門領域", fr: "Focus principal" })}
             </div>
           </div>
           <div>
             <div className="text-2xl font-bold">Web + Mobile</div>
             <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Entrega full-stack", en: "Full-stack Delivery", es: "Entrega full-stack", jp: "フルスタック開発" })}
+              {t(locale, { pt: "Entrega full-stack", en: "Full-stack Delivery", es: "Entrega full-stack", jp: "フルスタック開発", fr: "Livraison full-stack" })}
             </div>
           </div>
         </div>

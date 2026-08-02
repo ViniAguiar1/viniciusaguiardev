@@ -1,12 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
-
-const LOCALES = ["pt", "en", "es", "jp"] as const
-type Locale = (typeof LOCALES)[number]
-const DEFAULT_LOCALE: Locale = "pt"
-
-function isLocale(value: string | undefined): value is Locale {
-  return LOCALES.includes(value as Locale)
-}
+import { DEFAULT_LOCALE, isLocale } from "@/lib/i18n"
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl

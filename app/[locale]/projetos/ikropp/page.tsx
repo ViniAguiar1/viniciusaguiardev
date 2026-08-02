@@ -9,8 +9,8 @@ import Link from "next/link"
 export async function generateMetadata() {
   const locale = await getLocale()
   return {
-    title: t(locale, { pt: "iKropp — SaaS de gestão para clínicas de estética", en: "iKropp — Management SaaS for aesthetics clinics", es: "iKropp — SaaS de gestión para clínicas de estética", jp: "iKropp — エステクリニック向け管理SaaS" }),
-    description: t(locale, { pt: "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.", en: "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.", es: "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado.", jp: "5万人以上のユーザーを抱えるエステクリニック管理プラットフォーム。予約、顧客、問診、スタッフ管理、レガシーシステムのモダナイゼーション。" }),
+    title: t(locale, { pt: "iKropp — SaaS de gestão para clínicas de estética", en: "iKropp — Management SaaS for aesthetics clinics", es: "iKropp — SaaS de gestión para clínicas de estética", jp: "iKropp — エステクリニック向け管理SaaS", fr: "iKropp — SaaS de gestion pour cliniques d'esthétique" }),
+    description: t(locale, { pt: "Plataforma com 50k+ usuários para gestão de clínicas de estética. Agenda, clientes, anamneses, profissionais e modernização de legado.", en: "Platform with 50k+ users for aesthetics clinic management. Scheduling, clients, anamnesis, professionals and legacy modernization.", es: "Plataforma con 50k+ usuarios para gestión de clínicas de estética. Agenda, clientes, anamnesis, profesionales y modernización de legado.", jp: "5万人以上のユーザーを抱えるエステクリニック管理プラットフォーム。予約、顧客、問診、スタッフ管理、レガシーシステムのモダナイゼーション。", fr: "Plateforme avec 50k+ utilisateurs pour la gestion de cliniques d'esthétique. Planning, clients, anamnèses, professionnels et modernisation du legacy." }),
     alternates: buildAlternates("/projetos/ikropp", locale),
   }
 }
@@ -270,6 +270,69 @@ export default async function IKroppPage() {
       ],
       visitCta: "iKropp にアクセス",
       screenshotsTitle: "プラットフォーム",
+    },
+    fr: {
+      back: "Retour aux projets",
+      badge: "50k+ utilisateurs",
+      title: "iKropp",
+      subtitle:
+        "Plateforme SaaS de gestion pour cliniques d'esthétique et professionnels de santé — de la prise de rendez-vous à l'anamnèse.",
+      purposeTitle: "L'objectif",
+      purposeText1:
+        "Les cliniques d'esthétique, les professionnels biomédicaux et les esthéticiennes gèrent une activité complexe : planning de plusieurs professionnels, fiches clients avec historique des soins, anamnèses détaillées, gestion des services et des produits. La plupart utilisent des outils génériques qui ne comprennent pas le fonctionnement du secteur.",
+      purposeText2:
+        "iKropp résout cela avec une plateforme verticale : conçue spécifiquement pour le secteur de l'esthétique et de la santé, couvrant le cycle complet de l'activité dans un système unique. Plus de 50 000 utilisateurs actifs s'en servent au quotidien.",
+      purposeText3:
+        "Le résultat, c'est un contrôle opérationnel réel — les professionnels se concentrent sur les soins, pas sur les tableurs. Les responsables ont une visibilité sur le planning, la facturation et la productivité sans avoir à jongler entre plusieurs outils.",
+      roleTitle: "Mon rôle",
+      roleText:
+        "J'ai travaillé comme Software Engineer full stack avec un fort accent sur le frontend, l'expérience utilisateur et l'évolution du produit dans un environnement de production avec 50k+ utilisateurs.",
+      roleItems: [
+        "Développement et évolution de modules critiques : planning, clients/patients, professionnels et flux opérationnels",
+        "Implémentation de fonctionnalités avec des règles métier complexes, notamment dans le module de planning",
+        "Modernisation du système legacy (PHP 5.3) vers une architecture moderne avec React, Next.js et TypeScript",
+        "Mise en place et standardisation du Design System — réutilisation de composants et cohérence visuelle",
+        "Intégration avec des API externes et des systèmes de paiement",
+        "Décisions de system design : séparation des responsabilités, scalabilité et maintenabilité",
+        "Tests end-to-end avec Cypress pour les modules critiques",
+      ],
+      challengesTitle: "Défis techniques",
+      challenges: [
+        {
+          title: "Modernisation du legacy",
+          desc: "Migration progressive de PHP 5.3 vers React + Next.js + TypeScript, en maintenant l'activité de 50k+ utilisateurs sans interruption.",
+        },
+        {
+          title: "Module de planning",
+          desc: "Règles métier complexes : plusieurs professionnels, créneaux qui se chevauchent, blocages, récurrence et vues par jour/semaine/mois.",
+        },
+        {
+          title: "Design System à grande échelle",
+          desc: "Standardisation visuelle et des composants sur un produit comportant de nombreux modules, garantissant cohérence et rapidité de développement.",
+        },
+        {
+          title: "Production avec 50k+ utilisateurs",
+          desc: "Maintenance continue, évolution de fonctionnalités en usage actif, fiabilité et performance à l'échelle réelle.",
+        },
+      ],
+      statsTitle: "Échelle",
+      stats: [
+        { value: "50k+", label: "utilisateurs actifs" },
+        { value: "Web + Mobile", label: "multiplateforme" },
+      ],
+      stackTitle: "Stack technique",
+      stackItems: [
+        "React + Next.js + TypeScript",
+        "React Native (mobile)",
+        "Laravel (API backend)",
+        "PHP 5.3 (legacy en migration)",
+        "Docker + AWS",
+        "WebSockets",
+        "Cypress (E2E)",
+        "Design System",
+      ],
+      visitCta: "Accéder à iKropp",
+      screenshotsTitle: "La plateforme",
     },
   }
 

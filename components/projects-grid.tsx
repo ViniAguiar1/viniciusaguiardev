@@ -7,7 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { Project } from "@/data/projects"
-import { localePath, type Locale } from "@/lib/i18n"
+import { localePath, t, type Locale } from "@/lib/i18n"
 
 const categoryColors: Record<string, string> = {
   "AI SaaS": "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",
@@ -160,7 +160,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       data-umami-event-project={selected.name}
                       className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                     >
-                      {locale === "en" ? "Learn more" : locale === "es" ? "Ver más" : locale === "jp" ? "詳しく見る" : "Ver mais"}
+                      {t(locale, { pt: "Ver mais", en: "Learn more", es: "Ver más", jp: "詳しく見る", fr: "En savoir plus" })}
                       <svg
                         className="w-3.5 h-3.5"
                         fill="none"
@@ -186,7 +186,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                           : "bg-primary text-primary-foreground hover:opacity-90"
                       )}
                     >
-                      {locale === "en" ? "Visit website" : locale === "es" ? "Visitar sitio" : locale === "jp" ? "サイトを開く" : "Acessar site"}
+                      {t(locale, { pt: "Acessar site", en: "Visit website", es: "Visitar sitio", jp: "サイトを開く", fr: "Visiter le site" })}
                       <svg
                         className="w-3.5 h-3.5"
                         fill="none"

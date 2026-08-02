@@ -789,5 +789,202 @@
       "type": "paragraph",
       "text": "---\n\nプロジェクトについてもっと知りたいですか？ [Vox Pet Digital の専用ページにアクセスしてください](/projetos/vox-pet-digital)。"
     }
+  ],
+  "title_fr": "Étude de cas : Vox Pet Digital — migrer un SaaS vétérinaire d'Express vers NestJS sans downtime",
+  "description_fr": "95 modèles Prisma, multi-tenant + multi-filiale, IA sur WhatsApp avec RAG et Whisper, migration progressive v1→v2 et facturation avec fallback.",
+  "date_fr": "16 avril 2026",
+  "readTime_fr": "14 min de lecture",
+  "tag_fr": "Étude de cas",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Vox Pet Digital est un SaaS vertical pour animaleries et cliniques vétérinaires. Ce n'est pas un petit projet : il compte **95 modèles Prisma**, **91 pages sur le frontend**, **22 modules de feature**, des intégrations avec **OpenAI, WhatsApp, Stripe, Mercado Pago, Asaas, NF-e** et une migration active d'Express vers NestJS qui tourne dans le même processus. Dans cette étude de cas, je vais détailler les 4 plus grands défis techniques que j'ai affrontés."
+    },
+    {
+      "type": "heading",
+      "text": "Le système",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vox Pet couvre le cycle complet d'une clinique vétérinaire : rendez-vous, dossiers médicaux, vaccins, prescriptions, hospitalisations, ventes, caisse, stocks, commissions, NF-e et service client automatisé via WhatsApp. Il est multi-tenant (chaque clinique est un tenant isolé) et multi-filiale (un réseau de cliniques partage des données entre établissements avec un contrôle granulaire)."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Backend :** Node.js — Express (v1) + NestJS (v2) coexistant dans le même processus",
+        "**Frontend :** Next.js 16 + React 19 avec App Router, MUI v7 + shadcn/ui + Tailwind v4",
+        "**Base de données :** PostgreSQL 16 via Prisma — 95 modèles, 93 avec tenant_id, 76 avec branch_id",
+        "**IA :** OpenAI (GPT-4o-mini + embeddings + Whisper) + Baileys (WhatsApp self-hosted)",
+        "**Paiements :** Stripe (abonnements SaaS) + Mercado Pago + Asaas (paiements BR)",
+        "**Fiscal :** Focus NFe + NFe.io (deux providers avec fallback)",
+        "**Storage :** Firebase Admin",
+        "**Leads :** intégration Meta/Facebook"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Défi #1 : migration progressive Express → NestJS dans le même processus",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Quand j'ai rejoint le projet, le backend était un monolithe Express avec 41 controllers — sans typage fort, sans DTOs, sans validation cohérente. Tout réécrire d'un coup était irréalisable : le système était en production, avec des cliniques qui en dépendaient tous les jours."
+    },
+    {
+      "type": "paragraph",
+      "text": "La solution a été le pattern **strangler fig** : Express et NestJS tournant dans le même processus Node.js. Les routes v2 vivent sur `/api/v2`, tandis que les v1 continuent de fonctionner normalement. Les deux partagent la même instance de Prisma, le même système d'auth et le même tracer."
+    },
+    {
+      "type": "paragraph",
+      "text": "Les règles pour tout code v2 sont strictes :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "TypeScript strict — sans `any`, sans `// @ts-ignore`",
+        "Thin controllers — la logique métier dans les services, le controller ne fait que router",
+        "DTOs avec validation — tout input passe par class-validator",
+        "tenant_id obligatoire — il n'existe pas de query sans filtre de tenant",
+        "Zéro `console.log` — tout passe par un logger structuré avec contexte"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Jusqu'ici, 12 modules ont été migrés vers la v2 : **pets** (17 endpoints), **hospitalizations** (8), **procedures** (6), **branches**, **stock-transfers** (5 + workflow approve/reject/complete), **reminders**, **fiscal/NF-e** (11), **imports** (NF-e XML), **booking public** et **analytics**. Le reste — clients, ventes, rendez-vous, dossiers médicaux, vaccins, caisse, WhatsApp, admin — tourne encore sur la v1 et est migré de façon incrémentale."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// bootstrap.ts — Express et NestJS coexistant\nconst expressApp = express()\n\n// v1 routes (legacy)\nexpressApp.use('/api/v1', authMiddleware, v1Router)\n\n// v2 routes (NestJS)\nconst nestApp = await NestFactory.create(AppModule)\nnestApp.setGlobalPrefix('api/v2')\nconst nestAdapter = nestApp.getHttpAdapter().getInstance()\nexpressApp.use(nestAdapter)\n\n// Shared: Prisma, auth, tracer\nexpressApp.listen(PORT)"
+    },
+    {
+      "type": "heading",
+      "text": "Défi #2 : WhatsApp + IA 24h/24 self-hosted",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le service client via WhatsApp est l'un des plus grands atouts de Vox Pet. Ce n'est pas un simple chatbot — c'est un **agent d'IA avec 10 tools**, du RAG (knowledge base de l'activité), de la mémoire de conversation, du traitement de médias (audio via Whisper) et du follow-up automatique."
+    },
+    {
+      "type": "paragraph",
+      "text": "L'architecture :"
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Connexion :** Baileys (WhatsApp Web self-hosted) qui tourne sur Railway avec un persistent disk pour maintenir la session",
+        "**Orchestrator :** reçoit le message, identifie le tenant, charge le contexte (historique + knowledge base) et décide quel tool utiliser",
+        "**10 tools disponibles :** prendre un rendez-vous, vérifier les créneaux, consulter un prix, recommander un produit, chercher un dossier médical, envoyer un rappel, entre autres",
+        "**RAG :** knowledge base par tenant avec des embeddings OpenAI, recherche sémantique pour contextualiser les réponses",
+        "**Whisper :** quand le client envoie un audio, le système le transcrit automatiquement et le traite comme du texte",
+        "**Mémoire :** historique de conversation par client, maintient le contexte entre les messages",
+        "**Follow-up :** un cron minute par minute vérifie les conversations sans réponse dans la fenêtre de 15–240min et envoie un follow-up automatique"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Orchestrator simplifié\nasync function handleMessage(tenantId: string, message: WAMessage) {\n  const tenant = await loadTenantConfig(tenantId)\n  const history = await getConversationHistory(message.from, tenantId)\n  const knowledge = await ragSearch(message.text, tenantId)\n\n  // Si c'est un audio, transcrire d'abord avec Whisper\n  const text = message.type === 'audio'\n    ? await whisperTranscribe(message.media)\n    : message.text\n\n  const response = await openai.chat({\n    model: 'gpt-4o-mini',\n    messages: [\n      { role: 'system', content: buildSystemPrompt(tenant, knowledge) },\n      ...history,\n      { role: 'user', content: text },\n    ],\n    tools: getAvailableTools(tenant),\n  })\n\n  // Exécute les tool calls s'il y en a\n  if (response.tool_calls) {\n    for (const call of response.tool_calls) {\n      await executeToolCall(call, tenantId)\n    }\n  }\n\n  await sendWhatsAppMessage(message.from, response.content)\n  await saveToHistory(message.from, tenantId, text, response.content)\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le plus grand défi ici n'a pas été l'IA — c'était la **fiabilité**. Baileys se reconnecte tout seul, mais quand Railway redémarre le container, la session peut être perdue. Nous avons mis en place persistent disk + health check + alerting pour garantir que le bot ne reste jamais offline sans prévenir."
+    },
+    {
+      "type": "heading",
+      "text": "Défi #3 : multi-tenant + multi-filiale cohérent",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le multi-tenant en SaaS est courant. Le multi-filiale à l'intérieur d'un tenant est un autre niveau de complexité. Chez Vox Pet, un réseau de cliniques peut avoir 3 filiales qui partagent les fiches clients et pets, mais chaque filiale a son propre stock, sa propre caisse, son propre agenda et ses propres commissions."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sur les 95 modèles Prisma :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**93 modèles** ont `tenant_id` — isolation totale entre les cliniques",
+        "**76 modèles** ont `branch_id` — isolation par filiale à l'intérieur du tenant",
+        "**15 migrations** pour arriver à cette structure sans casser les données existantes"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Le cas le plus complexe est le **transfert de stock entre filiales**. Le flux a 3 états (en attente → approuvé/rejeté → terminé) avec 5 endpoints dédiés et un workflow d'approbation. La filiale d'origine fait la demande, la filiale de destination approuve ou rejette, et ce n'est qu'ensuite que le stock est déplacé de façon atomique."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Transfert de stock entre filiales — transaction atomique\nasync function completeTransfer(transferId: string, tenantId: string) {\n  return prisma.$transaction(async (tx) => {\n    const transfer = await tx.stockTransfer.findUnique({\n      where: { id: transferId, tenantId },\n      include: { items: true },\n    })\n\n    if (transfer.status !== 'APPROVED') {\n      throw new BadRequestException('Transfer must be approved first')\n    }\n\n    for (const item of transfer.items) {\n      // Déduit de la filiale d'origine\n      await tx.stock.update({\n        where: { productId_branchId: { productId: item.productId, branchId: transfer.fromBranchId } },\n        data: { quantity: { decrement: item.quantity } },\n      })\n      // Ajoute dans la filiale de destination\n      await tx.stock.upsert({\n        where: { productId_branchId: { productId: item.productId, branchId: transfer.toBranchId } },\n        create: { productId: item.productId, branchId: transfer.toBranchId, tenantId, quantity: item.quantity },\n        update: { quantity: { increment: item.quantity } },\n      })\n    }\n\n    await tx.stockTransfer.update({\n      where: { id: transferId },\n      data: { status: 'COMPLETED', completedAt: new Date() },\n    })\n  })\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Défi #4 : facturation avec deux providers et fallback",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'émission de NF-e au Brésil est critique — si le provider de facturation tombe, la clinique ne peut plus vendre. Nous avons intégré deux providers (**Focus NFe** et **NFe.io**) avec un fallback automatique. Un cron job v2 traite la file toutes les 30 secondes."
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**11 endpoints** dédiés à NF-e dans le module v2",
+        "**Import de XML** — la clinique peut importer les factures reçues des fournisseurs",
+        "**File résiliente** — si le provider primaire échoue, le système tente automatiquement le secondaire",
+        "**Traitement toutes les 30s** — évite les appels en burst et respecte les rate limits des providers"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "L'échelle du système",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Quelques chiffres qui montrent la complexité réelle du système :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**95 modèles** Prisma (base de données relationnelle complexe)",
+        "**91 pages** sur le frontend (86 fonctionnelles)",
+        "**22 modules** de feature sur le frontend",
+        "**41 controllers** Express (v1) + **12 modules** NestJS (v2)",
+        "**14 services** d'intégration externe",
+        "**4 cron jobs** en opération (follow-up WhatsApp, NF-e, rappels, analytics)",
+        "**10 tools** de l'agent d'IA sur WhatsApp"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Leçons apprises",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Le strangler fig fonctionne.** Migrer progressivement dans le même processus est plus sûr qu'un big bang. La clé, c'est d'avoir des règles strictes pour le nouveau code et de ne jamais les relâcher",
+        "**WhatsApp self-hosted est fragile.** Baileys règle le problème, mais exige une infra dédiée avec persistent disk et monitoring. Si je pouvais recommencer, j'évaluerais l'API officielle de WhatsApp Business pour les tenants les plus gros",
+        "**Le multi-filiale est 3x plus complexe que le multi-tenant.** Il ne s'agit pas seulement d'ajouter branch_id — ce sont des règles métier différentes selon le modèle. Le stock est par filiale, le client est par tenant, la commission est par filiale, le pet est par tenant",
+        "**Le fallback sur les intégrations critiques n'est pas optionnel.** Le jour où Focus NFe est resté hors service pendant 2 heures et où NFe.io a pris le relais sans que personne ne s'en aperçoive, c'est le jour où l'investissement s'est payé"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "---\n\nVous voulez en savoir plus sur le projet ? [Accédez à la page dédiée de Vox Pet Digital](/projetos/vox-pet-digital)."
+    }
   ]
 }

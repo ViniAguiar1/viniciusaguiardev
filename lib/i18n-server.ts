@@ -210,9 +210,51 @@ const jp: Dictionary = {
   },
 }
 
+const fr: Dictionary = {
+  nav: {
+    home: "Accueil",
+    about: "À propos",
+    projects: "Projets",
+    engineering: "Ingénierie",
+    uses: "Outils",
+    search: "Recherche",
+    curriculum: "CV",
+  },
+
+  home: {
+    title: "Vinicius Aguiar",
+
+    subtitle:
+      "Frontend Engineer qui construit des interfaces rapides et scalables pour des SaaS en production — React, Next.js et performance engineering.",
+
+    description:
+      "TypeScript de bout en bout. Une polyvalence full-stack comme atout : paiements, architecture multi-tenant et IA en production.",
+
+    ctaAbout: "À propos",
+    ctaResume: "Télécharger le CV",
+    ctaContact: "Me contacter",
+  },
+
+  about: {
+    title: "À propos",
+    subtitle: "Un aperçu de mon parcours, de mes compétences et de mes centres d'intérêt.",
+  },
+
+  projects: {
+    title: "Projets",
+    subtitle:
+      "Entreprises et produits sur lesquels j'ai travaillé — SaaS, marketplaces, ERP et plateformes digitales.",
+  },
+
+  ui: {
+    search: "Rechercher",
+  },
+}
+
 export function getDictionary(locale: Locale): Dictionary {
   if (locale === "en") return en
   if (locale === "es") return es
   if (locale === "jp") return jp
+  if (locale === "fr") return fr
   return pt
 }

@@ -857,5 +857,219 @@
         "定期的なリコンサイル（reconciliation）を実装した（ゲートウェイとすべて一致するか確認する）"
       ]
     }
+  ],
+  "title_fr": "Stratégie de tests pour les intégrations de paiement en Node.js",
+  "description_fr": "Comment tester les webhooks, l'idempotence, le PIX et plusieurs gateways (Stripe, Asaas, Mercado Pago) sans facturer pour de vrai — sandbox, mocks, contrats et tests de résilience.",
+  "date_fr": "17 avril 2026",
+  "readTime_fr": "11 min de lecture",
+  "tag_fr": "Ingénierie",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Les intégrations de paiement sont la partie la plus critique de n'importe quel SaaS. Si le test échoue, vous le découvrez en production — et en production, cela veut dire de l'argent réel, des clients facturés à tort et un support saturé. Après avoir intégré **Stripe**, **Asaas** et **Mercado Pago** dans des systèmes en production, j'ai appris que tester un paiement n'a rien à voir avec tester un CRUD. Cela exige une stratégie spécifique."
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans ce post, je vais partager la stratégie que j'utilise pour tester les intégrations de paiement en Node.js — quoi tester, quoi mocker, quand utiliser le sandbox et comment garantir que les webhooks, l'idempotence et les flux asynchrones (PIX, boleto) fonctionnent vraiment."
+    },
+    {
+      "type": "heading",
+      "text": "Le problème : un paiement, ce n'est pas du CRUD",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un test de CRUD vérifie que les données entrent et sortent correctement de la base. Un paiement implique :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Des flux asynchrones** — le PIX et le boleto ne confirment pas sur le moment. Le statut change via webhook, des minutes ou des heures plus tard",
+        "**Des systèmes externes** — le gateway peut devenir lent, renvoyer une erreur, ou changer le format de la réponse sans prévenir",
+        "**L'idempotence** — le même webhook peut arriver 2, 3, 5 fois. Votre système ne doit en traiter qu'un seul",
+        "**De l'argent réel** — un bug facture le client deux fois ou ne le facture pas du tout. Il n'y a pas de « rollback » facile",
+        "**Plusieurs providers** — chaque gateway a sa propre API, son propre format de webhook et son propre comportement de sandbox"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "La stratégie qui fonctionne consiste à tester en **4 couches** : unitaire, contrat, intégration avec sandbox et résilience."
+    },
+    {
+      "type": "heading",
+      "text": "Couche 1 : tests unitaires — logique métier isolée",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La première couche teste la logique sans toucher à aucun gateway. Ici, vous testez : le calcul des montants, la validation des statuts, les règles métier (peut-on annuler ? peut-on rembourser ?), et la logique d'idempotence."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Test unitaire — logique d'idempotence\ndescribe('PaymentEventProcessor', () => {\n  it('should process a new event', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    const event = createPaymentEvent({ externalId: 'evt_123', type: 'payment.confirmed' })\n\n    const result = await processor.handle(event)\n\n    expect(result.status).toBe('processed')\n    expect(mockDb.paymentEvent.create).toHaveBeenCalledWith(\n      expect.objectContaining({ idempotencyKey: 'evt_123:payment.confirmed' })\n    )\n  })\n\n  it('should skip duplicate events', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    mockDb.paymentEvent.findUnique.mockResolvedValue({ id: 'existing' })\n\n    const event = createPaymentEvent({ externalId: 'evt_123', type: 'payment.confirmed' })\n    const result = await processor.handle(event)\n\n    expect(result.status).toBe('already_processed')\n    expect(mockDb.order.update).not.toHaveBeenCalled()\n  })\n\n  it('should reject invalid status transitions', async () => {\n    const processor = new PaymentEventProcessor(mockDb)\n    mockDb.order.findUnique.mockResolvedValue({ paymentStatus: 'REFUNDED' })\n\n    const event = createPaymentEvent({ type: 'payment.confirmed' })\n\n    await expect(processor.handle(event)).rejects.toThrow('Invalid transition: REFUNDED → CONFIRMED')\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le mock ici porte sur la **base de données**, pas sur le gateway. La logique qui décide de traiter ou non, si la transition de statut est valide, si l'idempotency key existe déjà — tout cela, c'est votre code et il doit être couvert."
+    },
+    {
+      "type": "heading",
+      "text": "Couche 2 : tests de contrat — adapters de gateway",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si vous utilisez l'**adapter pattern** (et vous devriez, si vous intégrez plus d'un gateway), chaque adapter a besoin d'un test de contrat. Le test garantit que l'adapter transforme le payload du gateway dans le bon format interne."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Test de contrat — chaque adapter suit le même format de sortie\ndescribe('AsaasWebhookAdapter', () => {\n  it('should parse a PIX payment confirmation', () => {\n    const rawPayload = {\n      event: 'PAYMENT_CONFIRMED',\n      payment: {\n        id: 'pay_abc123',\n        value: 99.90,\n        billingType: 'PIX',\n        status: 'CONFIRMED',\n        externalReference: 'order_456',\n      },\n    }\n\n    const adapter = new AsaasWebhookAdapter()\n    const event = adapter.parse(rawPayload)\n\n    expect(event).toEqual({\n      provider: 'asaas',\n      externalId: 'pay_abc123',\n      type: 'payment.confirmed',\n      amount: 99.90,\n      method: 'PIX',\n      orderId: 'order_456',\n    })\n  })\n})\n\ndescribe('MercadoPagoWebhookAdapter', () => {\n  it('should parse a PIX payment confirmation', () => {\n    const rawPayload = {\n      action: 'payment.updated',\n      data: { id: '12345' },\n    }\n    // Mercado Pago n'envoie que l'ID — il faut aller chercher les détails\n    const paymentDetails = {\n      id: 12345,\n      status: 'approved',\n      transaction_amount: 99.90,\n      payment_method_id: 'pix',\n      external_reference: 'order_456',\n    }\n\n    const adapter = new MercadoPagoWebhookAdapter()\n    const event = adapter.parse(rawPayload, paymentDetails)\n\n    expect(event).toEqual({\n      provider: 'mercadopago',\n      externalId: '12345',\n      type: 'payment.confirmed',\n      amount: 99.90,\n      method: 'PIX',\n      orderId: 'order_456',\n    })\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le point clé : quel que soit le gateway qui l'a envoyé, l'output est **toujours au même format**. Si demain vous ajoutez un quatrième gateway, le test de contrat garantit que l'adapter produit le même shape."
+    },
+    {
+      "type": "heading",
+      "text": "Couche 3 : tests d'intégration avec sandbox",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est ici que vous tapez sur l'API réelle du gateway — mais dans l'environnement de sandbox. Chaque provider a le sien :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Stripe :** mode test avec des clés `sk_test_*`. Simule n'importe quel scénario avec des cartes spéciales (`4242...` pour un succès, `4000000000000002` pour un refus)",
+        "**Asaas :** environnement sandbox sur `sandbox.asaas.com`. Simule le PIX, le boleto et la carte sans faire bouger d'argent",
+        "**Mercado Pago :** identifiants de test avec des utilisateurs de test. Plus limité — certains flux PIX ne fonctionnent pas à 100 % dans le sandbox"
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "Le test d'intégration avec sandbox valide le **flux complet** : créer la demande de paiement → recevoir le webhook → traiter le paiement → mettre à jour la commande."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Test d'intégration avec sandbox — flux complet\ndescribe('Payment Flow (Sandbox)', () => {\n  it('should create a PIX charge and process the webhook', async () => {\n    // 1. Crée la demande de paiement dans le sandbox\n    const charge = await paymentService.createCharge({\n      provider: 'asaas',\n      amount: 49.90,\n      method: 'PIX',\n      orderId: 'test_order_001',\n    })\n\n    expect(charge.externalId).toBeDefined()\n    expect(charge.pixQrCode).toBeDefined()\n    expect(charge.status).toBe('PENDING')\n\n    // 2. Simule le webhook de confirmation (le sandbox le permet)\n    const webhookPayload = buildSandboxWebhook('asaas', {\n      paymentId: charge.externalId,\n      event: 'PAYMENT_CONFIRMED',\n    })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .set('asaas-access-token', SANDBOX_WEBHOOK_TOKEN)\n      .send(webhookPayload)\n\n    expect(response.status).toBe(200)\n\n    // 3. Vérifie que la commande a été mise à jour\n    const order = await db.order.findUnique({ where: { id: 'test_order_001' } })\n    expect(order.paymentStatus).toBe('CONFIRMED')\n  })\n})"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Attention aux tests de sandbox dans le CI.** Ils dépendent du réseau et d'un service externe. Si le sandbox d'Asaas est hors service, votre CI casse. La solution est de faire tourner ces tests dans un job séparé, avec retry et un timeout généreux, et de ne pas bloquer le merge à cause d'eux."
+    },
+    {
+      "type": "heading",
+      "text": "Couche 4 : tests de résilience — ce qui se passe quand ça tourne mal",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est la couche que la plupart des gens ignorent. Il ne suffit pas de tester le chemin heureux — vous devez tester ce qui se passe quand :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Le gateway renvoie un **timeout** au milieu d'une demande de paiement",
+        "Le webhook arrive **avant** la réponse de création de la demande de paiement (une vraie race condition)",
+        "Le webhook arrive **en double** — 3 fois en 2 secondes",
+        "Le webhook arrive avec une **signature invalide** (tentative de fraude)",
+        "Le gateway change le **format du payload** sans prévenir (c'est déjà arrivé avec Mercado Pago)",
+        "Le PIX **expire** et le client essaie de payer après"
+      ]
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Tests de résilience\ndescribe('Payment Resilience', () => {\n  it('should handle duplicate webhooks gracefully', async () => {\n    const webhook = buildWebhook({ externalId: 'pay_dup', type: 'payment.confirmed' })\n\n    // Envoie 3 fois de suite\n    const results = await Promise.all([\n      request(app).post('/api/webhooks/asaas').send(webhook),\n      request(app).post('/api/webhooks/asaas').send(webhook),\n      request(app).post('/api/webhooks/asaas').send(webhook),\n    ])\n\n    // Tous renvoient 200 (ack)\n    results.forEach(r => expect(r.status).toBe(200))\n\n    // Mais la commande n'a été mise à jour QU'UNE seule fois\n    const events = await db.paymentEvent.findMany({\n      where: { externalId: 'pay_dup' },\n    })\n    expect(events).toHaveLength(1)\n  })\n\n  it('should reject webhooks with invalid signature', async () => {\n    const webhook = buildWebhook({ externalId: 'pay_fake' })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .set('asaas-access-token', 'invalid_token')\n      .send(webhook)\n\n    expect(response.status).toBe(401)\n  })\n\n  it('should handle expired PIX without crashing', async () => {\n    const webhook = buildWebhook({\n      externalId: 'pay_expired',\n      type: 'payment.expired',\n    })\n\n    const response = await request(app)\n      .post('/api/webhooks/asaas')\n      .send(webhook)\n\n    expect(response.status).toBe(200)\n\n    const order = await db.order.findUnique({ where: { externalPaymentId: 'pay_expired' } })\n    expect(order.paymentStatus).toBe('EXPIRED')\n  })\n})"
+    },
+    {
+      "type": "heading",
+      "text": "Validation de signature : ne la sautez jamais",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Chaque gateway signe les webhooks différemment. Si vous ne validez pas, n'importe qui découvrant votre URL de webhook peut simuler des paiements."
+    },
+    {
+      "type": "code",
+      "language": "typescript",
+      "code": "// Validation de signature par provider\nfunction validateWebhookSignature(provider: string, req: Request): boolean {\n  switch (provider) {\n    case 'stripe': {\n      // Stripe utilise HMAC-SHA256 dans le header 'stripe-signature'\n      const sig = req.headers['stripe-signature'] as string\n      try {\n        stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)\n        return true\n      } catch {\n        return false\n      }\n    }\n    case 'asaas': {\n      // Asaas utilise un token fixe dans le header 'asaas-access-token'\n      return req.headers['asaas-access-token'] === ASAAS_WEBHOOK_TOKEN\n    }\n    case 'mercadopago': {\n      // Mercado Pago utilise HMAC-SHA256 dans le header 'x-signature'\n      const xSignature = req.headers['x-signature'] as string\n      const xRequestId = req.headers['x-request-id'] as string\n      const dataId = req.query['data.id'] as string\n      const computed = crypto\n        .createHmac('sha256', MP_WEBHOOK_SECRET)\n        .update(`id:${dataId};request-id:${xRequestId};ts:${extractTs(xSignature)};`)\n        .digest('hex')\n      return extractHash(xSignature) === computed\n    }\n    default:\n      return false\n  }\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Testez chaque validation avec une signature correcte ET incorrecte. C'est la première ligne de défense."
+    },
+    {
+      "type": "heading",
+      "text": "Ce qu'il ne faut PAS mocker",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La règle pratique que j'utilise :"
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "**Mockez le gateway** dans les tests unitaires et de contrat — vous testez VOTRE logique",
+        "**Ne mockez pas le gateway** dans les tests d'intégration — utilisez le sandbox. Un mock de gateway donne un faux sentiment de sécurité",
+        "**Ne mockez jamais la base de données** dans les tests d'intégration — utilisez une vraie base (PostgreSQL de test). Les mocks de base cachent des bugs de transaction, de constraint et de race condition",
+        "**Mockez le temps** dans les tests d'expiration — `jest.useFakeTimers()` pour simuler un PIX qui expire sans attendre 30 minutes"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "La structure de tests que j'utilise en production",
+      "level": 2
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "tests/\n├── unit/\n│   ├── payment-event-processor.test.ts    # Logique d'idempotence\n│   ├── status-machine.test.ts             # Transitions d'état\n│   └── charge-calculator.test.ts          # Calcul des montants\n├── contract/\n│   ├── asaas-adapter.test.ts              # Format du webhook Asaas\n│   ├── mercadopago-adapter.test.ts        # Format du webhook MP\n│   └── stripe-adapter.test.ts             # Format du webhook Stripe\n├── integration/\n│   ├── payment-flow.test.ts               # Flux complet avec sandbox\n│   └── webhook-endpoint.test.ts           # Endpoint HTTP réel\n└── resilience/\n    ├── duplicate-webhook.test.ts           # Idempotence sous charge\n    ├── invalid-signature.test.ts           # Rejet de fraude\n    └── expired-payment.test.ts            # PIX/boleto expiré"
+    },
+    {
+      "type": "heading",
+      "text": "Leçons de production",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": true,
+      "items": [
+        "**Le sandbox n'est pas la production.** Mercado Pago se comporte différemment en sandbox vs en production dans les scénarios PIX. J'ai déjà eu un test qui passait en sandbox et qui échouait en production parce que le format du webhook avait changé. Solution : des tests de contrat avec des snapshots du payload réel",
+        "**Le webhook dupliqué est la règle, pas l'exception.** Stripe garantit « at least once delivery ». Asaas aussi. Si vous ne testez pas la duplication, vous allez facturer le client deux fois. Je l'ai déjà vu arriver",
+        "**Race condition sur le webhook.** Le webhook peut arriver AVANT que la réponse de création de la demande de paiement ne revienne. Si votre code dépend d'un enregistrement en base qui n'existe pas encore, cela va provoquer une erreur. Solution : retry avec backoff dans le traitement du webhook",
+        "**Loguez tout.** Quand un paiement tourne mal en production, vous devez reconstruire la timeline. Loguez : le payload reçu, la signature valide/invalide, l'idempotency key, le statut précédent, le nouveau statut, le résultat de la transaction. Sans cela, débugger est impossible",
+        "**Surveillez le temps de réponse du webhook.** Si votre endpoint met plus de 5s à répondre, le gateway fait un retry. Ack immédiat + traitement en background est le pattern qui fonctionne"
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Checklist avant de passer en production",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "ordered": false,
+      "items": [
+        "Validation de signature implémentée pour chaque provider",
+        "Idempotence testée avec des webhooks dupliqués",
+        "Transitions d'état validées (ne pas accepter « confirmed » si c'est déjà « refunded »)",
+        "Flux PIX/boleto testé end-to-end dans le sandbox",
+        "Expiration de paiement gérée (le PIX expire, le boleto arrive à échéance)",
+        "Logs structurés avec contexte (orderId, provider, externalId)",
+        "Endpoint de webhook qui répond en < 1s (ack + background processing)",
+        "Réconciliation périodique implémentée (vérifier avec le gateway que tout correspond)"
+      ]
+    }
   ]
 }

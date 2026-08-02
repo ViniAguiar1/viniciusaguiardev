@@ -203,7 +203,7 @@ export default async function XDropPage() {
       purposeText2:
         "X-Drop est né pour résoudre ce problème. La plateforme connecte des fournisseurs vérifiés avec des sellers qui veulent démarrer ou faire évoluer leurs activités sur des marketplaces comme Mercado Livre et Shopee, en éliminant la barrière à l'entrée et en offrant toute l'infrastructure de gestion dont un seller a besoin.",
       purposeText3:
-        "Ce n'est pas seulement un outil de gestion — c'est un écosystème. Le fournisseur gagne un canal de distribution. Le seller gagne accès à des produits fiables, avec un catalogue prêt à publier, une intégration directe avec les marketplaces et une gestion financière centralisée.",
+        "Ce n'est pas seulement un outil de gestion — c'est un écosystème. Le fournisseur y gagne un canal de distribution. Le seller accède à des produits fiables, avec un catalogue prêt à publier, une intégration directe avec les marketplaces et une gestion financière centralisée.",
       howTitle: "Comment ça marche",
       howItems: [
         "Le fournisseur enregistre ses produits avec prix, photos et délais d'expédition",

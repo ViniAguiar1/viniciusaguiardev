@@ -281,7 +281,7 @@ export default async function IKroppPage() {
       purposeText1:
         "Les cliniques d'esthétique, les professionnels biomédicaux et les esthéticiennes gèrent une activité complexe : planning de plusieurs professionnels, fiches clients avec historique des soins, anamnèses détaillées, gestion des services et des produits. La plupart utilisent des outils génériques qui ne comprennent pas le fonctionnement du secteur.",
       purposeText2:
-        "iKropp résout cela avec une plateforme verticale : conçue spécifiquement pour le secteur de l'esthétique et de la santé, couvrant le cycle complet de l'activité dans un système unique. Plus de 50.000 utilisateurs actifs utilisent la plateforme au quotidien.",
+        "iKropp résout cela avec une plateforme verticale : conçue spécifiquement pour le secteur de l'esthétique et de la santé, couvrant le cycle complet de l'activité dans un système unique. Plus de 50 000 utilisateurs actifs s'en servent au quotidien.",
       purposeText3:
         "Le résultat, c'est un contrôle opérationnel réel — les professionnels se concentrent sur les soins, pas sur les tableurs. Les responsables ont une visibilité sur le planning, la facturation et la productivité sans avoir à jongler entre plusieurs outils.",
       roleTitle: "Mon rôle",

@@ -522,5 +522,135 @@
       "type": "paragraph",
       "text": "デザインシステムはモダンなアプリケーションに不可欠です。Shadcn UI、Tailwind CSS、React を使えば、一貫性がありスケーラブルなコンポーネントの基盤を構築できます。このようなアプローチは、生産性とインターフェースの品質を向上させ、デジタル製品が時間とともに進化していくのを容易にします。"
     }
+  ],
+  "title_fr": "Construire un design system avec Shadcn UI et Tailwind",
+  "description_fr": "Un guide pratique pour structurer un design system évolutif avec Shadcn UI, Tailwind CSS et React — en garantissant la cohérence visuelle et la productivité dans les applications modernes.",
+  "date_fr": "16 mars 2026",
+  "readTime_fr": "7 min de lecture",
+  "tag_fr": "Frontend",
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "À mesure que les applications web grandissent, maintenir la cohérence visuelle et la qualité de l'interface devient un défi. Composants dupliqués, variations de styles et incohérences de layout apparaissent rapidement. Un **design system** résout ce problème en établissant des standards d'interface réutilisables. Dans cet article, je présente comment construire un design system moderne avec **Shadcn UI, Tailwind CSS et React**."
+    },
+    {
+      "type": "heading",
+      "text": "Qu'est-ce qu'un design system",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un design system est un ensemble de **composants réutilisables, de design tokens et de patterns d'interface** qui garantissent la cohérence dans toute l'application. Il fonctionne comme une bibliothèque UI centralisée, ce qui permet aux équipes de construire des interfaces plus rapidement et avec moins d'incohérences."
+    },
+    {
+      "type": "list",
+      "items": [
+        "🎨 **Design Tokens :** couleurs, espacements et typographie standardisés.",
+        "🧱 **Composants réutilisables :** boutons, cards, inputs et modales.",
+        "📐 **Patterns de layout :** grids, espacements et hiérarchie visuelle."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Pourquoi utiliser Shadcn UI",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Shadcn UI est devenu l'une des solutions les plus populaires pour construire des interfaces modernes en React. Contrairement aux bibliothèques traditionnelles, ce n'est pas seulement un package de composants prêt à l'emploi — il génère les composants directement dans le projet, ce qui donne un contrôle total sur les styles et sur le comportement."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Composants basés sur **Radix UI**, garantissant l'accessibilité.",
+        "Intégration native avec **Tailwind CSS**.",
+        "Contrôle total du code — les composants vivent dans votre projet.",
+        "Grande flexibilité de personnalisation."
+      ]
+    },
+    {
+      "type": "image",
+      "src": "/design-system-layers.svg",
+      "alt": "Architecture d'un design system avec tokens, composants et écrans",
+      "width": 900,
+      "height": 550
+    },
+    {
+      "type": "heading",
+      "text": "Structure d'un design system",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une façon courante de structurer un design system dans les applications React consiste à organiser les composants dans un dossier dédié à l'intérieur du projet."
+    },
+    {
+      "type": "code",
+      "language": "bash",
+      "code": "src/\n  components/\n    ui/\n      button.tsx\n      card.tsx\n      dialog.tsx\n      input.tsx\n  lib/\n    utils.ts"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le dossier **components/ui** contient les composants de base du design system, tandis que les utilitaires partagés peuvent être placés dans **lib**."
+    },
+    {
+      "type": "heading",
+      "text": "Exemple de composant réutilisable",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Un bouton est l'un des composants les plus utilisés dans n'importe quelle application. Avec Shadcn UI, nous pouvons créer des variations de style cohérentes."
+    },
+    {
+      "type": "code",
+      "language": "tsx",
+      "code": "import { Button } from '@/components/ui/button'\n\nexport default function Example() {\n  return (\n    <div className=\"flex gap-4\">\n      <Button>Salvar</Button>\n      <Button variant=\"outline\">Cancelar</Button>\n      <Button variant=\"secondary\">Editar</Button>\n    </div>\n  )\n}"
+    },
+    {
+      "type": "heading",
+      "text": "Design tokens avec Tailwind",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tailwind facilite la création de design tokens à l'aide de variables de couleur et de classes utilitaires. Cela permet de standardiser les styles dans toute l'application."
+    },
+    {
+      "type": "code",
+      "language": "css",
+      "code": ":root {\n  --primary: 222 89% 55%;\n  --background: 0 0% 100%;\n  --foreground: 222 47% 11%;\n}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ces tokens sont utilisés par les composants du design system pour garantir la cohérence visuelle entre les écrans."
+    },
+    {
+      "type": "heading",
+      "text": "Avantages dans les applications SaaS",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans les applications SaaS — comme les dashboards administratifs ou les plateformes de gestion — un design system apporte des avantages importants :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "🚀 **Vitesse de développement :** les nouvelles fonctionnalités peuvent réutiliser les composants existants.",
+        "🎯 **Cohérence visuelle :** les interfaces suivent le même standard.",
+        "🔧 **Maintenance simplifiée :** les modifications d'un composant affectent toute l'application.",
+        "👥 **Collaboration entre équipes :** designers et développeurs partagent le même système."
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "Conclusion",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Les design systems sont essentiels pour les applications modernes. Avec Shadcn UI, Tailwind CSS et React, il est possible de construire une base de composants cohérente et évolutive. Ce type d'approche améliore la productivité et la qualité de l'interface, et facilite l'évolution des produits digitaux au fil du temps."
+    }
   ]
 }

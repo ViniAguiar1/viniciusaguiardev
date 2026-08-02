@@ -21,15 +21,16 @@ Runs on every PR to `main`: lint → typecheck → build → AEO check. Deploy i
 
 ## Architecture
 
-Next.js 16 App Router portfolio with trilingual support (PT-BR / EN / ES).
+Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).
 
 ### i18n System
 
-- `Locale` type: `"pt" | "en" | "es"` — read from `lang` cookie via `getLocale()` in `lib/i18n-server.ts`
+- `Locale` type: `"pt" | "en" | "es" | "jp" | "fr"` — resolved from the `x-locale` request header (set by `proxy.ts` from the URL's locale prefix) via `getLocale()` in `lib/i18n-server.ts`
 - `getDictionary(locale)` returns typed UI translations (nav, home, about, projects, etc.)
 - `t(locale, pt, en, es)` helper for inline trilingual strings in server components
 - Blog posts use suffix pattern: base fields are PT, `_en` suffix for English, `_es` for Spanish (e.g., `title_en`, `blocks_es`)
 - Project taglines/descriptions use `{ pt: string; en: string; es?: string }` objects
+- Adding a locale: append it to `LOCALES` in `lib/i18n.ts` and to the `HTML_LANGS`/`OG_LOCALES` maps. Everything else (proxy, sitemap, hreflang, `generateStaticParams`) derives from `LOCALES`. `lib/i18n-coverage.test.ts` then fails until every translation object, dictionary and post covers the new locale.
 
 ### Blog Posts
 

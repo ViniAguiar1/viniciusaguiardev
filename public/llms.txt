@@ -1,13 +1,13 @@
 # Vinicius Aguiar — Frontend Engineer
 
-> Portfólio pessoal e blog técnico de Vinicius Aguiar, Frontend Engineer especializado em React, Next.js, TypeScript e performance engineering, com capacidade full-stack (Node.js, pagamentos, IA) como diferencial. O site apresenta projetos reais em produção (SaaS, e-commerce, health), artigos técnicos sobre performance de frontend e arquitetura de software, e uma seção de engenharia com decisões técnicas e trade-offs em produção. Disponível em quatro idiomas (PT-BR / EN / ES / JA). URL base: `https://viniciusaguiardev.com.br`.
+> Portfólio pessoal e blog técnico de Vinicius Aguiar, Frontend Engineer especializado em React, Next.js, TypeScript e performance engineering, com capacidade full-stack (Node.js, pagamentos, IA) como diferencial. O site apresenta projetos reais em produção (SaaS, e-commerce, health), artigos técnicos sobre performance de frontend e arquitetura de software, e uma seção de engenharia com decisões técnicas e trade-offs em produção. Disponível em cinco idiomas (PT-BR / EN / ES / JA / FR). URL base: `https://viniciusaguiardev.com.br`.
 
 Notas importantes:
 
 - O site é um portfólio profissional, não um produto ou API.
 - O conteúdo reflete experiência real em empresas e projetos em produção.
 - Posts técnicos incluem código-fonte em TypeScript, SQL e Python.
-- O idioma principal é Português (BR), com versões completas em Inglês, Espanhol e Japonês.
+- O idioma principal é Português (BR), com versões completas em Inglês, Espanhol, Japonês e Francês.
 - Stack do site: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Shadcn UI.
 
 ## Páginas

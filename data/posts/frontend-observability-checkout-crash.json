@@ -1,0 +1,1141 @@
+{
+  "slug": "frontend-observability-checkout-crash",
+  "featured": true,
+  "order": 3,
+  "title": "O erro que ninguém via: quando o frontend quebra e a receita some do log",
+  "title_en": "The error nobody saw: when the frontend breaks and the revenue vanishes from the log",
+  "title_es": "El error que nadie veía: cuando el frontend se rompe y los ingresos desaparecen del log",
+  "title_jp": "誰にも見えなかったエラー：フロントエンドが壊れ、売上がログから消えるとき",
+  "title_fr": "L'erreur que personne ne voyait : quand le frontend casse et que le chiffre d'affaires disparaît du log",
+  "description": "Um componente de QR Code quebrava no checkout PIX de um SaaS de dropshipping enquanto o backend respondia 200 — receita vazando sem uma linha de log. Como instrumentamos o frontend com contexto de sessão, o que deliberadamente não capturamos num fluxo de pagamento, e o gap que continua aberto.",
+  "description_en": "A QR Code component was breaking in the PIX checkout of a dropshipping SaaS while the backend answered 200 — revenue leaking without a single log line. How we instrumented the frontend with session context, what we deliberately did not capture in a payment flow, and the gap still open.",
+  "description_es": "Un componente de QR se rompía en el checkout PIX de un SaaS de dropshipping mientras el backend respondía 200 — ingresos fugándose sin una línea de log. Cómo instrumentamos el frontend con contexto de sesión, qué decidimos no capturar en un flujo de pago y la brecha que sigue abierta.",
+  "description_jp": "ドロップシッピング SaaS の PIX チェックアウトで QR コードのコンポーネントが壊れる一方、バックエンドは 200 を返していた — ログ 1 行も残さずに売上が漏れていたのです。セッションコンテキストを伴うフロントエンド計装、決済フローで意図的に捕捉しなかったもの、そして今も残るギャップ。",
+  "description_fr": "Un composant QR Code cassait dans le checkout PIX d'un SaaS de dropshipping pendant que le backend répondait 200 — du chiffre d'affaires qui fuyait sans une seule ligne de log. Comment nous avons instrumenté le frontend avec du contexte de session, ce que nous n'avons délibérément pas capturé dans un flux de paiement, et l'écart encore ouvert.",
+  "date": "10 de ago de 2026",
+  "date_en": "Aug 10, 2026",
+  "date_es": "10 de ago. de 2026",
+  "date_jp": "2026年8月10日",
+  "date_fr": "10 août 2026",
+  "readTime": "14 min de leitura",
+  "readTime_en": "14 min read",
+  "readTime_es": "14 min de lectura",
+  "readTime_jp": "14分で読めます",
+  "readTime_fr": "14 min de lecture",
+  "tag": "Frontend",
+  "tag_en": "Frontend",
+  "tag_es": "Frontend",
+  "tag_jp": "フロントエンド",
+  "tag_fr": "Frontend",
+  "tagColor": "bg-emerald-700",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Durante meses, uma plataforma SaaS de dropshipping que ajudei a construir perdeu vendas de um jeito que nenhum gráfico mostrava. O comprador chegava ao checkout, o backend gerava a cobrança em PIX e respondia 200, o pedido existia no banco — e, para uma parte dos compradores, a tela de pagamento simplesmente desaparecia antes de o QR Code aparecer. Ninguém no time via nada. O log estava limpo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post é sobre a lacuna onde esse tipo de erro mora: o espaço entre a última linha de log do servidor e o que o usuário de fato viveu na tela. É onde o frontend inteiro acontece — e onde, por padrão, você é cego. A correção final foi barata. Cara foi a cegueira."
+    },
+    {
+      "type": "image",
+      "src": "/checkout-observability-blind-zone.svg",
+      "alt": "Uma requisição de checkout: o servidor registra três etapas bem-sucedidas e o log termina ali; do outro lado da fronteira, o cliente recebe um payload incompleto, o componente do QR Code lança e a tela de pagamento some — nada disso aparece no log",
+      "width": 900,
+      "height": 470
+    },
+    {
+      "type": "heading",
+      "text": "O sintoma: 200 no log, tela em branco no navegador",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O fluxo era o de qualquer checkout PIX. O comprador finalizava o pedido, o frontend em Next.js chamava a API em Node, a API pedia a cobrança ao gateway e devolvia os dados do PIX. A tela renderizava o QR Code e o código copia-e-cola. Do lado do servidor, esse caminho tinha uma taxa de sucesso essencialmente perfeita."
+    },
+    {
+      "type": "paragraph",
+      "text": "Do lado do comprador, não. Em uma fração das cobranças, a tela de pagamento sumia: nem QR Code, nem código, nem mensagem de erro. Uma área em branco no lugar da única coisa que importava naquele momento."
+    },
+    {
+      "type": "code",
+      "code": "[info] order.created      orderId=7f3a91 sellerId=442 total=189.90\n[info] charge.requested   orderId=7f3a91 gateway=pix\n[info] charge.created     orderId=7f3a91 status=pending\n[info] http               POST /orders 201 148ms",
+      "language": "text"
+    },
+    {
+      "type": "paragraph",
+      "text": "Lendo esse log, não existe incidente. Existe um pedido criado, uma cobrança gerada e uma resposta entregue. Qualquer alerta baseado em status HTTP, taxa de erro do servidor ou exceção no backend ficaria em silêncio para sempre — porque, do ponto de vista do backend, nada falhou."
+    },
+    {
+      "type": "heading",
+      "text": "Como descobrimos: um cliente avisou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Não foi um alerta. Foi um vendedor da plataforma relatando que um comprador dele não conseguia pagar. É o pior canal de detecção possível, e vale encarar por quê."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quem reclama é uma minoria autosselecionada. Um comprador que abre o checkout, vê uma tela em branco e vai embora não abre chamado — ele desiste, e talvez compre em outro lugar. Para o relato chegar até você, precisa existir alguém suficientemente motivado, com canal aberto e paciência para descrever o problema. Cada reclamação que chega representa um número desconhecido — e maior — de desistências silenciosas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quando o seu canal de detecção é o usuário irritado, você não está medindo falhas. Está medindo persistência."
+    },
+    {
+      "type": "heading",
+      "text": "Por que o log do servidor nunca ia pegar isso",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A resposta curta: o erro nascia depois do último ponto que a gente observava. A requisição inteira já tinha terminado com sucesso quando o problema aconteceu."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Observado:** o pedido é criado e persistido — 201.",
+        "**Observado:** a cobrança é solicitada ao gateway e volta sem erro — 200.",
+        "**Observado:** a resposta sai da API e é entregue ao navegador — 200.",
+        "**Cego:** o cliente desserializa o payload e monta o estado da tela.",
+        "**Cego:** o componente do QR Code renderiza — e lança.",
+        "**Cego:** a árvore de componentes cai e a tela de pagamento some.",
+        "**Cego:** o comprador não paga, fecha a aba e some da sua base."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Metade dessa lista é território do frontend, e nenhuma linha dela existia em lugar nenhum. Observabilidade de backend responde “o meu sistema respondeu?”. Observabilidade de frontend responde “o usuário conseguiu?”. São perguntas diferentes, e a segunda é a que paga a conta."
+    },
+    {
+      "type": "heading",
+      "text": "A causa raiz: um 200 com o payload incompleto",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Em determinadas condições, o gateway respondia com sucesso mas sem o campo do código PIX — a cobrança existia do lado dele, o status voltava coerente, só o dado de que o frontend precisava para desenhar a tela não vinha. A API repassava a resposta adiante sem validar o que estava repassando. E o componente confiava."
+    },
+    {
+      "type": "code",
+      "code": "// Original version: assumes the payload always carries the PIX code\nexport function PixQrCode({ charge }: { charge: Charge }) {\n  return (\n    <div className=\"checkout-pix\">\n      <img\n        src={`data:image/png;base64,${charge.qrCodeBase64}`}\n        alt=\"PIX QR Code\"\n      />\n      <code>{charge.qrCodePayload.toUpperCase()}</code>\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "`charge.qrCodePayload` chegava `undefined`, `.toUpperCase()` lançava um TypeError, e o React fazia exatamente o que promete: derrubava a árvore a partir dali. Como não havia error boundary isolando o checkout, o que caía não era o QR Code — era a tela de pagamento inteira."
+    },
+    {
+      "type": "paragraph",
+      "text": "Isso também explica o “só para alguns compradores”, que é a característica que torna esse bug tão difícil de enxergar. Não era um erro determinístico que apareceria no primeiro teste. Era uma resposta de terceiro que variava, atingindo um subconjunto de cobranças que ninguém conseguia reproduzir sob demanda."
+    },
+    {
+      "type": "heading",
+      "text": "O que a instrumentação mostrou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O Sentry entrou depois do relato, não antes — e essa é a parte honesta da história. A correção pontual a gente conseguiria fazer só com o relato do vendedor. O que não dava para responder eram as perguntas seguintes: acontece com quantos? desde quando? só nesse gateway? já parou?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Capturar a exceção sozinha não responde nada disso. Um TypeError sem contexto é uma linha de stack trace num arquivo minificado. O que transforma um erro em algo acionável é o que vai junto dele:"
+    },
+    {
+      "type": "code",
+      "code": "// The context that turns \"an error\" into \"an error you can reproduce\"\nSentry.setUser({ id: seller.id })            // who — no email, no name\nSentry.setTag(\"checkout.gateway\", \"pix\")\n\nSentry.setContext(\"charge\", {\n  orderId: charge.orderId,\n  status: charge.status,\n  hasQrPayload: Boolean(charge.qrCodePayload), // the shape, never the value\n  hasQrImage: Boolean(charge.qrCodeBase64),\n})\n\nSentry.addBreadcrumb({\n  category: \"checkout\",\n  message: \"charge.received\",\n  level: \"info\",\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "O detalhe que mais rendeu foi registrar a **forma** do payload, não o conteúdo: `hasQrPayload: Boolean(charge.qrCodePayload)`. É seguro para um fluxo de pagamento — não carrega valor nenhum — e é exatamente o que permite agrupar os eventos e ver a distribuição. Foi ali que ficou claro que não era um comprador com um navegador estranho: era um padrão, reproduzível na estatística mesmo sem ser reproduzível na mão."
+    },
+    {
+      "type": "paragraph",
+      "text": "Source maps no build fecham o ciclo. Sem eles, você recebe o erro no lugar certo do produto e no lugar errado do código."
+    },
+    {
+      "type": "heading",
+      "text": "A correção em duas camadas",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A primeira camada é defensiva, no cliente. O frontend deixou de assumir que o payload vem completo e passou a tratar a ausência do código PIX como um estado possível da tela — com caminho alternativo, não com tela branca:"
+    },
+    {
+      "type": "code",
+      "code": "export function PixQrCode({ charge }: { charge: Charge }) {\n  // No payload means no payment is possible: that is a screen state,\n  // not an exception\n  if (!charge.qrCodePayload) {\n    Sentry.captureMessage(\"checkout.pix.missing_payload\", {\n      level: \"error\",\n      extra: { orderId: charge.orderId, status: charge.status },\n    })\n    return <PixUnavailable orderId={charge.orderId} />\n  }\n\n  return (\n    <div className=\"checkout-pix\">\n      {charge.qrCodeBase64 ? (\n        <img\n          src={`data:image/png;base64,${charge.qrCodeBase64}`}\n          alt=\"PIX QR Code\"\n        />\n      ) : (\n        <QrCodeFromPayload value={charge.qrCodePayload} />\n      )}\n      <CopyablePixCode value={charge.qrCodePayload} />\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "Repare que o fallback não é uma mensagem de erro genérica. Se o código PIX existe mas a imagem não veio, o QR é gerado no cliente a partir do payload; e o código copia-e-cola aparece sempre, porque ele sozinho já permite concluir o pagamento no app do banco. A pergunta que guia um fallback de checkout não é “como avisar que falhou”, é “o que ainda dá para o usuário fazer”."
+    },
+    {
+      "type": "paragraph",
+      "text": "A segunda camada é o contrato, no servidor. Uma cobrança que o cliente não consegue renderizar não é uma cobrança bem-sucedida, e não deveria sair da API como 200:"
+    },
+    {
+      "type": "code",
+      "code": "// A charge the client cannot render is not a successful charge\nconst charge = await this.gateway.createCharge(order)\n\nif (!charge.qrCodePayload) {\n  this.logger.error(\n    { orderId: order.id, gatewayStatus: charge.status },\n    \"charge.incomplete\",\n  )\n  throw new ServiceUnavailableException(\"PIX_CHARGE_INCOMPLETE\")\n}\n\nreturn toChargeResponse(charge)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "As duas camadas juntas mudam a natureza do problema. O backend para de propagar um estado impossível e passa a gerar um erro visível — que o alerta pega. O frontend para de depender de o backend estar sempre certo. Nenhuma das duas sozinha resolveria: a validação no servidor não protege contra outros campos que faltem no futuro, e a defesa no cliente sem o contrato apenas troca um erro barulhento por uma degradação silenciosa."
+    },
+    {
+      "type": "heading",
+      "text": "O que deliberadamente não instrumentamos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Checkout é o fluxo onde mais dá vontade de capturar tudo — e onde isso sai mais caro. As regras que fixamos:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Nenhum dado de pagamento no evento.** Código PIX, valores e identificação do comprador ficam fora. Registra-se a presença do campo, nunca o valor.",
+        "**Sem replay de sessão no checkout.** Gravar a tela onde o usuário lida com dados de pagamento é enviar informação sensível para um terceiro. O ganho de debug não paga o risco.",
+        "**Sampling nas transações, não nos erros.** Traces de performance são amostrados; exceção em fluxo de pagamento é capturada sempre. São coisas com valor diferente.",
+        "**Ruído tratado como bug.** Erro de extensão de navegador, `ResizeObserver loop`, falha de rede de terceiro que não afeta o usuário — tudo filtrado. Um painel com 400 eventos por dia que ninguém lê é indistinguível de não ter painel nenhum."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "O resultado",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Depois que esse caminho parou de quebrar, o volume transacionado deixou de oscilar na casa dos R$ 20 mil — com uma parte se perdendo nas plataformas de origem — e passou a se sustentar entre R$ 60 mil e R$ 70 mil por mês, com a operação chegando à casa dos 2.000 pedidos mensais."
+    },
+    {
+      "type": "paragraph",
+      "text": "Não vou dizer que observabilidade gerou esse número: um produto cresce por muitos motivos ao mesmo tempo, e seria desonesto atribuir tudo a uma correção. O que dá para afirmar com segurança é mais específico e, na minha opinião, mais assustador — existia um vazamento no ponto exato onde o dinheiro entra, ele durou o tempo que durou porque nada no sistema era capaz de mostrá-lo, e o custo de descobri-lo por relato de cliente foi pago em vendas que ninguém nunca contabilizou."
+    },
+    {
+      "type": "heading",
+      "text": "O gap que continua aberto",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O que montamos resolve “o cliente quebrou e eu sei o suficiente para reproduzir”. Não resolve “este erro no navegador corresponde a esta requisição no servidor”. Hoje eu fecharia isso com um correlation ID: o frontend gera um identificador por requisição, envia num header, o backend o registra em toda linha de log daquele fluxo, e o mesmo identificador acompanha o contexto do erro no cliente."
+    },
+    {
+      "type": "paragraph",
+      "text": "Com isso, investigar deixa de ser cruzar dois mundos por horário aproximado e passa a ser uma busca por chave. É a diferença entre correlacionar e adivinhar — e é o próximo passo natural de qualquer instrumentação de frontend que já esteja capturando contexto."
+    },
+    {
+      "type": "heading",
+      "text": "O que eu levo disso",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Log de servidor mede o seu sistema, não o seu usuário.** Os dois divergem exatamente no lugar mais caro: depois da resposta.",
+        "**Erro de frontend não é “erro de tela”.** Quando mora no checkout, é perda de receita — e aparece no faturamento antes de aparecer em qualquer painel técnico.",
+        "**Todo dado externo é entrada não confiável, inclusive o do seu próprio backend.** Renderizar campo de terceiro sem validar é confiar num contrato que você não controla.",
+        "**Error boundary é contenção de raio.** Sem isolar o componente, um campo ausente derruba a tela inteira em vez de degradar um pedaço dela.",
+        "**Contexto vale mais que volume.** Um erro com usuário, rota, estado e forma do payload é acionável. Mil erros sem contexto são um painel que ninguém abre."
+      ],
+      "ordered": false
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "For months, a dropshipping SaaS platform I helped build was losing sales in a way no chart ever showed. The buyer reached checkout, the backend created the PIX charge and answered 200, the order existed in the database — and for a share of buyers, the payment screen simply vanished before the QR Code appeared. Nobody on the team saw a thing. The log was clean."
+    },
+    {
+      "type": "paragraph",
+      "text": "This post is about the gap where that kind of error lives: the space between the server's last log line and what the user actually experienced on screen. That is where the entire frontend happens — and where, by default, you are blind. The eventual fix was cheap. The blindness was expensive."
+    },
+    {
+      "type": "image",
+      "src": "/checkout-observability-blind-zone.svg",
+      "alt": "One checkout request: the server logs three successful steps and the log ends there; on the other side of the boundary the client receives an incomplete payload, the QR Code component throws and the payment screen disappears — none of it visible in the log",
+      "width": 900,
+      "height": 470
+    },
+    {
+      "type": "heading",
+      "text": "The symptom: 200 in the log, blank screen in the browser",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The flow was that of any PIX checkout. The buyer completed the order, the Next.js frontend called the Node API, the API requested the charge from the gateway and returned the PIX data. The screen rendered the QR Code and the copy-and-paste code. On the server side, that path had an essentially perfect success rate."
+    },
+    {
+      "type": "paragraph",
+      "text": "On the buyer's side, it did not. In a fraction of charges, the payment screen disappeared: no QR Code, no code, no error message. A blank area where the only thing that mattered at that moment should have been."
+    },
+    {
+      "type": "code",
+      "code": "[info] order.created      orderId=7f3a91 sellerId=442 total=189.90\n[info] charge.requested   orderId=7f3a91 gateway=pix\n[info] charge.created     orderId=7f3a91 status=pending\n[info] http               POST /orders 201 148ms",
+      "language": "text"
+    },
+    {
+      "type": "paragraph",
+      "text": "Reading that log, there is no incident. There is an order created, a charge generated and a response delivered. Any alert based on HTTP status, server error rate or backend exception would stay silent forever — because from the backend's point of view, nothing failed."
+    },
+    {
+      "type": "heading",
+      "text": "How we found out: a customer told us",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "It was not an alert. It was a seller on the platform reporting that one of their buyers could not pay. That is the worst possible detection channel, and it is worth facing why."
+    },
+    {
+      "type": "paragraph",
+      "text": "People who complain are a self-selected minority. A buyer who opens checkout, sees a blank screen and leaves does not file a ticket — they give up, and maybe buy somewhere else. For the report to reach you, someone has to be motivated enough, have an open channel, and have the patience to describe the problem. Every complaint that arrives stands for an unknown — and larger — number of silent abandonments."
+    },
+    {
+      "type": "paragraph",
+      "text": "When your detection channel is the annoyed user, you are not measuring failures. You are measuring persistence."
+    },
+    {
+      "type": "heading",
+      "text": "Why server logs were never going to catch this",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The short answer: the error was born after the last point we observed. The whole request had already finished successfully by the time the problem happened."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Observed:** the order is created and persisted — 201.",
+        "**Observed:** the charge is requested from the gateway and comes back without error — 200.",
+        "**Observed:** the response leaves the API and is delivered to the browser — 200.",
+        "**Blind:** the client deserializes the payload and builds the screen state.",
+        "**Blind:** the QR Code component renders — and throws.",
+        "**Blind:** the component tree collapses and the payment screen disappears.",
+        "**Blind:** the buyer does not pay, closes the tab and vanishes from your funnel."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Half of that list is frontend territory, and not one line of it existed anywhere. Backend observability answers “did my system respond?”. Frontend observability answers “did the user succeed?”. Those are different questions, and the second one is the one that pays the bills."
+    },
+    {
+      "type": "heading",
+      "text": "The root cause: a 200 with an incomplete payload",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Under certain conditions the gateway answered successfully but without the PIX code field — the charge existed on their side, the status came back coherent, only the data the frontend needed to draw the screen was missing. The API forwarded the response without validating what it was forwarding. And the component trusted it."
+    },
+    {
+      "type": "code",
+      "code": "// Original version: assumes the payload always carries the PIX code\nexport function PixQrCode({ charge }: { charge: Charge }) {\n  return (\n    <div className=\"checkout-pix\">\n      <img\n        src={`data:image/png;base64,${charge.qrCodeBase64}`}\n        alt=\"PIX QR Code\"\n      />\n      <code>{charge.qrCodePayload.toUpperCase()}</code>\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "`charge.qrCodePayload` arrived as `undefined`, `.toUpperCase()` threw a TypeError, and React did exactly what it promises: it tore down the tree from that point. With no error boundary isolating checkout, what fell was not the QR Code — it was the entire payment screen."
+    },
+    {
+      "type": "paragraph",
+      "text": "That also explains the “only for some buyers”, which is the property that makes this bug so hard to see. It was not a deterministic error that would show up in the first test. It was a varying third-party response hitting a subset of charges that nobody could reproduce on demand."
+    },
+    {
+      "type": "heading",
+      "text": "What the instrumentation revealed",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Sentry came in after the report, not before — and that is the honest part of the story. We could have shipped the one-off fix from the seller's report alone. What we could not answer were the questions that came next: how many buyers does this hit? since when? only on this gateway? has it stopped?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Capturing the exception on its own answers none of that. A TypeError without context is one stack trace line in a minified file. What turns an error into something actionable is what travels with it:"
+    },
+    {
+      "type": "code",
+      "code": "// The context that turns \"an error\" into \"an error you can reproduce\"\nSentry.setUser({ id: seller.id })            // who — no email, no name\nSentry.setTag(\"checkout.gateway\", \"pix\")\n\nSentry.setContext(\"charge\", {\n  orderId: charge.orderId,\n  status: charge.status,\n  hasQrPayload: Boolean(charge.qrCodePayload), // the shape, never the value\n  hasQrImage: Boolean(charge.qrCodeBase64),\n})\n\nSentry.addBreadcrumb({\n  category: \"checkout\",\n  message: \"charge.received\",\n  level: \"info\",\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "The detail that paid off most was recording the **shape** of the payload, not its content: `hasQrPayload: Boolean(charge.qrCodePayload)`. It is safe for a payment flow — it carries no value at all — and it is exactly what lets you group events and see the distribution. That is where it became clear this was not one buyer with an odd browser: it was a pattern, reproducible statistically even when it was not reproducible by hand."
+    },
+    {
+      "type": "paragraph",
+      "text": "Source maps in the build close the loop. Without them, you get the error in the right place in the product and the wrong place in the code."
+    },
+    {
+      "type": "heading",
+      "text": "The fix, in two layers",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The first layer is defensive, on the client. The frontend stopped assuming the payload arrives complete and started treating a missing PIX code as a possible screen state — with an alternative path, not a blank screen:"
+    },
+    {
+      "type": "code",
+      "code": "export function PixQrCode({ charge }: { charge: Charge }) {\n  // No payload means no payment is possible: that is a screen state,\n  // not an exception\n  if (!charge.qrCodePayload) {\n    Sentry.captureMessage(\"checkout.pix.missing_payload\", {\n      level: \"error\",\n      extra: { orderId: charge.orderId, status: charge.status },\n    })\n    return <PixUnavailable orderId={charge.orderId} />\n  }\n\n  return (\n    <div className=\"checkout-pix\">\n      {charge.qrCodeBase64 ? (\n        <img\n          src={`data:image/png;base64,${charge.qrCodeBase64}`}\n          alt=\"PIX QR Code\"\n        />\n      ) : (\n        <QrCodeFromPayload value={charge.qrCodePayload} />\n      )}\n      <CopyablePixCode value={charge.qrCodePayload} />\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "Note that the fallback is not a generic error message. If the PIX code exists but the image did not arrive, the QR is generated on the client from the payload; and the copy-and-paste code always shows, because on its own it is enough to complete the payment in the banking app. The question that guides a checkout fallback is not “how do we announce the failure”, it is “what can the user still do”."
+    },
+    {
+      "type": "paragraph",
+      "text": "The second layer is the contract, on the server. A charge the client cannot render is not a successful charge, and it should not leave the API as a 200:"
+    },
+    {
+      "type": "code",
+      "code": "// A charge the client cannot render is not a successful charge\nconst charge = await this.gateway.createCharge(order)\n\nif (!charge.qrCodePayload) {\n  this.logger.error(\n    { orderId: order.id, gatewayStatus: charge.status },\n    \"charge.incomplete\",\n  )\n  throw new ServiceUnavailableException(\"PIX_CHARGE_INCOMPLETE\")\n}\n\nreturn toChargeResponse(charge)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Together, the two layers change the nature of the problem. The backend stops propagating an impossible state and starts producing a visible error — one that alerting catches. The frontend stops depending on the backend always being right. Neither would be enough alone: server-side validation does not protect against other fields going missing later, and client-side defense without the contract merely swaps a loud error for a silent degradation."
+    },
+    {
+      "type": "heading",
+      "text": "What we deliberately did not instrument",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Checkout is the flow where the urge to capture everything is strongest — and where it costs the most. The rules we settled on:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**No payment data in the event.** PIX code, amounts and buyer identity stay out. We record the presence of the field, never its value.",
+        "**No session replay in checkout.** Recording the screen where a user handles payment data means shipping sensitive information to a third party. The debugging gain does not justify the risk.",
+        "**Sampling on transactions, not on errors.** Performance traces are sampled; an exception in a payment flow is always captured. They are worth different amounts.",
+        "**Noise treated as a bug.** Browser extension errors, `ResizeObserver loop`, third-party network failures that do not affect the user — all filtered out. A dashboard with 400 daily events nobody reads is indistinguishable from having no dashboard at all."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "The outcome",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Once that path stopped breaking, transacted volume went from swinging around R$ 20k — with part of it leaking on the source marketplaces — to holding between R$ 60k and R$ 70k per month, with the operation reaching roughly 2,000 orders a month."
+    },
+    {
+      "type": "paragraph",
+      "text": "I will not claim observability produced that number: a product grows for many reasons at once, and attributing all of it to one fix would be dishonest. What can be stated safely is more specific and, in my view, more unsettling — there was a leak at the exact point where money comes in, it lasted as long as it did because nothing in the system was capable of showing it, and the cost of discovering it through a customer report was paid in sales nobody ever counted."
+    },
+    {
+      "type": "heading",
+      "text": "The gap that is still open",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "What we built answers “the client broke and I know enough to reproduce it”. It does not answer “this browser error corresponds to this server request”. Today I would close that with a correlation ID: the frontend generates an identifier per request, sends it in a header, the backend writes it on every log line for that flow, and the same identifier travels with the client-side error context."
+    },
+    {
+      "type": "paragraph",
+      "text": "With that, investigating stops being a matter of matching two worlds by approximate timestamp and becomes a key lookup. It is the difference between correlating and guessing — and it is the natural next step for any frontend instrumentation that already captures context."
+    },
+    {
+      "type": "heading",
+      "text": "What I take from this",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Server logs measure your system, not your user.** The two diverge exactly at the most expensive place: after the response.",
+        "**A frontend error is not a “UI error”.** When it lives in checkout, it is lost revenue — and it shows up in the numbers before it shows up on any technical dashboard.",
+        "**All external data is untrusted input, including data from your own backend.** Rendering a third-party field without validating it is trusting a contract you do not control.",
+        "**An error boundary is blast containment.** Without isolating the component, one missing field takes down the whole screen instead of degrading a piece of it.",
+        "**Context beats volume.** One error with user, route, state and payload shape is actionable. A thousand errors without context are a dashboard nobody opens."
+      ],
+      "ordered": false
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "Durante meses, una plataforma SaaS de dropshipping que ayudé a construir perdió ventas de una forma que ningún gráfico mostraba. El comprador llegaba al checkout, el backend generaba el cobro por PIX y respondía 200, el pedido existía en la base — y, para una parte de los compradores, la pantalla de pago simplemente desaparecía antes de que el QR apareciera. Nadie en el equipo veía nada. El log estaba limpio."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post trata de la brecha donde vive ese tipo de error: el espacio entre la última línea de log del servidor y lo que el usuario realmente vivió en pantalla. Ahí ocurre todo el frontend — y ahí, por defecto, estás ciego. La corrección final fue barata. Cara fue la ceguera."
+    },
+    {
+      "type": "image",
+      "src": "/checkout-observability-blind-zone.svg",
+      "alt": "Una petición de checkout: el servidor registra tres pasos exitosos y el log termina ahí; del otro lado de la frontera, el cliente recibe un payload incompleto, el componente del QR lanza y la pantalla de pago desaparece — nada de eso aparece en el log",
+      "width": 900,
+      "height": 470
+    },
+    {
+      "type": "heading",
+      "text": "El síntoma: 200 en el log, pantalla en blanco en el navegador",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El flujo era el de cualquier checkout PIX. El comprador finalizaba el pedido, el frontend en Next.js llamaba a la API en Node, la API pedía el cobro al gateway y devolvía los datos del PIX. La pantalla renderizaba el QR y el código de copiar y pegar. Del lado del servidor, ese camino tenía una tasa de éxito esencialmente perfecta."
+    },
+    {
+      "type": "paragraph",
+      "text": "Del lado del comprador, no. En una fracción de los cobros, la pantalla de pago desaparecía: ni QR, ni código, ni mensaje de error. Un área en blanco en lugar de lo único que importaba en ese momento."
+    },
+    {
+      "type": "code",
+      "code": "[info] order.created      orderId=7f3a91 sellerId=442 total=189.90\n[info] charge.requested   orderId=7f3a91 gateway=pix\n[info] charge.created     orderId=7f3a91 status=pending\n[info] http               POST /orders 201 148ms",
+      "language": "text"
+    },
+    {
+      "type": "paragraph",
+      "text": "Leyendo ese log, no existe incidente. Existe un pedido creado, un cobro generado y una respuesta entregada. Cualquier alerta basada en estado HTTP, tasa de error del servidor o excepción en el backend quedaría en silencio para siempre — porque, desde el punto de vista del backend, nada falló."
+    },
+    {
+      "type": "heading",
+      "text": "Cómo lo descubrimos: nos avisó un cliente",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "No fue una alerta. Fue un vendedor de la plataforma reportando que uno de sus compradores no lograba pagar. Es el peor canal de detección posible, y vale la pena entender por qué."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quien se queja es una minoría autoseleccionada. Un comprador que abre el checkout, ve una pantalla en blanco y se va no abre un ticket — desiste, y quizá compra en otro lado. Para que el reporte te llegue tiene que existir alguien suficientemente motivado, con canal abierto y paciencia para describir el problema. Cada queja que llega representa un número desconocido — y mayor — de abandonos silenciosos."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cuando tu canal de detección es el usuario molesto, no estás midiendo fallos. Estás midiendo persistencia."
+    },
+    {
+      "type": "heading",
+      "text": "Por qué el log del servidor nunca iba a atrapar esto",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La respuesta corta: el error nacía después del último punto que observábamos. La petición entera ya había terminado con éxito cuando ocurrió el problema."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Observado:** el pedido se crea y se persiste — 201.",
+        "**Observado:** el cobro se solicita al gateway y vuelve sin error — 200.",
+        "**Observado:** la respuesta sale de la API y se entrega al navegador — 200.",
+        "**Ciego:** el cliente deserializa el payload y arma el estado de la pantalla.",
+        "**Ciego:** el componente del QR renderiza — y lanza.",
+        "**Ciego:** el árbol de componentes cae y la pantalla de pago desaparece.",
+        "**Ciego:** el comprador no paga, cierra la pestaña y desaparece de tu embudo."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "La mitad de esa lista es territorio del frontend, y ni una línea existía en ningún lado. La observabilidad de backend responde “¿mi sistema respondió?”. La de frontend responde “¿el usuario lo logró?”. Son preguntas distintas, y la segunda es la que paga las cuentas."
+    },
+    {
+      "type": "heading",
+      "text": "La causa raíz: un 200 con el payload incompleto",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Bajo ciertas condiciones el gateway respondía con éxito pero sin el campo del código PIX — el cobro existía de su lado, el estado volvía coherente, solo faltaba el dato que el frontend necesitaba para dibujar la pantalla. La API reenviaba la respuesta sin validar lo que estaba reenviando. Y el componente confiaba."
+    },
+    {
+      "type": "code",
+      "code": "// Original version: assumes the payload always carries the PIX code\nexport function PixQrCode({ charge }: { charge: Charge }) {\n  return (\n    <div className=\"checkout-pix\">\n      <img\n        src={`data:image/png;base64,${charge.qrCodeBase64}`}\n        alt=\"PIX QR Code\"\n      />\n      <code>{charge.qrCodePayload.toUpperCase()}</code>\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "`charge.qrCodePayload` llegaba como `undefined`, `.toUpperCase()` lanzaba un TypeError, y React hacía exactamente lo que promete: derribaba el árbol a partir de ahí. Como no había error boundary aislando el checkout, lo que caía no era el QR — era la pantalla de pago entera."
+    },
+    {
+      "type": "paragraph",
+      "text": "Eso también explica el “solo para algunos compradores”, que es la característica que vuelve este bug tan difícil de ver. No era un error determinista que aparecería en la primera prueba. Era una respuesta de terceros que variaba, afectando a un subconjunto de cobros que nadie lograba reproducir bajo demanda."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que la instrumentación reveló",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Sentry entró después del reporte, no antes — y esa es la parte honesta de la historia. La corrección puntual la podíamos hacer solo con el reporte del vendedor. Lo que no podíamos responder eran las preguntas siguientes: ¿a cuántos les pasa? ¿desde cuándo? ¿solo en ese gateway? ¿ya paró?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Capturar la excepción sola no responde nada de eso. Un TypeError sin contexto es una línea de stack trace en un archivo minificado. Lo que convierte un error en algo accionable es lo que viaja con él:"
+    },
+    {
+      "type": "code",
+      "code": "// The context that turns \"an error\" into \"an error you can reproduce\"\nSentry.setUser({ id: seller.id })            // who — no email, no name\nSentry.setTag(\"checkout.gateway\", \"pix\")\n\nSentry.setContext(\"charge\", {\n  orderId: charge.orderId,\n  status: charge.status,\n  hasQrPayload: Boolean(charge.qrCodePayload), // the shape, never the value\n  hasQrImage: Boolean(charge.qrCodeBase64),\n})\n\nSentry.addBreadcrumb({\n  category: \"checkout\",\n  message: \"charge.received\",\n  level: \"info\",\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "El detalle que más rindió fue registrar la **forma** del payload, no su contenido: `hasQrPayload: Boolean(charge.qrCodePayload)`. Es seguro para un flujo de pago — no lleva ningún valor — y es exactamente lo que permite agrupar los eventos y ver la distribución. Ahí quedó claro que no era un comprador con un navegador raro: era un patrón, reproducible en la estadística aunque no lo fuera a mano."
+    },
+    {
+      "type": "paragraph",
+      "text": "Los source maps en el build cierran el ciclo. Sin ellos, recibes el error en el lugar correcto del producto y en el lugar equivocado del código."
+    },
+    {
+      "type": "heading",
+      "text": "La corrección en dos capas",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La primera capa es defensiva, en el cliente. El frontend dejó de asumir que el payload viene completo y pasó a tratar la ausencia del código PIX como un estado posible de la pantalla — con camino alternativo, no con pantalla en blanco:"
+    },
+    {
+      "type": "code",
+      "code": "export function PixQrCode({ charge }: { charge: Charge }) {\n  // No payload means no payment is possible: that is a screen state,\n  // not an exception\n  if (!charge.qrCodePayload) {\n    Sentry.captureMessage(\"checkout.pix.missing_payload\", {\n      level: \"error\",\n      extra: { orderId: charge.orderId, status: charge.status },\n    })\n    return <PixUnavailable orderId={charge.orderId} />\n  }\n\n  return (\n    <div className=\"checkout-pix\">\n      {charge.qrCodeBase64 ? (\n        <img\n          src={`data:image/png;base64,${charge.qrCodeBase64}`}\n          alt=\"PIX QR Code\"\n        />\n      ) : (\n        <QrCodeFromPayload value={charge.qrCodePayload} />\n      )}\n      <CopyablePixCode value={charge.qrCodePayload} />\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "Nota que el fallback no es un mensaje de error genérico. Si el código PIX existe pero la imagen no llegó, el QR se genera en el cliente a partir del payload; y el código de copiar y pegar siempre aparece, porque por sí solo ya permite concluir el pago en la app del banco. La pregunta que guía un fallback de checkout no es “cómo aviso que falló”, es “qué puede hacer todavía el usuario”."
+    },
+    {
+      "type": "paragraph",
+      "text": "La segunda capa es el contrato, en el servidor. Un cobro que el cliente no puede renderizar no es un cobro exitoso, y no debería salir de la API como 200:"
+    },
+    {
+      "type": "code",
+      "code": "// A charge the client cannot render is not a successful charge\nconst charge = await this.gateway.createCharge(order)\n\nif (!charge.qrCodePayload) {\n  this.logger.error(\n    { orderId: order.id, gatewayStatus: charge.status },\n    \"charge.incomplete\",\n  )\n  throw new ServiceUnavailableException(\"PIX_CHARGE_INCOMPLETE\")\n}\n\nreturn toChargeResponse(charge)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Juntas, las dos capas cambian la naturaleza del problema. El backend deja de propagar un estado imposible y pasa a generar un error visible — que la alerta sí atrapa. El frontend deja de depender de que el backend siempre esté en lo correcto. Ninguna alcanzaría sola: la validación en el servidor no protege contra otros campos que falten en el futuro, y la defensa en el cliente sin el contrato solo cambia un error ruidoso por una degradación silenciosa."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que deliberadamente no instrumentamos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El checkout es el flujo donde más ganas dan de capturar todo — y donde eso sale más caro. Las reglas que fijamos:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Ningún dato de pago en el evento.** Código PIX, montos e identificación del comprador quedan fuera. Se registra la presencia del campo, nunca su valor.",
+        "**Sin session replay en el checkout.** Grabar la pantalla donde el usuario maneja datos de pago es enviar información sensible a un tercero. La ganancia de debug no paga el riesgo.",
+        "**Sampling en las transacciones, no en los errores.** Los traces de performance se muestrean; una excepción en flujo de pago se captura siempre. Valen cosas distintas.",
+        "**El ruido tratado como bug.** Errores de extensiones del navegador, `ResizeObserver loop`, fallos de red de terceros que no afectan al usuario — todo filtrado. Un panel con 400 eventos diarios que nadie lee es indistinguible de no tener panel."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "El resultado",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Después de que ese camino dejó de romperse, el volumen transaccionado dejó de oscilar en torno a los R$ 20 mil — con una parte perdiéndose en los marketplaces de origen — y pasó a sostenerse entre R$ 60 mil y R$ 70 mil por mes, con la operación llegando al orden de los 2.000 pedidos mensuales."
+    },
+    {
+      "type": "paragraph",
+      "text": "No voy a decir que la observabilidad generó ese número: un producto crece por muchos motivos a la vez, y atribuirlo todo a una corrección sería deshonesto. Lo que sí se puede afirmar con seguridad es más específico y, en mi opinión, más inquietante — había una fuga en el punto exacto donde entra el dinero, duró lo que duró porque nada en el sistema era capaz de mostrarla, y el costo de descubrirla por el reporte de un cliente se pagó en ventas que nadie contabilizó jamás."
+    },
+    {
+      "type": "heading",
+      "text": "La brecha que sigue abierta",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que armamos resuelve “el cliente se rompió y sé lo suficiente para reproducirlo”. No resuelve “este error en el navegador corresponde a esta petición en el servidor”. Hoy cerraría eso con un correlation ID: el frontend genera un identificador por petición, lo envía en un header, el backend lo registra en cada línea de log de ese flujo, y el mismo identificador acompaña el contexto del error en el cliente."
+    },
+    {
+      "type": "paragraph",
+      "text": "Con eso, investigar deja de ser cruzar dos mundos por horario aproximado y pasa a ser una búsqueda por clave. Es la diferencia entre correlacionar y adivinar — y es el siguiente paso natural de cualquier instrumentación de frontend que ya capture contexto."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que me llevo de esto",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**El log del servidor mide tu sistema, no a tu usuario.** Ambos divergen justo en el lugar más caro: después de la respuesta.",
+        "**Un error de frontend no es un “error de pantalla”.** Cuando vive en el checkout, es pérdida de ingresos — y aparece en la facturación antes que en cualquier panel técnico.",
+        "**Todo dato externo es entrada no confiable, incluido el de tu propio backend.** Renderizar un campo de terceros sin validarlo es confiar en un contrato que no controlas.",
+        "**El error boundary es contención de radio.** Sin aislar el componente, un campo ausente derriba la pantalla entera en vez de degradar una parte.",
+        "**El contexto vale más que el volumen.** Un error con usuario, ruta, estado y forma del payload es accionable. Mil errores sin contexto son un panel que nadie abre."
+      ],
+      "ordered": false
+    }
+  ],
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "私が構築に関わったドロップシッピングの SaaS プラットフォームは、どのグラフにも現れない形で、数か月にわたって売上を失っていました。購入者はチェックアウトに到達し、バックエンドは PIX の請求を作成して 200 を返し、注文はデータベースに存在していました — それでも一部の購入者では、QR コードが表示される前に決済画面がただ消えていたのです。チームの誰にも見えていませんでした。ログはきれいなままでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "この記事は、その種のエラーが潜む隙間についてです：サーバーの最後のログ行と、ユーザーが実際に画面で体験したことのあいだの空白。フロントエンドのすべてはそこで起こります — そして既定では、そこが盲点になります。最終的な修正は安上がりでした。高くついたのは、見えていなかったことです。"
+    },
+    {
+      "type": "image",
+      "src": "/checkout-observability-blind-zone.svg",
+      "alt": "1 回のチェックアウトリクエスト：サーバーは 3 つの成功したステップを記録し、そこでログは終わる。境界の反対側では、クライアントが不完全なペイロードを受け取り、QR コードのコンポーネントが例外を投げ、決済画面が消える — そのどれもログには現れない",
+      "width": 900,
+      "height": 470
+    },
+    {
+      "type": "heading",
+      "text": "症状：ログには 200、ブラウザには白い画面",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "フローはどこにでもある PIX チェックアウトでした。購入者が注文を確定し、Next.js のフロントエンドが Node の API を呼び、API がゲートウェイに請求を依頼して PIX のデータを返す。画面は QR コードとコピー用のコードを描画する。サーバー側から見れば、この経路の成功率はほぼ完璧でした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "購入者側はそうではありませんでした。一部の請求で決済画面が消えたのです：QR コードもなく、コードもなく、エラーメッセージもない。その瞬間に唯一重要だったものの代わりに、空白の領域だけがありました。"
+    },
+    {
+      "type": "code",
+      "code": "[info] order.created      orderId=7f3a91 sellerId=442 total=189.90\n[info] charge.requested   orderId=7f3a91 gateway=pix\n[info] charge.created     orderId=7f3a91 status=pending\n[info] http               POST /orders 201 148ms",
+      "language": "text"
+    },
+    {
+      "type": "paragraph",
+      "text": "このログを読む限り、インシデントは存在しません。あるのは作成された注文、生成された請求、配信されたレスポンスだけです。HTTP ステータス、サーバーのエラー率、バックエンドの例外にもとづくアラートは、永遠に沈黙し続けます — バックエンドの視点では、何も失敗していないからです。"
+    },
+    {
+      "type": "heading",
+      "text": "どう気づいたか：顧客が教えてくれた",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "アラートではありませんでした。プラットフォームの出品者が、自分の購入者が支払えないと報告してきたのです。考えうる最悪の検知チャネルであり、その理由と向き合う価値があります。"
+    },
+    {
+      "type": "paragraph",
+      "text": "苦情を言う人は、自己選択された少数派です。チェックアウトを開き、白い画面を見て立ち去る購入者は、問い合わせを出しません — 諦めて、おそらく別の場所で買います。報告があなたに届くには、十分に動機のある人が、開かれた連絡経路を持ち、問題を説明する忍耐を持っている必要があります。届く苦情の 1 件ごとに、未知の — そしてより多くの — 静かな離脱が背後にあります。"
+    },
+    {
+      "type": "paragraph",
+      "text": "検知チャネルが「怒ったユーザー」であるとき、あなたが測っているのは障害ではありません。粘り強さです。"
+    },
+    {
+      "type": "heading",
+      "text": "なぜサーバーログでは決して捕まえられなかったのか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "短い答え：エラーは、私たちが観測していた最後の地点より後で生まれていました。問題が起きた時点で、リクエスト全体はすでに成功して終わっていたのです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**観測済み：** 注文が作成され永続化される — 201。",
+        "**観測済み：** 請求がゲートウェイに要求され、エラーなく返る — 200。",
+        "**観測済み：** レスポンスが API を出てブラウザに届く — 200。",
+        "**盲点：** クライアントがペイロードをデシリアライズし、画面の状態を組み立てる。",
+        "**盲点：** QR コードのコンポーネントが描画され — 例外を投げる。",
+        "**盲点：** コンポーネントツリーが崩れ、決済画面が消える。",
+        "**盲点：** 購入者は支払わず、タブを閉じ、ファネルから消える。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "このリストの半分はフロントエンドの領域であり、その 1 行もどこにも記録されていませんでした。バックエンドのオブザーバビリティは「自分のシステムは応答したか？」に答えます。フロントエンドのオブザーバビリティは「ユーザーは完了できたか？」に答えます。異なる問いであり、支払いを生むのは後者です。"
+    },
+    {
+      "type": "heading",
+      "text": "根本原因：不完全なペイロードを伴う 200",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "特定の条件下で、ゲートウェイは成功を返しながら PIX コードのフィールドを欠いていました — 請求は向こう側に存在し、ステータスも整合していて、ただフロントエンドが画面を描くために必要なデータだけが来なかったのです。API は転送するものを検証せずにそのまま渡していました。そしてコンポーネントはそれを信頼していました。"
+    },
+    {
+      "type": "code",
+      "code": "// Original version: assumes the payload always carries the PIX code\nexport function PixQrCode({ charge }: { charge: Charge }) {\n  return (\n    <div className=\"checkout-pix\">\n      <img\n        src={`data:image/png;base64,${charge.qrCodeBase64}`}\n        alt=\"PIX QR Code\"\n      />\n      <code>{charge.qrCodePayload.toUpperCase()}</code>\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "`charge.qrCodePayload` は `undefined` として届き、`.toUpperCase()` が TypeError を投げ、React は約束どおりのことをしました：そこから先のツリーを破棄したのです。チェックアウトを隔離する error boundary がなかったため、落ちたのは QR コードではなく — 決済画面そのものでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "これは「一部の購入者だけ」という点も説明します。それこそが、このバグを見つけにくくしている性質です。最初のテストで現れる決定的なエラーではありませんでした。変動するサードパーティのレスポンスが、オンデマンドでは誰も再現できない一部の請求に当たっていたのです。"
+    },
+    {
+      "type": "heading",
+      "text": "計装が明らかにしたこと",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Sentry が入ったのは報告のあと、前ではありません — そこがこの話の正直な部分です。個別の修正だけなら、出品者の報告だけでもできました。答えられなかったのは、その次に来る問いです：何人に起きている？いつから？このゲートウェイだけ？もう止まった？"
+    },
+    {
+      "type": "paragraph",
+      "text": "例外を捕捉するだけでは、そのどれにも答えられません。コンテキストのない TypeError は、圧縮されたファイル内のスタックトレース 1 行にすぎません。エラーを行動可能なものに変えるのは、それに付随する情報です："
+    },
+    {
+      "type": "code",
+      "code": "// The context that turns \"an error\" into \"an error you can reproduce\"\nSentry.setUser({ id: seller.id })            // who — no email, no name\nSentry.setTag(\"checkout.gateway\", \"pix\")\n\nSentry.setContext(\"charge\", {\n  orderId: charge.orderId,\n  status: charge.status,\n  hasQrPayload: Boolean(charge.qrCodePayload), // the shape, never the value\n  hasQrImage: Boolean(charge.qrCodeBase64),\n})\n\nSentry.addBreadcrumb({\n  category: \"checkout\",\n  message: \"charge.received\",\n  level: \"info\",\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "もっとも効いたのは、ペイロードの中身ではなく **形** を記録したことです：`hasQrPayload: Boolean(charge.qrCodePayload)`。決済フローでも安全で — 値を一切運びません — しかもイベントをグルーピングして分布を見るにはこれで十分です。そこで、変わったブラウザを使う 1 人の購入者の話ではないことが明確になりました：手作業では再現できなくても、統計の上では再現するパターンだったのです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "ビルドでの source map がこの輪を閉じます。それがないと、エラーはプロダクト上の正しい場所と、コード上の間違った場所に届きます。"
+    },
+    {
+      "type": "heading",
+      "text": "2 層に分けた修正",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "1 層目はクライアント側の防御です。フロントエンドはペイロードが完全に届くという前提をやめ、PIX コードの欠落を画面のありうる状態として扱うようにしました — 白い画面ではなく、代替経路とともに："
+    },
+    {
+      "type": "code",
+      "code": "export function PixQrCode({ charge }: { charge: Charge }) {\n  // No payload means no payment is possible: that is a screen state,\n  // not an exception\n  if (!charge.qrCodePayload) {\n    Sentry.captureMessage(\"checkout.pix.missing_payload\", {\n      level: \"error\",\n      extra: { orderId: charge.orderId, status: charge.status },\n    })\n    return <PixUnavailable orderId={charge.orderId} />\n  }\n\n  return (\n    <div className=\"checkout-pix\">\n      {charge.qrCodeBase64 ? (\n        <img\n          src={`data:image/png;base64,${charge.qrCodeBase64}`}\n          alt=\"PIX QR Code\"\n        />\n      ) : (\n        <QrCodeFromPayload value={charge.qrCodePayload} />\n      )}\n      <CopyablePixCode value={charge.qrCodePayload} />\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "フォールバックが汎用のエラーメッセージではないことに注目してください。PIX コードはあるが画像が来なかった場合、QR はペイロードからクライアント側で生成されます。そしてコピー用のコードは常に表示されます。それだけで銀行アプリでの支払いを完了できるからです。チェックアウトのフォールバックを導く問いは「失敗をどう伝えるか」ではなく「ユーザーはまだ何ができるか」です。"
+    },
+    {
+      "type": "paragraph",
+      "text": "2 層目はサーバー側の契約です。クライアントが描画できない請求は成功した請求ではなく、200 として API を出るべきではありません："
+    },
+    {
+      "type": "code",
+      "code": "// A charge the client cannot render is not a successful charge\nconst charge = await this.gateway.createCharge(order)\n\nif (!charge.qrCodePayload) {\n  this.logger.error(\n    { orderId: order.id, gatewayStatus: charge.status },\n    \"charge.incomplete\",\n  )\n  throw new ServiceUnavailableException(\"PIX_CHARGE_INCOMPLETE\")\n}\n\nreturn toChargeResponse(charge)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "この 2 層が揃うと、問題の性質そのものが変わります。バックエンドはありえない状態を伝播するのをやめ、可視のエラー — アラートが捕まえられるもの — を生み出すようになります。フロントエンドはバックエンドが常に正しいことに依存しなくなります。どちらか一方では不十分です：サーバー側の検証は将来欠けうる別のフィールドを守りませんし、契約のないクライアント側の防御は、うるさいエラーを静かな劣化に置き換えるだけです。"
+    },
+    {
+      "type": "heading",
+      "text": "意図的に計装しなかったもの",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "チェックアウトは、すべてを捕捉したくなる誘惑がもっとも強く — そしてその代償がもっとも大きいフローです。定めたルール："
+    },
+    {
+      "type": "list",
+      "items": [
+        "**イベントに決済データを入れない。** PIX コード、金額、購入者の識別情報は対象外。記録するのはフィールドの有無であり、値ではありません。",
+        "**チェックアウトでセッションリプレイを使わない。** ユーザーが決済データを扱う画面を録画することは、機微な情報を第三者に送ることです。デバッグ上の利得はリスクに見合いません。",
+        "**サンプリングはトランザクションに、エラーにはかけない。** パフォーマンスのトレースはサンプリングし、決済フローの例外は常に捕捉します。価値が異なるものだからです。",
+        "**ノイズはバグとして扱う。** ブラウザ拡張のエラー、`ResizeObserver loop`、ユーザーに影響しないサードパーティのネットワーク障害 — すべて除外します。誰も読まない 1 日 400 件のダッシュボードは、ダッシュボードがないのと区別がつきません。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "結果",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "この経路が壊れなくなったあと、取引額は R$ 2 万前後で揺れる状態 — その一部は流入元のマーケットプレイスで失われていました — から、月あたり R$ 6 万〜7 万で安定するようになり、オペレーションは月およそ 2,000 件の注文規模に到達しました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "オブザーバビリティがこの数字を生んだ、とは言いません：プロダクトは同時に多くの理由で成長しますし、すべてを 1 つの修正に帰するのは不誠実です。安全に言えることはもっと具体的で、私の見方ではもっと不気味です — お金が入ってくるまさにその地点に漏れがあり、システムのどこにもそれを示せるものがなかったために続き、顧客の報告で気づくまでの代償は、誰も数えなかった売上で支払われた、ということです。"
+    },
+    {
+      "type": "heading",
+      "text": "まだ開いたままのギャップ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "私たちが作ったものは「クライアントが壊れ、再現するのに十分な情報がある」に答えます。「このブラウザのエラーはこのサーバーのリクエストに対応する」には答えません。今なら correlation ID で閉じます：フロントエンドがリクエストごとに識別子を生成してヘッダーで送り、バックエンドがそのフローのすべてのログ行に書き込み、同じ識別子がクライアント側のエラーコンテキストにも同行します。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そうすれば、調査はおおよその時刻で 2 つの世界を突き合わせる作業ではなく、キーによる検索になります。相関させることと当てずっぽうの違いであり、すでにコンテキストを収集しているフロントエンド計装にとって自然な次の一歩です。"
+    },
+    {
+      "type": "heading",
+      "text": "ここから得たもの",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**サーバーログが測るのはシステムであって、ユーザーではない。** 両者はもっとも高くつく地点、つまりレスポンスの後で分岐します。",
+        "**フロントエンドのエラーは「画面のエラー」ではない。** それがチェックアウトに住み着くとき、それは失われた売上であり、技術ダッシュボードより先に売上として現れます。",
+        "**外部データはすべて信頼できない入力であり、自社バックエンドのデータも含まれる。** サードパーティのフィールドを検証せず描画するのは、自分が制御しない契約を信じることです。",
+        "**error boundary は被害範囲の封じ込め。** コンポーネントを隔離しなければ、欠けた 1 フィールドが画面の一部を劣化させるのではなく、画面全体を落とします。",
+        "**コンテキストは量に勝る。** ユーザー、ルート、状態、ペイロードの形を伴うエラー 1 件は行動可能です。コンテキストのないエラー 1,000 件は、誰も開かないダッシュボードです。"
+      ],
+      "ordered": false
+    }
+  ],
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Pendant des mois, une plateforme SaaS de dropshipping que j'ai aidé à construire a perdu des ventes d'une manière qu'aucun graphique ne montrait. L'acheteur arrivait au checkout, le backend créait le paiement PIX et répondait 200, la commande existait en base — et pour une partie des acheteurs, l'écran de paiement disparaissait tout simplement avant que le QR Code n'apparaisse. Personne dans l'équipe ne voyait rien. Le log était propre."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce post parle de l'espace où vit ce genre d'erreur : l'intervalle entre la dernière ligne de log du serveur et ce que l'utilisateur a réellement vécu à l'écran. C'est là que tout le frontend se passe — et là que, par défaut, vous êtes aveugle. Le correctif final a été bon marché. C'est l'aveuglement qui a coûté cher."
+    },
+    {
+      "type": "image",
+      "src": "/checkout-observability-blind-zone.svg",
+      "alt": "Une requête de checkout : le serveur enregistre trois étapes réussies et le log s'arrête là ; de l'autre côté de la frontière, le client reçoit un payload incomplet, le composant du QR Code lève une exception et l'écran de paiement disparaît — rien de tout cela n'apparaît dans le log",
+      "width": 900,
+      "height": 470
+    },
+    {
+      "type": "heading",
+      "text": "Le symptôme : 200 dans le log, écran blanc dans le navigateur",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le flux était celui de n'importe quel checkout PIX. L'acheteur validait la commande, le frontend en Next.js appelait l'API en Node, l'API demandait le paiement au gateway et renvoyait les données PIX. L'écran affichait le QR Code et le code à copier-coller. Côté serveur, ce chemin avait un taux de succès pratiquement parfait."
+    },
+    {
+      "type": "paragraph",
+      "text": "Côté acheteur, non. Sur une fraction des paiements, l'écran disparaissait : ni QR Code, ni code, ni message d'erreur. Une zone blanche à la place de la seule chose qui comptait à ce moment-là."
+    },
+    {
+      "type": "code",
+      "code": "[info] order.created      orderId=7f3a91 sellerId=442 total=189.90\n[info] charge.requested   orderId=7f3a91 gateway=pix\n[info] charge.created     orderId=7f3a91 status=pending\n[info] http               POST /orders 201 148ms",
+      "language": "text"
+    },
+    {
+      "type": "paragraph",
+      "text": "À la lecture de ce log, il n'y a pas d'incident. Il y a une commande créée, un paiement généré et une réponse livrée. Toute alerte fondée sur le statut HTTP, le taux d'erreur serveur ou une exception backend resterait silencieuse pour toujours — car du point de vue du backend, rien n'a échoué."
+    },
+    {
+      "type": "heading",
+      "text": "Comment nous l'avons découvert : un client nous l'a signalé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce n'était pas une alerte. C'était un vendeur de la plateforme signalant qu'un de ses acheteurs n'arrivait pas à payer. C'est le pire canal de détection possible, et il vaut la peine de regarder pourquoi."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ceux qui se plaignent sont une minorité auto-sélectionnée. Un acheteur qui ouvre le checkout, voit un écran blanc et s'en va n'ouvre pas de ticket — il abandonne, et achète peut-être ailleurs. Pour que le signalement vous parvienne, il faut quelqu'un d'assez motivé, avec un canal ouvert et la patience de décrire le problème. Chaque plainte qui arrive représente un nombre inconnu — et plus grand — d'abandons silencieux."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quand votre canal de détection est l'utilisateur agacé, vous ne mesurez pas des défaillances. Vous mesurez de la persévérance."
+    },
+    {
+      "type": "heading",
+      "text": "Pourquoi les logs serveur n'allaient jamais attraper ça",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La réponse courte : l'erreur naissait après le dernier point que nous observions. La requête entière s'était déjà terminée avec succès au moment où le problème survenait."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Observé :** la commande est créée et persistée — 201.",
+        "**Observé :** le paiement est demandé au gateway et revient sans erreur — 200.",
+        "**Observé :** la réponse quitte l'API et est livrée au navigateur — 200.",
+        "**Aveugle :** le client désérialise le payload et construit l'état de l'écran.",
+        "**Aveugle :** le composant du QR Code s'affiche — et lève une exception.",
+        "**Aveugle :** l'arbre de composants s'effondre et l'écran de paiement disparaît.",
+        "**Aveugle :** l'acheteur ne paie pas, ferme l'onglet et disparaît de votre entonnoir."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "La moitié de cette liste est du territoire frontend, et pas une seule ligne n'existait nulle part. L'observabilité backend répond à « mon système a-t-il répondu ? ». L'observabilité frontend répond à « l'utilisateur a-t-il réussi ? ». Ce sont deux questions différentes, et c'est la seconde qui paie les factures."
+    },
+    {
+      "type": "heading",
+      "text": "La cause racine : un 200 avec un payload incomplet",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans certaines conditions, le gateway répondait avec succès mais sans le champ du code PIX — le paiement existait de son côté, le statut revenait cohérent, seule la donnée dont le frontend avait besoin pour dessiner l'écran manquait. L'API transmettait la réponse sans valider ce qu'elle transmettait. Et le composant faisait confiance."
+    },
+    {
+      "type": "code",
+      "code": "// Original version: assumes the payload always carries the PIX code\nexport function PixQrCode({ charge }: { charge: Charge }) {\n  return (\n    <div className=\"checkout-pix\">\n      <img\n        src={`data:image/png;base64,${charge.qrCodeBase64}`}\n        alt=\"PIX QR Code\"\n      />\n      <code>{charge.qrCodePayload.toUpperCase()}</code>\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "`charge.qrCodePayload` arrivait à `undefined`, `.toUpperCase()` levait un TypeError, et React faisait exactement ce qu'il promet : il démontait l'arbre à partir de là. Sans error boundary isolant le checkout, ce qui tombait n'était pas le QR Code — c'était tout l'écran de paiement."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cela explique aussi le « seulement pour certains acheteurs », qui est la propriété rendant ce bug si difficile à voir. Ce n'était pas une erreur déterministe qui apparaîtrait au premier test. C'était une réponse tierce variable, touchant un sous-ensemble de paiements que personne ne pouvait reproduire à la demande."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que l'instrumentation a révélé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Sentry est arrivé après le signalement, pas avant — et c'est la part honnête de l'histoire. Le correctif ponctuel, nous pouvions le faire avec le seul signalement du vendeur. Ce que nous ne pouvions pas faire, c'était répondre aux questions suivantes : combien d'acheteurs sont touchés ? depuis quand ? seulement sur ce gateway ? est-ce que ça s'est arrêté ?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Capturer l'exception seule ne répond à rien de tout cela. Un TypeError sans contexte, c'est une ligne de stack trace dans un fichier minifié. Ce qui transforme une erreur en quelque chose d'actionnable, c'est ce qui l'accompagne :"
+    },
+    {
+      "type": "code",
+      "code": "// The context that turns \"an error\" into \"an error you can reproduce\"\nSentry.setUser({ id: seller.id })            // who — no email, no name\nSentry.setTag(\"checkout.gateway\", \"pix\")\n\nSentry.setContext(\"charge\", {\n  orderId: charge.orderId,\n  status: charge.status,\n  hasQrPayload: Boolean(charge.qrCodePayload), // the shape, never the value\n  hasQrImage: Boolean(charge.qrCodeBase64),\n})\n\nSentry.addBreadcrumb({\n  category: \"checkout\",\n  message: \"charge.received\",\n  level: \"info\",\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le détail le plus rentable a été d'enregistrer la **forme** du payload, et non son contenu : `hasQrPayload: Boolean(charge.qrCodePayload)`. C'est sûr pour un flux de paiement — cela ne transporte aucune valeur — et c'est exactement ce qui permet de regrouper les événements et de voir la distribution. C'est là qu'il est devenu clair qu'il ne s'agissait pas d'un acheteur au navigateur exotique : c'était un motif, reproductible statistiquement même s'il ne l'était pas à la main."
+    },
+    {
+      "type": "paragraph",
+      "text": "Les source maps au build referment la boucle. Sans elles, vous recevez l'erreur au bon endroit du produit et au mauvais endroit du code."
+    },
+    {
+      "type": "heading",
+      "text": "Le correctif, en deux couches",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La première couche est défensive, côté client. Le frontend a cessé de supposer que le payload arrive complet et s'est mis à traiter l'absence du code PIX comme un état possible de l'écran — avec un chemin alternatif, pas un écran blanc :"
+    },
+    {
+      "type": "code",
+      "code": "export function PixQrCode({ charge }: { charge: Charge }) {\n  // No payload means no payment is possible: that is a screen state,\n  // not an exception\n  if (!charge.qrCodePayload) {\n    Sentry.captureMessage(\"checkout.pix.missing_payload\", {\n      level: \"error\",\n      extra: { orderId: charge.orderId, status: charge.status },\n    })\n    return <PixUnavailable orderId={charge.orderId} />\n  }\n\n  return (\n    <div className=\"checkout-pix\">\n      {charge.qrCodeBase64 ? (\n        <img\n          src={`data:image/png;base64,${charge.qrCodeBase64}`}\n          alt=\"PIX QR Code\"\n        />\n      ) : (\n        <QrCodeFromPayload value={charge.qrCodePayload} />\n      )}\n      <CopyablePixCode value={charge.qrCodePayload} />\n    </div>\n  )\n}",
+      "language": "tsx"
+    },
+    {
+      "type": "paragraph",
+      "text": "Notez que le fallback n'est pas un message d'erreur générique. Si le code PIX existe mais que l'image n'est pas arrivée, le QR est généré côté client à partir du payload ; et le code à copier-coller s'affiche toujours, car à lui seul il permet de finaliser le paiement dans l'application bancaire. La question qui guide un fallback de checkout n'est pas « comment annoncer l'échec », c'est « que peut encore faire l'utilisateur »."
+    },
+    {
+      "type": "paragraph",
+      "text": "La seconde couche est le contrat, côté serveur. Un paiement que le client ne peut pas afficher n'est pas un paiement réussi, et il ne devrait pas sortir de l'API en 200 :"
+    },
+    {
+      "type": "code",
+      "code": "// A charge the client cannot render is not a successful charge\nconst charge = await this.gateway.createCharge(order)\n\nif (!charge.qrCodePayload) {\n  this.logger.error(\n    { orderId: order.id, gatewayStatus: charge.status },\n    \"charge.incomplete\",\n  )\n  throw new ServiceUnavailableException(\"PIX_CHARGE_INCOMPLETE\")\n}\n\nreturn toChargeResponse(charge)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ensemble, les deux couches changent la nature du problème. Le backend cesse de propager un état impossible et se met à produire une erreur visible — que l'alerting attrape. Le frontend cesse de dépendre du fait que le backend a toujours raison. Aucune des deux ne suffirait seule : la validation serveur ne protège pas contre d'autres champs manquants à l'avenir, et la défense côté client sans le contrat ne fait qu'échanger une erreur bruyante contre une dégradation silencieuse."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que nous n'avons délibérément pas instrumenté",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le checkout est le flux où l'envie de tout capturer est la plus forte — et où elle coûte le plus cher. Les règles que nous avons fixées :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Aucune donnée de paiement dans l'événement.** Code PIX, montants et identité de l'acheteur restent dehors. On enregistre la présence du champ, jamais sa valeur.",
+        "**Pas de session replay dans le checkout.** Enregistrer l'écran où l'utilisateur manipule des données de paiement revient à envoyer de l'information sensible à un tiers. Le gain de debug ne paie pas le risque.",
+        "**Sampling sur les transactions, pas sur les erreurs.** Les traces de performance sont échantillonnées ; une exception dans un flux de paiement est toujours capturée. Elles n'ont pas la même valeur.",
+        "**Le bruit traité comme un bug.** Erreurs d'extensions de navigateur, `ResizeObserver loop`, pannes réseau tierces sans impact utilisateur — tout est filtré. Un tableau de bord avec 400 événements par jour que personne ne lit est indiscernable de l'absence de tableau de bord."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Le résultat",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une fois que ce chemin a cessé de casser, le volume transactionné est passé d'oscillations autour de 20 000 R$ — dont une partie se perdait sur les marketplaces d'origine — à une tenue entre 60 000 et 70 000 R$ par mois, l'opération atteignant l'ordre de 2 000 commandes mensuelles."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je ne dirai pas que l'observabilité a produit ce chiffre : un produit croît pour de nombreuses raisons à la fois, et tout attribuer à un correctif serait malhonnête. Ce que l'on peut affirmer sans risque est plus précis et, à mon avis, plus inquiétant — il y avait une fuite exactement au point où l'argent entre, elle a duré aussi longtemps parce que rien dans le système n'était capable de la montrer, et le coût de la découvrir via le signalement d'un client a été payé en ventes que personne n'a jamais comptées."
+    },
+    {
+      "type": "heading",
+      "text": "L'écart qui reste ouvert",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce que nous avons construit répond à « le client a cassé et j'en sais assez pour reproduire ». Cela ne répond pas à « cette erreur navigateur correspond à cette requête serveur ». Aujourd'hui je fermerais ça avec un correlation ID : le frontend génère un identifiant par requête, l'envoie dans un header, le backend l'écrit sur chaque ligne de log de ce flux, et le même identifiant accompagne le contexte de l'erreur côté client."
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec ça, enquêter cesse d'être un rapprochement de deux mondes à l'horodatage approximatif pour devenir une recherche par clé. C'est la différence entre corréler et deviner — et c'est l'étape suivante naturelle de toute instrumentation frontend qui capture déjà du contexte."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que j'en retiens",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Les logs serveur mesurent votre système, pas votre utilisateur.** Les deux divergent exactement à l'endroit le plus coûteux : après la réponse.",
+        "**Une erreur frontend n'est pas une « erreur d'écran ».** Quand elle vit dans le checkout, c'est du chiffre d'affaires perdu — et cela apparaît dans les ventes avant d'apparaître sur le moindre tableau de bord technique.",
+        "**Toute donnée externe est une entrée non fiable, y compris celle de votre propre backend.** Afficher un champ tiers sans le valider, c'est faire confiance à un contrat que vous ne contrôlez pas.",
+        "**Une error boundary est un confinement de rayon d'impact.** Sans isoler le composant, un champ manquant fait tomber l'écran entier au lieu d'en dégrader une partie.",
+        "**Le contexte vaut mieux que le volume.** Une erreur avec utilisateur, route, état et forme du payload est actionnable. Mille erreurs sans contexte forment un tableau de bord que personne n'ouvre."
+      ],
+      "ordered": false
+    }
+  ]
+}

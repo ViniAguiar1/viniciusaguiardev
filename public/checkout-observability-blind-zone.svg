@@ -1,0 +1,71 @@
+<svg width="900" height="470" viewBox="0 0 900 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One checkout request: the server logs three successful steps, then a blind zone where the client parses the response, the QR Code component throws and the payment screen disappears — none of it visible in server logs">
+
+<style>
+.panel { fill: #f8fafc; stroke: #1f2937; stroke-width: 2; }
+.panelBlind { fill: #fef2f2; stroke: #b91c1c; stroke-width: 2; }
+.kicker { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 2px; fill: #6b7280; }
+.kickerBlind { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 2px; fill: #b91c1c; }
+.step { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; fill: #111827; }
+.stepBlind { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; fill: #7f1d1d; }
+.status { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #047857; text-anchor: end; }
+.statusBlind { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #b91c1c; text-anchor: end; }
+.sub { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: #6b7280; }
+.subBlind { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; fill: #b91c1c; }
+.boundaryLabel { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 600; fill: #6b7280; text-anchor: middle; }
+.caption { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; fill: #111827; }
+.captionAccent { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #b91c1c; }
+.rowOk { fill: #ffffff; stroke: #047857; stroke-width: 1.5; }
+.rowBlind { fill: #ffffff; stroke: #b91c1c; stroke-width: 1.5; }
+</style>
+
+<text class="kicker" x="40" y="34">ONE CHECKOUT REQUEST</text>
+
+<!-- OBSERVED panel -->
+<rect class="panel" x="40" y="50" width="390" height="300" rx="14"/>
+<text class="kicker" x="60" y="82">OBSERVED — SERVER LOGS</text>
+
+<rect class="rowOk" x="60" y="98" width="350" height="46" rx="8"/>
+<text class="step" x="76" y="121">POST /orders</text>
+<text class="status" x="394" y="126">201</text>
+
+<rect class="rowOk" x="60" y="156" width="350" height="46" rx="8"/>
+<text class="step" x="76" y="179">POST /charges → gateway</text>
+<text class="status" x="394" y="184">200</text>
+
+<rect class="rowOk" x="60" y="214" width="350" height="46" rx="8"/>
+<text class="step" x="76" y="237">response sent to client</text>
+<text class="status" x="394" y="242">200</text>
+
+<text class="sub" x="60" y="292">Every checkpoint succeeded.</text>
+<text class="sub" x="60" y="312">The last line of the log is a success.</text>
+
+<!-- boundary -->
+<line x1="465" y1="50" x2="465" y2="350" stroke="#9ca3af" stroke-width="2" stroke-dasharray="6 6"/>
+<text class="boundaryLabel" x="465" y="372">where the</text>
+<text class="boundaryLabel" x="465" y="388">server log</text>
+<text class="boundaryLabel" x="465" y="404">ends</text>
+
+<!-- BLIND panel -->
+<rect class="panelBlind" x="500" y="50" width="360" height="300" rx="14"/>
+<text class="kickerBlind" x="520" y="82">BLIND ZONE — THE BROWSER</text>
+
+<rect class="rowBlind" x="520" y="98" width="320" height="46" rx="8"/>
+<text class="stepBlind" x="536" y="121">client parses payload</text>
+<text class="statusBlind" x="824" y="126">field missing</text>
+
+<rect class="rowBlind" x="520" y="156" width="320" height="46" rx="8"/>
+<text class="stepBlind" x="536" y="179">&lt;PixQrCode /&gt; renders</text>
+<text class="statusBlind" x="824" y="184">throws</text>
+
+<rect class="rowBlind" x="520" y="214" width="320" height="46" rx="8"/>
+<text class="stepBlind" x="536" y="237">payment screen unmounts</text>
+<text class="statusBlind" x="824" y="242">blank</text>
+
+<text class="subBlind" x="520" y="292">No log line. No alert. No error rate.</text>
+<text class="subBlind" x="520" y="312">The customer simply cannot pay.</text>
+
+<!-- caption strip -->
+<text class="caption" x="40" y="440">Server-side success rate: 100%.</text>
+<text class="captionAccent" x="290" y="440">Customers who could actually pay: not all of them.</text>
+
+</svg>

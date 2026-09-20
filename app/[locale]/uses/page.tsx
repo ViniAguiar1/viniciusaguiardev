@@ -456,10 +456,10 @@ export default async function UsesPage() {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-12">
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+        <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
           {t(locale, { pt: "Ferramentas. Apps. Setup.", en: "Tools. Apps. Setup.", es: "Herramientas. Apps. Setup.", jp: "ツール。アプリ。セットアップ。", fr: "Outils. Apps. Setup." })}
         </h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl">
+        <p className="text-mu mt-2 max-w-2xl">
           {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como Senior Product Engineer.", en: "This is not a static page — it's a living document with everything I currently use as a Senior Product Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como Senior Product Engineer.", jp: "これは静的なページではなく、シニアプロダクトエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。", fr: "Ceci n'est pas une page statique — c'est un document vivant avec tout ce que j'utilise actuellement en tant que Senior Product Engineer." })}
         </p>
       </header>
@@ -477,7 +477,7 @@ export default async function UsesPage() {
             <div className="space-y-4">
               {cat.items.map((item) => (
                 <div key={item.name} className="flex items-start gap-3">
-                  <span className="text-muted-foreground mt-0.5 select-none">-</span>
+                  <span className="text-mu mt-0.5 select-none">-</span>
                   <div>
                     {item.url ? (
                       <Link
@@ -491,7 +491,7 @@ export default async function UsesPage() {
                     ) : (
                       <span className="text-sm font-medium">{item.name}</span>
                     )}
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-mu">
                       {" — "}
                       {item.desc[locale] ?? item.desc.pt}
                     </span>
@@ -500,7 +500,7 @@ export default async function UsesPage() {
               ))}
               {cat.title.en === "Editor & Coding" && (
                 <div className="flex items-start gap-3">
-                  <span className="text-muted-foreground mt-0.5 select-none">-</span>
+                  <span className="text-mu mt-0.5 select-none">-</span>
                   <EditorConfigSheet
                     label={t(locale, { pt: "Ver meu settings.json", en: "View my settings.json", es: "Ver mi settings.json", jp: "settings.jsonを見る", fr: "Voir mon settings.json" })}
                     description={t(locale, { pt: "Configurações do VS Code que uso no dia a dia.", en: "VS Code settings I use daily.", es: "Configuraciones de VS Code que uso día a día.", jp: "日常的に使用しているVS Codeの設定。", fr: "Configurations de VS Code que j'utilise au quotidien." })}

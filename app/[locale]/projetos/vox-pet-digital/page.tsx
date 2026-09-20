@@ -269,7 +269,7 @@ export default async function VoxPetPage() {
         {/* Back link */}
         <Link
           href={localePath(locale, "/projetos")}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-mu hover:text-fg transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -298,12 +298,12 @@ export default async function VoxPetPage() {
                   className="object-contain w-full h-full"
                 />
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
             </div>
 
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-lg text-mu max-w-2xl">
               {c.subtitle}
             </p>
           </header>
@@ -315,7 +315,7 @@ export default async function VoxPetPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.purposeTitle}
             </h2>
-            <div className="space-y-4 text-foreground/85 leading-relaxed">
+            <div className="space-y-4 text-fg/85 leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -333,7 +333,7 @@ export default async function VoxPetPage() {
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="border border-border bg-card p-5"
+                  className="border border-line bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -343,7 +343,7 @@ export default async function VoxPetPage() {
                       <h3 className="text-sm font-semibold mb-1">
                         {challenge.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-mu leading-relaxed">
                         {challenge.desc}
                       </p>
                     </div>
@@ -394,7 +394,7 @@ export default async function VoxPetPage() {
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-line bg-card"
                 >
                   {tech}
                 </span>
@@ -416,7 +416,7 @@ export default async function VoxPetPage() {
               href="https://voxpetdigital.com.br/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium border border-line hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

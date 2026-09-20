@@ -344,7 +344,7 @@ export default async function IKroppPage() {
         {/* Back link */}
         <Link
           href={localePath(locale, "/projetos")}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-mu hover:text-fg transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -360,7 +360,7 @@ export default async function IKroppPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="flex-shrink-0 w-14 h-14 border border-line bg-surface flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/ikropp.png"
                   alt="iKropp"
@@ -369,12 +369,12 @@ export default async function IKroppPage() {
                   className="object-contain"
                 />
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
             </div>
 
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-lg text-mu max-w-2xl">
               {c.subtitle}
             </p>
           </header>
@@ -386,7 +386,7 @@ export default async function IKroppPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-4">
               {c.purposeTitle}
             </h2>
-            <div className="space-y-4 text-foreground/85 leading-relaxed">
+            <div className="space-y-4 text-fg/85 leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -400,11 +400,11 @@ export default async function IKroppPage() {
             <h2 className="text-2xl font-semibold tracking-tight mb-2">
               {c.roleTitle}
             </h2>
-            <p className="text-sm text-muted-foreground mb-4">{c.roleText}</p>
+            <p className="text-sm text-mu mb-4">{c.roleText}</p>
             <ul className="space-y-2">
               {c.roleItems.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
-                  <span className="text-muted-foreground mt-0.5 flex-shrink-0">-</span>
+                <li key={i} className="flex items-start gap-2 text-sm text-fg/85">
+                  <span className="text-mu mt-0.5 flex-shrink-0">-</span>
                   {item}
                 </li>
               ))}
@@ -422,7 +422,7 @@ export default async function IKroppPage() {
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="border border-border bg-card p-5"
+                  className="border border-line bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -432,7 +432,7 @@ export default async function IKroppPage() {
                       <h3 className="text-sm font-semibold mb-1">
                         {challenge.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-mu leading-relaxed">
                         {challenge.desc}
                       </p>
                     </div>
@@ -450,10 +450,10 @@ export default async function IKroppPage() {
               {c.stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="border border-border bg-card p-4 text-center"
+                  className="border border-line bg-card p-4 text-center"
                 >
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
+                  <div className="text-xs text-mu mt-1">
                     {stat.label}
                   </div>
                 </div>
@@ -497,7 +497,7 @@ export default async function IKroppPage() {
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-line bg-card"
                 >
                   {tech}
                 </span>

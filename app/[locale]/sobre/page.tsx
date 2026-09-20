@@ -27,7 +27,7 @@ export default async function SobrePage() {
             {t(locale, { pt: "Sobre", en: "About", es: "Acerca", jp: "プロフィール", fr: "À propos" })}
           </SectionEyebrow>
           <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">{dict.about.title}</h1>
-        <p className="text-muted-foreground mt-2">{dict.about.subtitle}</p>
+        <p className="text-mu mt-2">{dict.about.subtitle}</p>
       </header>
 
       {/* Bio sem caixa: envolver prosa numa borda nao acrescenta nada, e as

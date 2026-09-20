@@ -16,7 +16,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-2 text-xs text-mu">
         <span>{t(locale, period)}</span>
         {current ? (
           <span className={cn(MONO_CHIP, "border-field text-fg")}>
@@ -31,13 +31,13 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 
       <div className="flex flex-wrap gap-1.5">
         {stack.map((tech) => (
-          <span key={tech} className="border border-border bg-muted/40 px-2 py-0.5 text-xs">
+          <span key={tech} className="border border-line bg-surface px-2 py-0.5 text-xs">
             {tech}
           </span>
         ))}
       </div>
 
-      <p className="text-sm text-muted-foreground">{t(locale, summary)}</p>
+      <p className="text-sm text-mu">{t(locale, summary)}</p>
 
       {highlight ? (
         <p className="text-xs font-mono text-fg">{t(locale, highlight)}</p>
@@ -54,7 +54,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="text-sm text-primary hover:underline"
+        className="text-sm text-fg underline decoration-mu underline-offset-4 hover:decoration-fg"
       >
         {open
           ? t(locale, { pt: "Ler menos", en: "Read less", es: "Leer menos", jp: "閉じる", fr: "Lire moins" })

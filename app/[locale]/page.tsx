@@ -56,7 +56,7 @@ export default async function Home() {
             </h2>
             <Link
               href={localePath(locale, "/engenharia")}
-              className="text-sm text-muted-foreground hover:text-foreground transition inline-flex items-center gap-1"
+              className="text-sm text-mu hover:text-fg transition inline-flex items-center gap-1"
             >
               {t(locale, { pt: "Ver tudo", en: "See all", es: "Ver todo", jp: "すべて見る", fr: "Voir tout" })}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -89,13 +89,13 @@ export default async function Home() {
               <Link
                 key={topic.title}
                 href={localePath(locale, `/engenharia?topic=${topic.topicId}`)}
-                className="group border border-border bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
+                className="group border border-line bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
-                <svg className="w-5 h-5 text-muted-foreground mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <svg className="w-5 h-5 text-mu mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d={topic.icon} />
                 </svg>
                 <h3 className="text-sm font-semibold mb-1">{topic.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{topic.desc}</p>
+                <p className="text-xs text-mu leading-relaxed">{topic.desc}</p>
               </Link>
             ))}
           </div>

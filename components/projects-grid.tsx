@@ -123,7 +123,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
           <Dialog.Content
             className={cn(
               "fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-              "w-[calc(100%-2rem)] max-w-lg border border-border bg-card p-6 shadow-xl",
+              "w-[calc(100%-2rem)] max-w-lg border border-line bg-card p-6 shadow-xl",
               "data-[state=open]:animate-in data-[state=closed]:animate-out",
               "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
               "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
@@ -158,14 +158,14 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                         {selected.category}
                       </span>
                     </div>
-                    <Dialog.Description className="text-sm text-muted-foreground mt-0.5">
+                    <Dialog.Description className="text-sm text-mu mt-0.5">
                       {selected.tagline[locale] ?? selected.tagline.pt}
                     </Dialog.Description>
                   </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-sm leading-relaxed text-foreground/80">
+                <p className="text-sm leading-relaxed text-fg/80">
                   {selected.description[locale] ?? selected.description.pt}
                 </p>
 
@@ -200,7 +200,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       className={cn(
                         "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition",
                         selected.detailPage
-                          ? "border border-border hover:bg-muted"
+                          ? "border border-line hover:bg-muted"
                           : "bg-primary text-primary-foreground hover:opacity-90"
                       )}
                     >

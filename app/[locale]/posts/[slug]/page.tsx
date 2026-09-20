@@ -153,7 +153,7 @@ export default async function PostPage({ params }: PageProps) {
             }
           })
         ) : (
-          <p className="text-muted-foreground">Em breve conteúdo deste post.</p>
+          <p className="text-mu">Em breve conteúdo deste post.</p>
         )}
       </article>
     </div>

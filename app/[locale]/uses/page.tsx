@@ -7,7 +7,7 @@ export async function generateMetadata() {
   const locale = await getLocale()
   return {
     title: t(locale, { pt: "Ferramentas", en: "Uses", es: "Herramientas", jp: "ツール", fr: "Outils" }),
-    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como Frontend Engineer.", en: "Tools, apps and setup I use daily as a Frontend Engineer.", es: "Herramientas, apps y setup que uso día a día como Frontend Engineer.", jp: "フロントエンドエンジニアとして日常的に使用するツール、アプリ、セットアップ。", fr: "Outils, apps et setup que j'utilise au quotidien en tant que Frontend Engineer." }),
+    description: t(locale, { pt: "Ferramentas, apps e setup que uso no dia a dia como Senior Product Engineer.", en: "Tools, apps and setup I use daily as a Senior Product Engineer.", es: "Herramientas, apps y setup que uso día a día como Senior Product Engineer.", jp: "シニアプロダクトエンジニアとして日常的に使用するツール、アプリ、セットアップ。", fr: "Outils, apps et setup que j'utilise au quotidien en tant que Senior Product Engineer." }),
     alternates: buildAlternates("/uses", locale),
   }
 }
@@ -460,7 +460,7 @@ export default async function UsesPage() {
           {t(locale, { pt: "Ferramentas. Apps. Setup.", en: "Tools. Apps. Setup.", es: "Herramientas. Apps. Setup.", jp: "ツール。アプリ。セットアップ。", fr: "Outils. Apps. Setup." })}
         </h1>
         <p className="text-muted-foreground mt-2 max-w-2xl">
-          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como Frontend Engineer.", en: "This is not a static page — it's a living document with everything I currently use as a Frontend Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como Frontend Engineer.", jp: "これは静的なページではなく、フロントエンドエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。", fr: "Ceci n'est pas une page statique — c'est un document vivant avec tout ce que j'utilise actuellement en tant que Frontend Engineer." })}
+          {t(locale, { pt: "Esta não é uma página estática — é um documento vivo com tudo que uso atualmente como Senior Product Engineer.", en: "This is not a static page — it's a living document with everything I currently use as a Senior Product Engineer.", es: "Esta no es una página estática — es un documento vivo con todo lo que uso actualmente como Senior Product Engineer.", jp: "これは静的なページではなく、シニアプロダクトエンジニアとして現在使用しているもの全てをまとめた生きたドキュメントです。", fr: "Ceci n'est pas une page statique — c'est un document vivant avec tout ce que j'utilise actuellement en tant que Senior Product Engineer." })}
         </p>
       </header>
 

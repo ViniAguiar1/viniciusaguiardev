@@ -57,14 +57,6 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-
-  /* Cantos retos. As quatro escalas seguem declaradas porque rounded-md e
-     rounded-lg ainda aparecem em components/ui/ até a Task 4; a Task 4 as
-     remove junto com os últimos usos. */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
 }
 
 :root,
@@ -81,7 +73,6 @@
 
   /* Compat shadcn. Como todos derivam dos 7 acima, o tema claro só precisa
      redeclarar os 7 — estes seguem sozinhos. */
-  --radius: 0;
   --background: var(--color-canvas);
   --foreground: var(--color-fg);
   --card: var(--color-card);

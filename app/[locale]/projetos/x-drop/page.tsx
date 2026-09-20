@@ -265,7 +265,7 @@ export default async function XDropPage() {
         {/* Header */}
         <FadeIn>
           <header className="mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fg opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-fg" />
@@ -274,7 +274,7 @@ export default async function XDropPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/x-droplogo.png"
                   alt="X-Drop"
@@ -318,7 +318,7 @@ export default async function XDropPage() {
               {c.howItems.map((item, i) => (
                 <div
                   key={i}
-                  className="flex gap-3 p-4 rounded-lg border border-border bg-card"
+                  className="flex gap-3 p-4 border border-border bg-card"
                 >
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center">
                     {i + 1}
@@ -347,7 +347,7 @@ export default async function XDropPage() {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-border bg-card p-4 text-center"
+                  className="border border-border bg-card p-4 text-center"
                 >
                   <div className="text-2xl font-bold">{stat.value}</div>
                   <div className="text-xs text-muted-foreground mt-1">
@@ -382,7 +382,7 @@ export default async function XDropPage() {
             </div>
 
             {/* Mobile App */}
-            <div className="rounded-lg border border-border bg-card p-6">
+            <div className="border border-border bg-card p-6">
               <div className="flex items-center gap-2 mb-4">
                 <svg className="w-5 h-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
@@ -403,7 +403,7 @@ export default async function XDropPage() {
                 </a>
               </div>
               <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
-                <div className="rounded-lg border border-border overflow-hidden">
+                <div className="border border-border overflow-hidden">
                   <Image
                     src="/xdrop/dashboard-app-xdrop.webp"
                     alt="X-Drop iOS App — Dashboard executivo com métricas de vendas e faturamento"
@@ -412,7 +412,7 @@ export default async function XDropPage() {
                     className="w-full h-auto"
                   />
                 </div>
-                <div className="rounded-lg border border-border overflow-hidden">
+                <div className="border border-border overflow-hidden">
                   <Image
                     src="/xdrop/balance-screen.webp"
                     alt="X-Drop iOS App — Tela de saldo com PIX e gestão financeira"
@@ -436,7 +436,7 @@ export default async function XDropPage() {
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-border bg-card"
                 >
                   {tech}
                 </span>
@@ -450,7 +450,7 @@ export default async function XDropPage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={localePath(locale, "/posts/case-study-xdrop")}
-              className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {c.caseStudyCta}
             </Link>
@@ -458,7 +458,7 @@ export default async function XDropPage() {
               href="https://xdrop.com.br/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg
@@ -479,7 +479,7 @@ export default async function XDropPage() {
               href="https://apps.apple.com/us/app/xdrop/id6749638204"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               App Store (iOS)
               <svg

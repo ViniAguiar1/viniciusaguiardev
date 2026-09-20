@@ -27,7 +27,7 @@ export function EngineeringTopic({ id, title, subtitle, children, defaultOpen = 
         type="button"
         id={id}
         onClick={() => setOpen(true)}
-        className="w-full rounded-lg border border-border bg-card flex items-center gap-4 p-5 text-left cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all"
+        className="w-full border border-border bg-card flex items-center gap-4 p-5 text-left cursor-pointer hover:shadow-md hover:-translate-y-0.5 transition-all"
       >
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold leading-tight">{title}</h3>

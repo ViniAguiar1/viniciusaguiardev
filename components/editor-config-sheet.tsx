@@ -61,12 +61,12 @@ export function EditorConfigSheet({ label, description }: EditorConfigSheetProps
             <button
               type="button"
               onClick={onCopy}
-              className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-md border border-border bg-background/80 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-muted transition-colors"
+              className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 border border-border bg-background/80 px-2.5 py-1.5 text-xs font-medium shadow-sm backdrop-blur-sm hover:bg-muted transition-colors"
             >
               {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
               {copied ? "Copied!" : "Copy"}
             </button>
-            <pre className="rounded-lg border border-border bg-muted/50 p-4 pt-12 overflow-x-auto text-sm">
+            <pre className="border border-border bg-muted/50 p-4 pt-12 overflow-x-auto text-sm">
               <code className="whitespace-pre text-foreground/90">{editorConfig}</code>
             </pre>
           </div>

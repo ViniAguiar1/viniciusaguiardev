@@ -73,7 +73,7 @@ export function CodeBlock({ code, language, className }: Props) {
         type="button"
         onClick={onCopy}
         className={cn(
-          "absolute right-2 top-2 z-10 inline-flex items-center gap-1 rounded-md border border-border bg-background/80 px-2 py-1 text-xs text-foreground/80 shadow-sm backdrop-blur-sm transition-opacity",
+          "absolute right-2 top-2 z-10 inline-flex items-center gap-1 border border-border bg-background/80 px-2 py-1 text-xs text-foreground/80 shadow-sm backdrop-blur-sm transition-opacity",
           "opacity-0 group-hover:opacity-100 focus:opacity-100"
         )}
         aria-label="Copiar código"
@@ -81,7 +81,7 @@ export function CodeBlock({ code, language, className }: Props) {
         {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
         {copied ? "Copiado" : "Copiar"}
       </button>
-      <pre className="rounded-lg border border-border bg-muted/50 p-4 overflow-x-auto text-sm" suppressHydrationWarning>
+      <pre className="border border-border bg-muted/50 p-4 overflow-x-auto text-sm" suppressHydrationWarning>
         <code
           ref={codeRef}
           className={cn("whitespace-pre", `language-${lang}`)}

@@ -31,12 +31,12 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               data-umami-event="project-click"
               data-umami-event-project={project.name}
               className={cn(
-                "group rounded-lg border border-border bg-card text-card-foreground p-5",
+                "group border border-border bg-card text-card-foreground p-5",
                 "flex items-center gap-5 transition-all text-left w-full",
                 "hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
               )}
             >
-              <div className="relative flex-shrink-0 w-12 h-12 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="relative flex-shrink-0 w-12 h-12 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                 <Image
                   src={project.logo}
                   alt={project.name}
@@ -81,7 +81,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
           <Dialog.Content
             className={cn(
               "fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-              "w-[calc(100%-2rem)] max-w-lg rounded-xl border border-border bg-card p-6 shadow-xl",
+              "w-[calc(100%-2rem)] max-w-lg border border-border bg-card p-6 shadow-xl",
               "data-[state=open]:animate-in data-[state=closed]:animate-out",
               "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
               "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
@@ -93,7 +93,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               <>
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+                  <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                     <Image
                       src={selected.logo}
                       alt={selected.name}
@@ -129,7 +129,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       href={localePath(locale, selected.detailPage)}
                       data-umami-event="project-detail"
                       data-umami-event-project={selected.name}
-                      className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
+                      className="inline-flex items-center gap-2 bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                     >
                       {t(locale, { pt: "Ver mais", en: "Learn more", es: "Ver más", jp: "詳しく見る", fr: "En savoir plus" })}
                       <svg
@@ -151,7 +151,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       data-umami-event="project-visit"
                       data-umami-event-project={selected.name}
                       className={cn(
-                        "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
+                        "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition",
                         selected.detailPage
                           ? "border border-border hover:bg-muted"
                           : "bg-primary text-primary-foreground hover:opacity-90"
@@ -176,7 +176,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                 </div>
 
                 {/* Close */}
-                <Dialog.Close className="absolute top-4 right-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity">
+                <Dialog.Close className="absolute top-4 right-4 opacity-70 hover:opacity-100 transition-opacity">
                   <XIcon className="w-4 h-4" />
                   <span className="sr-only">Close</span>
                 </Dialog.Close>

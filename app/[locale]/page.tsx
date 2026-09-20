@@ -61,7 +61,7 @@ export default async function Home() {
               target="_blank"
               data-umami-event="cv-download"
               data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
+              className="px-4 py-2 text-sm bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {dict.home.ctaResume}
             </Link>
@@ -78,7 +78,7 @@ export default async function Home() {
 
             <Link
               href={localePath(locale, "/sobre")}
-              className="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted transition text-center"
+              className="px-4 py-2 text-sm border border-border hover:bg-muted transition text-center"
             >
               {dict.home.ctaAbout}
             </Link>
@@ -130,7 +130,7 @@ export default async function Home() {
               <Link
                 key={topic.title}
                 href={localePath(locale, `/engenharia?topic=${topic.topicId}`)}
-                className="group rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
+                className="group border border-border bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
                 <svg className="w-5 h-5 text-muted-foreground mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d={topic.icon} />
@@ -152,7 +152,7 @@ export default async function Home() {
             <FadeIn key={article.slug} delay={Math.min(index * 50, 200)}>
             <article
               className={cn(
-                "rounded-lg border border-border bg-card text-card-foreground shadow p-6 flex flex-col justify-between min-h-45 transition-transform hover:-translate-y-1 hover:shadow-lg relative cursor-pointer"
+                "border border-border bg-card text-card-foreground shadow p-6 flex flex-col justify-between min-h-45 transition-transform hover:-translate-y-1 hover:shadow-lg relative cursor-pointer"
               )}
             >
               <Link
@@ -166,7 +166,7 @@ export default async function Home() {
                 {article.tag ? (
                   <span
                     className={cn(
-                      "absolute left-6 top-6 border border-line bg-canvas/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu backdrop-blur-sm"
+                      "absolute left-6 top-6 border border-line bg-canvas/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu backdrop-blur-sm"
                     )}
                   >
                     {article.tag}

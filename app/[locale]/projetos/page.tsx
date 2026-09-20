@@ -40,7 +40,7 @@ export default async function ProjectsPage() {
 
       {/* Footer stats */}
       <FadeIn delay={200}>
-      <section className="mt-10 rounded-lg border border-border bg-card p-6">
+      <section className="mt-10 border border-border bg-card p-6">
         <div className="grid grid-cols-3 gap-6 text-center">
           <div>
             <div className="text-2xl font-bold">{projects.length}</div>

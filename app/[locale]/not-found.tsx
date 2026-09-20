@@ -69,19 +69,19 @@ export default async function NotFound() {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
           href={localePath(locale, "/")}
-          className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition"
+          className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition"
         >
           {t(locale, { pt: "Voltar ao início", en: "Back to home", es: "Volver al inicio", jp: "ホームに戻る", fr: "Retour à l'accueil" })}
         </Link>
         <Link
           href={localePath(locale, "/projetos")}
-          className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
+          className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition"
         >
           {t(locale, { pt: "Ver projetos", en: "See projects", es: "Ver proyectos", jp: "プロジェクトを見る", fr: "Voir les projets" })}
         </Link>
         <Link
           href={localePath(locale, "/engenharia")}
-          className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition"
+          className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition"
         >
           {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
         </Link>

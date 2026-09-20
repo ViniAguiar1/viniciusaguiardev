@@ -73,7 +73,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
           onChange={(e) => setQuery(e.target.value)}
           placeholder={labels.placeholder}
           autoFocus
-          className="w-full rounded-lg border border-border bg-card pl-12 pr-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+          className="w-full border border-border bg-card pl-12 pr-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
         />
       </div>
 
@@ -106,12 +106,12 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
               <Link
                 key={post.slug}
                 href={localePath(safeLocale, `/posts/${post.slug}`)}
-                className="group flex items-start gap-4 rounded-lg border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group flex items-start gap-4 border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     {post.tag && (
-                      <span className="border border-line px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                      <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
                         {post.tag}
                       </span>
                     )}
@@ -144,9 +144,9 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
               <Link
                 key={project.slug}
                 href={localePath(safeLocale, "/projetos")}
-                className="group flex items-center gap-4 rounded-lg border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group flex items-center gap-4 border border-border bg-card p-4 hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
-                <div className="relative flex-shrink-0 w-10 h-10 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+                <div className="relative flex-shrink-0 w-10 h-10 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                   <Image src={project.logo} alt={project.name} width={28} height={28} className="object-contain" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -154,7 +154,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
                     <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">
                       {project.name}
                     </h3>
-                    <span className="text-[10px] font-medium rounded-full px-2 py-0.5 bg-muted text-muted-foreground">
+                    <span className="text-[10px] font-medium px-2 py-0.5 bg-muted text-muted-foreground">
                       {project.category}
                     </span>
                   </div>

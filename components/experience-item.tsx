@@ -18,7 +18,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span>{t(locale, period)}</span>
         {current ? (
-          <span className="border border-field px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-fg">
+          <span className="border border-field px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-fg">
             {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職", fr: "Actuel" })}
           </span>
         ) : null}
@@ -30,7 +30,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 
       <div className="flex flex-wrap gap-1.5">
         {stack.map((tech) => (
-          <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">
+          <span key={tech} className="border border-border bg-muted/40 px-2 py-0.5 text-xs">
             {tech}
           </span>
         ))}

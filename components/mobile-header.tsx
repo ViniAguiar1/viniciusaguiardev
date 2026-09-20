@@ -14,7 +14,7 @@ export function MobileHeader() {
       <button
         type="button"
         onClick={() => setOpenMobile(true)}
-        className="flex items-center justify-center rounded-md p-1.5 hover:bg-muted transition"
+        className="flex items-center justify-center p-1.5 hover:bg-muted transition"
         aria-label="Open menu"
       >
         <Menu className="w-5 h-5" />

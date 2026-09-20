@@ -110,11 +110,11 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Stack</h4>
               <div className="flex flex-wrap gap-1.5">
                 {["React", "Next.js", "TypeScript"].map((tech) => (
-                  <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
+                  <span key={tech} className="border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
                 ))}
               </div>
             </div>
-            <div className="rounded-md border border-border bg-muted/20 p-4">
+            <div className="border border-border bg-muted/20 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
               <p className="text-sm leading-relaxed">
                 {t(locale, { pt: "Cursor-based abre mão do salto direto para uma página arbitrária — aceitável para um inbox, que é navegado como um fluxo cronológico, não como uma tabela paginada. A virtualização adicionou complexidade (medição de alturas, scroll restoration), mas era a única forma de manter a interface fluida: paginação sozinha reduz o payload, e não o custo de renderizar milhares de linhas acumuladas no DOM.", en: "Cursor-based gives up direct jumps to an arbitrary page — acceptable for an inbox, which is navigated as a chronological stream, not a paginated table. Virtualization added complexity (height measurement, scroll restoration), but it was the only way to keep the interface fluid: pagination alone reduces the payload, not the cost of rendering thousands of accumulated rows in the DOM.", es: "Cursor-based renuncia al salto directo a una página arbitraria — aceptable para un inbox, que se navega como un flujo cronológico, no como una tabla paginada. La virtualización agregó complejidad (medición de alturas, scroll restoration), pero era la única forma de mantener la interfaz fluida: la paginación sola reduce el payload, no el costo de renderizar miles de filas acumuladas en el DOM.", jp: "カーソルベースでは任意のページへの直接ジャンプができなくなります — インボックスはページ番号付きのテーブルではなく時系列のストリームとして閲覧されるため、許容できるトレードオフです。仮想化は複雑さ（高さの計測、スクロール位置の復元）を増やしましたが、インターフェースを滑らかに保つ唯一の方法でした：ページネーションだけではペイロードは減っても、DOMに蓄積された数千行のレンダリングコストは減らないためです。", fr: "Le cursor-based renonce au saut direct vers une page arbitraire — acceptable pour une inbox, qui se parcourt comme un flux chronologique et non comme un tableau paginé. La virtualisation a ajouté de la complexité (mesure des hauteurs, scroll restoration), mais c'était la seule façon de garder l'interface fluide : la pagination seule réduit le payload, pas le coût de rendu de milliers de lignes accumulées dans le DOM." })}
@@ -150,11 +150,11 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Stack</h4>
               <div className="flex flex-wrap gap-1.5">
                 {["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "WhatsApp API", "OpenAI", "Stripe"].map((tech) => (
-                  <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
+                  <span key={tech} className="border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
                 ))}
               </div>
             </div>
-            <div className="rounded-md border border-border bg-muted/20 p-4">
+            <div className="border border-border bg-muted/20 p-4">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
               <p className="text-sm leading-relaxed">
                 {t(locale, { pt: "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência do LLM) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos do provedor.", en: "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on LLM latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during provider spikes.", es: "Los flujos de IA en WhatsApp necesitaban ser confiables para cerrar ventas automáticamente. La elección era entre procesamiento síncrono (más simple, pero bloquea en la latencia del LLM) vs. cola de eventos asíncrona. Optamos por el asíncrono — el usuario recibe un ack inmediato y la respuesta de la IA se procesa en background con lógica de retry. Esto agregó complejidad pero eliminó mensajes perdidos durante picos del proveedor.", jp: "WhatsAppのAIフローは、販売を自動完了できるほど信頼性が必要でした。選択肢は同期処理（シンプルだがLLMレイテンシでブロックする）と非同期イベントキューでした。非同期を選択 — ユーザーは即座にackを受け取り、AIの応答はリトライロジックを伴ってバックグラウンドで処理されます。複雑さは増しましたが、プロバイダーのピーク時にメッセージが失われる問題はなくなりました。", fr: "Les flux d'IA sur WhatsApp devaient être assez fiables pour conclure des ventes automatiquement. Le choix se faisait entre un traitement synchrone (plus simple, mais qui bloque sur la latence du LLM) et une file d'événements asynchrone. Nous avons opté pour l'asynchrone — l'utilisateur reçoit un ack immédiat et la réponse de l'IA est traitée en background avec une logique de retry. Cela a ajouté de la complexité mais a éliminé les messages perdus pendant les pics du fournisseur." })}
@@ -179,10 +179,10 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 { title: t(locale, { pt: "Schema por tenant", en: "Schema per tenant", es: "Schema por tenant", jp: "テナント単位のスキーマ", fr: "Schema par tenant" }), desc: t(locale, { pt: "Bom isolamento, complexidade de migrações", en: "Good isolation, migration complexity", es: "Buen aislamiento, complejidad de migraciones", jp: "良好な分離、マイグレーションの複雑さ", fr: "Bonne isolation, complexité des migrations" }), status: t(locale, { pt: "Descartado", en: "Discarded", es: "Descartado", jp: "却下", fr: "Écarté" }), chosen: false },
                 { title: t(locale, { pt: "DB compartilhado + tenant_id", en: "Shared DB + tenant_id", es: "DB compartida + tenant_id", jp: "共有DB + tenant_id", fr: "DB partagée + tenant_id" }), desc: t(locale, { pt: "Melhor custo/simplicidade, requer RLS", en: "Best cost/simplicity ratio, needs RLS", es: "Mejor costo/simplicidad, requiere RLS", jp: "コストとシンプルさのバランスが最良、RLSが必要", fr: "Meilleur rapport coût/simplicité, nécessite RLS" }), status: t(locale, { pt: "Escolhido", en: "Chosen", es: "Elegido", jp: "採用", fr: "Retenu" }), chosen: true },
               ].map((s) => (
-                <div key={s.title} className="rounded-md border border-border p-3">
+                <div key={s.title} className="border border-border p-3">
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="text-xs font-medium">{s.title}</h4>
-                    <span className={`text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 ${s.chosen ? "bg-fg text-canvas" : "border border-line text-mu"}`}>{s.status}</span>
+                    <span className={`text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 ${s.chosen ? "bg-fg text-canvas border border-transparent" : "border border-line text-mu"}`}>{s.status}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{s.desc}</p>
                 </div>
@@ -191,9 +191,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{t(locale, { pt: "Camadas de isolamento", en: "Isolation Layers", es: "Capas de aislamiento", jp: "分離のレイヤー", fr: "Couches d'isolation" })}</h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">1</span>{t(locale, { pt: "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", en: "Application layer — all queries filtered by session.tenantId automatically", es: "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente", jp: "アプリケーション層 — すべてのクエリがsession.tenantIdで自動フィルタリング", fr: "Couche applicative — toutes les queries filtrées automatiquement par session.tenantId" })}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">2</span>{t(locale, { pt: "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", en: "Database layer — PostgreSQL Row Level Security (RLS) as safety net", es: "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad", jp: "DB層 — PostgreSQLのRow Level Security（RLS）をセーフティネットとして利用", fr: "Couche base de données — Row Level Security (RLS) de PostgreSQL comme filet de sécurité" })}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">3</span>{t(locale, { pt: "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", en: "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", es: "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes", jp: "パフォーマンス — (tenant_id, ...) の複合インデックス + 大規模テナント向けのテーブルパーティショニング", fr: "Performance — index composites sur (tenant_id, ...) + partitionnement de tables pour les gros tenants" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 px-1.5 py-0.5">1</span>{t(locale, { pt: "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", en: "Application layer — all queries filtered by session.tenantId automatically", es: "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente", jp: "アプリケーション層 — すべてのクエリがsession.tenantIdで自動フィルタリング", fr: "Couche applicative — toutes les queries filtrées automatiquement par session.tenantId" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 px-1.5 py-0.5">2</span>{t(locale, { pt: "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", en: "Database layer — PostgreSQL Row Level Security (RLS) as safety net", es: "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad", jp: "DB層 — PostgreSQLのRow Level Security（RLS）をセーフティネットとして利用", fr: "Couche base de données — Row Level Security (RLS) de PostgreSQL comme filet de sécurité" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 px-1.5 py-0.5">3</span>{t(locale, { pt: "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", en: "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", es: "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes", jp: "パフォーマンス — (tenant_id, ...) の複合インデックス + 大規模テナント向けのテーブルパーティショニング", fr: "Performance — index composites sur (tenant_id, ...) + partitionnement de tables pour les gros tenants" })}</li>
               </ul>
             </div>
             <Link href={localePath(locale, "/posts/multi-tenant-architecture-postgresql")} className="text-sm text-primary hover:underline inline-block">
@@ -213,7 +213,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               {t(locale, { pt: "Integrei sistemas de pagamento em múltiplos produtos em produção — Stripe, Mercado Pago e Asaas. Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes.", en: "I've integrated payment systems across multiple production products — Stripe, Mercado Pago and Asaas. Each has different webhook patterns, failure modes, and consistency guarantees.", es: "Integré sistemas de pago en múltiples productos en producción — Stripe, Mercado Pago y Asaas. Cada uno tiene patrones de webhook, modos de falla y garantías de consistencia diferentes.", jp: "本番環境の複数プロダクトに決済システムを統合しました — Stripe、Mercado Pago、Asaas。それぞれWebhookのパターン、失敗モード、整合性保証が異なります。", fr: "J'ai intégré des systèmes de paiement dans plusieurs produits en production — Stripe, Mercado Pago et Asaas. Chacun a des patterns de webhook, des modes de défaillance et des garanties de cohérence qui lui sont propres." })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="rounded-md border border-border p-4">
+              <div className="border border-border p-4">
                 <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Arquitetura de Webhooks", en: "Webhook Architecture", es: "Arquitectura de Webhooks", jp: "Webhookアーキテクチャ", fr: "Architecture de Webhooks" })}</h4>
                 <ul className="text-xs space-y-1.5 text-muted-foreground">
                   <li>- {t(locale, { pt: "Validação de assinatura em cada evento recebido", en: "Signature validation on every incoming event", es: "Validación de firma en cada evento recibido", jp: "受信した各イベントの署名検証", fr: "Validation de signature sur chaque événement reçu" })}</li>
@@ -222,7 +222,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                   <li>- {t(locale, { pt: "Dead letter queue para eventos com falha", en: "Dead letter queue for failed events", es: "Dead letter queue para eventos con falla", jp: "失敗したイベント用のデッドレターキュー", fr: "Dead letter queue pour les événements en échec" })}</li>
                 </ul>
               </div>
-              <div className="rounded-md border border-border p-4">
+              <div className="border border-border p-4">
                 <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Preocupações reais", en: "Real-world Concerns", es: "Preocupaciones reales", jp: "実際の懸念事項", fr: "Préoccupations réelles" })}</h4>
                 <ul className="text-xs space-y-1.5 text-muted-foreground">
                   <li>- {t(locale, { pt: "Atrasos na confirmação de PIX variam entre provedores", en: "PIX confirmation delays vary between providers", es: "Atrasos en la confirmación de PIX varían entre proveedores", jp: "PIX確認の遅延はプロバイダー間で異なる", fr: "Les délais de confirmation PIX varient selon les fournisseurs" })}</li>
@@ -247,7 +247,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
           <h2 className="text-xl font-semibold">{t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción", jp: "本番環境で解決した問題", fr: "Problèmes résolus en production" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
-        <div className="rounded-lg border border-border bg-card p-6">
+        <div className="border border-border bg-card p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {[
               { signal: t(locale, { pt: "Performance de frontend", en: "Frontend performance", es: "Performance de frontend", jp: "フロントエンドパフォーマンス", fr: "Performance frontend" }), detail: t(locale, { pt: "Inbox de um SaaS B2B carregando ~20.000 conversas de uma vez (~6,7 MB por requisição) — paginação cursor-based + virtualização de lista, payload de ~19 KB e fim dos travamentos de interface", en: "A B2B SaaS inbox loading ~20,000 conversations at once (~6.7 MB per request) — cursor-based pagination + list virtualization, ~19 KB payload and no more UI freezes", es: "Inbox de un SaaS B2B cargando ~20.000 conversaciones de una vez (~6,7 MB por request) — paginación cursor-based + virtualización de lista, payload de ~19 KB y fin de los bloqueos de interfaz", jp: "B2B SaaSのインボックスが約20,000件の会話を一度に読み込み（リクエストあたり約6.7MB） — カーソルベースのページネーション + リスト仮想化で約19KBのペイロードにし、UIフリーズを解消", fr: "Inbox d'un SaaS B2B chargeant ~20 000 conversations d'un coup (~6,7 MB par requête) — pagination cursor-based + virtualisation de liste, payload de ~19 KB et fin des blocages de l'interface" }) },
@@ -275,18 +275,18 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
           <h2 className="text-xl font-semibold">{t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción", jp: "本番環境のAIシステム", fr: "Systèmes d'IA en production" })}</h2>
           <div className="h-px flex-1 bg-border" />
         </div>
-        <div className="rounded-lg border border-border bg-card p-6 space-y-5">
+        <div className="border border-border bg-card p-6 space-y-5">
           <p className="text-sm leading-relaxed">
             {t(locale, { pt: "Não chatbots — pipelines em produção onde IA é um componente em um sistema maior, com fallbacks, monitoramento e dados reais fluindo.", en: "Not chatbots — production pipelines where AI is a component in a larger system, with fallbacks, monitoring, and real data flowing through.", es: "No chatbots — pipelines en producción donde IA es un componente en un sistema mayor, con fallbacks, monitoreo y datos reales fluyendo.", jp: "チャットボットではなく — AIがより大きなシステムの一部として機能する本番パイプライン。フォールバック、モニタリング、実データの流れを伴う。", fr: "Pas de chatbots — des pipelines en production où l'IA est un composant d'un système plus large, avec fallbacks, monitoring et de vraies données qui circulent." })}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="rounded-md border border-border p-4">
+            <div className="border border-border p-4">
               <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Agente IA no WhatsApp", en: "WhatsApp AI Agent", es: "Agente IA en WhatsApp", jp: "WhatsApp上のAIエージェント", fr: "Agent IA sur WhatsApp" })}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {t(locale, { pt: "Agente com LLM para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível.", en: "LLM-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable.", es: "Agente con LLM para atención, recomendación de productos y cierre de ventas. Mensajes procesados de forma asíncrona, datos registrados en PostgreSQL. Fallback a matching por reglas cuando LLM no está disponible.", jp: "顧客対応、商品推薦、販売完了のためのLLMエージェント。メッセージは非同期で処理され、データはPostgreSQLに保存。LLMが利用できない場合はルールベースのマッチングにフォールバック。", fr: "Agent avec LLM pour le service client, la recommandation de produits et la finalisation des ventes. Messages traités de façon asynchrone, données enregistrées dans PostgreSQL. Fallback vers un matching par règles quand le LLM est indisponible." })}
               </p>
             </div>
-            <div className="rounded-md border border-border p-4">
+            <div className="border border-border p-4">
               <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Pipeline RAG (LangChain + pgVector)", en: "RAG Pipeline (LangChain + pgVector)", es: "Pipeline RAG (LangChain + pgVector)", jp: "RAGパイプライン（LangChain + pgVector）", fr: "Pipeline RAG (LangChain + pgVector)" })}</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 {t(locale, { pt: "Ingestão de documentos → chunking → geração de embeddings → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM.", en: "Document ingestion → chunk splitting → embedding generation → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context.", es: "Ingestión de documentos → chunking → generación de embeddings → almacenamiento vectorial en PostgreSQL con pgVector → búsqueda semántica con top-K como contexto para LLM.", jp: "ドキュメント取り込み → チャンキング → 埋め込み生成 → pgVectorによるPostgreSQLへのベクトル保存 → top-Kの意味検索結果をLLMのコンテキストとして使用。", fr: "Ingestion de documents → chunking → génération d'embeddings → stockage vectoriel dans PostgreSQL avec pgVector → recherche sémantique avec top-K comme contexte pour le LLM." })}
@@ -309,7 +309,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         </div>
         <div className="space-y-4">
           {faq.map((item) => (
-            <div key={item.q} className="rounded-lg border border-border bg-card p-5">
+            <div key={item.q} className="border border-border bg-card p-5">
               <h3 className="text-sm font-semibold">{item.q}</h3>
               <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{item.a}</p>
             </div>
@@ -336,7 +336,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             { title: t(locale, { pt: "Docker para devs frontend", en: "Docker for Frontend Devs", es: "Docker para devs frontend", jp: "フロントエンド開発者のためのDocker", fr: "Docker pour les devs frontend" }), desc: t(locale, { pt: "Dockerfile, multi-stage builds, dev/prod", en: "Dockerfile, multi-stage builds, dev/prod", es: "Dockerfile, multi-stage builds, dev/prod", jp: "Dockerfile、マルチステージビルド、dev/prod", fr: "Dockerfile, multi-stage builds, dev/prod" }), href: "/posts/docker-for-frontend-devs" },
             { title: t(locale, { pt: "Iniciando no TypeScript", en: "Getting Started with TypeScript", es: "Iniciando en TypeScript", jp: "TypeScript入門", fr: "Démarrer avec TypeScript" }), desc: t(locale, { pt: "Tipos, interfaces, generics, utility types", en: "Types, interfaces, generics, utility types", es: "Tipos, interfaces, generics, utility types", jp: "型、インターフェース、ジェネリクス、ユーティリティ型", fr: "Types, interfaces, generics, utility types" }), href: "/posts/starting-typescript" },
           ].map((post) => (
-            <Link key={post.href} href={localePath(locale, post.href)} className="group rounded-lg border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <Link key={post.href} href={localePath(locale, post.href)} className="group border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
               <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">{post.title}</h3>
               <p className="text-xs text-muted-foreground mt-1">{post.desc}</p>
             </Link>

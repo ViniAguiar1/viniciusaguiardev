@@ -31,7 +31,7 @@ export function SearchButton() {
     <button
       type="button"
       onClick={() => router.push(searchPath)}
-      className="flex items-center justify-center w-8 h-8 rounded-md hover:bg-muted transition-colors"
+      className="flex items-center justify-center w-8 h-8 hover:bg-muted transition-colors"
       title="Search (⌘K)"
     >
       <Search className="w-5 h-5" />

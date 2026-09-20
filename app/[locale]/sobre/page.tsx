@@ -24,7 +24,7 @@ export default async function SobrePage() {
         <p className="text-muted-foreground mt-2">{dict.about.subtitle}</p>
       </header>
 
-      <section className={cn("rounded-lg border border-border bg-card text-card-foreground p-6 md:p-8")}>
+      <section className={cn("border border-border bg-card text-card-foreground p-6 md:p-8")}>
         <div className="flex flex-col gap-6 md:gap-8">
           <div>
             <h2 className="text-2xl font-semibold leading-tight">Vinicius Aguiar</h2>
@@ -46,7 +46,7 @@ export default async function SobrePage() {
 
       {/* Skills */}
       <section className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="rounded-lg border border-border bg-card p-6">
+        <div className="border border-border bg-card p-6">
           <h3 className="text-xl font-semibold mb-3">
             {t(locale, { pt: "Habilidades", en: "Skills", es: "Habilidades", jp: "スキル", fr: "Compétences" })}
           </h3>
@@ -63,7 +63,7 @@ export default async function SobrePage() {
           </ul>
         </div>
 
-        <div className="rounded-lg border border-border bg-card p-6">
+        <div className="border border-border bg-card p-6">
           <h3 className="text-xl font-semibold mb-3">
             {t(locale, { pt: "Interesses", en: "Interests", es: "Intereses", jp: "興味", fr: "Centres d'intérêt" })}
           </h3>
@@ -82,7 +82,7 @@ export default async function SobrePage() {
       </section>
 
       {/* Experience */}
-      <section className="mt-8 rounded-lg border border-border bg-card p-6">
+      <section className="mt-8 border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
           {t(locale, { pt: "Experiência", en: "Experience", es: "Experiencia", jp: "実務経験", fr: "Expérience" })}
         </h2>
@@ -104,7 +104,7 @@ export default async function SobrePage() {
       </section>
 
       {/* Tech Stack */}
-      <section className="mt-8 rounded-lg border border-border bg-card p-6">
+      <section className="mt-8 border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">Tech Stack</h2>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -115,7 +115,7 @@ export default async function SobrePage() {
             "Java", "CI/CD", "Testing", "Accessibility", "Design System",
             "Linux/macOS",
           ].map((tag) => (
-            <span key={tag} className="rounded-md border border-border bg-muted/40 px-2 py-1 text-xs">
+            <span key={tag} className="border border-border bg-muted/40 px-2 py-1 text-xs">
               {tag}
             </span>
           ))}
@@ -123,7 +123,7 @@ export default async function SobrePage() {
       </section>
 
       {/* Core Concepts */}
-      <section className="mt-8 rounded-lg border border-border bg-card p-6">
+      <section className="mt-8 border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
           {t(locale, { pt: "Conceitos-chave", en: "Core Concepts", es: "Conceptos clave", jp: "重要な概念", fr: "Concepts clés" })}
         </h2>
@@ -140,7 +140,7 @@ export default async function SobrePage() {
       </section>
 
       {/* Projects */}
-      <section className="mt-8 rounded-lg border border-border bg-card p-6">
+      <section className="mt-8 border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
           {t(locale, { pt: "Projetos em destaque", en: "Featured Projects", es: "Proyectos destacados", jp: "注目のプロジェクト", fr: "Projets phares" })}
         </h2>
@@ -164,7 +164,7 @@ export default async function SobrePage() {
       </section>
 
       {/* Contact */}
-      <section className="mt-8 rounded-lg border border-border bg-card p-6">
+      <section className="mt-8 border border-border bg-card p-6">
         <h2 className="text-2xl font-semibold">
           {t(locale, { pt: "Contato", en: "Contact", es: "Contacto", jp: "連絡先", fr: "Contact" })}
         </h2>

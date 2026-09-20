@@ -280,7 +280,7 @@ export default async function VoxPetPage() {
         {/* Header */}
         <FadeIn>
           <header className="mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fg opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-fg" />
@@ -289,7 +289,7 @@ export default async function VoxPetPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/vox-pet-digital.png"
                   alt="Vox Pet Digital"
@@ -333,7 +333,7 @@ export default async function VoxPetPage() {
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-border bg-card p-5"
+                  className="border border-border bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -394,7 +394,7 @@ export default async function VoxPetPage() {
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-border bg-card"
                 >
                   {tech}
                 </span>
@@ -408,7 +408,7 @@ export default async function VoxPetPage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={localePath(locale, "/posts/case-study-vox-pet")}
-              className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {c.caseStudyCta}
             </Link>
@@ -416,7 +416,7 @@ export default async function VoxPetPage() {
               href="https://voxpetdigital.com.br/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

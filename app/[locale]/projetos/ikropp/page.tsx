@@ -355,12 +355,12 @@ export default async function IKroppPage() {
         {/* Header */}
         <FadeIn>
           <header className="mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
               {c.badge}
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
                 <Image
                   src="/images/ikropp.png"
                   alt="iKropp"
@@ -422,7 +422,7 @@ export default async function IKroppPage() {
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-border bg-card p-5"
+                  className="border border-border bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -450,7 +450,7 @@ export default async function IKroppPage() {
               {c.stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-border bg-card p-4 text-center"
+                  className="border border-border bg-card p-4 text-center"
                 >
                   <div className="text-2xl font-bold">{stat.value}</div>
                   <div className="text-xs text-muted-foreground mt-1">
@@ -497,7 +497,7 @@ export default async function IKroppPage() {
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-border bg-card"
                 >
                   {tech}
                 </span>
@@ -513,7 +513,7 @@ export default async function IKroppPage() {
               href="https://ikropp.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

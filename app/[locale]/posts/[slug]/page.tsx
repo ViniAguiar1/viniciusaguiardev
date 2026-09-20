@@ -80,7 +80,7 @@ export default async function PostPage({ params }: PageProps) {
       {post.tag ? (
         <span
           className={cn(
-            "border border-line px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu mb-4 inline-block"
+            "border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu mb-4 inline-block"
           )}
         >
           {post.tag}
@@ -123,7 +123,7 @@ export default async function PostPage({ params }: PageProps) {
                       alt={block.alt || "Imagem do post"}
                       width={block.width || 1200}
                       height={block.height || 675}
-                      className="rounded-md border border-border w-full h-auto"
+                      className="border border-border w-full h-auto"
                     />
                     {block.alt ? (
                       <span className="text-xs text-muted-foreground">{block.alt}</span>

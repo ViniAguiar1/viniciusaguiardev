@@ -289,13 +289,13 @@ export default async function VoxPetPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+              <div className="flex-shrink-0 w-14 h-14 border border-line bg-plate flex items-center justify-center overflow-hidden p-2">
                 <Image
-                  src="/images/vox-pet-digital.png"
+                  src="/images/vox-pet-digital.webp"
                   alt="Vox Pet Digital"
                   width={40}
                   height={40}
-                  className="object-contain"
+                  className="object-contain w-full h-full"
                 />
               </div>
               <h1 className="text-3xl md:text-4xl font-bold tracking-tight">

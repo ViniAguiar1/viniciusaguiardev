@@ -6,6 +6,7 @@ export type ProjectCategory =
   | "E-commerce"
   | "Health"
   | "Open Source"
+  | "Revenue Ops"
 
 /** Translated string with PT as the required fallback. */
 export type LocalizedString = Partial<Record<Locale, string>> & { pt: string }
@@ -39,6 +40,35 @@ export type Project = {
 }
 
 export const projects: Project[] = [
+  {
+    slug: "keep",
+    name: "Keep",
+    logo: "/images/keep-logo.jpeg",
+    tagline: {
+      pt: "Detecção de churn cruzando Stripe com o uso real do produto",
+      en: "Churn detection crossing Stripe with real product usage",
+      es: "Detección de churn cruzando Stripe con el uso real del producto",
+      jp: "Stripeと実際のプロダクト利用を突き合わせるチャーン検知",
+      fr: "Détection de churn croisant Stripe et l'usage réel du produit",
+    },
+    description: {
+      pt: "Produto da Aguiar Labs que cruza os dados de pagamento do Stripe com o uso real do produto para mostrar quem está prestes a cancelar enquanto ainda dá tempo de ligar. Prioriza os alertas pela receita em risco, não pela severidade da queda de uso, e entrega no Slack em vez de exigir que alguém abra um dashboard. Acompanha três sinais de churn: contas silenciosas, queda de uso e contas que nunca usaram o produto. Integra Stripe, PostHog, Slack, HubSpot e Intercom, com acesso somente leitura via OAuth.",
+      en: "An Aguiar Labs product that crosses Stripe payment data with real product usage to show who is about to churn while there is still time to call. It ranks alerts by revenue at stake rather than by how sharply usage dropped, and delivers them in Slack instead of expecting anyone to open a dashboard. It tracks three churn signals: silent accounts, usage drops and accounts that never used the product. Integrates Stripe, PostHog, Slack, HubSpot and Intercom, with read-only OAuth access.",
+      es: "Producto de Aguiar Labs que cruza los datos de pago de Stripe con el uso real del producto para mostrar quién está a punto de cancelar mientras todavía da tiempo de llamar. Prioriza las alertas por los ingresos en riesgo, no por la severidad de la caída de uso, y las entrega en Slack en vez de exigir que alguien abra un dashboard. Sigue tres señales de churn: cuentas silenciosas, caída de uso y cuentas que nunca usaron el producto. Integra Stripe, PostHog, Slack, HubSpot e Intercom, con acceso de solo lectura vía OAuth.",
+      jp: "Aguiar Labsのプロダクト。Stripeの決済データと実際のプロダクト利用状況を突き合わせ、まだ電話が間に合ううちに解約しそうな顧客を可視化する。アラートは利用減少の大きさではなく失うリスクのある収益で優先順位づけし、ダッシュボードを開かせる代わりにSlackへ届ける。解約の兆候を3つ追跡：無音のアカウント、利用の低下、一度も使われていないアカウント。Stripe、PostHog、Slack、HubSpot、Intercomと連携し、OAuthによる読み取り専用アクセスで動作する。",
+      fr: "Produit d'Aguiar Labs qui croise les données de paiement Stripe avec l'usage réel du produit pour montrer qui est sur le point de résilier pendant qu'il est encore temps d'appeler. Il priorise les alertes selon le revenu en jeu plutôt que selon la brutalité de la baisse d'usage, et les livre dans Slack au lieu d'exiger que quelqu'un ouvre un dashboard. Il suit trois signaux de churn : comptes silencieux, baisse d'usage et comptes jamais utilisés. Intègre Stripe, PostHog, Slack, HubSpot et Intercom, avec un accès en lecture seule via OAuth.",
+    },
+    category: "Revenue Ops",
+    role: {
+      pt: "Projeto próprio",
+      en: "Own product",
+      es: "Proyecto propio",
+      jp: "自社プロダクト",
+      fr: "Produit interne",
+    },
+    stack: ["Stripe", "PostHog", "Slack", "HubSpot", "Intercom"],
+    url: "https://usekeep.dev",
+  },
   {
     slug: "chattie",
     name: "Chattie",
@@ -118,6 +148,13 @@ export const projects: Project[] = [
       fr: "Plateforme qui centralise les opérations des vendeurs sur plusieurs marketplaces, en automatisant la gestion des commandes, des stocks et de la tarification pour faire passer les ventes en ligne à l'échelle.",
     },
     category: "E-commerce",
+    role: {
+      pt: "Senior Software Engineer",
+      en: "Senior Software Engineer",
+      es: "Senior Software Engineer",
+      jp: "シニアソフトウェアエンジニア",
+      fr: "Senior Software Engineer",
+    },
   },
   {
     slug: "x-drop",
@@ -139,11 +176,11 @@ export const projects: Project[] = [
     },
     category: "SaaS",
     role: {
-      pt: "Construção do zero — arquitetura ao lançamento",
-      en: "Built from scratch — architecture to launch",
-      es: "Construcción desde cero — arquitectura al lanzamiento",
-      jp: "ゼロからの構築 — アーキテクチャからローンチまで",
-      fr: "Construit de zéro — architecture au lancement",
+      pt: "Senior Software Engineer",
+      en: "Senior Software Engineer",
+      es: "Senior Software Engineer",
+      jp: "シニアソフトウェアエンジニア",
+      fr: "Senior Software Engineer",
     },
     highlight: {
       pt: "+R$ 600 mil em GMV nos 6 primeiros meses",
@@ -158,7 +195,7 @@ export const projects: Project[] = [
   {
     slug: "vox-pet-digital",
     name: "Vox Pet Digital",
-    logo: "/images/vox-pet-digital.png",
+    logo: "/images/vox-pet-digital.webp",
     tagline: {
       pt: "Gestão e marketing 360° para petshops e clínicas veterinárias",
       en: "Complete 360° management and marketing for pet businesses",
@@ -174,6 +211,13 @@ export const projects: Project[] = [
       fr: "Plateforme complète qui offre automatisation et outils de gestion pour cliniques vétérinaires et animaleries, combinant système de gestion et conseil spécialisé pour augmenter le chiffre d'affaires et fidéliser les clients.",
     },
     category: "SaaS",
+    role: {
+      pt: "Senior Software Engineer",
+      en: "Senior Software Engineer",
+      es: "Senior Software Engineer",
+      jp: "シニアソフトウェアエンジニア",
+      fr: "Senior Software Engineer",
+    },
     highlight: {
       pt: "R$ 2 milhões+ transacionados",
       en: "R$2M+ transacted",
@@ -240,6 +284,13 @@ export const projects: Project[] = [
       fr: "Logiciel permettant aux nutritionnistes et aux coachs sportifs de prescrire des plans alimentaires et des entraînements personnalisés, de suivre la progression de leurs clients et de gérer les consultations dans une seule application web et mobile.",
     },
     category: "SaaS",
+    role: {
+      pt: "Projeto próprio",
+      en: "Own project",
+      es: "Proyecto propio",
+      jp: "個人プロジェクト",
+      fr: "Projet personnel",
+    },
     url: "https://movepro-ruddy.vercel.app/",
   },
 ]

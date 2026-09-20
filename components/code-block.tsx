@@ -81,7 +81,13 @@ export function CodeBlock({ code, language, className }: Props) {
         {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
         {copied ? "Copiado" : "Copiar"}
       </button>
-      <pre className="border border-border bg-muted/50 p-4 overflow-x-auto text-sm" suppressHydrationWarning>
+      <pre
+        className={cn(
+          "border border-line bg-card font-mono text-[13.5px] leading-[1.65] overflow-x-auto p-[1.1em_1.25em]",
+          className
+        )}
+        suppressHydrationWarning
+      >
         <code
           ref={codeRef}
           className={cn("whitespace-pre", `language-${lang}`)}

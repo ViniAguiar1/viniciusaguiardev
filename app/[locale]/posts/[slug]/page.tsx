@@ -87,15 +87,15 @@ export default async function PostPage({ params }: PageProps) {
         </span>
       ) : null}
 
-      <h1 className="text-2xl md:text-4xl font-bold leading-tight mb-2 break-words">
+      <h1 className="text-[clamp(1.875rem,3.6vw,3rem)] font-medium leading-[1.05] tracking-[-0.025em] mb-3 break-words text-fg">
         {post.title}
       </h1>
-      <p className="text-sm text-muted-foreground mb-8">
+      <p className="text-xs font-mono uppercase tracking-[0.16em] text-mu mb-10">
         {post.date}
         {post.readTime ? ` · ${post.readTime}` : null}
       </p>
 
-      <article className="space-y-6 text-base leading-relaxed min-w-0">
+      <article className="space-y-6 text-[17px] leading-[1.75] min-w-0 text-fg">
         {blocks.length ? (
           blocks.map((block, i) => {
             switch (block.type) {
@@ -109,7 +109,7 @@ export default async function PostPage({ params }: PageProps) {
               }
               case "paragraph":
                 return (
-                  <p key={i} className="text-foreground/90">
+                  <p key={i} className="text-fg">
                     {renderInline(block.text)}
                   </p>
                 )
@@ -123,10 +123,10 @@ export default async function PostPage({ params }: PageProps) {
                       alt={block.alt || "Imagem do post"}
                       width={block.width || 1200}
                       height={block.height || 675}
-                      className="border border-border w-full h-auto"
+                      className="border border-line w-full h-auto"
                     />
                     {block.alt ? (
-                      <span className="text-xs text-muted-foreground">{block.alt}</span>
+                      <span className="text-xs text-mu">{block.alt}</span>
                     ) : null}
                   </div>
                 )

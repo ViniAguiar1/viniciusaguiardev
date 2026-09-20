@@ -1,123 +1,140 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-@custom-variant dark (&:is(.dark *));
+/* O portfólio compartilha a paleta do aguiarlabs (~/Development/aguiarlabs).
+   Os 7 tokens abaixo são a fonte da verdade; os tokens do shadcn apontam
+   para eles, de modo que components/ui/ funciona sem reescrita. */
+
+@custom-variant dark (&:is([data-theme="dark"] *));
+
+@theme {
+  --color-canvas: #050505;
+  --color-surface: #0A0A0A;
+  --color-card: #111111;
+  --color-line: #1C1C1C;
+  /* Borda de controles de formulário. --color-line mede 1.20:1 contra o
+     canvas, e um input vazio cuja única fronteira é esse filete reprova no
+     WCAG 1.4.11 (3:1 para a borda de um controle). Este mede 3.55:1. */
+  --color-field: #666666;
+  --color-fg: #F2F2F2;
+  /* WCAG AA sobre --color-canvas: 5.16:1. */
+  --color-mu: #808080;
+}
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* ATENÇÃO: --color-card NÃO é mapeado aqui, e a omissão é deliberada.
+     `card` é o único nome que existe nos dois sistemas (paleta do aguiarlabs
+     e shadcn). Mapeá-lo aqui criaria a referência circular
+     --color-card → var(--card) → var(--color-card), porque :root declara
+     --card: var(--color-card). O @theme acima já define --color-card, e
+     :root/[data-theme="light"] o trocam por tema, então bg-card resolve
+     certo para a paleta e para os componentes do shadcn. */
   --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Cantos retos. As quatro escalas seguem declaradas porque rounded-md e
+     rounded-lg ainda aparecem em components/ui/ até a Task 4; a Task 4 as
+     remove junto com os últimos usos. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
 }
 
-:root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-canvas: #050505;
+  --color-surface: #0A0A0A;
+  --color-card: #111111;
+  --color-line: #1C1C1C;
+  --color-field: #666666;
+  --color-fg: #F2F2F2;
+  --color-mu: #808080;
+
+  /* Compat shadcn. Como todos derivam dos 7 acima, o tema claro só precisa
+     redeclarar os 7 — estes seguem sozinhos. */
+  --radius: 0;
+  --background: var(--color-canvas);
+  --foreground: var(--color-fg);
+  --card: var(--color-card);
+  --card-foreground: var(--color-fg);
+  --popover: var(--color-card);
+  --popover-foreground: var(--color-fg);
+  --primary: var(--color-fg);
+  --primary-foreground: var(--color-canvas);
+  --secondary: var(--color-card);
+  --secondary-foreground: var(--color-fg);
+  --muted: var(--color-surface);
+  --muted-foreground: var(--color-mu);
+  /* Um degrau acima de --popover (card), senão o hover do menu some. */
+  --accent: var(--color-line);
+  --accent-foreground: var(--color-fg);
+  /* Nunca renderizado: 0 usos fora de components/ui/. Existe para as
+     variantes destructive do shadcn compilarem. */
+  --destructive: #7A2E2E;
+  --border: var(--color-line);
+  --input: var(--color-field);
+  /* fg, não line: um anel em #1C1C1C mede 1.20:1 e reprova no WCAG 1.4.11. */
+  --ring: var(--color-fg);
+  --sidebar: var(--color-surface);
+  --sidebar-foreground: var(--color-fg);
+  --sidebar-primary: var(--color-fg);
+  --sidebar-primary-foreground: var(--color-canvas);
+  /* Um degrau acima de --sidebar (surface). */
+  --sidebar-accent: var(--color-card);
+  --sidebar-accent-foreground: var(--color-fg);
+  --sidebar-border: var(--color-line);
+  --sidebar-ring: var(--color-fg);
 }
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+[data-theme="light"] {
+  color-scheme: light;
+
+  --color-canvas: #FFFFFF;
+  --color-surface: #F7F7F7;
+  --color-card: #F0F0F0;
+  --color-line: #E5E5E5;
+  /* 3.45:1 contra o canvas claro. */
+  --color-field: #8A8A8A;
+  --color-fg: #0A0A0A;
+  /* 5.33:1 no canvas, 4.64:1 no card. */
+  --color-mu: #6B6B6B;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-canvas text-fg;
   }
 }
 
@@ -135,7 +152,9 @@
 }
 
 [data-side="right"][data-slot="sidebar-inner"] {
-  border-left: 1px solid hsl(var(--sidebar-border));
+  /* Era hsl(var(--sidebar-border)) com um valor oklch dentro — declaração
+     inválida, descartada pelo navegador, e a hairline nunca renderizou. */
+  border-left: 1px solid var(--color-line);
   /* Fallback to 100vh, then prefer dynamic viewport height */
   height: 100vh;
   height: 100dvh;
@@ -261,4 +280,35 @@ code[class*="language-"] {
 
 .token.italic {
   font-style: italic;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise-in {
+  animation: rise-in 0.9s cubic-bezier(0.2, 0.7, 0.15, 1) both;
+}
+
+.rise-in-delay-1 { animation-delay: 0.08s; }
+.rise-in-delay-2 { animation-delay: 0.18s; }
+.rise-in-delay-3 { animation-delay: 0.32s; }
+.rise-in-delay-4 { animation-delay: 0.46s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

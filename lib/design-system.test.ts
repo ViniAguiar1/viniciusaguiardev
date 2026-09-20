@@ -76,7 +76,7 @@ describe("paleta", () => {
 // rounded-full é permitido: pontos, avatares e a foto de perfil são
 // formas redondas por natureza. O aguiarlabs mantém rounded-full no
 // ponto de 6px do StatusStrip.
-const BOXY_ROUNDED = /\brounded(?!-full)(?:-(?:sm|md|lg|xl|2xl|3xl))?\b/g
+const BOXY_ROUNDED = /\brounded(?!-full)(?!-none)(?:-(?:sm|md|lg|xl|2xl|3xl))?\b/g
 
 describe("cantos", () => {
   it("nenhuma caixa arredondada em app/ e components/", () => {

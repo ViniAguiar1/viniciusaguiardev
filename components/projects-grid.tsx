@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import * as Dialog from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import type { Project } from "@/data/projects"
 import { localePath, t, type Locale } from "@/lib/i18n"
 
@@ -51,7 +51,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                   <h3 className="text-sm font-semibold leading-tight truncate">
                     {project.name}
                   </h3>
-                  <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                  <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
                     {project.category}
                   </span>
                 </div>
@@ -107,7 +107,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       <Dialog.Title className="text-lg font-semibold">
                         {selected.name}
                       </Dialog.Title>
-                      <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                      <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
                         {selected.category}
                       </span>
                     </div>

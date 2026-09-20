@@ -83,8 +83,7 @@ export function CodeBlock({ code, language, className }: Props) {
       </button>
       <pre
         className={cn(
-          "border border-line bg-card font-mono text-[13.5px] leading-[1.65] overflow-x-auto p-[1.1em_1.25em]",
-          className
+          "border border-line bg-card font-mono text-[13.5px] leading-[1.65] overflow-x-auto p-[1.1em_1.25em]"
         )}
         suppressHydrationWarning
       >

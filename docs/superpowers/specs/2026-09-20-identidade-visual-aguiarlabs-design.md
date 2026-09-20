@@ -121,7 +121,9 @@ substituindo o `@apply outline-ring/50` que hoje está no `@layer base`.
 
 ### O que é deletado
 
-- `--chart-1` … `--chart-5` nos dois temas — **10 declarações, 0 usos** em todo o projeto.
+- **`--chart-1` … `--chart-5` são renomeados, não deletados.** A versão original desta spec afirmava "10 declarações, 0 usos em todo o projeto". **Isso era falso.** O levantamento que produziu esse número excluiu o próprio `globals.css`, que é exatamente onde os cinco são consumidos: o bloco de tokens do Prism referencia todos (`var(--chart-3)`, `var(--chart-5)`, `var(--chart-4)`, `var(--chart-2)`, `var(--chart-3)` de novo, `var(--chart-1)`). Deletá-los apaga a cor de sintaxe de todo bloco de código do site — o oposto do que a seção 6 desta spec exige.
+
+  Eles voltam como **`--syntax-1` … `--syntax-5`**, com os valores oklch originais de cada tema, porque nunca foram cores de gráfico — o nome do shadcn era mentira. São a exceção deliberada ao croma zero, consistente com a seção 6: o grayscale vale para a moldura do bloco, não para os tokens da linguagem. Não recebem mapeamento em `@theme inline`: são consumidos só como `var()` cru dentro do `globals.css` e não precisam de utilities do Tailwind.
 - `--radius: 0.625rem` vira `--radius: 0`; as escalas derivadas `--radius-sm/md/lg/xl` saem do bloco `@theme inline`.
 
 ## 2. Mecanismo de tema

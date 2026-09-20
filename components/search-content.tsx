@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Search, FileText, Briefcase } from "lucide-react"
 import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { cn, MONO_CHIP } from "@/lib/utils"
 
 type SearchPost = {
   slug: string
@@ -111,7 +112,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     {post.tag && (
-                      <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                      <span className={cn(MONO_CHIP)}>
                         {post.tag}
                       </span>
                     )}
@@ -154,7 +155,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
                     <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">
                       {project.name}
                     </h3>
-                    <span className="text-[10px] font-medium px-2 py-0.5 bg-muted text-muted-foreground">
+                    <span className={cn(MONO_CHIP)}>
                       {project.category}
                     </span>
                   </div>

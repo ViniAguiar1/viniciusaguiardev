@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getAllPosts, getPostBySlug, ContentBlock } from "@/lib/posts"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import Image from "next/image"
 import { CodeBlock } from "@/components/code-block"
 import { renderInline } from "@/lib/inline-md"
@@ -79,9 +79,7 @@ export default async function PostPage({ params }: PageProps) {
       />
       {post.tag ? (
         <span
-          className={cn(
-            "border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu mb-4 inline-block"
-          )}
+          className={cn(MONO_CHIP, "mb-4 inline-block")}
         >
           {post.tag}
         </span>

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { t, type Locale } from "@/lib/i18n"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import type { Experience } from "@/data/experiences"
 
 interface ExperienceItemProps {
@@ -18,7 +19,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span>{t(locale, period)}</span>
         {current ? (
-          <span className="border border-field px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-fg">
+          <span className={cn(MONO_CHIP, "border-field text-fg")}>
             {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職", fr: "Actuel" })}
           </span>
         ) : null}

@@ -1,5 +1,5 @@
 import { getAllPosts } from "@/lib/posts"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import Link from "next/link"
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { localePath } from "@/lib/i18n"
@@ -176,9 +176,7 @@ export default async function Home() {
 
                 {article.tag ? (
                   <span
-                    className={cn(
-                      "absolute left-6 top-6 border border-line bg-canvas/80 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu backdrop-blur-sm"
-                    )}
+                    className={cn(MONO_CHIP, "absolute left-6 top-6 bg-canvas/80 backdrop-blur-sm")}
                   >
                     {article.tag}
                   </span>

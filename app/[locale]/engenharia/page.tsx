@@ -4,6 +4,7 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
+import { cn, MONO_CHIP } from "@/lib/utils"
 
 const siteUrl = "https://viniciusaguiardev.com.br"
 
@@ -182,7 +183,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 <div key={s.title} className="border border-border p-3">
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="text-xs font-medium">{s.title}</h4>
-                    <span className={`text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 ${s.chosen ? "bg-fg text-canvas border border-transparent" : "border border-line text-mu"}`}>{s.status}</span>
+                    <span className={cn(MONO_CHIP, s.chosen && "bg-fg text-canvas border-transparent")}>{s.status}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{s.desc}</p>
                 </div>

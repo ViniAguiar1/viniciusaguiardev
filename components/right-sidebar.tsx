@@ -21,14 +21,14 @@ export async function RightSidebar() {
     <Sidebar
       side="right"
       collapsible="none"
-      className="sticky top-0 h-screen w-18 min-w-0 max-w-xs hidden lg:flex"
+      className="sticky top-0 h-screen w-18 min-w-0 max-w-xs hidden lg:flex border-l border-line"
     >
       <SidebarContent className="h-full flex flex-col p-2">
 
         <div className="flex flex-col items-center gap-3 mb-4">
           <SidebarMenu className="flex flex-col items-center gap-3">
             <SidebarMenuItem>
-              <SidebarMenuButton asChild size="sm" className="w-8 h-8 p-0 hover:bg-transparent">
+              <SidebarMenuButton asChild size="sm" className="w-8 h-8 p-0 text-mu hover:text-fg">
                 <Link href={localePath(locale, "/")} title={dict.nav.home} className="flex items-center justify-center">
                   <Home className="w-5 h-5" />
                 </Link>

@@ -57,6 +57,16 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Cantos retos. O @theme do Tailwind v4 faz merge com o tema padrão em vez
+     de substituí-lo: sem estas quatro linhas, --radius-md volta a 0.375rem.
+     O guard de cantos (lib/design-system.test.ts) não varre components/ui/
+     (código gerado do Shadcn) — é este bloco, não o guard, que garante que um
+     rounded-* reintroduzido lá (ex.: `npx shadcn add`) ainda renderize 0. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
 }
 
 :root,
@@ -70,6 +80,9 @@
   --color-field: #666666;
   --color-fg: #F2F2F2;
   --color-mu: #808080;
+
+  /* Ver comentário em @theme inline: existe para blindar components/ui/. */
+  --radius: 0;
 
   /* Compat shadcn. Como todos derivam dos 7 acima, o tema claro só precisa
      redeclarar os 7 — estes seguem sozinhos. */
@@ -132,7 +145,11 @@
   --syntax-1: oklch(0.646 0.222 41.116);
   --syntax-2: oklch(0.6 0.118 184.704);
   --syntax-3: oklch(0.398 0.07 227.392);
-  --syntax-4: oklch(0.828 0.189 84.429);
+  /* Era oklch(0.828 0.189 84.429): 0.189 de chroma nesse L já excede o
+     gamut sRGB para este matiz, e o navegador recorta para ~#FABC00 — 1.51:1
+     contra --color-card (#F0F0F0), bem abaixo do WCAG AA. Mesmo matiz
+     (84.429), chroma reduzido para caber no gamut a este L: 5.31:1. */
+  --syntax-4: oklch(0.5 0.1 84.429);
   --syntax-5: oklch(0.769 0.188 70.08);
 }
 
@@ -154,67 +171,6 @@
 /* Custom styles for sidebars */
 [data-side="left"] {
   --sidebar-width: 20rem; /* Aumentando a sidebar esquerda */
-}
-
-[data-side="right"] {
-  --sidebar-width: 4.5rem; /* Sidebar direita com respiro do conteúdo */
-}
-
-[data-side="right"][data-slot="sidebar-container"] {
-  width: 4.5rem !important;
-}
-
-[data-side="right"][data-slot="sidebar-inner"] {
-  /* Era hsl(var(--sidebar-border)) com um valor oklch dentro — declaração
-     inválida, descartada pelo navegador, e a hairline nunca renderizou. */
-  border-left: 1px solid var(--color-line);
-  /* Fallback to 100vh, then prefer dynamic viewport height */
-  height: 100vh;
-  height: 100dvh;
-}
-
-/* Garantir que a sidebar direita ocupe 100% da altura */
-[data-side="right"][data-slot="sidebar"] {
-  height: 100vh !important;
-  height: 100dvh !important;
-}
-
-/* Ensure the fixed container uses dynamic viewport height */
-[data-side="right"][data-slot="sidebar-container"] {
-  height: 100vh !important;
-  height: 100dvh !important;
-}
-
-/* Estilos específicos para a sidebar direita fina */
-[data-side="right"] {
-  width: 4.5rem !important;
-  min-width: 4.5rem !important;
-  max-width: 4.5rem !important;
-}
-
-[data-side="right"] .group\/sidebar-wrapper {
-  width: 4.5rem !important;
-}
-
-/* Centralizar os ícones na sidebar direita */
-[data-side="right"] [data-slot="sidebar-content"] {
-  height: 100vh !important;
-  height: 100dvh !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-[data-side="right"] [data-slot="sidebar-group"] {
-  width: 100% !important;
-  padding: 0 !important;
-}
-
-[data-side="right"] [data-slot="sidebar-menu"] {
-  width: 100% !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 1.5rem !important;
 }
 
 /* Prism.js syntax tokens (adaptados para as cores do tema) */

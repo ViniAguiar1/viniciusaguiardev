@@ -188,7 +188,9 @@ Trocar tudo de `@import "tailwindcss";` até o fechamento do bloco `.dark { … 
 }
 ```
 
-Os tokens `--chart-1` … `--chart-5` **não** aparecem em lugar nenhum acima: são deletados nos dois temas (10 declarações, 0 usos no projeto).
+> **Correção aplicada durante a execução.** Este passo mandava deletar `--chart-1` … `--chart-5` alegando "0 usos no projeto". **A alegação era falsa** — o levantamento excluiu o próprio `globals.css`, onde o bloco de tokens do Prism consome os cinco. Deletá-los apaga a cor de sintaxe de todo bloco de código.
+>
+> Eles voltam como `--syntax-1` … `--syntax-5` com os valores oklch originais de cada tema, e as seis referências no bloco do Prism passam a apontar para os nomes novos. Sem mapeamento em `@theme inline` — são consumidos só como `var()` cru. Ver Ruling 5 no ledger.
 
 - [ ] **Step 2: Corrigir a hairline inválida da sidebar direita**
 

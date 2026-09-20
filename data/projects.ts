@@ -19,6 +19,23 @@ export type Project = {
   category: ProjectCategory
   url?: string
   detailPage?: string
+
+  // Os quatro campos abaixo são opcionais de propósito: nem todo projeto do
+  // portfólio registra papel, período, métrica ou stack, e o card foi desenhado
+  // para encolher quando faltam em vez de exibir espaço vazio. Preenchê-los é
+  // trabalho editorial do Vinicius — nada aqui é inferido.
+
+  /** Papel dele no projeto, não o que o produto faz. */
+  role?: LocalizedString
+  /** Período. Invariante entre locales: só anos, sem a palavra "atual". */
+  period?: string
+  /** O número que prova o resultado: uma transformação que ele executou
+   *  (6,7 MB → 19 KB) ou o resultado de negócio do produto que construiu
+   *  (GMV, volume transacionado). Sempre um fato publicado, nunca estimado. */
+  highlight?: LocalizedString
+  /** Nome de tecnologia não se traduz, então é array invariante e fica fora do
+   *  guard de cobertura de locale. */
+  stack?: string[]
 }
 
 export const projects: Project[] = [
@@ -27,20 +44,36 @@ export const projects: Project[] = [
     name: "Chattie",
     logo: "/images/chattie-logo.png",
     tagline: {
-      pt: "Outreach e customer engagement com IA — 100+ empresas",
-      en: "AI-powered outreach and customer engagement — 100+ companies",
-      es: "Outreach y customer engagement con IA — 100+ empresas",
-      jp: "AIによるアウトリーチ＆カスタマーエンゲージメント — 100社以上",
-      fr: "Outreach et customer engagement avec IA — 100+ entreprises",
+      pt: "Outreach e customer engagement com IA — 165+ empresas",
+      en: "AI-powered outreach and customer engagement — 165+ companies",
+      es: "Outreach y customer engagement con IA — 165+ empresas",
+      jp: "AIによるアウトリーチ＆カスタマーエンゲージメント — 165社以上",
+      fr: "Outreach et customer engagement avec IA — 165+ entreprises",
     },
     description: {
-      pt: "Plataforma de outreach e customer engagement com IA usada por 100+ empresas. Atuo como Product Engineer (Frontend) na evolução da frente de frontend, com foco em performance e escalabilidade — incluindo a reconstrução do inbox principal com paginação cursor-based e virtualização, reduzindo o payload de ~6,7 MB para ~19 KB por requisição e eliminando travamentos com milhares de conversas. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude e Vercel AI SDK.",
-      en: "AI-powered outreach and customer engagement platform used by 100+ companies. I work as a Product Engineer (Frontend) on the evolution of the frontend, focused on performance and scalability — including rebuilding the main inbox with cursor-based pagination and virtualization, cutting the payload from ~6.7 MB to ~19 KB per request and eliminating freezes with thousands of conversations. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude and Vercel AI SDK.",
-      es: "Plataforma de outreach y customer engagement con IA usada por 100+ empresas. Actúo como Product Engineer (Frontend) en la evolución del frontend, con foco en performance y escalabilidad — incluyendo la reconstrucción del inbox principal con paginación cursor-based y virtualización, reduciendo el payload de ~6,7 MB a ~19 KB por request y eliminando bloqueos con miles de conversaciones. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude y Vercel AI SDK.",
-      jp: "100社以上が利用するAIアウトリーチ＆カスタマーエンゲージメントプラットフォーム。プロダクトエンジニア（フロントエンド）としてフロントエンドの進化に携わり、パフォーマンスとスケーラビリティに注力 — カーソルベースのページネーションと仮想化によるメインインボックスの再構築を含み、リクエストあたりのペイロードを約6.7MBから約19KBへ削減、数千件の会話でのフリーズを解消。スタック：React、Next.js、TypeScript、Supabase、TanStack Query、TanStack Virtual、Anthropic Claude、Vercel AI SDK。",
-      fr: "Plateforme d'outreach et de customer engagement avec IA utilisée par 100+ entreprises. Je travaille comme Product Engineer (Frontend) sur l'évolution du frontend, avec un focus sur la performance et la scalabilité — y compris la reconstruction de l'inbox principale avec une pagination cursor-based et une virtualisation, réduisant le payload de ~6,7 MB à ~19 KB par requête et éliminant les blocages avec des milliers de conversations. Stack : React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude et Vercel AI SDK.",
+      pt: "Plataforma de outreach e customer engagement com IA usada por 165+ empresas. Atuo como Product Engineer (Frontend) na evolução da frente de frontend, com foco em performance e escalabilidade — incluindo a reconstrução do inbox principal com paginação cursor-based e virtualização, reduzindo o payload de ~6,7 MB para ~19 KB por requisição e eliminando travamentos com milhares de conversas. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude e Vercel AI SDK.",
+      en: "AI-powered outreach and customer engagement platform used by 165+ companies. I work as a Product Engineer (Frontend) on the evolution of the frontend, focused on performance and scalability — including rebuilding the main inbox with cursor-based pagination and virtualization, cutting the payload from ~6.7 MB to ~19 KB per request and eliminating freezes with thousands of conversations. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude and Vercel AI SDK.",
+      es: "Plataforma de outreach y customer engagement con IA usada por 165+ empresas. Actúo como Product Engineer (Frontend) en la evolución del frontend, con foco en performance y escalabilidad — incluyendo la reconstrucción del inbox principal con paginación cursor-based y virtualización, reduciendo el payload de ~6,7 MB a ~19 KB por request y eliminando bloqueos con miles de conversaciones. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude y Vercel AI SDK.",
+      jp: "165社以上が利用するAIアウトリーチ＆カスタマーエンゲージメントプラットフォーム。プロダクトエンジニア（フロントエンド）としてフロントエンドの進化に携わり、パフォーマンスとスケーラビリティに注力 — カーソルベースのページネーションと仮想化によるメインインボックスの再構築を含み、リクエストあたりのペイロードを約6.7MBから約19KBへ削減、数千件の会話でのフリーズを解消。スタック：React、Next.js、TypeScript、Supabase、TanStack Query、TanStack Virtual、Anthropic Claude、Vercel AI SDK。",
+      fr: "Plateforme d'outreach et de customer engagement avec IA utilisée par 165+ entreprises. Je travaille comme Product Engineer (Frontend) sur l'évolution du frontend, avec un focus sur la performance et la scalabilité — y compris la reconstruction de l'inbox principale avec une pagination cursor-based et une virtualisation, réduisant le payload de ~6,7 MB à ~19 KB par requête et éliminant les blocages avec des milliers de conversations. Stack : React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude et Vercel AI SDK.",
     },
     category: "AI SaaS",
+    role: {
+      pt: "Product Engineer (Frontend)",
+      en: "Product Engineer (Frontend)",
+      es: "Product Engineer (Frontend)",
+      jp: "プロダクトエンジニア（フロントエンド）",
+      fr: "Product Engineer (Frontend)",
+    },
+    period: "2026 —",
+    highlight: {
+      pt: "6,7 MB → 19 KB por requisição",
+      en: "6.7 MB → 19 KB per request",
+      es: "6,7 MB → 19 KB por request",
+      jp: "1リクエストあたり 6.7 MB → 19 KB",
+      fr: "6,7 MB → 19 KB par requête",
+    },
+    stack: ["React", "Next.js", "TypeScript", "Supabase", "TanStack Query", "TanStack Virtual", "Vercel AI SDK"],
     url: "https://trychattie.com",
     detailPage: "/posts/inbox-cursor-pagination-virtualization",
   },
@@ -63,6 +96,7 @@ export const projects: Project[] = [
       fr: "Projet open source d'émulateur de terminal avec rendu via GPU (wgpu) et moteur d'IA qui détecte automatiquement les erreurs et suggère des corrections via Claude ou OpenAI, avec un fallback offline par pattern matching. Rust pour le core de l'émulateur (PTY, vt100/xterm, split panes, scrollback) et Go pour le daemon d'IA. Distribué sous forme de .app/.dmg signé et notarisé pour macOS.",
     },
     category: "Open Source",
+    stack: ["Rust", "Go", "wgpu", "Claude", "OpenAI"],
     url: "https://github.com/ViniAguiar1/termai",
   },
   {
@@ -104,6 +138,20 @@ export const projects: Project[] = [
       fr: "Système qui intègre catalogue, commandes, expédition et paiements dans un seul tableau de bord, permettant aux vendeurs de gérer leurs opérations et leurs finances avec une gouvernance par profils d'accès et des rapports en temps réel.",
     },
     category: "SaaS",
+    role: {
+      pt: "Construção do zero — arquitetura ao lançamento",
+      en: "Built from scratch — architecture to launch",
+      es: "Construcción desde cero — arquitectura al lanzamiento",
+      jp: "ゼロからの構築 — アーキテクチャからローンチまで",
+      fr: "Construit de zéro — architecture au lancement",
+    },
+    highlight: {
+      pt: "+R$ 600 mil em GMV nos 6 primeiros meses",
+      en: "R$600k+ in GMV in the first 6 months",
+      es: "+R$ 600 mil en GMV en los primeros 6 meses",
+      jp: "ローンチ後6か月でGMV 60万レアル超",
+      fr: "+600 000 R$ de GMV sur les 6 premiers mois",
+    },
     url: "https://xdrop.com.br/",
     detailPage: "/projetos/x-drop",
   },
@@ -126,6 +174,13 @@ export const projects: Project[] = [
       fr: "Plateforme complète qui offre automatisation et outils de gestion pour cliniques vétérinaires et animaleries, combinant système de gestion et conseil spécialisé pour augmenter le chiffre d'affaires et fidéliser les clients.",
     },
     category: "SaaS",
+    highlight: {
+      pt: "R$ 2 milhões+ transacionados",
+      en: "R$2M+ transacted",
+      es: "R$ 2 millones+ transaccionados",
+      jp: "取引総額200万レアル超",
+      fr: "Plus de 2 M R$ transactionnés",
+    },
     url: "https://voxpetdigital.com.br/",
     detailPage: "/projetos/vox-pet-digital",
   },
@@ -148,6 +203,21 @@ export const projects: Project[] = [
       fr: "Plateforme SaaS pour le secteur de l'esthétique et de la santé avec 50 000+ utilisateurs. Centralise planning, clients, anamnèses, professionnels, services et flux opérationnels. J'ai travaillé comme Software Engineer full stack, en faisant évoluer des modules critiques en production, en modernisant le système legacy (PHP 5.3 → React/Next.js) et en implémentant un Design System.",
     },
     category: "Health",
+    role: {
+      pt: "Software Engineer full stack",
+      en: "Full stack Software Engineer",
+      es: "Software Engineer full stack",
+      jp: "ソフトウェアエンジニア（フルスタック）",
+      fr: "Software Engineer full stack",
+    },
+    highlight: {
+      pt: "Legado PHP 5.3 → React/Next.js",
+      en: "PHP 5.3 legacy → React/Next.js",
+      es: "Legado PHP 5.3 → React/Next.js",
+      jp: "レガシー PHP 5.3 → React/Next.js",
+      fr: "Legacy PHP 5.3 → React/Next.js",
+    },
+    stack: ["React", "Next.js", "PHP", "Design System"],
     url: "https://ikropp.com/",
     detailPage: "/projetos/ikropp",
   },

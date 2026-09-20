@@ -19,9 +19,18 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* items-start: card de altura natural. Projeto sem papel/métrica/stack
+          encolhe em vez de exibir um vazio reservado — a altura vira sinal de
+          quanta substância o projeto tem registrada. */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
         {projects.map((project) => {
           const tagline = project.tagline[locale] ?? project.tagline.pt
+          const role = project.role ? (project.role[locale] ?? project.role.pt) : null
+          const highlight = project.highlight
+            ? (project.highlight[locale] ?? project.highlight.pt)
+            : null
+          const stack = project.stack ?? []
+          const STACK_VISIVEL = 4
 
           return (
             <button
@@ -30,45 +39,69 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               onClick={() => setSelected(project)}
               data-umami-event="project-click"
               data-umami-event-project={project.name}
-              className={cn(
-                "group border border-border bg-card text-card-foreground p-5",
-                "flex items-center gap-5 transition-all text-left w-full",
-                "hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
-              )}
+              className="group border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
             >
-              <div className="relative flex-shrink-0 w-12 h-12 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
-                <Image
-                  src={project.logo}
-                  alt={project.name}
-                  width={32}
-                  height={32}
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2.5">
-                  <h3 className="text-sm font-semibold leading-tight truncate">
-                    {project.name}
-                  </h3>
-                  <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
-                    {project.category}
-                  </span>
+              <div className="flex items-start gap-4">
+                {/* Logo em grayscale: sete marcas de terceiros com fundos e
+                    formatos diferentes brigavam entre si e com o canvas. A cor
+                    real volta no hover. */}
+                <div className="relative flex-shrink-0 w-11 h-11 border border-line bg-surface flex items-center justify-center overflow-hidden">
+                  <Image
+                    src={project.logo}
+                    alt=""
+                    width={30}
+                    height={30}
+                    className="object-contain grayscale opacity-80 transition duration-200 group-hover:grayscale-0 group-hover:opacity-100"
+                  />
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-1">
-                  {tagline}
-                </p>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <h3 className="text-[15px] font-semibold leading-tight text-fg">
+                      {project.name}
+                    </h3>
+                    <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
+                      {project.category}
+                    </span>
+                  </div>
+                  {/* Sem line-clamp: o tagline cabe em duas linhas e cortá-lo
+                      no meio era a informação mais barata da página sendo
+                      truncada sem necessidade. */}
+                  <p className="text-[12.5px] text-mu mt-1.5 leading-relaxed">
+                    {tagline}
+                  </p>
+                </div>
               </div>
 
-              <svg
-                className="w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform group-hover:translate-x-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
+              {role || project.period ? (
+                <p className="mt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                  {[role, project.period].filter(Boolean).join("  ·  ")}
+                </p>
+              ) : null}
+
+              {highlight ? (
+                <p className="mt-3 border-t border-line pt-3 text-[13px] font-medium text-fg">
+                  {highlight}
+                </p>
+              ) : null}
+
+              {stack.length > 0 ? (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {stack.slice(0, STACK_VISIVEL).map((tech) => (
+                    <span
+                      key={tech}
+                      className="border border-line px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-mu"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                  {stack.length > STACK_VISIVEL ? (
+                    <span className="border border-line px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-mu">
+                      +{stack.length - STACK_VISIVEL}
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
             </button>
           )
         })}

@@ -45,16 +45,17 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               className="group mb-3 break-inside-avoid border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
             >
               <div className="flex items-start gap-4">
-                {/* Logo em grayscale: sete marcas de terceiros com fundos e
-                    formatos diferentes brigavam entre si e com o canvas. A cor
-                    real volta no hover. */}
-                <div className="relative flex-shrink-0 w-11 h-11 border border-line bg-surface flex items-center justify-center overflow-hidden">
+                {/* Ficha clara e logo em cor cheia. A versão anterior era
+                    grayscale sobre bg-surface: unificava as sete marcas, mas
+                    tornava ilegível qualquer arte escura — a do Chattie é
+                    preto sólido e sumia por completo, colorida ou não. */}
+                <div className="relative flex-shrink-0 w-11 h-11 border border-line bg-plate flex items-center justify-center overflow-hidden p-1.5">
                   <Image
                     src={project.logo}
                     alt=""
                     width={30}
                     height={30}
-                    className="object-contain grayscale opacity-80 transition duration-200 group-hover:grayscale-0 group-hover:opacity-100"
+                    className="object-contain w-full h-full"
                   />
                 </div>
 

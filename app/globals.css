@@ -19,6 +19,14 @@
   --color-fg: #F2F2F2;
   /* WCAG AA sobre --color-canvas: 5.16:1. */
   --color-mu: #808080;
+  /* Ficha de logo de terceiro. Invariante nos dois temas de proposito: as
+     marcas dos projetos sao PNG transparente com arte de luminancia muito
+     diferente entre si — o Chattie e preto solido, o iKropp e rosa e ciano —
+     e nenhuma delas fica legivel sobre um canvas quase preto. Uma ficha clara
+     segura todas. Nao e excecao ao croma zero da identidade: marca de
+     terceiro nunca pertenceu a paleta do site. */
+  --color-plate: #F2F2F2;
+
 }
 
 @theme inline {
@@ -80,6 +88,8 @@
   --color-field: #666666;
   --color-fg: #F2F2F2;
   --color-mu: #808080;
+  --color-plate: #F2F2F2;
+
 
   /* Ver comentário em @theme inline: existe para blindar components/ui/. */
   --radius: 0;

@@ -26,6 +26,10 @@
      segura todas. Nao e excecao ao croma zero da identidade: marca de
      terceiro nunca pertenceu a paleta do site. */
   --color-plate: #F2F2F2;
+  /* Par do --color-plate: texto sobre a ficha clara precisa de um escuro
+     invariante, senao o monograma some no tema escuro. */
+  --color-plate-fg: #0A0A0A;
+
 
 }
 
@@ -89,6 +93,8 @@
   --color-fg: #F2F2F2;
   --color-mu: #808080;
   --color-plate: #F2F2F2;
+  --color-plate-fg: #0A0A0A;
+
 
 
   /* Ver comentário em @theme inline: existe para blindar components/ui/. */

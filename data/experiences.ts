@@ -34,11 +34,11 @@ export const experiences: Experience[] = [
       fr: "Inbox : payload ~6,7 MB → ~19 KB (~400x)",
     },
     summary: {
-      pt: "Atuo diretamente na evolução da frente de frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance, escalabilidade e experiência do usuário.",
-      en: "Working directly on the evolution of the frontend of an AI outreach platform used by 100+ companies, focused on performance, scalability and user experience.",
-      es: "Actúo directamente en la evolución del frontend de una plataforma de outreach con IA usada por 100+ empresas, con foco en performance, escalabilidad y experiencia de usuario.",
-      jp: "100社以上が利用するAIアウトリーチプラットフォームのフロントエンドの進化に直接携わる。パフォーマンス、スケーラビリティ、ユーザー体験に注力。",
-      fr: "Je travaille directement à l'évolution du frontend d'une plateforme d'outreach avec IA utilisée par 100+ entreprises, avec un focus sur la performance, la scalabilité et l'expérience utilisateur.",
+      pt: "Atuo diretamente na evolução da frente de frontend de uma plataforma de outreach com IA usada por 165+ empresas, com foco em performance, escalabilidade e experiência do usuário.",
+      en: "Working directly on the evolution of the frontend of an AI outreach platform used by 165+ companies, focused on performance, scalability and user experience.",
+      es: "Actúo directamente en la evolución del frontend de una plataforma de outreach con IA usada por 165+ empresas, con foco en performance, escalabilidad y experiencia de usuario.",
+      jp: "165社以上が利用するAIアウトリーチプラットフォームのフロントエンドの進化に直接携わる。パフォーマンス、スケーラビリティ、ユーザー体験に注力。",
+      fr: "Je travaille directement à l'évolution du frontend d'une plateforme d'outreach avec IA utilisée par 165+ entreprises, avec un focus sur la performance, la scalabilité et l'expérience utilisateur.",
     },
     details: [
       {

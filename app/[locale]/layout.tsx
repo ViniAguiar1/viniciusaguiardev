@@ -119,9 +119,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           }}
         />
         <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
+          attribute="data-theme"
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <SidebarProvider>

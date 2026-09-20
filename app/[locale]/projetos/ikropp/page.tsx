@@ -3,6 +3,8 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
+import { SectionEyebrow } from "@/components/section-eyebrow"
+import { ProjectLogo } from "@/components/project-logo"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -360,15 +362,7 @@ export default async function IKroppPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 border border-line bg-surface flex items-center justify-center overflow-hidden">
-                <Image
-                  src="/images/ikropp.png"
-                  alt="iKropp"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
+              <ProjectLogo src="/images/ikropp.png" name="iKropp" size={56} />
               <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
@@ -383,10 +377,10 @@ export default async function IKroppPage() {
         {/* Purpose */}
         <FadeIn delay={100}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="01" as="h2">
               {c.purposeTitle}
-            </h2>
-            <div className="space-y-4 text-fg/85 leading-relaxed">
+            </SectionEyebrow>
+            <div className="space-y-4 text-fg leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -397,13 +391,13 @@ export default async function IKroppPage() {
         {/* My Role */}
         <FadeIn delay={150}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-2">
+            <SectionEyebrow index="02" as="h2">
               {c.roleTitle}
-            </h2>
+            </SectionEyebrow>
             <p className="text-sm text-mu mb-4">{c.roleText}</p>
             <ul className="space-y-2">
               {c.roleItems.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-fg/85">
+                <li key={i} className="flex items-start gap-2 text-sm text-fg">
                   <span className="text-mu mt-0.5 flex-shrink-0">-</span>
                   {item}
                 </li>
@@ -415,9 +409,9 @@ export default async function IKroppPage() {
         {/* Challenges */}
         <FadeIn delay={200}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="03" as="h2">
               {c.challengesTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {c.challenges.map((challenge, i) => (
                 <div
@@ -446,6 +440,9 @@ export default async function IKroppPage() {
         {/* Stats */}
         <FadeIn delay={250}>
           <section className="mb-12">
+            <SectionEyebrow index="04" as="h2">
+              {c.statsTitle}
+            </SectionEyebrow>
             <div className="grid grid-cols-2 gap-4">
               {c.stats.map((stat) => (
                 <div
@@ -465,9 +462,9 @@ export default async function IKroppPage() {
         {/* Screenshots placeholder */}
         <FadeIn delay={300}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="05" as="h2">
               {c.screenshotsTitle}
-            </h2>
+            </SectionEyebrow>
             <ImageGallery
               images={[
                 {
@@ -490,9 +487,9 @@ export default async function IKroppPage() {
         {/* Stack */}
         <FadeIn delay={350}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="06" as="h2">
               {c.stackTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="flex flex-wrap gap-2">
               {c.stackItems.map((tech) => (
                 <span

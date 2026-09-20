@@ -3,6 +3,8 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
+import { SectionEyebrow } from "@/components/section-eyebrow"
+import { ProjectLogo } from "@/components/project-logo"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -289,15 +291,7 @@ export default async function VoxPetPage() {
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 border border-line bg-plate flex items-center justify-center overflow-hidden p-2">
-                <Image
-                  src="/images/vox-pet-digital.webp"
-                  alt="Vox Pet Digital"
-                  width={40}
-                  height={40}
-                  className="object-contain w-full h-full"
-                />
-              </div>
+              <ProjectLogo src="/images/vox-pet-digital.webp" name="Vox Pet Digital" size={56} />
               <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
@@ -312,10 +306,10 @@ export default async function VoxPetPage() {
         {/* Purpose */}
         <FadeIn delay={100}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="01" as="h2">
               {c.purposeTitle}
-            </h2>
-            <div className="space-y-4 text-fg/85 leading-relaxed">
+            </SectionEyebrow>
+            <div className="space-y-4 text-fg leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -326,9 +320,9 @@ export default async function VoxPetPage() {
         {/* Technical Challenges */}
         <FadeIn delay={200}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="02" as="h2">
               {c.challengesTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {c.challenges.map((challenge, i) => (
                 <div
@@ -353,14 +347,12 @@ export default async function VoxPetPage() {
             </div>
           </section>
         </FadeIn>
-
-        {/* Numbers */}
         {/* Screenshots */}
         <FadeIn delay={300}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="03" as="h2">
               {c.screenshotsTitle}
-            </h2>
+            </SectionEyebrow>
             <ImageGallery
               images={[
                 {
@@ -387,9 +379,9 @@ export default async function VoxPetPage() {
         {/* Stack */}
         <FadeIn delay={400}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="04" as="h2">
               {c.stackTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="flex flex-wrap gap-2">
               {c.stackItems.map((tech) => (
                 <span

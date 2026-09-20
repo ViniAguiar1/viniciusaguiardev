@@ -1,6 +1,7 @@
 import { getLocale, t } from "@/lib/i18n-server"
 import { buildAlternates, type Locale } from "@/lib/i18n"
 import Link from "next/link"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 import { EditorConfigSheet } from "@/components/editor-config-sheet"
 
 export async function generateMetadata() {
@@ -465,14 +466,11 @@ export default async function UsesPage() {
       </header>
 
       <div className="space-y-10">
-        {categories.map((cat) => (
+        {categories.map((cat, i) => (
           <section key={cat.title.en}>
-            <div className="flex items-center gap-3 mb-5">
-              <h2 className="text-lg font-semibold">
-                {cat.title[locale] ?? cat.title.pt}
-              </h2>
-              <div className="h-px flex-1 bg-border" />
-            </div>
+            <SectionEyebrow index={String(i + 1).padStart(2, "0")} as="h2">
+              {cat.title[locale] ?? cat.title.pt}
+            </SectionEyebrow>
 
             <div className="space-y-4">
               {cat.items.map((item) => (
@@ -484,7 +482,7 @@ export default async function UsesPage() {
                         href={item.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm font-medium hover:underline"
+                        className="text-sm font-medium underline decoration-mu underline-offset-4 hover:decoration-fg"
                       >
                         {item.name}
                       </Link>

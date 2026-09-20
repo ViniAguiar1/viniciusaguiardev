@@ -19,10 +19,13 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
 
   return (
     <>
-      {/* items-start: card de altura natural. Projeto sem papel/métrica/stack
-          encolhe em vez de exibir um vazio reservado — a altura vira sinal de
-          quanta substância o projeto tem registrada. */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+      {/* Colunas CSS em vez de grid: numa grade, a altura da linha é a do card
+          mais alto, então um projeto sem papel/métrica/stack deixa um buraco
+          visível ao lado de um que tem tudo. Com columns os cards empacotam e
+          o vazio some, sem precisar esticar card curto nem reservar espaço.
+          Contrapartida: a leitura passa a ser coluna a coluna, não linha a
+          linha. */}
+      <div className="columns-1 md:columns-2 gap-3">
         {projects.map((project) => {
           const tagline = project.tagline[locale] ?? project.tagline.pt
           const role = project.role ? (project.role[locale] ?? project.role.pt) : null
@@ -39,7 +42,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               onClick={() => setSelected(project)}
               data-umami-event="project-click"
               data-umami-event-project={project.name}
-              className="group border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
+              className="group mb-3 break-inside-avoid border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
             >
               <div className="flex items-start gap-4">
                 {/* Logo em grayscale: sete marcas de terceiros com fundos e
@@ -67,26 +70,26 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                   {/* Sem line-clamp: o tagline cabe em duas linhas e cortá-lo
                       no meio era a informação mais barata da página sendo
                       truncada sem necessidade. */}
-                  <p className="text-[12.5px] text-mu mt-1.5 leading-relaxed">
+                  <p className="text-[12.5px] text-mu mt-2 leading-relaxed">
                     {tagline}
                   </p>
                 </div>
               </div>
 
               {role || project.period ? (
-                <p className="mt-3.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
                   {[role, project.period].filter(Boolean).join("  ·  ")}
                 </p>
               ) : null}
 
               {highlight ? (
-                <p className="mt-3 border-t border-line pt-3 text-[13px] font-medium text-fg">
+                <p className="mt-4 border-t border-line pt-4 text-[13px] font-medium text-fg">
                   {highlight}
                 </p>
               ) : null}
 
               {stack.length > 0 ? (
-                <div className="mt-3 flex flex-wrap gap-1.5">
+                <div className="mt-4 flex flex-wrap gap-1.5">
                   {stack.slice(0, STACK_VISIVEL).map((tech) => (
                     <span
                       key={tech}

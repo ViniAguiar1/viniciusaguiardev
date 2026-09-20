@@ -113,6 +113,15 @@
   --sidebar-accent-foreground: var(--color-fg);
   --sidebar-border: var(--color-line);
   --sidebar-ring: var(--color-fg);
+
+  /* Paleta de sintaxe do Prism. É a exceção deliberada ao croma zero: o
+     grayscale vale para a moldura do bloco de código, não para os tokens
+     da linguagem. Valores herdados do tema escuro anterior. */
+  --syntax-1: oklch(0.488 0.243 264.376);
+  --syntax-2: oklch(0.696 0.17 162.48);
+  --syntax-3: oklch(0.769 0.188 70.08);
+  --syntax-4: oklch(0.627 0.265 303.9);
+  --syntax-5: oklch(0.645 0.246 16.439);
 }
 
 [data-theme="light"] {
@@ -127,6 +136,13 @@
   --color-fg: #0A0A0A;
   /* 5.33:1 no canvas, 4.64:1 no card. */
   --color-mu: #6B6B6B;
+
+  /* Paleta de sintaxe, valores do tema claro anterior. */
+  --syntax-1: oklch(0.646 0.222 41.116);
+  --syntax-2: oklch(0.6 0.118 184.704);
+  --syntax-3: oklch(0.398 0.07 227.392);
+  --syntax-4: oklch(0.828 0.189 84.429);
+  --syntax-5: oklch(0.769 0.188 70.08);
 }
 
 @layer base {
@@ -136,6 +152,12 @@
   body {
     @apply bg-canvas text-fg;
   }
+}
+
+/* Foco visível do aguiarlabs, no lugar do outline-ring/50 do shadcn. */
+*:focus-visible {
+  outline: 1px solid var(--color-fg);
+  outline-offset: 3px;
 }
 
 /* Custom styles for sidebars */
@@ -230,19 +252,19 @@ code[class*="language-"] {
 .token.attr-name,
 .token.namespace,
 .token.deleted {
-  color: var(--chart-3);
+  color: var(--syntax-3);
 }
 
 .token.function,
 .token.class-name {
-  color: var(--chart-5);
+  color: var(--syntax-5);
 }
 
 .token.boolean,
 .token.number,
 .token.constant,
 .token.symbol {
-  color: var(--chart-4);
+  color: var(--syntax-4);
 }
 
 .token.selector,
@@ -251,7 +273,7 @@ code[class*="language-"] {
 .token.char,
 .token.builtin,
 .token.inserted {
-  color: var(--chart-2);
+  color: var(--syntax-2);
 }
 
 .token.operator,
@@ -266,12 +288,12 @@ code[class*="language-"] {
 
 .token.keyword,
 .token.atrule {
-  color: var(--chart-3);
+  color: var(--syntax-3);
 }
 
 .token.regex,
 .token.important {
-  color: var(--chart-1);
+  color: var(--syntax-1);
 }
 
 .token.bold {

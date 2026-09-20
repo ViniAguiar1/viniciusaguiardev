@@ -1,5 +1,6 @@
 {
   "slug": "multi-tenant-architecture-postgresql",
+  "coverSubject": "a single large monolithic slab divided internally by thin deep grooves into many equal sealed compartments, none of the compartments connected to another",
   "order": 6,
   "title": "Arquitetura multi-tenant com PostgreSQL em aplicações SaaS",
   "title_en": "Multi-tenant architecture with PostgreSQL in SaaS applications",

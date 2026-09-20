@@ -1,5 +1,6 @@
 {
   "slug": "design-system-shadcn-tailwind",
+  "coverSubject": "a set of modular geometric blocks in graduated sizes arranged on a precise grid, a few of them lifted slightly above the plane as if mid-assembly",
   "featured": true,
   "order": 2,
   "title": "Construindo um Design System com Shadcn UI e Tailwind",

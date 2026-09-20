@@ -24,7 +24,11 @@ export async function generateMetadata({ params }: PageProps) {
   const post = getPostBySlug(slug, locale)
   if (!post) return { title: "Post não encontrado" }
   const url = `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`
-  const ogImage = post.ogImage || "/og-image.png"
+  // Um ogImage declarado no JSON ganha da capa gerada: é trabalho manual e
+  // não deve ser atropelado. Sem os dois, cai no card genérico do site.
+  const ogImage =
+    post.ogImage ||
+    (post.cover ? `/blog/${slug}/og.jpg` : "/og-image.png")
   return {
     title: `${post.title} | Blog`,
     description: post.description ?? undefined,

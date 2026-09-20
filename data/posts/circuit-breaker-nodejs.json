@@ -1,5 +1,6 @@
 {
   "slug": "circuit-breaker-nodejs",
+  "coverSubject": "a long row of falling dominoes arrested mid-collapse by one thick upright block, every domino beyond that block still standing perfectly straight",
   "order": 8,
   "title": "Circuit Breaker em Node.js: protegendo sistemas contra falhas em cascata",
   "title_en": "Circuit Breaker in Node.js: protecting systems against cascading failures",

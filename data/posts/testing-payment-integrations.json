@@ -1,5 +1,6 @@
 {
   "slug": "testing-payment-integrations",
+  "coverSubject": "a row of identical precision measuring gauges mounted on heavy machined blocks, arranged in a straight line with shallow depth of field",
   "order": 5,
   "title": "Estratégia de testes para integrações de pagamento em Node.js",
   "title_en": "Testing strategy for payment integrations in Node.js",

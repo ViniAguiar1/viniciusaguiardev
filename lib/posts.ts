@@ -53,9 +53,14 @@ export type Post = {
   ogImage?: string
   // false => fora da grid da home (continua em busca, sitemap e URL direta)
   showOnHome?: boolean
+  // Derivado do disco, não do JSON: há capa em public/blog/<slug>/cover.webp.
+  // Deriva em vez de declarar porque este loader já lê do disco — um campo
+  // manual poderia dizer true com o arquivo ausente.
+  cover: boolean
 }
 
 const postsDir = path.join(process.cwd(), "data", "posts")
+const coversDir = path.join(process.cwd(), "public", "blog")
 const isProd = process.env.NODE_ENV === "production"
 
 // Em produção, JSONs são imutáveis até o próximo deploy — vale persistir
@@ -97,6 +102,7 @@ function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
     order: typeof data.order === "number" ? data.order : undefined,
     ogImage: typeof data.ogImage === "string" ? data.ogImage : undefined,
     showOnHome: data.showOnHome !== false,
+    cover: fs.existsSync(path.join(coversDir, slug, "cover.webp")),
   }
 }
 

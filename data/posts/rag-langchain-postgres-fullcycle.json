@@ -1,5 +1,6 @@
 {
   "slug": "rag-langchain-postgres-fullcycle",
+  "coverSubject": "a dense archive wall of small identical drawers, with a narrow beam of light picking out exactly three drawers that stand pulled open",
   "order": 9,
   "title": "Construindo um sistema RAG com LangChain e PostgreSQL",
   "title_en": "Building a RAG system with LangChain and PostgreSQL",

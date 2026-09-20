@@ -1,5 +1,6 @@
 {
   "slug": "webhook-architecture-payment-providers",
+  "coverSubject": "several thin cables entering from outside the frame and converging into one single heavy junction block at the centre",
   "order": 7,
   "title": "Arquitetura de webhooks para provedores de pagamento em Node.js",
   "title_en": "Webhook architecture for payment providers in Node.js",

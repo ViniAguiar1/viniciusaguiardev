@@ -29,7 +29,15 @@ O portfólio e o `aguiarlabs` (`~/Development/aguiarlabs`) são hoje dois sistem
 border-left: 1px solid hsl(var(--sidebar-border));
 ```
 
-Mas `--sidebar-border` é `oklch(0.922 0 0)`. `hsl(oklch(…))` é inválido, o navegador descarta a declaração inteira, e **a hairline da sidebar direita não é desenhada hoje**. Como hairline é o elemento estrutural central da identidade que estamos adotando, a correção entra no escopo.
+Mas `--sidebar-border` é `oklch(0.922 0 0)`. `hsl(oklch(…))` é inválido e o navegador descarta a declaração inteira.
+
+> **Correção pós-execução: este diagnóstico estava certo e incompleto, e a conclusão que ele sustentava era falsa.**
+>
+> A declaração é de fato inválida. Mas **não é por isso** que a hairline não aparece: `components/right-sidebar.tsx` passa `collapsible="none"`, e nesse caminho `components/ui/sidebar.tsx` faz um *early return* que renderiza um `<div data-slot="sidebar">` sem `data-side` e sem nenhum descendente `data-slot="sidebar-inner"`. O seletor `[data-side="right"][data-slot="sidebar-inner"]` **nunca casou** — e o mesmo vale para as outras nove regras `[data-side="right"]` do arquivo, que também eram letra morta. A largura de 4.5rem vinha de `w-18` no componente, não do CSS.
+>
+> Portanto corrigir o valor da declaração não produzia o resultado que esta seção prometia. A correção real é `border-l border-line` no `className` do `components/right-sidebar.tsx`, e as dez regras mortas foram deletadas.
+>
+> **Causa raiz, comum às três afirmações falsas desta spec** (esta, a contagem de `--chart-*` e a contagem de "85 usos cromáticos"): todas foram derivadas de ler um arquivo isolado em vez de seguir o caminho de renderização até o DOM. Um `grep` diz o que está escrito; não diz o que é aplicado.
 
 ## Objetivo
 
@@ -252,3 +260,29 @@ Sem esses guards a purga é um mutirão que a próxima linha de código desfaz e
 ## 8. Risco conhecido
 
 A troca de `attribute="class"` para `attribute="data-theme"` muda a chave que o `next-themes` persiste e o atributo que o script de bloqueio aplica antes da hidratação. Visitante que já tenha tema salvo no `localStorage` pode ver um flash na primeira visita após o deploy. É de uma visita só e não justifica código de migração.
+
+---
+
+## Apêndice: correções pós-execução
+
+Esta spec foi escrita antes da implementação e errou em seis pontos. Todos foram descobertos pela execução ou pela revisão de branch completa, e todos já estão corrigidos no código. Ficam registrados aqui porque uma spec que mente é pior que uma spec ausente.
+
+1. **A hairline da sidebar direita** — diagnóstico incompleto que sustentava uma conclusão falsa. Ver a nota na seção *Bug pré-existente*.
+
+2. **`--chart-1..5` não tinham "0 usos"** — o bloco de tokens do Prism no próprio `globals.css` consome os cinco. Ver a nota na seção 1.
+
+3. **"85 usos cromáticos" eram 132 pontos** — faltavam as famílias neutras do Tailwind, `white`/`black` chapados, três hex arbitrários e o campo `tagColor` no nível dos dados. Ver a emenda na seção 4.
+
+4. **A seção 8 erra o mecanismo do risco.** Trocar `attribute="class"` por `attribute="data-theme"` **não** muda a chave persistida — `storageKey` é uma prop separada, com default `"theme"`, independente de `attribute`. O que de fato muda é o atributo escrito no `<html>` e o tratamento de um valor `"system"` já persistido sob `enableSystem={false}`. A conclusão (um flash numa visita) continua válida; a causa declarada não era essa.
+
+5. **A seção 2 superestima os `dark:`.** Ela justifica a troca do `@custom-variant` dizendo que mantém "34 usos de `dark:` em 11 arquivos" válidos. Depois da purga de cor da seção 4, restam **2** usos fora de `components/ui/` (ambos no `theme-toggle.tsx`) mais 10 dentro. A troca continua necessária — para 12 usos, não 34. A maioria daqueles 34 era metade cromática de pares `dark:`, deletada pela própria seção 4.
+
+6. **A seção 6 manda tratar `<hr>` e cabeçalho de tabela, que não existem.** O renderizador de posts trata exatamente cinco tipos de bloco (`heading`, `paragraph`, `code`, `image`, `list`) e o `lib/inline-md.tsx` só parseia link, negrito, itálico e código inline. Não há `<hr>` nem tabela em lugar nenhum do pipeline. A implementação corretamente pulou os dois; a spec é que não deveria tê-los pedido.
+
+### Tensão não resolvida entre objetivo e mecanismo
+
+O **Objetivo** promete que os dois repositórios compartilhem vocabulário "a ponto de um componente poder ser copiado de um para o outro e funcionar". A decisão 4 aprovou uma camada de compat que mantém ~25 nomes de token do shadcn vivos, e a seção 4 mandou purgar apenas classes **cromáticas** — não `text-muted-foreground` → `text-mu`.
+
+O resultado satisfaz o mecanismo e falha o objetivo: restam **~293 usos do vocabulário shadcn** em 21 arquivos fora de `components/ui/`. Todos resolvem para os pixels certos pela camada de compat, mas `text-muted-foreground` não existe no aguiarlabs — colar um componente lá não gera regra nenhuma.
+
+Isto não é erro de implementação: fizeram o que a seção 4 mandou. É uma decisão em aberto. Se a propriedade de copiar-e-colar importa, ela precisa de escopo próprio e de uma regra de guard que proíba os nomes-alias fora de `components/ui/`. Se não importa, o Objetivo deveria parar de prometê-la.

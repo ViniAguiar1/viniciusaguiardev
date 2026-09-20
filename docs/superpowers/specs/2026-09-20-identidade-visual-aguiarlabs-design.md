@@ -54,7 +54,7 @@ Trazer a linguagem visual do aguiarlabs para o portfólio de forma que os dois r
 - **Trocar Prism por Shiki.** O aguiarlabs usa Shiki com temas duais; aqui o Prism já funciona e o alinhamento acontece na **moldura** do bloco, não nos tokens da linguagem.
 - **`pulse-ring`.** É do indicador de disponibilidade do aguiarlabs; não há equivalente no portfólio.
 - **Substituir `FadeIn` nas seções internas.** Só o hero ganha `rise-in`.
-- **Reescrever conteúdo.** Nenhum texto de post, projeto ou experiência muda. Esta é uma entrega puramente visual.
+- **Reescrever conteúdo.** Nenhum **texto** de post, projeto ou experiência muda. A única alteração em arquivo de dados é a remoção da chave `tagColor` dos 12 posts (ver 4.4), que é metadado de apresentação.
 - **Novo PDF de currículo** com a identidade nova.
 
 ## 1. Fundação de tokens
@@ -151,7 +151,17 @@ Os eyebrows e a numeração introduzem texto de UI novo. Toda string nova usa `t
 
 ## 4. Purga de cor
 
-Os 85 usos cromáticos se dividem em três classes, com destinos diferentes.
+> **Emenda de 2026-09-20, após a aprovação.** A contagem original de "85 usos cromáticos" estava incompleta. O levantamento completo encontrou **132 pontos**, incluindo um sistema de cor no nível dos **dados** que não aparece em nenhuma varredura de `.tsx`. As subseções 4.4 e 4.5 são novas; o destino de todas segue a decisão 7 (croma zero absoluto), já aprovada.
+
+| Fonte | Qtd |
+|---|---|
+| Classes cromáticas (`emerald`, `blue`, `violet`, …) | 85 |
+| Famílias neutras do Tailwind (`gray`, `slate`, `zinc`) | 19 |
+| `text-white` / `bg-black` / `bg-white` / `text-black` | 13 |
+| Hex arbitrários (`text-[#444]`, `border-[#eee]`, `bg-[#f5f6fa]`) | 3 |
+| `tagColor` nos 12 posts (dados) | 12 |
+
+As classes se dividem em cinco grupos, com destinos diferentes.
 
 ### 4.1 Decorativo — deletado
 
@@ -178,6 +188,24 @@ Inversão é o gesto mais forte da paleta de 7 tokens — marca "escolhido" com 
 
 Decisão consciente: o reconhecimento do canal vem da forma do ícone, não do matiz, e a primeira exceção documentada num design system é como todos começam a vazar. Reintroduzir um token depois é trivial; remover é mais difícil.
 
+### 4.4 `tagColor` — sistema de cor no nível dos dados
+
+`lib/posts.ts:46` declara `tagColor?: string`, preenchido em `lib/posts.ts:94`, e **os 12 posts de `data/posts/` o definem** com valores como `bg-blue-700`, `bg-emerald-700`, `bg-cyan-700` e `bg-purple-700`. Ele é renderizado com `text-white` em três lugares:
+
+- `components/search-content.tsx:116`
+- `app/[locale]/page.tsx:169`
+- `app/[locale]/posts/[slug]/page.tsx:83`
+
+Mesmo destino do `categoryColors`: o badge vira chip mono (`border border-line`, `font-mono text-[10px] uppercase tracking-[0.16em] text-mu`), o campo sai de `RawPostData` e de `Post` em `lib/posts.ts`, e a chave sai dos 12 JSONs.
+
+Isto **altera arquivos de dados**, o que a seção "Fora do escopo" excluía. A exclusão original se referia a **texto** de post — título, descrição, blocos. Nenhum texto muda; `tagColor` é metadado de apresentação e é a única chave removida.
+
+### 4.5 Neutros, hex arbitrários e a exceção do scrim
+
+As famílias neutras do Tailwind (`text-gray-700`, `bg-zinc-100`, `bg-slate-900`, …) e os três hex arbitrários de `components/app-sidebar.tsx` (`text-[#444]`, `border-[#eee]`, `bg-[#f5f6fa]`) passam por fora dos 7 tokens tanto quanto as cromáticas, e vão junto. O bloco de perfil da sidebar é o mais afetado: hoje ele fixa cor de texto, fundo e borda à mão em vez de usar os tokens.
+
+**Uma exceção sancionada:** `bg-black/50` no `Dialog.Overlay` de `components/projects-grid.tsx:104`. Scrim de modal não é cor de marca — o próprio aguiarlabs usa `bg-black/60` e `backdrop:bg-black/70` no admin. O guard da seção 7 permite `black` e `white` **quando acompanhados de opacidade** (`/50`, `/70`), e proíbe o uso chapado.
+
 ## 5. Cantos e filetes
 
 **Regra:** caixas ficam retas; formas intrinsecamente redondas não. O próprio aguiarlabs mantém `rounded-full` no ponto de 6px do `StatusStrip`.
@@ -203,7 +231,16 @@ Os posts não usam MDX nem uma classe `prose` — `app/[locale]/posts/[slug]/pag
 
 ## 7. Verificação
 
-- `pnpm lint`, `pnpm typecheck`, `pnpm build` — pipeline de CI atual.
+O CI (`.github/workflows/ci.yml`) roda **lint → typecheck → test → build → AEO**. O passo de teste existe e é onde os guards desta entrega passam a morar — o `CLAUDE.md` descreve o pipeline sem ele e está desatualizado nesse ponto.
+
+Dois guards novos em `lib/design-system.test.ts`, no mesmo padrão de varredura de `lib/i18n-coverage.test.ts` (scan de `app/` e `components/`, pulando `components/ui/`):
+
+1. **Paleta** — falha se aparecer qualquer classe de cor fora dos 7 tokens: famílias cromáticas, famílias neutras do Tailwind, `white`/`black` chapados e hex arbitrários em colchetes. Permite `black`/`white` com opacidade (o scrim de 4.5). Varre também `data/posts/*.json` atrás de `tagColor`, que é onde a varredura de `.tsx` é cega.
+2. **Cantos** — falha se aparecer `rounded-sm|md|lg|xl|2xl|3xl`. Permite `rounded-full`, que é a forma correta para pontos, avatares e a foto de perfil.
+
+Sem esses guards a purga é um mutirão que a próxima linha de código desfaz em silêncio.
+
+- `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` — pipeline de CI atual.
 - `pnpm aeo` — score deve continuar **≥ 90/100**. A entrega é visual e não toca schema, `robots.ts`, `sitemap.ts` nem `llms.txt`, então nenhum dos 17 sinais deveria se mover; o check confirma.
 - `lib/i18n-coverage.test.ts` — falha se algum eyebrow ou rótulo novo não cobrir os 5 locales.
 - **Contraste:** os valores vêm prontos do aguiarlabs com AA verificado, mas as combinações novas do portfólio precisam ser conferidas — em especial `text-mu` sobre `--color-card` no tema claro (4.64:1) e os chips mono com borda `--color-field`.

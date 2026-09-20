@@ -212,11 +212,11 @@ export const projects: Project[] = [
     },
     category: "SaaS",
     role: {
-      pt: "Senior Software Engineer",
-      en: "Senior Software Engineer",
-      es: "Senior Software Engineer",
-      jp: "シニアソフトウェアエンジニア",
-      fr: "Senior Software Engineer",
+      pt: "CTO & Co-Founder",
+      en: "CTO & Co-Founder",
+      es: "CTO & Co-Founder",
+      jp: "CTO 兼 共同創業者",
+      fr: "CTO & Co-Fondateur",
     },
     highlight: {
       pt: "R$ 2 milhões+ transacionados",

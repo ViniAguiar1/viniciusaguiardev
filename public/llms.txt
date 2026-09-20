@@ -14,7 +14,7 @@ Notas importantes:
 
 - [Home](https://viniciusaguiardev.com.br/): Página inicial com seção de engenharia, artigos técnicos e apresentação profissional.
 - [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Chattie, Holy Solutions, Vox Pet Digital, Stack Labs, MovePro, EasyToGo), habilidades, tech stack e conceitos-chave.
-- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 7 projetos — Chattie, termAI, FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em AI SaaS, e-commerce e health.
+- [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 6 projetos — Chattie, termAI, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em AI SaaS, e-commerce e health.
 - [X-Drop — Página dedicada](https://viniciusaguiardev.com.br/projetos/x-drop): Case de produto com propósito, métricas reais (R$ 30k+ faturados, 100+ usuários, 400+ pedidos, MRR R$ 20k em 2 meses), screenshots do dashboard web e app iOS nativo (Swift UI), stack técnica e links para App Store e site.
 - [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: performance de frontend (paginação cursor-based, virtualização de lista), arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
 

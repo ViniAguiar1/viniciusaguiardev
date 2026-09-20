@@ -100,26 +100,6 @@ export const projects: Project[] = [
     url: "https://github.com/ViniAguiar1/termai",
   },
   {
-    slug: "fastseller",
-    name: "FastSeller",
-    logo: "/images/fastseller-logo.png",
-    tagline: {
-      pt: "Plataforma de automação para vendedores em marketplaces",
-      en: "Automation platform for marketplace sellers",
-      es: "Plataforma de automatización para vendedores en marketplaces",
-      jp: "マーケットプレイス販売者向けの自動化プラットフォーム",
-      fr: "Plateforme d'automatisation pour vendeurs sur marketplaces",
-    },
-    description: {
-      pt: "Plataforma que centraliza a operação de vendedores em múltiplos marketplaces, automatizando gestão de pedidos, estoque e precificação para escalar vendas online.",
-      en: "Platform that centralizes seller operations across multiple marketplaces, automating order management, inventory, and pricing to scale online sales.",
-      es: "Plataforma que centraliza la operación de vendedores en múltiples marketplaces, automatizando gestión de pedidos, inventario y precios para escalar ventas online.",
-      jp: "複数のマーケットプレイスにわたる販売者の業務を一元化するプラットフォーム。注文管理、在庫、価格設定を自動化してオンライン販売をスケール。",
-      fr: "Plateforme qui centralise les opérations des vendeurs sur plusieurs marketplaces, en automatisant la gestion des commandes, des stocks et de la tarification pour faire passer les ventes en ligne à l'échelle.",
-    },
-    category: "E-commerce",
-  },
-  {
     slug: "x-drop",
     name: "X-Drop",
     logo: "/images/x-droplogo.png",

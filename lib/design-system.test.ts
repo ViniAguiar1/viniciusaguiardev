@@ -5,7 +5,7 @@ import { describe, it, expect } from "vitest"
 // process.cwd() é a raiz do repo sob Vitest — mesmo padrão de lib/i18n-coverage.test.ts
 const ROOT = process.cwd()
 
-const SCAN_DIRS = ["app", "components"]
+const SCAN_DIRS = ["app", "components", "lib"]
 const SKIPPED_DIR = path.join("components", "ui") // código gerado do Shadcn
 
 const FAMILIES =

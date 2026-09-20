@@ -21,7 +21,7 @@ function renderInlineCode(content: string): ReactNode {
     <code
       key={nextKey()}
       className={cn(
-        "rounded border border-border bg-muted/60 px-1 py-0.5 text-[0.9em]"
+        "border border-line bg-card px-[0.35em] py-[0.1em] text-[0.88em] font-mono"
       )}
     >
       {content}

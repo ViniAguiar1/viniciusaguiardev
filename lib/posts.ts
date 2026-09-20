@@ -43,7 +43,6 @@ export type Post = {
   date: string
   readTime?: string
   tag?: string
-  tagColor?: string
   content?: string
   blocks?: ContentBlock[]
   featured?: boolean
@@ -91,7 +90,6 @@ function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
     date: data.date ?? "",
     readTime: data.readTime ?? "",
     tag: data.tag ?? "",
-    tagColor: data.tagColor ?? "",
     content: data.content ?? "",
     blocks: normalizeBlocks(data),
     featured: Boolean(data.featured),

@@ -94,7 +94,7 @@ export default async function SobrePage() {
                 aria-hidden="true"
                 className={cn(
                   "absolute -left-[29px] top-1 h-2.5 w-2.5 rounded-full",
-                  experience.current ? "bg-emerald-500 ring-4 ring-emerald-500/20" : "bg-border"
+                  experience.current ? "bg-fg" : "bg-line"
                 )}
               />
               <ExperienceItem experience={experience} locale={locale} />

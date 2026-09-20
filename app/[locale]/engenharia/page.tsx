@@ -182,7 +182,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 <div key={s.title} className="rounded-md border border-border p-3">
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="text-xs font-medium">{s.title}</h4>
-                    <span className={`text-[10px] font-medium rounded-full px-2 py-0.5 ${s.chosen ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>{s.status}</span>
+                    <span className={`text-[10px] font-mono uppercase tracking-[0.16em] px-2 py-0.5 ${s.chosen ? "bg-fg text-canvas" : "border border-line text-mu"}`}>{s.status}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">{s.desc}</p>
                 </div>

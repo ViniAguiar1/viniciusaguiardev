@@ -23,7 +23,6 @@
   "tag_en": "Frontend",
   "tag_es": "Frontend",
   "tag_jp": "フロントエンド",
-  "tagColor": "bg-emerald-700",
   "blocks": [
     { "type": "paragraph", "text": "Todo SaaS B2B tem uma tela onde o produto inteiro acontece. No caso deste post — uma plataforma de mensagens usada por times comerciais — essa tela é o inbox: a lista de conversas que os usuários mantêm aberta o dia todo. Em workspaces maduros, essa lista acumula ~20.000 conversas. E a versão original carregava todas elas de uma vez." },
     { "type": "paragraph", "text": "Este post documenta a reconstrução dessa tela do ponto de vista de frontend: por que paginação offset-based não resolvia, como ficou o contrato de API cursor-based, a implementação com React Query e TanStack Virtual, e os trade-offs assumidos. O resultado: o payload caiu de ~6,7 MB para ~19 KB por requisição (~400x), e os travamentos de interface desapareceram." },

@@ -71,7 +71,7 @@ export default async function Home() {
               target="_blank"
               data-umami-event="contact-click"
               data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-emerald-700 text-white hover:bg-emerald-800 transition text-center"
+              className="px-4 py-2 text-sm border border-line bg-surface text-fg hover:border-field hover:bg-card transition text-center"
             >
               {dict.home.ctaContact}
             </Link>
@@ -166,8 +166,7 @@ export default async function Home() {
                 {article.tag ? (
                   <span
                     className={cn(
-                      "absolute text-white left-6 top-6 uppercase text-xs font-semibold px-3 py-1 rounded shadow-sm",
-                      article.tagColor || "bg-primary text-primary-foreground"
+                      "absolute left-6 top-6 border border-line bg-canvas/80 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu backdrop-blur-sm"
                     )}
                   >
                     {article.tag}

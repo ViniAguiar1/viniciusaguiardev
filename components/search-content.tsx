@@ -4,7 +4,6 @@ import { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Search, FileText, Briefcase } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
 
 type SearchPost = {
@@ -12,7 +11,6 @@ type SearchPost = {
   title: string
   description: string
   tag?: string
-  tagColor?: string
 }
 
 type SearchProject = {
@@ -113,7 +111,7 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     {post.tag && (
-                      <span className={cn("text-[10px] font-semibold uppercase px-2 py-0.5 rounded text-white", post.tagColor || "bg-primary")}>
+                      <span className="border border-line px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
                         {post.tag}
                       </span>
                     )}

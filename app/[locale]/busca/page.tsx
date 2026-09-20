@@ -22,7 +22,6 @@ export default async function SearchPage() {
     title: p.title,
     description: p.description ?? "",
     tag: p.tag,
-    tagColor: p.tagColor,
   }))
 
   const projectList = projects.map((p) => ({

@@ -9,24 +9,6 @@ import { cn } from "@/lib/utils"
 import type { Project } from "@/data/projects"
 import { localePath, t, type Locale } from "@/lib/i18n"
 
-const categoryColors: Record<string, string> = {
-  "AI SaaS": "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",
-  SaaS: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  Marketplace: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-  ERP: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-  Platform: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-  "E-commerce": "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  Agency: "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400",
-  App: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400",
-  EdTech: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400",
-  Travel: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
-  Health: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-  Logistics: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
-  HealthTech: "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-400",
-  Automotive: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-  "Open Source": "bg-zinc-100 text-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-300",
-}
-
 interface ProjectsGridProps {
   projects: Project[]
   locale: Locale
@@ -40,7 +22,6 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {projects.map((project) => {
           const tagline = project.tagline[locale] ?? project.tagline.pt
-          const colorClass = categoryColors[project.category] ?? "bg-muted text-muted-foreground"
 
           return (
             <button
@@ -70,12 +51,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                   <h3 className="text-sm font-semibold leading-tight truncate">
                     {project.name}
                   </h3>
-                  <span
-                    className={cn(
-                      "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium flex-shrink-0",
-                      colorClass
-                    )}
-                  >
+                  <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
                     {project.category}
                   </span>
                 </div>
@@ -131,12 +107,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       <Dialog.Title className="text-lg font-semibold">
                         {selected.name}
                       </Dialog.Title>
-                      <span
-                        className={cn(
-                          "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                          categoryColors[selected.category] ?? "bg-muted text-muted-foreground"
-                        )}
-                      >
+                      <span className="border border-line px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
                         {selected.category}
                       </span>
                     </div>

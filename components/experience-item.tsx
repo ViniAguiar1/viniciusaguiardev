@@ -18,7 +18,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span>{t(locale, period)}</span>
         {current ? (
-          <span className="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 text-[10px] font-medium px-2 py-0.5">
+          <span className="border border-field px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-fg">
             {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職", fr: "Actuel" })}
           </span>
         ) : null}
@@ -39,7 +39,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <p className="text-sm text-muted-foreground">{t(locale, summary)}</p>
 
       {highlight ? (
-        <p className="text-xs font-mono text-emerald-700 dark:text-emerald-400">{t(locale, highlight)}</p>
+        <p className="text-xs font-mono text-fg">{t(locale, highlight)}</p>
       ) : null}
 
       {open && (

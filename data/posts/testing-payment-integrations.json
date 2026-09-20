@@ -16,7 +16,6 @@
   "tag": "Engenharia",
   "tag_en": "Engineering",
   "tag_es": "Ingeniería",
-  "tagColor": "bg-blue-700",
   "blocks": [
     {
       "type": "paragraph",

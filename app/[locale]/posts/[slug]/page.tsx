@@ -80,8 +80,7 @@ export default async function PostPage({ params }: PageProps) {
       {post.tag ? (
         <span
           className={cn(
-            "uppercase text-white text-xs font-semibold px-3 py-1 rounded shadow-sm mb-4 inline-block",
-            post.tagColor || "bg-primary text-primary-foreground"
+            "border border-line px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-mu mb-4 inline-block"
           )}
         >
           {post.tag}

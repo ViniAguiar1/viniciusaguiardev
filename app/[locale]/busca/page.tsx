@@ -1,9 +1,11 @@
+import { Suspense } from "react"
 import { getLocale, t } from "@/lib/i18n-server"
 import { buildAlternates } from "@/lib/i18n"
 import { getAllPosts } from "@/lib/posts"
 import { projects } from "@/data/projects"
 import { SearchContent } from "@/components/search-content"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 
 export async function generateMetadata() {
   const locale = await getLocale()
@@ -22,6 +24,7 @@ export default async function SearchPage() {
     title: p.title,
     description: p.description ?? "",
     tag: p.tag,
+    cover: p.cover,
   }))
 
   const projectList = projects.map((p) => ({
@@ -30,22 +33,27 @@ export default async function SearchPage() {
     logo: p.logo,
     tagline: p.tagline[locale] ?? p.tagline.pt,
     category: p.category,
+    detailPage: p.detailPage,
   }))
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 py-12">
       <FadeIn>
         <header className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+          <SectionEyebrow index="01">
+            {t(locale, { pt: "Busca", en: "Search", es: "Búsqueda", jp: "検索", fr: "Recherche" })}
+          </SectionEyebrow>
+          <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
             {t(locale, { pt: "Busca", en: "Search", es: "Búsqueda", jp: "検索", fr: "Recherche" })}
           </h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-mu mt-3 leading-relaxed">
             {t(locale, { pt: "Encontre posts, projetos e conteúdo técnico.", en: "Find posts, projects and technical content.", es: "Encuentra posts, proyectos y contenido técnico.", jp: "投稿、プロジェクト、技術コンテンツを探す。", fr: "Trouvez des articles, projets et contenus techniques." })}
           </p>
         </header>
       </FadeIn>
 
       <FadeIn delay={100}>
+        <Suspense fallback={null}>
         <SearchContent
           posts={posts}
           projects={projectList}
@@ -58,6 +66,7 @@ export default async function SearchPage() {
             hint: t(locale, { pt: "Digite algo para buscar posts e projetos.", en: "Type something to search posts and projects.", es: "Escribe algo para buscar posts y proyectos.", jp: "投稿やプロジェクトを検索するには入力してください。", fr: "Tapez quelque chose pour rechercher des articles et projets." }),
           }}
         />
+        </Suspense>
       </FadeIn>
     </div>
   )

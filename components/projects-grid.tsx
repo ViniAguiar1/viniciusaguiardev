@@ -38,11 +38,14 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
           return (
             <button
               key={project.slug}
+              // Ancora para a busca: projeto sem detailPage e linkado como
+              // /projetos#<slug>. scroll-mt tira o card de debaixo do topo.
+              id={project.slug}
               type="button"
               onClick={() => setSelected(project)}
               data-umami-event="project-click"
               data-umami-event-project={project.name}
-              className="group mb-3 break-inside-avoid border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
+              className="group mb-3 scroll-mt-20 break-inside-avoid border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
             >
               <div className="flex items-start gap-4">
                 {/* Ficha clara e logo em cor cheia. A versão anterior era
@@ -130,13 +133,16 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               <>
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="flex-shrink-0 w-14 h-14 border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
+                  {/* Mesma ficha clara da grade: sem ela a arte preta do
+                      Chattie some dentro do modal, que é o lugar onde o
+                      visitante foi justamente para olhar o projeto. */}
+                  <div className="flex-shrink-0 w-14 h-14 border border-line bg-plate flex items-center justify-center overflow-hidden p-2">
                     <Image
                       src={selected.logo}
                       alt={selected.name}
                       width={40}
                       height={40}
-                      className="object-contain"
+                      className="object-contain w-full h-full"
                     />
                   </div>
                   <div className="flex-1 min-w-0">

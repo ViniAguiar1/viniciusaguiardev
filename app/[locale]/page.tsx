@@ -145,11 +145,17 @@ export default async function Home() {
       </FadeIn>
 
       {/* POSTS */}
-      <main className="border-t border-line pt-12 mb-16">
+      <section className="border-t border-line pt-12 mb-16">
 
         <SectionEyebrow index="03">
           {t(locale, { pt: "Escrita", en: "Writing", es: "Escritura", jp: "執筆", fr: "Écrits" })}
         </SectionEyebrow>
+
+        {/* A seção não tem título visível — sem um h2, os títulos dos posts
+            ficam pendurados no heading da seção anterior. */}
+        <h2 className="sr-only">
+          {t(locale, { pt: "Escrita", en: "Writing", es: "Escritura", jp: "執筆", fr: "Écrits" })}
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -205,7 +211,7 @@ export default async function Home() {
 
         </div>
 
-      </main>
+      </section>
 
     </div>
   )

@@ -52,15 +52,17 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                     grayscale sobre bg-surface: unificava as sete marcas, mas
                     tornava ilegível qualquer arte escura — a do Chattie é
                     preto sólido e sumia por completo, colorida ou não. */}
-                <div className="relative flex-shrink-0 w-11 h-11 border border-line bg-plate flex items-center justify-center overflow-hidden p-1.5">
-                  <Image
-                    src={project.logo}
-                    alt=""
-                    width={30}
-                    height={30}
-                    className="object-contain w-full h-full"
-                  />
-                </div>
+                {project.logo ? (
+                  <div className="relative flex-shrink-0 w-11 h-11 border border-line bg-plate flex items-center justify-center overflow-hidden p-1.5">
+                    <Image
+                      src={project.logo}
+                      alt=""
+                      width={30}
+                      height={30}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
+                ) : null}
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2.5 flex-wrap">
@@ -136,15 +138,17 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                   {/* Mesma ficha clara da grade: sem ela a arte preta do
                       Chattie some dentro do modal, que é o lugar onde o
                       visitante foi justamente para olhar o projeto. */}
-                  <div className="flex-shrink-0 w-14 h-14 border border-line bg-plate flex items-center justify-center overflow-hidden p-2">
-                    <Image
-                      src={selected.logo}
-                      alt={selected.name}
-                      width={40}
-                      height={40}
-                      className="object-contain w-full h-full"
-                    />
-                  </div>
+                  {selected.logo ? (
+                    <div className="flex-shrink-0 w-14 h-14 border border-line bg-plate flex items-center justify-center overflow-hidden p-2">
+                      <Image
+                        src={selected.logo}
+                        alt={selected.name}
+                        width={40}
+                        height={40}
+                        className="object-contain w-full h-full"
+                      />
+                    </div>
+                  ) : null}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2.5">
                       <Dialog.Title className="text-lg font-semibold">

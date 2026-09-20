@@ -19,7 +19,7 @@ type SearchPost = {
 type SearchProject = {
   slug: string
   name: string
-  logo: string
+  logo?: string
   tagline: string
   category: string
   detailPage?: string
@@ -183,15 +183,17 @@ export function SearchContent({ posts, projects, locale, labels }: SearchContent
                 href={destinoProjeto(project)}
                 className="group flex items-center gap-4 border border-line bg-card p-4 transition-colors hover:border-field"
               >
-                <div className="relative flex-shrink-0 w-10 h-10 border border-line bg-plate flex items-center justify-center overflow-hidden p-1">
-                  <Image
-                    src={project.logo}
-                    alt=""
-                    width={28}
-                    height={28}
-                    className="object-contain w-full h-full"
-                  />
-                </div>
+                {project.logo ? (
+                  <div className="relative flex-shrink-0 w-10 h-10 border border-line bg-plate flex items-center justify-center overflow-hidden p-1">
+                    <Image
+                      src={project.logo}
+                      alt=""
+                      width={28}
+                      height={28}
+                      className="object-contain w-full h-full"
+                    />
+                  </div>
+                ) : null}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h2 className="text-sm font-semibold text-fg">{project.name}</h2>

@@ -14,7 +14,9 @@ export type LocalizedString = Partial<Record<Locale, string>> & { pt: string }
 export type Project = {
   slug: string
   name: string
-  logo: string
+  /** Opcional: nem todo cliente tem asset quadrado disponivel, e um wordmark
+   *  largo espremido numa ficha de 44px fica ilegivel. O card degrada sem ele. */
+  logo?: string
   tagline: LocalizedString
   description: LocalizedString
   category: ProjectCategory
@@ -106,6 +108,41 @@ export const projects: Project[] = [
     stack: ["React", "Next.js", "TypeScript", "Supabase", "TanStack Query", "TanStack Virtual", "Vercel AI SDK"],
     url: "https://trychattie.com",
     detailPage: "/posts/inbox-cursor-pagination-virtualization",
+  },
+  {
+    slug: "hora-util",
+    name: "Hora Útil 360",
+    tagline: {
+      pt: "Gestão de frota que conecta campo e escritório em tempo real",
+      en: "Fleet management connecting field and back office in real time",
+      es: "Gestión de flota que conecta campo y oficina en tiempo real",
+      jp: "現場とバックオフィスをリアルタイムでつなぐ車両管理",
+      fr: "Gestion de flotte reliant le terrain et le bureau en temps réel",
+    },
+    description: {
+      pt: "ERP de gestão de frotas reconstruído sem interromper a operação: o core migrou de Firestore para PostgreSQL módulo a módulo, com migrações auditáveis, e seis produtos separados foram consolidados num único deploy multi-tenant. Inclui módulo de RH conforme CLT — escala, ponto com recibo NSR, banco de horas, férias e folha com IRRF progressivo — com auditoria append-only garantida por triggers no banco e expurgo automatizado. O app de operador é nativo em Expo/React Native, com base local criptografada e sincronização offline. Um assistente de IA opera sobre read-models, com ferramentas de escopo restrito, redação de PII e limite de tokens por tenant.",
+      en: "Fleet management ERP rebuilt without interrupting operations: the core migrated from Firestore to PostgreSQL module by module with auditable migrations, and six separate products were consolidated into a single multi-tenant deployment. It includes a labour-law-compliant HR module — scheduling, time tracking with NSR receipts, overtime banking, vacation and payroll with progressive tax withholding — with append-only auditing enforced by database triggers and automated data purging. The operator app is native Expo/React Native, with an encrypted local database and an offline sync strategy. An AI assistant runs over read-models, with scope-enforced tools, PII redaction and per-tenant token limits.",
+      es: "ERP de gestión de flotas reconstruido sin interrumpir la operación: el core migró de Firestore a PostgreSQL módulo a módulo, con migraciones auditables, y seis productos separados se consolidaron en un único deploy multi-tenant. Incluye módulo de RR.HH. conforme a la legislación laboral — turnos, control de jornada con recibo NSR, banco de horas, vacaciones y nómina con retención progresiva — con auditoría append-only garantizada por triggers en la base y purga automatizada. La app de operador es nativa en Expo/React Native, con base local cifrada y sincronización offline. Un asistente de IA opera sobre read-models, con herramientas de alcance restringido, redacción de PII y límite de tokens por tenant.",
+      jp: "稼働を止めずに再構築した車両管理ERP。コアをFirestoreからPostgreSQLへモジュール単位で移行し、監査可能なマイグレーションを用意。分かれていた6つのプロダクトを単一のマルチテナント環境に統合した。労働法に準拠した人事モジュール（シフト、NSR受領書付きの勤怠、時間貯蓄、休暇、累進課税の給与計算）を含み、DBトリガーによる追記専用の監査と自動データ削除を備える。オペレーター向けアプリはExpo/React Nativeのネイティブ実装で、暗号化されたローカルDBとオフライン同期に対応。AIアシスタントはread-model上で動作し、スコープを制限したツール、PIIの秘匿、テナントごとのトークン上限を持つ。",
+      fr: "ERP de gestion de flotte reconstruit sans interrompre l'exploitation : le core a migré de Firestore vers PostgreSQL module par module, avec des migrations auditables, et six produits distincts ont été consolidés en un seul déploiement multi-tenant. Il comprend un module RH conforme au droit du travail — planning, pointage avec reçu NSR, compte épargne-temps, congés et paie avec retenue progressive — avec un audit append-only garanti par des triggers en base et une purge automatisée. L'application opérateur est native en Expo/React Native, avec une base locale chiffrée et une synchronisation hors ligne. Un assistant IA opère sur des read-models, avec des outils à portée restreinte, une rédaction des données personnelles et une limite de tokens par tenant.",
+    },
+    category: "SaaS",
+    role: {
+      pt: "Senior Software Engineer — pela Aguiar Labs",
+      en: "Senior Software Engineer — through Aguiar Labs",
+      es: "Senior Software Engineer — por Aguiar Labs",
+      jp: "シニアソフトウェアエンジニア — Aguiar Labs を通じて",
+      fr: "Senior Software Engineer — via Aguiar Labs",
+    },
+    highlight: {
+      pt: "Firestore → PostgreSQL, sem parar a operação",
+      en: "Firestore → PostgreSQL, with zero downtime",
+      es: "Firestore → PostgreSQL, sin parar la operación",
+      jp: "Firestore → PostgreSQL、稼働を止めずに",
+      fr: "Firestore → PostgreSQL, sans interruption",
+    },
+    stack: ["React", "Next.js", "React Native", "Expo", "NestJS", "PostgreSQL", "Prisma"],
+    url: "https://horautil360.com",
   },
   {
     slug: "termai",

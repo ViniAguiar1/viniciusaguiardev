@@ -5,6 +5,7 @@ import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { localePath } from "@/lib/i18n"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 
 export default async function Home() {
   const locale = await getLocale()
@@ -35,64 +36,64 @@ export default async function Home() {
       />
 
       {/* HERO */}
-      <FadeIn>
-      <header className="mb-10">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
+      <header className="mb-16">
+        <SectionEyebrow index="01">
+          {t(locale, { pt: "Portfólio", en: "Portfolio", es: "Portafolio", jp: "ポートフォリオ", fr: "Portfolio" })}
+        </SectionEyebrow>
 
-          {/* LEFT: texto */}
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight">
-              {dict.home.title}
-            </h1>
+        <h1 className="rise-in rise-in-delay-1 font-medium leading-[0.94] tracking-[-0.035em] text-fg [font-size:clamp(2.25rem,5.2vw,4.5rem)]">
+          {dict.home.title}
+        </h1>
 
-            <p className="mt-2 text-lg text-muted-foreground max-w-xl">
-              {dict.home.subtitle}
-            </p>
+        <p className="rise-in rise-in-delay-2 mt-8 max-w-2xl text-lg leading-relaxed text-mu">
+          {dict.home.subtitle}
+        </p>
 
-            <p className="mt-2 text-sm text-muted-foreground max-w-xl">
-              {dict.home.description}
-            </p>
-          </div>
+        <p className="rise-in rise-in-delay-2 mt-3 max-w-2xl text-sm text-mu">
+          {dict.home.description}
+        </p>
 
-          {/* RIGHT: botões empilhados */}
-          <div className="inline-grid grid-cols-1 gap-2 md:justify-self-end">
-            <Link
-              href="/Curriculo-Vinicius-Aguiar.pdf"
-              target="_blank"
-              data-umami-event="cv-download"
-              data-umami-event-source="hero"
-              className="px-4 py-2 text-sm bg-primary text-primary-foreground hover:opacity-90 transition text-center"
-            >
-              {dict.home.ctaResume}
-            </Link>
+        <div className="rise-in rise-in-delay-3 mt-10 flex flex-wrap items-center gap-3">
+          <Link
+            href="/Curriculo-Vinicius-Aguiar.pdf"
+            target="_blank"
+            data-umami-event="cv-download"
+            data-umami-event-source="hero"
+            className="group inline-flex items-center gap-3 bg-fg px-5 py-3.5 text-[13px] font-medium text-canvas transition-colors duration-200 hover:bg-fg/85"
+          >
+            {dict.home.ctaResume}
+            <span aria-hidden className="transition-transform duration-200 group-hover:translate-x-1">
+              →
+            </span>
+          </Link>
 
-            <Link
-              href="https://api.whatsapp.com/send?phone=5511915369113&text=Ol%C3%A1%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar."
-              target="_blank"
-              data-umami-event="contact-click"
-              data-umami-event-source="hero"
-              className="px-4 py-2 text-sm border border-line bg-surface text-fg hover:border-field hover:bg-card transition text-center"
-            >
-              {dict.home.ctaContact}
-            </Link>
+          <Link
+            href="https://api.whatsapp.com/send?phone=5511915369113&text=Ol%C3%A1%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar."
+            target="_blank"
+            data-umami-event="contact-click"
+            data-umami-event-source="hero"
+            className="inline-flex items-center border border-line bg-surface px-5 py-3.5 text-[13px] font-medium text-fg transition-colors duration-200 hover:border-field hover:bg-card"
+          >
+            {dict.home.ctaContact}
+          </Link>
 
-            <Link
-              href={localePath(locale, "/sobre")}
-              className="px-4 py-2 text-sm border border-border hover:bg-muted transition text-center"
-            >
-              {dict.home.ctaAbout}
-            </Link>
-          </div>
-
+          <Link
+            href={localePath(locale, "/sobre")}
+            className="inline-flex items-center border border-line bg-surface px-5 py-3.5 text-[13px] font-medium text-fg transition-colors duration-200 hover:border-field hover:bg-card"
+          >
+            {dict.home.ctaAbout}
+          </Link>
         </div>
       </header>
-      </FadeIn>
 
       {/* ENGINEERING PREVIEW */}
       <FadeIn delay={100}>
-        <section className="mb-10">
+        <section className="border-t border-line pt-12 mb-16">
+          <SectionEyebrow index="02">
+            {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
+          </SectionEyebrow>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-medium tracking-[-0.02em] text-fg">
               {t(locale, { pt: "Como eu penso sobre sistemas", en: "How I think about systems", es: "Cómo pienso sobre sistemas", jp: "システムをどう設計するか", fr: "Comment je pense les systèmes" })}
             </h2>
             <Link
@@ -144,7 +145,11 @@ export default async function Home() {
       </FadeIn>
 
       {/* POSTS */}
-      <main>
+      <main className="border-t border-line pt-12 mb-16">
+
+        <SectionEyebrow index="03">
+          {t(locale, { pt: "Escrita", en: "Writing", es: "Escritura", jp: "執筆", fr: "Écrits" })}
+        </SectionEyebrow>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 

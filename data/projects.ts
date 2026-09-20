@@ -248,6 +248,7 @@ export const projects: Project[] = [
       fr: "Plateforme complète qui offre automatisation et outils de gestion pour cliniques vétérinaires et animaleries, combinant système de gestion et conseil spécialisé pour augmenter le chiffre d'affaires et fidéliser les clients.",
     },
     category: "SaaS",
+    stack: ["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "OpenAI"],
     role: {
       pt: "CTO & Co-Founder",
       en: "CTO & Co-Founder",
@@ -321,6 +322,7 @@ export const projects: Project[] = [
       fr: "Logiciel permettant aux nutritionnistes et aux coachs sportifs de prescrire des plans alimentaires et des entraînements personnalisés, de suivre la progression de leurs clients et de gérer les consultations dans une seule application web et mobile.",
     },
     category: "SaaS",
+    stack: ["React Native", "Expo", "Next.js", "Stripe", "Firebase", "FatSecret"],
     role: {
       pt: "Projeto próprio",
       en: "Own project",

@@ -4,6 +4,7 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 import { cn, MONO_CHIP } from "@/lib/utils"
 
 const siteUrl = "https://viniciusaguiardev.com.br"
@@ -75,6 +76,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* Hero */}
       <FadeIn>
       <header className="mb-10">
+        <SectionEyebrow index="01">
+          {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
+        </SectionEyebrow>
         <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
           {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
         </h1>
@@ -86,7 +90,11 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
 
       {/* Expandable topics */}
       <FadeIn delay={100}>
-      <section className="space-y-3 mb-12">
+      <section className="mb-12">
+        <SectionEyebrow index="02" as="h2">
+          {t(locale, { pt: "Decisões de arquitetura", en: "Architecture Decisions", es: "Decisiones de arquitectura", jp: "アーキテクチャの判断", fr: "Décisions d'architecture" })}
+        </SectionEyebrow>
+        <div className="space-y-3">
         <EngineeringTopic
           id="frontend-performance"
           defaultOpen={topic === "frontend-performance"}
@@ -238,16 +246,16 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             </Link>
           </div>
         </EngineeringTopic>
+        </div>
       </section>
       </FadeIn>
 
       {/* Problems Solved */}
       <FadeIn delay={200}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción", jp: "本番環境で解決した問題", fr: "Problèmes résolus en production" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="03" as="h2">
+          {t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción", jp: "本番環境で解決した問題", fr: "Problèmes résolus en production" })}
+        </SectionEyebrow>
         <div className="border border-line bg-card p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {[
@@ -272,15 +280,20 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* AI in Production */}
       <FadeIn delay={300}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción", jp: "本番環境のAIシステム", fr: "Systèmes d'IA en production" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="04" as="h2">
+          {t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción", jp: "本番環境のAIシステム", fr: "Systèmes d'IA en production" })}
+        </SectionEyebrow>
         <div className="border border-line bg-card p-6 space-y-5">
           <p className="text-sm leading-relaxed">
             {t(locale, { pt: "Não chatbots — pipelines em produção onde IA é um componente em um sistema maior, com fallbacks, monitoramento e dados reais fluindo.", en: "Not chatbots — production pipelines where AI is a component in a larger system, with fallbacks, monitoring, and real data flowing through.", es: "No chatbots — pipelines en producción donde IA es un componente en un sistema mayor, con fallbacks, monitoreo y datos reales fluyendo.", jp: "チャットボットではなく — AIがより大きなシステムの一部として機能する本番パイプライン。フォールバック、モニタリング、実データの流れを伴う。", fr: "Pas de chatbots — des pipelines en production où l'IA est un composant d'un système plus large, avec fallbacks, monitoring et de vraies données qui circulent." })}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border border-line p-4 md:col-span-2">
+              <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Classificação de idioma em conversas", en: "Conversation Language Classification", es: "Clasificación de idioma en conversaciones", jp: "会話の言語判定", fr: "Classification de langue des conversations" })}</h3>
+              <p className="text-xs text-mu leading-relaxed">
+                {t(locale, { pt: "Plataforma de customer engagement respondendo no idioma errado em ~30-40% das conversas. Classificação com Anthropic Claude via Vercel AI SDK antes do roteamento da resposta — caiu para <0,1%.", en: "A customer engagement platform replying in the wrong language in ~30-40% of conversations. Classification with Anthropic Claude via the Vercel AI SDK before response routing — down to <0.1%.", es: "Plataforma de customer engagement respondiendo en el idioma equivocado en ~30-40% de las conversaciones. Clasificación con Anthropic Claude vía Vercel AI SDK antes del ruteo de la respuesta — bajó a <0,1%.", jp: "カスタマーエンゲージメントプラットフォームで、会話の約30〜40%が誤った言語で応答していた。応答のルーティング前にVercel AI SDK経由のAnthropic Claudeで言語を判定 — 0.1%未満まで低下。", fr: "Plateforme de customer engagement répondant dans la mauvaise langue dans ~30-40% des conversations. Classification avec Anthropic Claude via le Vercel AI SDK avant le routage de la réponse — descendu à <0,1%." })}
+              </p>
+            </div>
             <div className="border border-line p-4">
               <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Agente IA no WhatsApp", en: "WhatsApp AI Agent", es: "Agente IA en WhatsApp", jp: "WhatsApp上のAIエージェント", fr: "Agent IA sur WhatsApp" })}</h3>
               <p className="text-xs text-mu leading-relaxed">
@@ -304,10 +317,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* FAQ */}
       <FadeIn delay={400}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Perguntas frequentes", en: "Frequently Asked Questions", es: "Preguntas frecuentes", jp: "よくある質問", fr: "Questions fréquentes" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="05" as="h2">
+          {t(locale, { pt: "Perguntas frequentes", en: "Frequently Asked Questions", es: "Preguntas frecuentes", jp: "よくある質問", fr: "Questions fréquentes" })}
+        </SectionEyebrow>
         <div className="space-y-4">
           {faq.map((item) => (
             <div key={item.q} className="border border-line bg-card p-5">
@@ -322,10 +334,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* Deep dives */}
       <FadeIn delay={500}>
       <section>
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Aprofundamentos", en: "Deep Dives", es: "Profundizaciones", jp: "詳細", fr: "Approfondissements" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="06" as="h2">
+          {t(locale, { pt: "Aprofundamentos", en: "Deep Dives", es: "Profundizaciones", jp: "詳細", fr: "Approfondissements" })}
+        </SectionEyebrow>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             { title: t(locale, { pt: "Inbox React em escala", en: "React Inbox at Scale", es: "Inbox React a escala", jp: "スケールするReactインボックス", fr: "Inbox React à grande échelle" }), desc: t(locale, { pt: "Cursor, virtualização, 6,7 MB → 19 KB por requisição", en: "Cursor, virtualization, 6.7 MB → 19 KB per request", es: "Cursor, virtualización, 6,7 MB → 19 KB por request", jp: "カーソル、仮想化、リクエストあたり6.7MB → 19KB", fr: "Cursor, virtualisation, 6,7 MB → 19 KB par requête" }), href: "/posts/inbox-cursor-pagination-virtualization" },
@@ -337,7 +348,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             { title: t(locale, { pt: "Docker para devs frontend", en: "Docker for Frontend Devs", es: "Docker para devs frontend", jp: "フロントエンド開発者のためのDocker", fr: "Docker pour les devs frontend" }), desc: t(locale, { pt: "Dockerfile, multi-stage builds, dev/prod", en: "Dockerfile, multi-stage builds, dev/prod", es: "Dockerfile, multi-stage builds, dev/prod", jp: "Dockerfile、マルチステージビルド、dev/prod", fr: "Dockerfile, multi-stage builds, dev/prod" }), href: "/posts/docker-for-frontend-devs" },
             { title: t(locale, { pt: "Iniciando no TypeScript", en: "Getting Started with TypeScript", es: "Iniciando en TypeScript", jp: "TypeScript入門", fr: "Démarrer avec TypeScript" }), desc: t(locale, { pt: "Tipos, interfaces, generics, utility types", en: "Types, interfaces, generics, utility types", es: "Tipos, interfaces, generics, utility types", jp: "型、インターフェース、ジェネリクス、ユーティリティ型", fr: "Types, interfaces, generics, utility types" }), href: "/posts/starting-typescript" },
           ].map((post) => (
-            <Link key={post.href} href={localePath(locale, post.href)} className="group border border-line bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
+            <Link key={post.href} href={localePath(locale, post.href)} className="group border border-line bg-card p-5 hover:border-field hover:-translate-y-0.5 transition-all">
               <h3 className="text-sm font-semibold text-fg">{post.title}</h3>
               <p className="text-xs text-mu mt-1">{post.desc}</p>
             </Link>

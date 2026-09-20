@@ -3,13 +3,19 @@ import { experiences } from "./experiences"
 import { LOCALES } from "@/lib/i18n"
 
 describe("experiences data", () => {
-  it("has the 5 companies in timeline order", () => {
+  // A timeline espelha o LinkedIn: mesmas empresas, mesma ordem. Easytogo
+  // aparece duas vezes de proposito — sao dois cargos na mesma empresa, e a
+  // progressao de Web/Mobile Developer para Software Engineer e sinal, nao
+  // ruido. Stack Labs e MovePro sairam: a primeira nao esta no LinkedIn, e a
+  // segunda e cliente da Aguiar Labs, nao empregadora.
+  it("has the 6 entries in timeline order, mirroring LinkedIn", () => {
     expect(experiences.map((e) => e.company)).toEqual([
       "Chattie",
       "Holy Solutions",
-      "Stack Labs",
-      "MovePro",
+      "Aguiar Labs",
       "Easytogo",
+      "Easytogo",
+      "Stealth Startup",
     ])
   })
 
@@ -24,9 +30,9 @@ describe("experiences data", () => {
     ])
   })
 
-  it("labels MovePro and Holy Solutions as contract work in every locale", () => {
+  it("labels Aguiar Labs as contract work in every locale", () => {
     const contractWord = { pt: "Contrato", en: "Contract", es: "Contrato", jp: "業務委託", fr: "Contrat" }
-    for (const company of ["MovePro", "Holy Solutions"]) {
+    for (const company of ["Aguiar Labs"]) {
       const exp = experiences.find((e) => e.company === company)!
       for (const locale of LOCALES) {
         expect(exp.period[locale], `${company} ${locale}`).toContain(contractWord[locale])

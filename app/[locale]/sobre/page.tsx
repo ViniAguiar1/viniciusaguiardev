@@ -63,7 +63,7 @@ export default async function SobrePage() {
 
         <ol className="mt-6 relative border-l border-line pl-6 space-y-10">
           {experiences.map((experience) => (
-            <li key={experience.company} className="relative">
+            <li key={`${experience.company}-${experience.period.pt}`} className="relative">
               <span
                 aria-hidden="true"
                 className={cn(

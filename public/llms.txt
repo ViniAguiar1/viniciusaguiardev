@@ -13,7 +13,7 @@ Notas importantes:
 ## Páginas
 
 - [Home](https://viniciusaguiardev.com.br/): Página inicial com seção de engenharia, artigos técnicos e apresentação profissional.
-- [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Chattie, Holy Solutions, Stack Labs, MovePro, EasyToGo), habilidades, tech stack e conceitos-chave.
+- [Sobre](https://viniciusaguiardev.com.br/sobre): Trajetória profissional, experiência em empresas (Chattie, Holy Solutions, Aguiar Labs, EasyToGo, Stealth Startup), habilidades, tech stack e conceitos-chave.
 - [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 9 projetos — Keep, Chattie, Hora Útil 360, termAI, FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em AI SaaS, revenue ops, e-commerce e health.
 - [X-Drop — Página dedicada](https://viniciusaguiardev.com.br/projetos/x-drop): Case de produto com propósito, métricas reais (R$ 30k+ faturados, 100+ usuários, 400+ pedidos, MRR R$ 20k em 2 meses), screenshots do dashboard web e app iOS nativo (Swift UI), stack técnica e links para App Store e site.
 - [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: performance de frontend (paginação cursor-based, virtualização de lista), arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
@@ -32,11 +32,12 @@ Notas importantes:
 
 ## Experiência profissional
 
-- **Chattie** (Jul 2026 — presente): Product Engineer (Frontend). Atua diretamente na evolução do frontend de uma plataforma de outreach com IA usada por 100+ empresas, com foco em performance e escalabilidade. Reconstrução do inbox principal com paginação cursor-based e virtualização de lista (payload inicial de ~6,7 MB para ~19 KB, ~400x). Atuação adicional em backend, IA (Anthropic Claude, Vercel AI SDK) e confiabilidade.
-- **Holy Solutions** (Nov 2025 — Jul 2026, contrato): Mid-level Software Engineer. React, Next.js, React Native, AWS, integrações com IA e pagamentos.
-- **Stack Labs** (Abr 2025 — Jan 2026): Software Engineer. Desenvolvimento web/mobile para múltiplos clientes.
-- **MovePro** (Mai 2025 — Nov 2025, contrato): Software Engineer. Plataforma de saúde/fitness web + mobile. Stripe, Firebase, Crashlytics.
-- **EasyToGo** (Mai 2024 — Jun 2025): Web/Mobile Developer. React, Next.js, React Native, Flutter.
+- **Chattie** (Jul 2026 — presente): Product Engineer. Engenharia de produto numa plataforma de customer engagement com IA usada por 165+ empresas, com ownership em frontend, backend, arquitetura e sistemas de IA. Reconstruiu o inbox principal com paginação cursor-based e virtualização (payload de ~6,7 MB para ~19 KB por requisição, ~400x). Classificação de conversas com Anthropic Claude e Vercel AI SDK reduziu respostas em idioma incorreto de ~30-40% para <0,1%. Cobertura automatizada de testes acima de 90%.
+- **Holy Solutions** (Nov 2025 — Jul 2026): Full Stack Developer. Engenharia full stack web e mobile no iKropp, que cresceu para 50k+ usuários. Pagamentos, autenticação, integrações externas (Asaas) e migração de legado PHP 5.3 para arquitetura moderna.
+- **Aguiar Labs** (Abr 2025 — Jul 2026, contrato): Senior Software Engineer. Engenharia sob contrato para plataformas de marketplace, gestão de frota e operações transacionais em produção. Clientes: Hora Útil (ERP de frotas migrado de Firestore para PostgreSQL sem parar a operação), X-Drop, MovePro e FastSeller.
+- **EasyToGo** (Abr 2025 — Jun 2025): Software Engineer. Delivery, hubs logísticos, dropshipping, CRM e catálogo. Integrações com Mercado Livre, Shopee, Google Analytics e Meta; publicação na Google Play.
+- **EasyToGo** (Mai 2024 — Abr 2025): Web/Mobile Developer. React, Next.js, React Native, Flutter.
+- **Stealth Startup** (Fev 2022 — Mai 2024): Founding Engineer. Aplicativo de delivery web e mobile, da arquitetura à implementação, em paralelo à graduação.
 
 ## Tech Stack
 

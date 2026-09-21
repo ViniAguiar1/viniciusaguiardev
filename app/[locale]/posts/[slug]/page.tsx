@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getAllPosts, getPostBySlug, ContentBlock } from "@/lib/posts"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import Image from "next/image"
 import { CodeBlock } from "@/components/code-block"
 import { renderInline } from "@/lib/inline-md"
@@ -24,7 +24,11 @@ export async function generateMetadata({ params }: PageProps) {
   const post = getPostBySlug(slug, locale)
   if (!post) return { title: "Post não encontrado" }
   const url = `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`
-  const ogImage = post.ogImage || "/og-image.png"
+  // Um ogImage declarado no JSON ganha da capa gerada: é trabalho manual e
+  // não deve ser atropelado. Sem os dois, cai no card genérico do site.
+  const ogImage =
+    post.ogImage ||
+    (post.cover ? `/blog/${slug}/og.jpg` : "/og-image.png")
   return {
     title: `${post.title} | Blog`,
     description: post.description ?? undefined,
@@ -64,7 +68,9 @@ export default async function PostPage({ params }: PageProps) {
           "@type": "Article",
           headline: post.title,
           description: post.description ?? "",
-          datePublished: post.date,
+          // ISO 8601, nunca `post.date`: aquela é localizada e o schema.org
+          // não parseia "16 de abril de 2026" nem "2026年4月16日".
+          datePublished: post.publishedAt,
           url: `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`,
           author: {
             "@type": "Person",
@@ -79,24 +85,21 @@ export default async function PostPage({ params }: PageProps) {
       />
       {post.tag ? (
         <span
-          className={cn(
-            "uppercase text-white text-xs font-semibold px-3 py-1 rounded shadow-sm mb-4 inline-block",
-            post.tagColor || "bg-primary text-primary-foreground"
-          )}
+          className={cn(MONO_CHIP, "mb-4 inline-block")}
         >
           {post.tag}
         </span>
       ) : null}
 
-      <h1 className="text-2xl md:text-4xl font-bold leading-tight mb-2 break-words">
+      <h1 className="text-[clamp(1.875rem,3.6vw,3rem)] font-medium leading-[1.05] tracking-[-0.025em] mb-3 break-words text-fg">
         {post.title}
       </h1>
-      <p className="text-sm text-muted-foreground mb-8">
+      <p className="text-xs font-mono uppercase tracking-[0.16em] text-mu mb-10">
         {post.date}
         {post.readTime ? ` · ${post.readTime}` : null}
       </p>
 
-      <article className="space-y-6 text-base leading-relaxed min-w-0">
+      <article className="space-y-6 text-[17px] leading-[1.75] min-w-0 text-fg">
         {blocks.length ? (
           blocks.map((block, i) => {
             switch (block.type) {
@@ -110,7 +113,7 @@ export default async function PostPage({ params }: PageProps) {
               }
               case "paragraph":
                 return (
-                  <p key={i} className="text-foreground/90">
+                  <p key={i} className="text-fg">
                     {renderInline(block.text)}
                   </p>
                 )
@@ -124,10 +127,10 @@ export default async function PostPage({ params }: PageProps) {
                       alt={block.alt || "Imagem do post"}
                       width={block.width || 1200}
                       height={block.height || 675}
-                      className="rounded-md border border-border w-full h-auto"
+                      className="border border-line w-full h-auto"
                     />
                     {block.alt ? (
-                      <span className="text-xs text-muted-foreground">{block.alt}</span>
+                      <span className="text-xs text-mu">{block.alt}</span>
                     ) : null}
                   </div>
                 )
@@ -152,7 +155,7 @@ export default async function PostPage({ params }: PageProps) {
             }
           })
         ) : (
-          <p className="text-muted-foreground">Em breve conteúdo deste post.</p>
+          <p className="text-mu">Em breve conteúdo deste post.</p>
         )}
       </article>
     </div>

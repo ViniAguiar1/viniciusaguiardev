@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { t, type Locale } from "@/lib/i18n"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import type { Experience } from "@/data/experiences"
 
 interface ExperienceItemProps {
@@ -15,10 +16,10 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center gap-2 text-xs text-mu">
         <span>{t(locale, period)}</span>
         {current ? (
-          <span className="rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 text-[10px] font-medium px-2 py-0.5">
+          <span className={cn(MONO_CHIP, "border-field text-fg")}>
             {t(locale, { pt: "Atual", en: "Current", es: "Actual", jp: "現職", fr: "Actuel" })}
           </span>
         ) : null}
@@ -30,16 +31,16 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
 
       <div className="flex flex-wrap gap-1.5">
         {stack.map((tech) => (
-          <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">
+          <span key={tech} className="border border-line bg-surface px-2 py-0.5 text-xs">
             {tech}
           </span>
         ))}
       </div>
 
-      <p className="text-sm text-muted-foreground">{t(locale, summary)}</p>
+      <p className="text-sm text-mu">{t(locale, summary)}</p>
 
       {highlight ? (
-        <p className="text-xs font-mono text-emerald-700 dark:text-emerald-400">{t(locale, highlight)}</p>
+        <p className="text-xs font-mono text-fg">{t(locale, highlight)}</p>
       ) : null}
 
       {open && (
@@ -53,7 +54,7 @@ export function ExperienceItem({ experience, locale }: ExperienceItemProps) {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
-        className="text-sm text-primary hover:underline"
+        className="text-sm text-fg underline decoration-mu underline-offset-4 hover:decoration-fg"
       >
         {open
           ? t(locale, { pt: "Ler menos", en: "Read less", es: "Leer menos", jp: "閉じる", fr: "Lire moins" })

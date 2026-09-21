@@ -1,5 +1,6 @@
 {
   "slug": "docker-for-frontend-devs",
+  "coverSubject": "identical sealed rectangular containers stacked into a neat interlocking wall, one container pulled slightly forward out of the face of the stack",
   "showOnHome": false,
   "title": "Docker para devs frontend: do zero ao deploy",
   "title_en": "Docker for frontend devs: from zero to deploy",
@@ -16,7 +17,6 @@
   "tag": "DevOps",
   "tag_en": "DevOps",
   "tag_es": "DevOps",
-  "tagColor": "bg-cyan-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -961,6 +961,7 @@
   "title_fr": "Docker pour les devs frontend : de zéro au deploy",
   "description_fr": "Guide pratique de Docker pour ceux qui viennent du frontend — Dockerfile, docker-compose, environnements de dev, multi-stage builds et deploy en production.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "10 min de lecture",
   "tag_fr": "DevOps",
   "blocks_fr": [

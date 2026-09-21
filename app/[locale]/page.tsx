@@ -1,10 +1,12 @@
 import { getAllPosts } from "@/lib/posts"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
 import Link from "next/link"
+import Image from "next/image"
 import { getDictionary, getLocale, t } from "@/lib/i18n-server"
 import { localePath } from "@/lib/i18n"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 
 export default async function Home() {
   const locale = await getLocale()
@@ -24,7 +26,7 @@ export default async function Home() {
           author: {
             "@type": "Person",
             name: "Vinicius Aguiar",
-            jobTitle: "Frontend Engineer",
+            jobTitle: "Senior Product Engineer",
             url: "https://viniciusaguiardev.com.br",
             sameAs: [
               "https://github.com/ViniAguiar1",
@@ -34,70 +36,27 @@ export default async function Home() {
         }}
       />
 
-      {/* HERO */}
-      <FadeIn>
-      <header className="mb-10">
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-start">
-
-          {/* LEFT: texto */}
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight">
-              {dict.home.title}
-            </h1>
-
-            <p className="mt-2 text-lg text-muted-foreground max-w-xl">
-              {dict.home.subtitle}
-            </p>
-
-            <p className="mt-2 text-sm text-muted-foreground max-w-xl">
-              {dict.home.description}
-            </p>
-          </div>
-
-          {/* RIGHT: botões empilhados */}
-          <div className="inline-grid grid-cols-1 gap-2 md:justify-self-end">
-            <Link
-              href="/Curriculo-Vinicius-Aguiar.pdf"
-              target="_blank"
-              data-umami-event="cv-download"
-              data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
-            >
-              {dict.home.ctaResume}
-            </Link>
-
-            <Link
-              href="https://api.whatsapp.com/send?phone=5511915369113&text=Ol%C3%A1%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar."
-              target="_blank"
-              data-umami-event="contact-click"
-              data-umami-event-source="hero"
-              className="px-4 py-2 text-sm rounded-md bg-emerald-700 text-white hover:bg-emerald-800 transition text-center"
-            >
-              {dict.home.ctaContact}
-            </Link>
-
-            <Link
-              href={localePath(locale, "/sobre")}
-              className="px-4 py-2 text-sm rounded-md border border-border hover:bg-muted transition text-center"
-            >
-              {dict.home.ctaAbout}
-            </Link>
-          </div>
-
-        </div>
-      </header>
-      </FadeIn>
+      {/* O hero saiu a pedido do Vinicius (2026-09-20): a sidebar já mostra
+          nome e cargo, então repetir os dois no topo da coluna era a
+          redundância mais visível da página. Sobra só o h1 acessível — a home
+          precisa de exatamente um, e sem ele os h2 das seções abaixo ficam
+          pendurados em nada. dict.home.title/subtitle/description seguem
+          alimentando metadata e JSON-LD. */}
+      <h1 className="sr-only">{dict.home.title}</h1>
 
       {/* ENGINEERING PREVIEW */}
       <FadeIn delay={100}>
-        <section className="mb-10">
+        <section className="mb-16">
+          <SectionEyebrow index="01">
+            {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
+          </SectionEyebrow>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold tracking-tight">
+            <h2 className="text-2xl font-medium tracking-[-0.02em] text-fg">
               {t(locale, { pt: "Como eu penso sobre sistemas", en: "How I think about systems", es: "Cómo pienso sobre sistemas", jp: "システムをどう設計するか", fr: "Comment je pense les systèmes" })}
             </h2>
             <Link
               href={localePath(locale, "/engenharia")}
-              className="text-sm text-muted-foreground hover:text-foreground transition inline-flex items-center gap-1"
+              className="text-sm text-mu hover:text-fg transition inline-flex items-center gap-1"
             >
               {t(locale, { pt: "Ver tudo", en: "See all", es: "Ver todo", jp: "すべて見る", fr: "Voir tout" })}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -130,13 +89,13 @@ export default async function Home() {
               <Link
                 key={topic.title}
                 href={localePath(locale, `/engenharia?topic=${topic.topicId}`)}
-                className="group rounded-lg border border-border bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
+                className="group border border-line bg-card p-4 transition-all hover:shadow-md hover:-translate-y-0.5"
               >
-                <svg className="w-5 h-5 text-muted-foreground mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <svg className="w-5 h-5 text-mu mb-2" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d={topic.icon} />
                 </svg>
                 <h3 className="text-sm font-semibold mb-1">{topic.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{topic.desc}</p>
+                <p className="text-xs text-mu leading-relaxed">{topic.desc}</p>
               </Link>
             ))}
           </div>
@@ -144,54 +103,72 @@ export default async function Home() {
       </FadeIn>
 
       {/* POSTS */}
-      <main>
+      <section className="border-t border-line pt-12 mb-16">
+
+        <SectionEyebrow index="02">
+          {t(locale, { pt: "Escrita", en: "Writing", es: "Escritura", jp: "執筆", fr: "Écrits" })}
+        </SectionEyebrow>
+
+        {/* A seção não tem título visível — sem um h2, os títulos dos posts
+            ficam pendurados no heading da seção anterior. */}
+        <h2 className="sr-only">
+          {t(locale, { pt: "Escrita", en: "Writing", es: "Escritura", jp: "執筆", fr: "Écrits" })}
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
           {articles.map((article, index) => (
             <FadeIn key={article.slug} delay={Math.min(index * 50, 200)}>
-            <article
-              className={cn(
-                "rounded-lg border border-border bg-card text-card-foreground shadow p-6 flex flex-col justify-between min-h-45 transition-transform hover:-translate-y-1 hover:shadow-lg relative cursor-pointer"
-              )}
-            >
+            <article className="border border-line bg-card flex flex-col min-h-45 transition-[transform,border-color] hover:-translate-y-1 hover:border-field relative cursor-pointer">
               <Link
                 href={localePath(locale, `/posts/${article.slug}`)}
                 aria-label={`Ir para ${article.title}`}
-                className="absolute inset-0"
+                className="absolute inset-0 z-10"
               />
 
-              <div>
+              {/* A capa é decorativa: o título do post está logo abaixo, em
+                  texto, então um alt descrevendo o render seria redundância
+                  que o leitor de tela anuncia duas vezes. */}
+              {article.cover ? (
+                <div className="relative aspect-video border-b border-line overflow-hidden">
+                  <Image
+                    src={`/blog/${article.slug}/cover.webp`}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                  {article.tag ? (
+                    <span className={cn(MONO_CHIP, "absolute left-4 top-4 z-20 bg-canvas/80 backdrop-blur-sm")}>
+                      {article.tag}
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
 
-                {article.tag ? (
-                  <span
-                    className={cn(
-                      "absolute text-white left-6 top-6 uppercase text-xs font-semibold px-3 py-1 rounded shadow-sm",
-                      article.tagColor || "bg-primary text-primary-foreground"
-                    )}
-                  >
+              <div className="p-6 flex flex-col flex-1">
+
+                {/* Sem capa o chip não tem onde se apoiar: entra no fluxo. */}
+                {!article.cover && article.tag ? (
+                  <span className={cn(MONO_CHIP, "self-start mb-4")}>
                     {article.tag}
                   </span>
                 ) : null}
 
-                <div className="mt-8">
+                <span className="text-xs text-mu block mb-1">
+                  {article.date}
+                  {article.readTime ? ` · ${article.readTime}` : null}
+                </span>
 
-                  <span className="text-xs text-muted-foreground block mb-1">
-                    {article.date}
-                    {article.readTime ? ` · ${article.readTime}` : null}
-                  </span>
+                <h3 className="text-lg md:text-xl font-semibold mb-1 leading-snug">
+                  {article.title}
+                </h3>
 
-                  <h3 className="text-lg md:text-xl font-semibold mb-1 leading-snug">
-                    {article.title}
-                  </h3>
-
-                  {article.description ? (
-                    <p className="text-sm text-muted-foreground">
-                      {article.description}
-                    </p>
-                  ) : null}
-
-                </div>
+                {article.description ? (
+                  <p className="text-sm text-mu">
+                    {article.description}
+                  </p>
+                ) : null}
 
               </div>
 
@@ -201,7 +178,7 @@ export default async function Home() {
 
         </div>
 
-      </main>
+      </section>
 
     </div>
   )

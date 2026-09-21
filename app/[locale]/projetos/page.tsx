@@ -3,6 +3,7 @@ import { buildAlternates } from "@/lib/i18n"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
 
 export async function generateMetadata() {
   const locale = await getLocale()
@@ -22,10 +23,13 @@ export default async function ProjectsPage() {
       {/* Header */}
       <FadeIn>
         <header className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+          <SectionEyebrow index="01">
+            {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" })}
+          </SectionEyebrow>
+          <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
             {dict.projects.title}
           </h1>
-          <p className="text-muted-foreground mt-2 max-w-2xl">
+          <p className="text-mu mt-3 max-w-2xl leading-relaxed">
             {dict.projects.subtitle}
           </p>
         </header>
@@ -38,31 +42,6 @@ export default async function ProjectsPage() {
         </section>
       </FadeIn>
 
-      {/* Footer stats */}
-      <FadeIn delay={200}>
-      <section className="mt-10 rounded-lg border border-border bg-card p-6">
-        <div className="grid grid-cols-3 gap-6 text-center">
-          <div>
-            <div className="text-2xl font-bold">{projects.length}</div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" })}
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold">SaaS + E-commerce</div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Foco principal", en: "Main focus", es: "Enfoque principal", jp: "主な専門領域", fr: "Focus principal" })}
-            </div>
-          </div>
-          <div>
-            <div className="text-2xl font-bold">Web + Mobile</div>
-            <div className="text-xs text-muted-foreground mt-1">
-              {t(locale, { pt: "Entrega full-stack", en: "Full-stack Delivery", es: "Entrega full-stack", jp: "フルスタック開発", fr: "Livraison full-stack" })}
-            </div>
-          </div>
-        </div>
-      </section>
-      </FadeIn>
     </div>
   )
 }

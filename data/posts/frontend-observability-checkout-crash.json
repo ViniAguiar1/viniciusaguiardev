@@ -1,7 +1,6 @@
 {
   "slug": "frontend-observability-checkout-crash",
-  "featured": true,
-  "order": 3,
+  "coverSubject": "a dense field of small uniform pillars lit from above, with one narrow channel in the middle where the light does not reach and the pillars disappear into black",
   "title": "O erro que ninguém via: quando o frontend quebra e a receita some do log",
   "title_en": "The error nobody saw: when the frontend breaks and the revenue vanishes from the log",
   "title_es": "El error que nadie veía: cuando el frontend se rompe y los ingresos desaparecen del log",
@@ -17,6 +16,7 @@
   "date_es": "10 de ago. de 2026",
   "date_jp": "2026年8月10日",
   "date_fr": "10 août 2026",
+  "publishedAt": "2026-08-10",
   "readTime": "14 min de leitura",
   "readTime_en": "14 min read",
   "readTime_es": "14 min de lectura",
@@ -27,7 +27,6 @@
   "tag_es": "Frontend",
   "tag_jp": "フロントエンド",
   "tag_fr": "Frontend",
-  "tagColor": "bg-emerald-700",
   "blocks": [
     {
       "type": "paragraph",

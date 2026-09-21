@@ -153,11 +153,9 @@ describe("getAllPosts", () => {
     expect(posts.every((p) => !p.draft)).toBe(true)
   })
 
-  it("sorts featured posts before non-featured ones", () => {
-    const posts = getAllPosts("pt")
-    const firstNonFeatured = posts.findIndex((p) => !p.featured)
-    if (firstNonFeatured === -1) return
-    expect(posts.slice(firstNonFeatured).every((p) => !p.featured)).toBe(true)
+  it("sorts by publication date, newest first", () => {
+    const datas = getAllPosts("pt").map((p) => p.publishedAt)
+    expect([...datas].sort().reverse()).toEqual(datas)
   })
 
   it("keeps home-hidden posts available in the full listing", () => {
@@ -166,10 +164,24 @@ describe("getAllPosts", () => {
     expect(hidden).toEqual(["docker-for-frontend-devs", "starting-typescript"])
   })
 
-  it("orders featured posts by their order field", () => {
-    const featuredOrders = getAllPosts("pt")
-      .filter((p) => p.featured)
-      .map((p) => p.order ?? Infinity)
-    expect([...featuredOrders].sort((a, b) => a - b)).toEqual(featuredOrders)
+  // Uma data ausente ou malformada não quebraria o build: ordenaria por
+  // último em silêncio e iria para o schema.org como lixo, que é o bug que
+  // este campo veio corrigir. Só um teste pega isso.
+  it("gives every post a valid ISO 8601 publication date", () => {
+    const invalidos = getAllPosts("pt")
+      .filter((p) => !/^\d{4}-\d{2}-\d{2}$/.test(p.publishedAt) || Number.isNaN(Date.parse(p.publishedAt)))
+      .map((p) => `${p.slug}: ${JSON.stringify(p.publishedAt)}`)
+    expect(invalidos).toEqual([])
+  })
+
+  // O desempate por slug é o que mantém a listagem estável entre máquinas;
+  // sem ele, cinco posts que dividem a mesma data ordenariam pelo readdir.
+  it("breaks same-date ties by slug, not by filesystem order", () => {
+    const posts = getAllPosts("pt")
+    const empatados = posts.filter((p, i) => i > 0 && posts[i - 1].publishedAt === p.publishedAt)
+    for (const p of empatados) {
+      const anterior = posts[posts.indexOf(p) - 1]
+      expect(anterior.slug.localeCompare(p.slug)).toBeLessThan(0)
+    }
   })
 })

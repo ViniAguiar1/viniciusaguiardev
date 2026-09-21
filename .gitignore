@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Visual companion (brainstorming)
+.superpowers/
+
+# Candidatas de capa de post (so a escolhida vai para public/blog/)
+.covers/

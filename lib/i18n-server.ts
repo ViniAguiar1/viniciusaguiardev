@@ -61,7 +61,7 @@ const pt: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer que constrói interfaces rápidas e escaláveis para SaaS em produção — React, Next.js e performance engineering.",
+      "Senior Product Engineer que constrói interfaces rápidas e escaláveis para SaaS em produção — React, Next.js e performance engineering.",
 
     description:
       "TypeScript de ponta a ponta. Capacidade full-stack como diferencial: pagamentos, arquitetura multi-tenant e IA operando em produtos reais.",
@@ -102,7 +102,7 @@ const en: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer building fast, scalable interfaces for production SaaS — React, Next.js and performance engineering.",
+      "Senior Product Engineer building fast, scalable interfaces for production SaaS — React, Next.js and performance engineering.",
 
     description:
       "TypeScript end to end. Full-stack range as a differentiator: payments, multi-tenant architecture and AI running in real products.",
@@ -143,7 +143,7 @@ const es: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer que construye interfaces rápidas y escalables para SaaS en producción — React, Next.js y performance engineering.",
+      "Senior Product Engineer que construye interfaces rápidas y escalables para SaaS en producción — React, Next.js y performance engineering.",
 
     description:
       "TypeScript de punta a punta. Capacidad full-stack como diferencial: pagos, arquitectura multi-tenant e IA operando en productos reales.",
@@ -184,7 +184,7 @@ const jp: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "本番SaaSのための高速でスケーラブルなインターフェースを構築するフロントエンドエンジニア — React、Next.js、パフォーマンスエンジニアリング。",
+      "本番SaaSのための高速でスケーラブルなインターフェースを構築するシニアプロダクトエンジニア — React、Next.js、パフォーマンスエンジニアリング。",
 
     description:
       "TypeScriptをエンドツーエンドで。フルスタック対応力が強み — 実プロダクトで稼働する決済、マルチテナントアーキテクチャ、AI。",
@@ -225,7 +225,7 @@ const fr: Dictionary = {
     title: "Vinicius Aguiar",
 
     subtitle:
-      "Frontend Engineer qui construit des interfaces rapides et scalables pour des SaaS en production — React, Next.js et performance engineering.",
+      "Senior Product Engineer qui construit des interfaces rapides et scalables pour des SaaS en production — React, Next.js et performance engineering.",
 
     description:
       "TypeScript de bout en bout. Une polyvalence full-stack comme atout : paiements, architecture multi-tenant et IA en production.",

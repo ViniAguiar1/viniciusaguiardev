@@ -5,27 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import * as Dialog from "@radix-ui/react-dialog"
 import { XIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@/lib/utils"
+import { ProjectLogo } from "@/components/project-logo"
 import type { Project } from "@/data/projects"
 import { localePath, t, type Locale } from "@/lib/i18n"
-
-const categoryColors: Record<string, string> = {
-  "AI SaaS": "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",
-  SaaS: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",
-  Marketplace: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400",
-  ERP: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",
-  Platform: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400",
-  "E-commerce": "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  Agency: "bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400",
-  App: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400",
-  EdTech: "bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-400",
-  Travel: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400",
-  Health: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400",
-  Logistics: "bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400",
-  HealthTech: "bg-sky-100 text-sky-800 dark:bg-sky-900/30 dark:text-sky-400",
-  Automotive: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
-  "Open Source": "bg-zinc-100 text-zinc-800 dark:bg-zinc-900/30 dark:text-zinc-300",
-}
 
 interface ProjectsGridProps {
   projects: Project[]
@@ -37,62 +20,88 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Colunas CSS em vez de grid: numa grade, a altura da linha é a do card
+          mais alto, então um projeto sem papel/métrica/stack deixa um buraco
+          visível ao lado de um que tem tudo. Com columns os cards empacotam e
+          o vazio some, sem precisar esticar card curto nem reservar espaço.
+          Contrapartida: a leitura passa a ser coluna a coluna, não linha a
+          linha. */}
+      <div className="columns-1 md:columns-2 gap-3">
         {projects.map((project) => {
           const tagline = project.tagline[locale] ?? project.tagline.pt
-          const colorClass = categoryColors[project.category] ?? "bg-muted text-muted-foreground"
+          const role = project.role ? (project.role[locale] ?? project.role.pt) : null
+          const highlight = project.highlight
+            ? (project.highlight[locale] ?? project.highlight.pt)
+            : null
+          const stack = project.stack ?? []
+          const STACK_VISIVEL = 4
 
           return (
             <button
               key={project.slug}
+              // Ancora para a busca: projeto sem detailPage e linkado como
+              // /projetos#<slug>. scroll-mt tira o card de debaixo do topo.
+              id={project.slug}
               type="button"
               onClick={() => setSelected(project)}
               data-umami-event="project-click"
               data-umami-event-project={project.name}
-              className={cn(
-                "group rounded-lg border border-border bg-card text-card-foreground p-5",
-                "flex items-center gap-5 transition-all text-left w-full",
-                "hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
-              )}
+              className="group mb-3 scroll-mt-20 break-inside-avoid border border-line bg-card p-5 flex flex-col text-left w-full transition-colors hover:border-field cursor-pointer"
             >
-              <div className="relative flex-shrink-0 w-12 h-12 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
-                <Image
-                  src={project.logo}
-                  alt={project.name}
-                  width={32}
-                  height={32}
-                  className="object-contain"
-                />
-              </div>
+              <div className="flex items-start gap-4">
+                {/* Ficha clara e logo em cor cheia. A versão anterior era
+                    grayscale sobre bg-surface: unificava as sete marcas, mas
+                    tornava ilegível qualquer arte escura — a do Chattie é
+                    preto sólido e sumia por completo, colorida ou não. */}
+                <ProjectLogo src={project.logo} name={project.name} size={44} />
 
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2.5">
-                  <h3 className="text-sm font-semibold leading-tight truncate">
-                    {project.name}
-                  </h3>
-                  <span
-                    className={cn(
-                      "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium flex-shrink-0",
-                      colorClass
-                    )}
-                  >
-                    {project.category}
-                  </span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <h3 className="text-[15px] font-semibold leading-tight text-fg">
+                      {project.name}
+                    </h3>
+                    <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
+                      {project.category}
+                    </span>
+                  </div>
+                  {/* Sem line-clamp: o tagline cabe em duas linhas e cortá-lo
+                      no meio era a informação mais barata da página sendo
+                      truncada sem necessidade. */}
+                  <p className="text-[12.5px] text-mu mt-2 leading-relaxed">
+                    {tagline}
+                  </p>
                 </div>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed line-clamp-1">
-                  {tagline}
-                </p>
               </div>
 
-              <svg
-                className="w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform group-hover:translate-x-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
+              {role || project.period ? (
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-mu">
+                  {[role, project.period].filter(Boolean).join("  ·  ")}
+                </p>
+              ) : null}
+
+              {highlight ? (
+                <p className="mt-4 border-t border-line pt-4 text-[13px] font-medium text-fg">
+                  {highlight}
+                </p>
+              ) : null}
+
+              {stack.length > 0 ? (
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {stack.slice(0, STACK_VISIVEL).map((tech) => (
+                    <span
+                      key={tech}
+                      className="border border-line px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-mu"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                  {stack.length > STACK_VISIVEL ? (
+                    <span className="border border-line px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-mu">
+                      +{stack.length - STACK_VISIVEL}
+                    </span>
+                  ) : null}
+                </div>
+              ) : null}
             </button>
           )
         })}
@@ -105,7 +114,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
           <Dialog.Content
             className={cn(
               "fixed z-50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
-              "w-[calc(100%-2rem)] max-w-lg rounded-xl border border-border bg-card p-6 shadow-xl",
+              "w-[calc(100%-2rem)] max-w-lg border border-line bg-card p-6 shadow-xl",
               "data-[state=open]:animate-in data-[state=closed]:animate-out",
               "data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
               "data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95",
@@ -117,37 +126,27 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
               <>
                 {/* Header */}
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
-                    <Image
-                      src={selected.logo}
-                      alt={selected.name}
-                      width={40}
-                      height={40}
-                      className="object-contain"
-                    />
-                  </div>
+                  {/* Mesma ficha clara da grade: sem ela a arte preta do
+                      Chattie some dentro do modal, que é o lugar onde o
+                      visitante foi justamente para olhar o projeto. */}
+                  <ProjectLogo src={selected.logo} name={selected.name} size={56} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2.5">
                       <Dialog.Title className="text-lg font-semibold">
                         {selected.name}
                       </Dialog.Title>
-                      <span
-                        className={cn(
-                          "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-                          categoryColors[selected.category] ?? "bg-muted text-muted-foreground"
-                        )}
-                      >
+                      <span className={cn(MONO_CHIP, "flex-shrink-0 whitespace-nowrap")}>
                         {selected.category}
                       </span>
                     </div>
-                    <Dialog.Description className="text-sm text-muted-foreground mt-0.5">
+                    <Dialog.Description className="text-sm text-mu mt-0.5">
                       {selected.tagline[locale] ?? selected.tagline.pt}
                     </Dialog.Description>
                   </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-sm leading-relaxed text-foreground/80">
+                <p className="text-sm leading-relaxed text-fg/80">
                   {selected.description[locale] ?? selected.description.pt}
                 </p>
 
@@ -158,7 +157,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       href={localePath(locale, selected.detailPage)}
                       data-umami-event="project-detail"
                       data-umami-event-project={selected.name}
-                      className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
+                      className="inline-flex items-center gap-2 bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition"
                     >
                       {t(locale, { pt: "Ver mais", en: "Learn more", es: "Ver más", jp: "詳しく見る", fr: "En savoir plus" })}
                       <svg
@@ -180,9 +179,9 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                       data-umami-event="project-visit"
                       data-umami-event-project={selected.name}
                       className={cn(
-                        "inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition",
+                        "inline-flex items-center gap-2 px-4 py-2 text-sm font-medium transition",
                         selected.detailPage
-                          ? "border border-border hover:bg-muted"
+                          ? "border border-line hover:bg-muted"
                           : "bg-primary text-primary-foreground hover:opacity-90"
                       )}
                     >
@@ -205,7 +204,7 @@ export function ProjectsGrid({ projects, locale }: ProjectsGridProps) {
                 </div>
 
                 {/* Close */}
-                <Dialog.Close className="absolute top-4 right-4 rounded-sm opacity-70 hover:opacity-100 transition-opacity">
+                <Dialog.Close className="absolute top-4 right-4 opacity-70 hover:opacity-100 transition-opacity">
                   <XIcon className="w-4 h-4" />
                   <span className="sr-only">Close</span>
                 </Dialog.Close>

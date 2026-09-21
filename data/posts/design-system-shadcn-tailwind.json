@@ -1,7 +1,6 @@
 {
   "slug": "design-system-shadcn-tailwind",
-  "featured": true,
-  "order": 2,
+  "coverSubject": "a set of modular geometric blocks in graduated sizes arranged on a precise grid, a few of them lifted slightly above the plane as if mid-assembly",
   "title": "Construindo um Design System com Shadcn UI e Tailwind",
   "title_en": "Building a Design System with Shadcn UI and Tailwind",
   "description": "Um guia prático sobre como estruturar um design system escalável utilizando Shadcn UI, Tailwind CSS e React — garantindo consistência visual e produtividade em aplicações modernas.",
@@ -17,7 +16,6 @@
   "readTime_en": "7 min read",
   "tag": "Frontend",
   "tag_en": "Frontend",
-  "tagColor": "bg-emerald-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -526,6 +524,7 @@
   "title_fr": "Construire un design system avec Shadcn UI et Tailwind",
   "description_fr": "Un guide pratique pour structurer un design system évolutif avec Shadcn UI, Tailwind CSS et React — en garantissant la cohérence visuelle et la productivité dans les applications modernes.",
   "date_fr": "16 mars 2026",
+  "publishedAt": "2026-03-16",
   "readTime_fr": "7 min de lecture",
   "tag_fr": "Frontend",
   "blocks_fr": [

@@ -6,7 +6,7 @@ export async function Footer() {
   const locale = await getLocale()
 
   return (
-    <footer className="w-full border-t border-border mt-auto">
+    <footer className="w-full border-t border-line mt-auto">
       <div className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           {/* Left — contact */}
@@ -14,10 +14,10 @@ export async function Footer() {
             <p className="text-sm font-medium">
               {t(locale, { pt: "Vamos conversar?", en: "Let's talk?", es: "Hablemos?", jp: "お話ししませんか？", fr: "On discute ?" })}
             </p>
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-3 text-sm text-mu">
               <a
                 href="mailto:vinicius.aguiar1@icloud.com"
-                className="hover:text-foreground transition"
+                className="hover:text-fg transition"
               >
                 vinicius.aguiar1@icloud.com
               </a>
@@ -26,7 +26,7 @@ export async function Footer() {
                 href="https://api.whatsapp.com/send?phone=5511915369113&text=Ol%C3%A1%2C%20vim%20pelo%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-foreground transition"
+                className="hover:text-fg transition"
               >
                 WhatsApp
               </a>
@@ -35,7 +35,7 @@ export async function Footer() {
                 href="https://www.linkedin.com/in/viniciusaguiar-araujo/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-foreground transition"
+                className="hover:text-fg transition"
               >
                 LinkedIn
               </a>
@@ -44,7 +44,7 @@ export async function Footer() {
                 href="https://github.com/ViniAguiar1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-foreground transition"
+                className="hover:text-fg transition"
               >
                 GitHub
               </a>
@@ -52,14 +52,14 @@ export async function Footer() {
           </div>
 
           {/* Right — nav */}
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <Link href={localePath(locale, "/projetos")} className="hover:text-foreground transition">
+          <div className="flex items-center gap-4 text-sm text-mu">
+            <Link href={localePath(locale, "/projetos")} className="hover:text-fg transition">
               {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" })}
             </Link>
-            <Link href={localePath(locale, "/engenharia")} className="hover:text-foreground transition">
+            <Link href={localePath(locale, "/engenharia")} className="hover:text-fg transition">
               {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
             </Link>
-            <Link href={localePath(locale, "/sobre")} className="hover:text-foreground transition">
+            <Link href={localePath(locale, "/sobre")} className="hover:text-fg transition">
               {t(locale, { pt: "Sobre", en: "About", es: "Acerca", jp: "プロフィール", fr: "À propos" })}
             </Link>
           </div>

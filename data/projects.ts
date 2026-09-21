@@ -6,6 +6,7 @@ export type ProjectCategory =
   | "E-commerce"
   | "Health"
   | "Open Source"
+  | "Revenue Ops"
 
 /** Translated string with PT as the required fallback. */
 export type LocalizedString = Partial<Record<Locale, string>> & { pt: string }
@@ -13,36 +14,135 @@ export type LocalizedString = Partial<Record<Locale, string>> & { pt: string }
 export type Project = {
   slug: string
   name: string
-  logo: string
+  /** Opcional: nem todo cliente tem asset quadrado disponivel, e um wordmark
+   *  largo espremido numa ficha de 44px fica ilegivel. O card degrada sem ele. */
+  logo?: string
   tagline: LocalizedString
   description: LocalizedString
   category: ProjectCategory
   url?: string
   detailPage?: string
+
+  // Os quatro campos abaixo são opcionais de propósito: nem todo projeto do
+  // portfólio registra papel, período, métrica ou stack, e o card foi desenhado
+  // para encolher quando faltam em vez de exibir espaço vazio. Preenchê-los é
+  // trabalho editorial do Vinicius — nada aqui é inferido.
+
+  /** Papel dele no projeto, não o que o produto faz. */
+  role?: LocalizedString
+  /** Período. Invariante entre locales: só anos, sem a palavra "atual". */
+  period?: string
+  /** O número que prova o resultado: uma transformação que ele executou
+   *  (6,7 MB → 19 KB) ou o resultado de negócio do produto que construiu
+   *  (GMV, volume transacionado). Sempre um fato publicado, nunca estimado. */
+  highlight?: LocalizedString
+  /** Nome de tecnologia não se traduz, então é array invariante e fica fora do
+   *  guard de cobertura de locale. */
+  stack?: string[]
 }
 
 export const projects: Project[] = [
+  {
+    slug: "keep",
+    name: "Keep",
+    logo: "/images/keep-logo.jpeg",
+    tagline: {
+      pt: "Detecção de churn cruzando Stripe com o uso real do produto",
+      en: "Churn detection crossing Stripe with real product usage",
+      es: "Detección de churn cruzando Stripe con el uso real del producto",
+      jp: "Stripeと実際のプロダクト利用を突き合わせるチャーン検知",
+      fr: "Détection de churn croisant Stripe et l'usage réel du produit",
+    },
+    description: {
+      pt: "Produto da Aguiar Labs que cruza os dados de pagamento do Stripe com o uso real do produto para mostrar quem está prestes a cancelar enquanto ainda dá tempo de ligar. Prioriza os alertas pela receita em risco, não pela severidade da queda de uso, e entrega no Slack em vez de exigir que alguém abra um dashboard. Acompanha três sinais de churn: contas silenciosas, queda de uso e contas que nunca usaram o produto. Integra Stripe, PostHog, Slack, HubSpot e Intercom, com acesso somente leitura via OAuth.",
+      en: "An Aguiar Labs product that crosses Stripe payment data with real product usage to show who is about to churn while there is still time to call. It ranks alerts by revenue at stake rather than by how sharply usage dropped, and delivers them in Slack instead of expecting anyone to open a dashboard. It tracks three churn signals: silent accounts, usage drops and accounts that never used the product. Integrates Stripe, PostHog, Slack, HubSpot and Intercom, with read-only OAuth access.",
+      es: "Producto de Aguiar Labs que cruza los datos de pago de Stripe con el uso real del producto para mostrar quién está a punto de cancelar mientras todavía da tiempo de llamar. Prioriza las alertas por los ingresos en riesgo, no por la severidad de la caída de uso, y las entrega en Slack en vez de exigir que alguien abra un dashboard. Sigue tres señales de churn: cuentas silenciosas, caída de uso y cuentas que nunca usaron el producto. Integra Stripe, PostHog, Slack, HubSpot e Intercom, con acceso de solo lectura vía OAuth.",
+      jp: "Aguiar Labsのプロダクト。Stripeの決済データと実際のプロダクト利用状況を突き合わせ、まだ電話が間に合ううちに解約しそうな顧客を可視化する。アラートは利用減少の大きさではなく失うリスクのある収益で優先順位づけし、ダッシュボードを開かせる代わりにSlackへ届ける。解約の兆候を3つ追跡：無音のアカウント、利用の低下、一度も使われていないアカウント。Stripe、PostHog、Slack、HubSpot、Intercomと連携し、OAuthによる読み取り専用アクセスで動作する。",
+      fr: "Produit d'Aguiar Labs qui croise les données de paiement Stripe avec l'usage réel du produit pour montrer qui est sur le point de résilier pendant qu'il est encore temps d'appeler. Il priorise les alertes selon le revenu en jeu plutôt que selon la brutalité de la baisse d'usage, et les livre dans Slack au lieu d'exiger que quelqu'un ouvre un dashboard. Il suit trois signaux de churn : comptes silencieux, baisse d'usage et comptes jamais utilisés. Intègre Stripe, PostHog, Slack, HubSpot et Intercom, avec un accès en lecture seule via OAuth.",
+    },
+    category: "Revenue Ops",
+    role: {
+      pt: "Projeto próprio",
+      en: "Own product",
+      es: "Proyecto propio",
+      jp: "自社プロダクト",
+      fr: "Produit interne",
+    },
+    stack: ["Stripe", "PostHog", "Slack", "HubSpot", "Intercom"],
+    url: "https://usekeep.dev",
+  },
   {
     slug: "chattie",
     name: "Chattie",
     logo: "/images/chattie-logo.png",
     tagline: {
-      pt: "Outreach e customer engagement com IA — 100+ empresas",
-      en: "AI-powered outreach and customer engagement — 100+ companies",
-      es: "Outreach y customer engagement con IA — 100+ empresas",
-      jp: "AIによるアウトリーチ＆カスタマーエンゲージメント — 100社以上",
-      fr: "Outreach et customer engagement avec IA — 100+ entreprises",
+      pt: "Outreach e customer engagement com IA — 165+ empresas",
+      en: "AI-powered outreach and customer engagement — 165+ companies",
+      es: "Outreach y customer engagement con IA — 165+ empresas",
+      jp: "AIによるアウトリーチ＆カスタマーエンゲージメント — 165社以上",
+      fr: "Outreach et customer engagement avec IA — 165+ entreprises",
     },
     description: {
-      pt: "Plataforma de outreach e customer engagement com IA usada por 100+ empresas. Atuo como Product Engineer (Frontend) na evolução da frente de frontend, com foco em performance e escalabilidade — incluindo a reconstrução do inbox principal com paginação cursor-based e virtualização, reduzindo o payload de ~6,7 MB para ~19 KB por requisição e eliminando travamentos com milhares de conversas. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude e Vercel AI SDK.",
-      en: "AI-powered outreach and customer engagement platform used by 100+ companies. I work as a Product Engineer (Frontend) on the evolution of the frontend, focused on performance and scalability — including rebuilding the main inbox with cursor-based pagination and virtualization, cutting the payload from ~6.7 MB to ~19 KB per request and eliminating freezes with thousands of conversations. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude and Vercel AI SDK.",
-      es: "Plataforma de outreach y customer engagement con IA usada por 100+ empresas. Actúo como Product Engineer (Frontend) en la evolución del frontend, con foco en performance y escalabilidad — incluyendo la reconstrucción del inbox principal con paginación cursor-based y virtualización, reduciendo el payload de ~6,7 MB a ~19 KB por request y eliminando bloqueos con miles de conversaciones. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude y Vercel AI SDK.",
-      jp: "100社以上が利用するAIアウトリーチ＆カスタマーエンゲージメントプラットフォーム。プロダクトエンジニア（フロントエンド）としてフロントエンドの進化に携わり、パフォーマンスとスケーラビリティに注力 — カーソルベースのページネーションと仮想化によるメインインボックスの再構築を含み、リクエストあたりのペイロードを約6.7MBから約19KBへ削減、数千件の会話でのフリーズを解消。スタック：React、Next.js、TypeScript、Supabase、TanStack Query、TanStack Virtual、Anthropic Claude、Vercel AI SDK。",
-      fr: "Plateforme d'outreach et de customer engagement avec IA utilisée par 100+ entreprises. Je travaille comme Product Engineer (Frontend) sur l'évolution du frontend, avec un focus sur la performance et la scalabilité — y compris la reconstruction de l'inbox principale avec une pagination cursor-based et une virtualisation, réduisant le payload de ~6,7 MB à ~19 KB par requête et éliminant les blocages avec des milliers de conversations. Stack : React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude et Vercel AI SDK.",
+      pt: "Plataforma de outreach e customer engagement com IA usada por 165+ empresas. Atuo como Product Engineer (Frontend) na evolução da frente de frontend, com foco em performance e escalabilidade — incluindo a reconstrução do inbox principal com paginação cursor-based e virtualização, reduzindo o payload de ~6,7 MB para ~19 KB por requisição e eliminando travamentos com milhares de conversas. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude e Vercel AI SDK.",
+      en: "AI-powered outreach and customer engagement platform used by 165+ companies. I work as a Product Engineer (Frontend) on the evolution of the frontend, focused on performance and scalability — including rebuilding the main inbox with cursor-based pagination and virtualization, cutting the payload from ~6.7 MB to ~19 KB per request and eliminating freezes with thousands of conversations. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude and Vercel AI SDK.",
+      es: "Plataforma de outreach y customer engagement con IA usada por 165+ empresas. Actúo como Product Engineer (Frontend) en la evolución del frontend, con foco en performance y escalabilidad — incluyendo la reconstrucción del inbox principal con paginación cursor-based y virtualización, reduciendo el payload de ~6,7 MB a ~19 KB por request y eliminando bloqueos con miles de conversaciones. Stack: React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude y Vercel AI SDK.",
+      jp: "165社以上が利用するAIアウトリーチ＆カスタマーエンゲージメントプラットフォーム。プロダクトエンジニア（フロントエンド）としてフロントエンドの進化に携わり、パフォーマンスとスケーラビリティに注力 — カーソルベースのページネーションと仮想化によるメインインボックスの再構築を含み、リクエストあたりのペイロードを約6.7MBから約19KBへ削減、数千件の会話でのフリーズを解消。スタック：React、Next.js、TypeScript、Supabase、TanStack Query、TanStack Virtual、Anthropic Claude、Vercel AI SDK。",
+      fr: "Plateforme d'outreach et de customer engagement avec IA utilisée par 165+ entreprises. Je travaille comme Product Engineer (Frontend) sur l'évolution du frontend, avec un focus sur la performance et la scalabilité — y compris la reconstruction de l'inbox principale avec une pagination cursor-based et une virtualisation, réduisant le payload de ~6,7 MB à ~19 KB par requête et éliminant les blocages avec des milliers de conversations. Stack : React, Next.js, TypeScript, Supabase, TanStack Query, TanStack Virtual, Anthropic Claude et Vercel AI SDK.",
     },
     category: "AI SaaS",
+    role: {
+      pt: "Product Engineer (Frontend)",
+      en: "Product Engineer (Frontend)",
+      es: "Product Engineer (Frontend)",
+      jp: "プロダクトエンジニア（フロントエンド）",
+      fr: "Product Engineer (Frontend)",
+    },
+    period: "2026 —",
+    highlight: {
+      pt: "6,7 MB → 19 KB por requisição",
+      en: "6.7 MB → 19 KB per request",
+      es: "6,7 MB → 19 KB por request",
+      jp: "1リクエストあたり 6.7 MB → 19 KB",
+      fr: "6,7 MB → 19 KB par requête",
+    },
+    stack: ["React", "Next.js", "TypeScript", "Supabase", "TanStack Query", "TanStack Virtual", "Vercel AI SDK"],
     url: "https://trychattie.com",
     detailPage: "/posts/inbox-cursor-pagination-virtualization",
+  },
+  {
+    slug: "hora-util",
+    name: "Hora Útil 360",
+    tagline: {
+      pt: "Gestão de frota que conecta campo e escritório em tempo real",
+      en: "Fleet management connecting field and back office in real time",
+      es: "Gestión de flota que conecta campo y oficina en tiempo real",
+      jp: "現場とバックオフィスをリアルタイムでつなぐ車両管理",
+      fr: "Gestion de flotte reliant le terrain et le bureau en temps réel",
+    },
+    description: {
+      pt: "ERP de gestão de frotas reconstruído sem interromper a operação: o core migrou de Firestore para PostgreSQL módulo a módulo, com migrações auditáveis, e seis produtos separados foram consolidados num único deploy multi-tenant. Inclui módulo de RH conforme CLT — escala, ponto com recibo NSR, banco de horas, férias e folha com IRRF progressivo — com auditoria append-only garantida por triggers no banco e expurgo automatizado. O app de operador é nativo em Expo/React Native, com base local criptografada e sincronização offline. Um assistente de IA opera sobre read-models, com ferramentas de escopo restrito, redação de PII e limite de tokens por tenant.",
+      en: "Fleet management ERP rebuilt without interrupting operations: the core migrated from Firestore to PostgreSQL module by module with auditable migrations, and six separate products were consolidated into a single multi-tenant deployment. It includes a labour-law-compliant HR module — scheduling, time tracking with NSR receipts, overtime banking, vacation and payroll with progressive tax withholding — with append-only auditing enforced by database triggers and automated data purging. The operator app is native Expo/React Native, with an encrypted local database and an offline sync strategy. An AI assistant runs over read-models, with scope-enforced tools, PII redaction and per-tenant token limits.",
+      es: "ERP de gestión de flotas reconstruido sin interrumpir la operación: el core migró de Firestore a PostgreSQL módulo a módulo, con migraciones auditables, y seis productos separados se consolidaron en un único deploy multi-tenant. Incluye módulo de RR.HH. conforme a la legislación laboral — turnos, control de jornada con recibo NSR, banco de horas, vacaciones y nómina con retención progresiva — con auditoría append-only garantizada por triggers en la base y purga automatizada. La app de operador es nativa en Expo/React Native, con base local cifrada y sincronización offline. Un asistente de IA opera sobre read-models, con herramientas de alcance restringido, redacción de PII y límite de tokens por tenant.",
+      jp: "稼働を止めずに再構築した車両管理ERP。コアをFirestoreからPostgreSQLへモジュール単位で移行し、監査可能なマイグレーションを用意。分かれていた6つのプロダクトを単一のマルチテナント環境に統合した。労働法に準拠した人事モジュール（シフト、NSR受領書付きの勤怠、時間貯蓄、休暇、累進課税の給与計算）を含み、DBトリガーによる追記専用の監査と自動データ削除を備える。オペレーター向けアプリはExpo/React Nativeのネイティブ実装で、暗号化されたローカルDBとオフライン同期に対応。AIアシスタントはread-model上で動作し、スコープを制限したツール、PIIの秘匿、テナントごとのトークン上限を持つ。",
+      fr: "ERP de gestion de flotte reconstruit sans interrompre l'exploitation : le core a migré de Firestore vers PostgreSQL module par module, avec des migrations auditables, et six produits distincts ont été consolidés en un seul déploiement multi-tenant. Il comprend un module RH conforme au droit du travail — planning, pointage avec reçu NSR, compte épargne-temps, congés et paie avec retenue progressive — avec un audit append-only garanti par des triggers en base et une purge automatisée. L'application opérateur est native en Expo/React Native, avec une base locale chiffrée et une synchronisation hors ligne. Un assistant IA opère sur des read-models, avec des outils à portée restreinte, une rédaction des données personnelles et une limite de tokens par tenant.",
+    },
+    category: "SaaS",
+    role: {
+      pt: "Senior Software Engineer — pela Aguiar Labs",
+      en: "Senior Software Engineer — through Aguiar Labs",
+      es: "Senior Software Engineer — por Aguiar Labs",
+      jp: "シニアソフトウェアエンジニア — Aguiar Labs を通じて",
+      fr: "Senior Software Engineer — via Aguiar Labs",
+    },
+    highlight: {
+      pt: "Firestore → PostgreSQL, sem parar a operação",
+      en: "Firestore → PostgreSQL, with zero downtime",
+      es: "Firestore → PostgreSQL, sin parar la operación",
+      jp: "Firestore → PostgreSQL、稼働を止めずに",
+      fr: "Firestore → PostgreSQL, sans interruption",
+    },
+    stack: ["React", "Next.js", "React Native", "Expo", "NestJS", "PostgreSQL", "Prisma"],
+    url: "https://horautil360.com",
   },
   {
     slug: "termai",
@@ -63,6 +163,7 @@ export const projects: Project[] = [
       fr: "Projet open source d'émulateur de terminal avec rendu via GPU (wgpu) et moteur d'IA qui détecte automatiquement les erreurs et suggère des corrections via Claude ou OpenAI, avec un fallback offline par pattern matching. Rust pour le core de l'émulateur (PTY, vt100/xterm, split panes, scrollback) et Go pour le daemon d'IA. Distribué sous forme de .app/.dmg signé et notarisé pour macOS.",
     },
     category: "Open Source",
+    stack: ["Rust", "Go", "wgpu", "Claude", "OpenAI"],
     url: "https://github.com/ViniAguiar1/termai",
   },
   {
@@ -84,6 +185,17 @@ export const projects: Project[] = [
       fr: "Plateforme qui centralise les opérations des vendeurs sur plusieurs marketplaces, en automatisant la gestion des commandes, des stocks et de la tarification pour faire passer les ventes en ligne à l'échelle.",
     },
     category: "E-commerce",
+    // Os 4 primeiros sao os unicos visiveis no card (o resto vira "+N"), entao
+    // Go e Kubernetes vem na frente: React/Next/Node aparecem em todo projeto,
+    // esses dois so aqui.
+    stack: ["Next.js", "Go", "Kubernetes", "NestJS", "React", "Node.js", "AWS", "Firebase", "PostgreSQL", "MongoDB"],
+    role: {
+      pt: "Senior Software Engineer",
+      en: "Senior Software Engineer",
+      es: "Senior Software Engineer",
+      jp: "シニアソフトウェアエンジニア",
+      fr: "Senior Software Engineer",
+    },
   },
   {
     slug: "x-drop",
@@ -104,13 +216,28 @@ export const projects: Project[] = [
       fr: "Système qui intègre catalogue, commandes, expédition et paiements dans un seul tableau de bord, permettant aux vendeurs de gérer leurs opérations et leurs finances avec une gouvernance par profils d'accès et des rapports en temps réel.",
     },
     category: "SaaS",
+    stack: ["Swift", "Next.js", "NestJS", "Firebase", "React", "Node.js", "Resend"],
+    role: {
+      pt: "Senior Software Engineer",
+      en: "Senior Software Engineer",
+      es: "Senior Software Engineer",
+      jp: "シニアソフトウェアエンジニア",
+      fr: "Senior Software Engineer",
+    },
+    highlight: {
+      pt: "+R$ 600 mil em GMV nos 6 primeiros meses",
+      en: "R$600k+ in GMV in the first 6 months",
+      es: "+R$ 600 mil en GMV en los primeros 6 meses",
+      jp: "ローンチ後6か月でGMV 60万レアル超",
+      fr: "+600 000 R$ de GMV sur les 6 premiers mois",
+    },
     url: "https://xdrop.com.br/",
     detailPage: "/projetos/x-drop",
   },
   {
     slug: "vox-pet-digital",
     name: "Vox Pet Digital",
-    logo: "/images/vox-pet-digital.png",
+    logo: "/images/vox-pet-digital.webp",
     tagline: {
       pt: "Gestão e marketing 360° para petshops e clínicas veterinárias",
       en: "Complete 360° management and marketing for pet businesses",
@@ -126,6 +253,21 @@ export const projects: Project[] = [
       fr: "Plateforme complète qui offre automatisation et outils de gestion pour cliniques vétérinaires et animaleries, combinant système de gestion et conseil spécialisé pour augmenter le chiffre d'affaires et fidéliser les clients.",
     },
     category: "SaaS",
+    stack: ["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "OpenAI"],
+    role: {
+      pt: "CTO & Co-Founder",
+      en: "CTO & Co-Founder",
+      es: "CTO & Co-Founder",
+      jp: "CTO 兼 共同創業者",
+      fr: "CTO & Co-Fondateur",
+    },
+    highlight: {
+      pt: "R$ 2 milhões+ transacionados",
+      en: "R$2M+ transacted",
+      es: "R$ 2 millones+ transaccionados",
+      jp: "取引総額200万レアル超",
+      fr: "Plus de 2 M R$ transactionnés",
+    },
     url: "https://voxpetdigital.com.br/",
     detailPage: "/projetos/vox-pet-digital",
   },
@@ -148,6 +290,21 @@ export const projects: Project[] = [
       fr: "Plateforme SaaS pour le secteur de l'esthétique et de la santé avec 50 000+ utilisateurs. Centralise planning, clients, anamnèses, professionnels, services et flux opérationnels. J'ai travaillé comme Software Engineer full stack, en faisant évoluer des modules critiques en production, en modernisant le système legacy (PHP 5.3 → React/Next.js) et en implémentant un Design System.",
     },
     category: "Health",
+    role: {
+      pt: "Software Engineer full stack",
+      en: "Full stack Software Engineer",
+      es: "Software Engineer full stack",
+      jp: "ソフトウェアエンジニア（フルスタック）",
+      fr: "Software Engineer full stack",
+    },
+    highlight: {
+      pt: "Legado PHP 5.3 → React/Next.js",
+      en: "PHP 5.3 legacy → React/Next.js",
+      es: "Legado PHP 5.3 → React/Next.js",
+      jp: "レガシー PHP 5.3 → React/Next.js",
+      fr: "Legacy PHP 5.3 → React/Next.js",
+    },
+    stack: ["React", "Next.js", "PHP", "Design System"],
     url: "https://ikropp.com/",
     detailPage: "/projetos/ikropp",
   },
@@ -170,6 +327,14 @@ export const projects: Project[] = [
       fr: "Logiciel permettant aux nutritionnistes et aux coachs sportifs de prescrire des plans alimentaires et des entraînements personnalisés, de suivre la progression de leurs clients et de gérer les consultations dans une seule application web et mobile.",
     },
     category: "SaaS",
+    stack: ["React Native", "Expo", "Next.js", "Stripe", "Firebase", "FatSecret"],
+    role: {
+      pt: "Projeto próprio",
+      en: "Own project",
+      es: "Proyecto propio",
+      jp: "個人プロジェクト",
+      fr: "Projet personnel",
+    },
     url: "https://movepro-ruddy.vercel.app/",
   },
 ]

@@ -28,10 +28,10 @@ export function ImageGallery({ images }: ImageGalleryProps) {
             type="button"
             onClick={() => setActive(i)}
             className={cn(
-              "w-16 h-16 rounded-lg border overflow-hidden transition-all flex-shrink-0",
+              "w-16 h-16 border overflow-hidden transition-all flex-shrink-0",
               i === active
                 ? "border-primary ring-2 ring-primary/20"
-                : "border-border opacity-60 hover:opacity-100"
+                : "border-line opacity-60 hover:opacity-100"
             )}
           >
             <Image
@@ -46,7 +46,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
       </div>
 
       {/* Main image */}
-      <div className="flex-1 rounded-lg border border-border overflow-hidden">
+      <div className="flex-1 border border-line overflow-hidden">
         <Image
           src={images[active].src}
           alt={images[active].alt}

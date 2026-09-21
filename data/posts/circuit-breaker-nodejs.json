@@ -1,6 +1,6 @@
 {
   "slug": "circuit-breaker-nodejs",
-  "order": 8,
+  "coverSubject": "a long row of falling dominoes arrested mid-collapse by one thick upright block, every domino beyond that block still standing perfectly straight",
   "title": "Circuit Breaker em Node.js: protegendo sistemas contra falhas em cascata",
   "title_en": "Circuit Breaker in Node.js: protecting systems against cascading failures",
   "title_es": "Circuit Breaker en Node.js: protegiendo sistemas contra fallas en cascada",
@@ -16,7 +16,6 @@
   "tag": "Arquitetura",
   "tag_en": "Architecture",
   "tag_es": "Arquitectura",
-  "tagColor": "bg-blue-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -913,6 +912,7 @@
   "title_fr": "Circuit Breaker en Node.js : protéger les systèmes contre les défaillances en cascade",
   "description_fr": "Comment implémenter le pattern Circuit Breaker dans des applications Node.js pour gérer des API externes instables — state machine, fallbacks, retry et monitoring en production.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "9 min de lecture",
   "tag_fr": "Architecture",
   "blocks_fr": [

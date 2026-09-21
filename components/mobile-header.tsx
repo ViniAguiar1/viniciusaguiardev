@@ -10,11 +10,11 @@ export function MobileHeader() {
   const { setOpenMobile } = useSidebar()
 
   return (
-    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-border bg-background px-4 py-3 lg:hidden">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-line bg-canvas px-4 py-3 lg:hidden">
       <button
         type="button"
         onClick={() => setOpenMobile(true)}
-        className="flex items-center justify-center rounded-md p-1.5 hover:bg-muted transition"
+        className="flex items-center justify-center p-1.5 hover:bg-muted transition"
         aria-label="Open menu"
       >
         <Menu className="w-5 h-5" />

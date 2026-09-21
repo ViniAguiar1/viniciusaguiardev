@@ -1,6 +1,6 @@
 {
   "slug": "rag-langchain-postgres-fullcycle",
-  "order": 9,
+  "coverSubject": "a dense archive wall of small identical drawers, with a narrow beam of light picking out exactly three drawers that stand pulled open",
   "title": "Construindo um sistema RAG com LangChain e PostgreSQL",
   "title_en": "Building a RAG system with LangChain and PostgreSQL",
   "description": "Um estudo prático sobre como implementar um sistema de busca semântica (RAG) com Python, LangChain e pgVector — integrando IA generativa a dados empresariais.",
@@ -16,7 +16,6 @@
   "readTime_en": "9 min read",
   "tag": "IA",
   "tag_en": "AI",
-  "tagColor": "bg-purple-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -473,6 +472,7 @@
   "title_fr": "Construire un système RAG avec LangChain et PostgreSQL",
   "description_fr": "Une étude pratique sur la façon d'implémenter un système de recherche sémantique (RAG) avec Python, LangChain et pgVector — en intégrant l'IA générative aux données d'entreprise.",
   "date_fr": "11 octobre 2025",
+  "publishedAt": "2025-10-11",
   "readTime_fr": "9 min de lecture",
   "tag_fr": "IA",
   "blocks_fr": [

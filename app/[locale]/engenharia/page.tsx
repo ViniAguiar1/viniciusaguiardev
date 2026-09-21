@@ -4,6 +4,8 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
+import { SectionEyebrow } from "@/components/section-eyebrow"
+import { cn, MONO_CHIP } from "@/lib/utils"
 
 const siteUrl = "https://viniciusaguiardev.com.br"
 
@@ -74,10 +76,13 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* Hero */}
       <FadeIn>
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+        <SectionEyebrow index="01">
+          {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
+        </SectionEyebrow>
+        <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
           {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
         </h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl">
+        <p className="text-mu mt-2 max-w-2xl">
           {t(locale, { pt: "Sistemas que projetei e operei em produção — decisões de arquitetura, trade-offs e restrições reais.", en: "Systems I've designed and operated in production — architecture decisions, trade-offs, and real constraints.", es: "Sistemas que diseñé y operé en producción — decisiones de arquitectura, trade-offs y restricciones reales.", jp: "本番環境で設計・運用したシステム — アーキテクチャ判断、トレードオフ、実際の制約。", fr: "Des systèmes que j'ai conçus et exploités en production — décisions d'architecture, trade-offs et contraintes réelles." })}
         </p>
       </header>
@@ -85,7 +90,11 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
 
       {/* Expandable topics */}
       <FadeIn delay={100}>
-      <section className="space-y-3 mb-12">
+      <section className="mb-12">
+        <SectionEyebrow index="02" as="h2">
+          {t(locale, { pt: "Decisões de arquitetura", en: "Architecture Decisions", es: "Decisiones de arquitectura", jp: "アーキテクチャの判断", fr: "Décisions d'architecture" })}
+        </SectionEyebrow>
+        <div className="space-y-3">
         <EngineeringTopic
           id="frontend-performance"
           defaultOpen={topic === "frontend-performance"}
@@ -94,33 +103,33 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
         >
           <div className="space-y-5">
             <p className="text-sm leading-relaxed">
-              {t(locale, { pt: "Reconstruí o inbox principal de uma plataforma de outreach com IA usada por 100+ empresas. Workspaces acumulam ~20.000 registros, e o fetch inicial carregava tudo de uma vez: payload de ~6,7 MB, travamentos de interface e carregamentos de vários segundos.", en: "I rebuilt the main inbox of an AI outreach platform used by 100+ companies. Workspaces accumulate ~20,000 records, and the initial fetch loaded everything at once: a ~6.7 MB payload, UI freezes and multi-second loads.", es: "Reconstruí el inbox principal de una plataforma de outreach con IA usada por 100+ empresas. Los workspaces acumulan ~20.000 registros, y el fetch inicial cargaba todo de una vez: payload de ~6,7 MB, bloqueos de interfaz y cargas de varios segundos.", jp: "100社以上が利用するAIアウトリーチプラットフォームのメインインボックスを再構築しました。ワークスペースには約20,000件のレコードが蓄積され、初期フェッチはすべてを一度に読み込んでいました：約6.7MBのペイロード、UIのフリーズ、数秒かかる読み込み。", fr: "J'ai reconstruit l'inbox principale d'une plateforme d'outreach avec IA utilisée par 100+ entreprises. Les workspaces accumulent ~20 000 enregistrements, et le fetch initial chargeait tout d'un coup : payload de ~6,7 MB, blocages de l'interface et chargements de plusieurs secondes." })}
+              {t(locale, { pt: "Reconstruí o inbox principal de uma plataforma de outreach com IA usada por 165+ empresas. Workspaces acumulam ~20.000 registros, e o fetch inicial carregava tudo de uma vez: payload de ~6,7 MB, travamentos de interface e carregamentos de vários segundos.", en: "I rebuilt the main inbox of an AI outreach platform used by 165+ companies. Workspaces accumulate ~20,000 records, and the initial fetch loaded everything at once: a ~6.7 MB payload, UI freezes and multi-second loads.", es: "Reconstruí el inbox principal de una plataforma de outreach con IA usada por 165+ empresas. Los workspaces acumulan ~20.000 registros, y el fetch inicial cargaba todo de una vez: payload de ~6,7 MB, bloqueos de interfaz y cargas de varios segundos.", jp: "165社以上が利用するAIアウトリーチプラットフォームのメインインボックスを再構築しました。ワークスペースには約20,000件のレコードが蓄積され、初期フェッチはすべてを一度に読み込んでいました：約6.7MBのペイロード、UIのフリーズ、数秒かかる読み込み。", fr: "J'ai reconstruit l'inbox principale d'une plateforme d'outreach avec IA utilisée par 165+ entreprises. Les workspaces accumulent ~20 000 enregistrements, et le fetch initial chargeait tout d'un coup : payload de ~6,7 MB, blocages de l'interface et chargements de plusieurs secondes." })}
             </p>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">
                 {t(locale, { pt: "Decisões-chave", en: "Key Decisions", es: "Decisiones clave", jp: "重要な判断", fr: "Décisions clés" })}
               </h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Paginação cursor-based em vez de offset — custo de leitura constante e sem itens duplicados ou pulados quando novas conversas chegam", en: "Cursor-based pagination instead of offset — constant read cost and no duplicated or skipped items when new conversations arrive", es: "Paginación cursor-based en lugar de offset — costo de lectura constante y sin ítems duplicados o saltados cuando llegan nuevas conversaciones", jp: "オフセットではなくカーソルベースのページネーション — 読み取りコストが一定で、新しい会話が届いても項目の重複や抜けが発生しない", fr: "Pagination cursor-based au lieu d'offset — coût de lecture constant et aucun élément dupliqué ou sauté quand de nouvelles conversations arrivent" })}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Virtualização de lista — só as linhas visíveis são renderizadas, mantendo o DOM pequeno mesmo com milhares de registros", en: "List virtualization — only visible rows are rendered, keeping the DOM small even with thousands of records", es: "Virtualización de lista — solo se renderizan las filas visibles, manteniendo el DOM pequeño incluso con miles de registros", jp: "リスト仮想化 — 表示中の行だけをレンダリングし、数千件でもDOMを小さく保つ", fr: "Virtualisation de liste — seules les lignes visibles sont rendues, ce qui garde le DOM petit même avec des milliers d'enregistrements" })}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Resultado: payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface", en: "Result: initial payload from ~6.7 MB to ~19 KB (~400x), eliminating UI freezes", es: "Resultado: payload inicial de ~6,7 MB a ~19 KB (~400x), eliminando bloqueos de interfaz", jp: "結果：初期ペイロードを約6.7MBから約19KBへ（約1/400）削減し、UIフリーズを解消", fr: "Résultat : payload initial de ~6,7 MB à ~19 KB (~400x), éliminant les blocages de l'interface" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Paginação cursor-based em vez de offset — custo de leitura constante e sem itens duplicados ou pulados quando novas conversas chegam", en: "Cursor-based pagination instead of offset — constant read cost and no duplicated or skipped items when new conversations arrive", es: "Paginación cursor-based en lugar de offset — costo de lectura constante y sin ítems duplicados o saltados cuando llegan nuevas conversaciones", jp: "オフセットではなくカーソルベースのページネーション — 読み取りコストが一定で、新しい会話が届いても項目の重複や抜けが発生しない", fr: "Pagination cursor-based au lieu d'offset — coût de lecture constant et aucun élément dupliqué ou sauté quand de nouvelles conversations arrivent" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Virtualização de lista — só as linhas visíveis são renderizadas, mantendo o DOM pequeno mesmo com milhares de registros", en: "List virtualization — only visible rows are rendered, keeping the DOM small even with thousands of records", es: "Virtualización de lista — solo se renderizan las filas visibles, manteniendo el DOM pequeño incluso con miles de registros", jp: "リスト仮想化 — 表示中の行だけをレンダリングし、数千件でもDOMを小さく保つ", fr: "Virtualisation de liste — seules les lignes visibles sont rendues, ce qui garde le DOM petit même avec des milliers d'enregistrements" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Resultado: payload inicial de ~6,7 MB para ~19 KB (~400x), eliminando travamentos de interface", en: "Result: initial payload from ~6.7 MB to ~19 KB (~400x), eliminating UI freezes", es: "Resultado: payload inicial de ~6,7 MB a ~19 KB (~400x), eliminando bloqueos de interfaz", jp: "結果：初期ペイロードを約6.7MBから約19KBへ（約1/400）削減し、UIフリーズを解消", fr: "Résultat : payload initial de ~6,7 MB à ~19 KB (~400x), éliminant les blocages de l'interface" })}</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Stack</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">Stack</h4>
               <div className="flex flex-wrap gap-1.5">
                 {["React", "Next.js", "TypeScript"].map((tech) => (
-                  <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
+                  <span key={tech} className="border border-line bg-surface px-2 py-0.5 text-xs">{tech}</span>
                 ))}
               </div>
             </div>
-            <div className="rounded-md border border-border bg-muted/20 p-4">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
+            <div className="border border-line bg-surface p-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">Trade-off</h4>
               <p className="text-sm leading-relaxed">
                 {t(locale, { pt: "Cursor-based abre mão do salto direto para uma página arbitrária — aceitável para um inbox, que é navegado como um fluxo cronológico, não como uma tabela paginada. A virtualização adicionou complexidade (medição de alturas, scroll restoration), mas era a única forma de manter a interface fluida: paginação sozinha reduz o payload, e não o custo de renderizar milhares de linhas acumuladas no DOM.", en: "Cursor-based gives up direct jumps to an arbitrary page — acceptable for an inbox, which is navigated as a chronological stream, not a paginated table. Virtualization added complexity (height measurement, scroll restoration), but it was the only way to keep the interface fluid: pagination alone reduces the payload, not the cost of rendering thousands of accumulated rows in the DOM.", es: "Cursor-based renuncia al salto directo a una página arbitraria — aceptable para un inbox, que se navega como un flujo cronológico, no como una tabla paginada. La virtualización agregó complejidad (medición de alturas, scroll restoration), pero era la única forma de mantener la interfaz fluida: la paginación sola reduce el payload, no el costo de renderizar miles de filas acumuladas en el DOM.", jp: "カーソルベースでは任意のページへの直接ジャンプができなくなります — インボックスはページ番号付きのテーブルではなく時系列のストリームとして閲覧されるため、許容できるトレードオフです。仮想化は複雑さ（高さの計測、スクロール位置の復元）を増やしましたが、インターフェースを滑らかに保つ唯一の方法でした：ページネーションだけではペイロードは減っても、DOMに蓄積された数千行のレンダリングコストは減らないためです。", fr: "Le cursor-based renonce au saut direct vers une page arbitraire — acceptable pour une inbox, qui se parcourt comme un flux chronologique et non comme un tableau paginé. La virtualisation a ajouté de la complexité (mesure des hauteurs, scroll restoration), mais c'était la seule façon de garder l'interface fluide : la pagination seule réduit le payload, pas le coût de rendu de milliers de lignes accumulées dans le DOM." })}
               </p>
             </div>
-            <Link href={localePath(locale, "/posts/inbox-cursor-pagination-virtualization")} className="text-sm text-primary hover:underline inline-block">
+            <Link href={localePath(locale, "/posts/inbox-cursor-pagination-virtualization")} className="text-sm text-fg underline decoration-mu underline-offset-4 hover:decoration-fg inline-block">
               {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →", jp: "実装の詳細を読む →", fr: "Lire l'implémentation complète →" })}
             </Link>
           </div>
@@ -137,25 +146,25 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               {t(locale, { pt: "Plataforma SaaS multi-módulo para pequenos negócios em um vertical específico. Projetei o sistema para lidar com agenda, vendas, financeiro, comissões e automações via WhatsApp — tudo operando como um único produto com dados compartilhados.", en: "Multi-module SaaS platform serving small businesses in a specific vertical. I designed the system to handle scheduling, sales, finance, commissions, and WhatsApp automations — all operating as a single product with shared data.", es: "Plataforma SaaS multi-módulo para pequeños negocios en un vertical específico. Diseñé el sistema para manejar agenda, ventas, financiero, comisiones y automatizaciones vía WhatsApp — todo operando como un único producto con datos compartidos.", jp: "特定バーティカル向けの中小企業を対象としたマルチモジュールSaaSプラットフォーム。予約、販売、財務、手数料、WhatsApp自動化を扱うシステムを設計 — すべてが共有データを持つ単一プロダクトとして稼働。", fr: "Plateforme SaaS multi-module pour les petites entreprises d'un vertical spécifique. J'ai conçu le système pour gérer l'agenda, les ventes, les finances, les commissions et les automatisations via WhatsApp — le tout fonctionnant comme un produit unique avec des données partagées." })}
             </p>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">
                 {t(locale, { pt: "Decisões-chave", en: "Key Decisions", es: "Decisiones clave", jp: "重要な判断", fr: "Décisions clés" })}
               </h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Arquitetura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", en: "Event-driven architecture for WhatsApp → LLM → PostgreSQL pipeline", es: "Arquitectura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", jp: "WhatsApp → LLM → PostgreSQLパイプラインのためのイベント駆動アーキテクチャ", fr: "Architecture orientée événements pour le pipeline WhatsApp → LLM → PostgreSQL" })}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados", en: "Atomic transactions to keep sales, commissions and payments always in sync", es: "Transacciones atómicas para mantener ventas, comisiones y pagos siempre sincronizados", jp: "販売、手数料、決済を常に同期させるためのアトミックトランザクション", fr: "Transactions atomiques pour garder ventes, commissions et paiements toujours synchronisés" })}</li>
-                <li className="flex items-start gap-2"><span className="text-muted-foreground mt-0.5">-</span>{t(locale, { pt: "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos", en: "AI integration in WhatsApp for automated support and product recommendations", es: "Integración de IA en WhatsApp para atención automatizada y recomendación de productos", jp: "WhatsAppへのAI統合による自動応対と商品推薦", fr: "Intégration d'IA sur WhatsApp pour le service client automatisé et la recommandation de produits" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Arquitetura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", en: "Event-driven architecture for WhatsApp → LLM → PostgreSQL pipeline", es: "Arquitectura orientada a eventos para pipeline WhatsApp → LLM → PostgreSQL", jp: "WhatsApp → LLM → PostgreSQLパイプラインのためのイベント駆動アーキテクチャ", fr: "Architecture orientée événements pour le pipeline WhatsApp → LLM → PostgreSQL" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Transações atômicas para manter vendas, comissões e pagamentos sempre sincronizados", en: "Atomic transactions to keep sales, commissions and payments always in sync", es: "Transacciones atómicas para mantener ventas, comisiones y pagos siempre sincronizados", jp: "販売、手数料、決済を常に同期させるためのアトミックトランザクション", fr: "Transactions atomiques pour garder ventes, commissions et paiements toujours synchronisés" })}</li>
+                <li className="flex items-start gap-2"><span className="text-mu mt-0.5">-</span>{t(locale, { pt: "Integração de IA no WhatsApp para atendimento automatizado e recomendação de produtos", en: "AI integration in WhatsApp for automated support and product recommendations", es: "Integración de IA en WhatsApp para atención automatizada y recomendación de productos", jp: "WhatsAppへのAI統合による自動応対と商品推薦", fr: "Intégration d'IA sur WhatsApp pour le service client automatisé et la recommandation de produits" })}</li>
               </ul>
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Stack</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">Stack</h4>
               <div className="flex flex-wrap gap-1.5">
                 {["React", "Next.js", "Node.js", "TypeScript", "PostgreSQL", "WhatsApp API", "OpenAI", "Stripe"].map((tech) => (
-                  <span key={tech} className="rounded-md border border-border bg-muted/40 px-2 py-0.5 text-xs">{tech}</span>
+                  <span key={tech} className="border border-line bg-surface px-2 py-0.5 text-xs">{tech}</span>
                 ))}
               </div>
             </div>
-            <div className="rounded-md border border-border bg-muted/20 p-4">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">Trade-off</h4>
+            <div className="border border-line bg-surface p-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">Trade-off</h4>
               <p className="text-sm leading-relaxed">
                 {t(locale, { pt: "Os fluxos de IA no WhatsApp precisavam ser confiáveis o suficiente para fechar vendas automaticamente. A escolha era entre processamento síncrono (mais simples, mas bloqueia na latência do LLM) vs. fila de eventos assíncrona. Optamos pelo assíncrono — o usuário recebe um ack imediato e a resposta da IA é processada em background com lógica de retry. Isso adicionou complexidade mas eliminou mensagens perdidas durante picos do provedor.", en: "WhatsApp AI flows needed to be reliable enough to close sales automatically. The choice was between synchronous processing (simpler, but blocks on LLM latency) vs. async event queue. We went with async — the user gets an immediate ack, and the AI response is processed in background with retry logic. This added complexity but eliminated dropped messages during provider spikes.", es: "Los flujos de IA en WhatsApp necesitaban ser confiables para cerrar ventas automáticamente. La elección era entre procesamiento síncrono (más simple, pero bloquea en la latencia del LLM) vs. cola de eventos asíncrona. Optamos por el asíncrono — el usuario recibe un ack inmediato y la respuesta de la IA se procesa en background con lógica de retry. Esto agregó complejidad pero eliminó mensajes perdidos durante picos del proveedor.", jp: "WhatsAppのAIフローは、販売を自動完了できるほど信頼性が必要でした。選択肢は同期処理（シンプルだがLLMレイテンシでブロックする）と非同期イベントキューでした。非同期を選択 — ユーザーは即座にackを受け取り、AIの応答はリトライロジックを伴ってバックグラウンドで処理されます。複雑さは増しましたが、プロバイダーのピーク時にメッセージが失われる問題はなくなりました。", fr: "Les flux d'IA sur WhatsApp devaient être assez fiables pour conclure des ventes automatiquement. Le choix se faisait entre un traitement synchrone (plus simple, mais qui bloque sur la latence du LLM) et une file d'événements asynchrone. Nous avons opté pour l'asynchrone — l'utilisateur reçoit un ack immédiat et la réponse de l'IA est traitée en background avec une logique de retry. Cela a ajouté de la complexité mais a éliminé les messages perdus pendant les pics du fournisseur." })}
               </p>
@@ -179,24 +188,24 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 { title: t(locale, { pt: "Schema por tenant", en: "Schema per tenant", es: "Schema por tenant", jp: "テナント単位のスキーマ", fr: "Schema par tenant" }), desc: t(locale, { pt: "Bom isolamento, complexidade de migrações", en: "Good isolation, migration complexity", es: "Buen aislamiento, complejidad de migraciones", jp: "良好な分離、マイグレーションの複雑さ", fr: "Bonne isolation, complexité des migrations" }), status: t(locale, { pt: "Descartado", en: "Discarded", es: "Descartado", jp: "却下", fr: "Écarté" }), chosen: false },
                 { title: t(locale, { pt: "DB compartilhado + tenant_id", en: "Shared DB + tenant_id", es: "DB compartida + tenant_id", jp: "共有DB + tenant_id", fr: "DB partagée + tenant_id" }), desc: t(locale, { pt: "Melhor custo/simplicidade, requer RLS", en: "Best cost/simplicity ratio, needs RLS", es: "Mejor costo/simplicidad, requiere RLS", jp: "コストとシンプルさのバランスが最良、RLSが必要", fr: "Meilleur rapport coût/simplicité, nécessite RLS" }), status: t(locale, { pt: "Escolhido", en: "Chosen", es: "Elegido", jp: "採用", fr: "Retenu" }), chosen: true },
               ].map((s) => (
-                <div key={s.title} className="rounded-md border border-border p-3">
+                <div key={s.title} className="border border-line p-3">
                   <div className="flex items-center justify-between mb-1">
                     <h4 className="text-xs font-medium">{s.title}</h4>
-                    <span className={`text-[10px] font-medium rounded-full px-2 py-0.5 ${s.chosen ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-muted text-muted-foreground"}`}>{s.status}</span>
+                    <span className={cn(MONO_CHIP, s.chosen && "bg-fg text-canvas border-transparent")}>{s.status}</span>
                   </div>
-                  <p className="text-xs text-muted-foreground">{s.desc}</p>
+                  <p className="text-xs text-mu">{s.desc}</p>
                 </div>
               ))}
             </div>
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">{t(locale, { pt: "Camadas de isolamento", en: "Isolation Layers", es: "Capas de aislamiento", jp: "分離のレイヤー", fr: "Couches d'isolation" })}</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-mu mb-2">{t(locale, { pt: "Camadas de isolamento", en: "Isolation Layers", es: "Capas de aislamiento", jp: "分離のレイヤー", fr: "Couches d'isolation" })}</h4>
               <ul className="text-sm space-y-1.5">
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">1</span>{t(locale, { pt: "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", en: "Application layer — all queries filtered by session.tenantId automatically", es: "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente", jp: "アプリケーション層 — すべてのクエリがsession.tenantIdで自動フィルタリング", fr: "Couche applicative — toutes les queries filtrées automatiquement par session.tenantId" })}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">2</span>{t(locale, { pt: "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", en: "Database layer — PostgreSQL Row Level Security (RLS) as safety net", es: "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad", jp: "DB層 — PostgreSQLのRow Level Security（RLS）をセーフティネットとして利用", fr: "Couche base de données — Row Level Security (RLS) de PostgreSQL comme filet de sécurité" })}</li>
-                <li className="flex items-start gap-2"><span className="font-mono text-xs text-muted-foreground bg-muted/40 rounded px-1.5 py-0.5">3</span>{t(locale, { pt: "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", en: "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", es: "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes", jp: "パフォーマンス — (tenant_id, ...) の複合インデックス + 大規模テナント向けのテーブルパーティショニング", fr: "Performance — index composites sur (tenant_id, ...) + partitionnement de tables pour les gros tenants" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-mu bg-surface px-1.5 py-0.5">1</span>{t(locale, { pt: "Camada de aplicação — todas as queries filtradas por session.tenantId automaticamente", en: "Application layer — all queries filtered by session.tenantId automatically", es: "Capa de aplicación — todas las queries filtradas por session.tenantId automáticamente", jp: "アプリケーション層 — すべてのクエリがsession.tenantIdで自動フィルタリング", fr: "Couche applicative — toutes les queries filtrées automatiquement par session.tenantId" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-mu bg-surface px-1.5 py-0.5">2</span>{t(locale, { pt: "Camada de banco — Row Level Security (RLS) do PostgreSQL como rede de segurança", en: "Database layer — PostgreSQL Row Level Security (RLS) as safety net", es: "Capa de base de datos — Row Level Security (RLS) de PostgreSQL como red de seguridad", jp: "DB層 — PostgreSQLのRow Level Security（RLS）をセーフティネットとして利用", fr: "Couche base de données — Row Level Security (RLS) de PostgreSQL comme filet de sécurité" })}</li>
+                <li className="flex items-start gap-2"><span className="font-mono text-xs text-mu bg-surface px-1.5 py-0.5">3</span>{t(locale, { pt: "Performance — índices compostos em (tenant_id, ...) + particionamento de tabelas para tenants grandes", en: "Performance — composite indexes on (tenant_id, ...) + table partitioning for large tenants", es: "Performance — índices compuestos en (tenant_id, ...) + particionamiento de tablas para tenants grandes", jp: "パフォーマンス — (tenant_id, ...) の複合インデックス + 大規模テナント向けのテーブルパーティショニング", fr: "Performance — index composites sur (tenant_id, ...) + partitionnement de tables pour les gros tenants" })}</li>
               </ul>
             </div>
-            <Link href={localePath(locale, "/posts/multi-tenant-architecture-postgresql")} className="text-sm text-primary hover:underline inline-block">
+            <Link href={localePath(locale, "/posts/multi-tenant-architecture-postgresql")} className="text-sm text-fg underline decoration-mu underline-offset-4 hover:decoration-fg inline-block">
               {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →", jp: "実装の詳細を読む →", fr: "Lire l'implémentation complète →" })}
             </Link>
           </div>
@@ -213,18 +222,18 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
               {t(locale, { pt: "Integrei sistemas de pagamento em múltiplos produtos em produção — Stripe, Mercado Pago e Asaas. Cada um tem padrões de webhook, modos de falha e garantias de consistência diferentes.", en: "I've integrated payment systems across multiple production products — Stripe, Mercado Pago and Asaas. Each has different webhook patterns, failure modes, and consistency guarantees.", es: "Integré sistemas de pago en múltiples productos en producción — Stripe, Mercado Pago y Asaas. Cada uno tiene patrones de webhook, modos de falla y garantías de consistencia diferentes.", jp: "本番環境の複数プロダクトに決済システムを統合しました — Stripe、Mercado Pago、Asaas。それぞれWebhookのパターン、失敗モード、整合性保証が異なります。", fr: "J'ai intégré des systèmes de paiement dans plusieurs produits en production — Stripe, Mercado Pago et Asaas. Chacun a des patterns de webhook, des modes de défaillance et des garanties de cohérence qui lui sont propres." })}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="rounded-md border border-border p-4">
+              <div className="border border-line p-4">
                 <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Arquitetura de Webhooks", en: "Webhook Architecture", es: "Arquitectura de Webhooks", jp: "Webhookアーキテクチャ", fr: "Architecture de Webhooks" })}</h4>
-                <ul className="text-xs space-y-1.5 text-muted-foreground">
+                <ul className="text-xs space-y-1.5 text-mu">
                   <li>- {t(locale, { pt: "Validação de assinatura em cada evento recebido", en: "Signature validation on every incoming event", es: "Validación de firma en cada evento recibido", jp: "受信した各イベントの署名検証", fr: "Validation de signature sur chaque événement reçu" })}</li>
                   <li>- {t(locale, { pt: "Chaves de idempotência para evitar processamento duplicado", en: "Idempotency keys to prevent duplicate processing", es: "Claves de idempotencia para evitar procesamiento duplicado", jp: "重複処理を防ぐための冪等性キー", fr: "Clés d'idempotence pour éviter le traitement en double" })}</li>
                   <li>- {t(locale, { pt: "Processamento assíncrono — ack imediato, processa em background", en: "Async processing — ack immediately, process in background", es: "Procesamiento asíncrono — ack inmediato, procesa en background", jp: "非同期処理 — 即座にack、バックグラウンドで処理", fr: "Traitement asynchrone — ack immédiat, traitement en background" })}</li>
                   <li>- {t(locale, { pt: "Dead letter queue para eventos com falha", en: "Dead letter queue for failed events", es: "Dead letter queue para eventos con falla", jp: "失敗したイベント用のデッドレターキュー", fr: "Dead letter queue pour les événements en échec" })}</li>
                 </ul>
               </div>
-              <div className="rounded-md border border-border p-4">
+              <div className="border border-line p-4">
                 <h4 className="text-sm font-medium mb-2">{t(locale, { pt: "Preocupações reais", en: "Real-world Concerns", es: "Preocupaciones reales", jp: "実際の懸念事項", fr: "Préoccupations réelles" })}</h4>
-                <ul className="text-xs space-y-1.5 text-muted-foreground">
+                <ul className="text-xs space-y-1.5 text-mu">
                   <li>- {t(locale, { pt: "Atrasos na confirmação de PIX variam entre provedores", en: "PIX confirmation delays vary between providers", es: "Atrasos en la confirmación de PIX varían entre proveedores", jp: "PIX確認の遅延はプロバイダー間で異なる", fr: "Les délais de confirmation PIX varient selon les fournisseurs" })}</li>
                   <li>- {t(locale, { pt: "Retries de webhook chegando fora de ordem", en: "Webhook retries arriving out of order", es: "Retries de webhook llegando fuera de orden", jp: "順不同で到着するWebhookリトライ", fr: "Retries de webhook arrivant dans le désordre" })}</li>
                   <li>- {t(locale, { pt: "Reconciliação entre estado local e estado do provedor", en: "Reconciliation between local state and provider state", es: "Reconciliación entre estado local y estado del proveedor", jp: "ローカル状態とプロバイダー状態の照合", fr: "Réconciliation entre l'état local et l'état du fournisseur" })}</li>
@@ -232,22 +241,22 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
                 </ul>
               </div>
             </div>
-            <Link href={localePath(locale, "/posts/webhook-architecture-payment-providers")} className="text-sm text-primary hover:underline inline-block">
+            <Link href={localePath(locale, "/posts/webhook-architecture-payment-providers")} className="text-sm text-fg underline decoration-mu underline-offset-4 hover:decoration-fg inline-block">
               {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →", jp: "実装の詳細を読む →", fr: "Lire l'implémentation complète →" })}
             </Link>
           </div>
         </EngineeringTopic>
+        </div>
       </section>
       </FadeIn>
 
       {/* Problems Solved */}
       <FadeIn delay={200}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción", jp: "本番環境で解決した問題", fr: "Problèmes résolus en production" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-        <div className="rounded-lg border border-border bg-card p-6">
+        <SectionEyebrow index="03" as="h2">
+          {t(locale, { pt: "Problemas resolvidos em produção", en: "Problems Solved in Production", es: "Problemas resueltos en producción", jp: "本番環境で解決した問題", fr: "Problèmes résolus en production" })}
+        </SectionEyebrow>
+        <div className="border border-line bg-card p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
             {[
               { signal: t(locale, { pt: "Performance de frontend", en: "Frontend performance", es: "Performance de frontend", jp: "フロントエンドパフォーマンス", fr: "Performance frontend" }), detail: t(locale, { pt: "Inbox de um SaaS B2B carregando ~20.000 conversas de uma vez (~6,7 MB por requisição) — paginação cursor-based + virtualização de lista, payload de ~19 KB e fim dos travamentos de interface", en: "A B2B SaaS inbox loading ~20,000 conversations at once (~6.7 MB per request) — cursor-based pagination + list virtualization, ~19 KB payload and no more UI freezes", es: "Inbox de un SaaS B2B cargando ~20.000 conversaciones de una vez (~6,7 MB por request) — paginación cursor-based + virtualización de lista, payload de ~19 KB y fin de los bloqueos de interfaz", jp: "B2B SaaSのインボックスが約20,000件の会話を一度に読み込み（リクエストあたり約6.7MB） — カーソルベースのページネーション + リスト仮想化で約19KBのペイロードにし、UIフリーズを解消", fr: "Inbox d'un SaaS B2B chargeant ~20 000 conversations d'un coup (~6,7 MB par requête) — pagination cursor-based + virtualisation de liste, payload de ~19 KB et fin des blocages de l'interface" }) },
@@ -260,7 +269,7 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             ].map((item) => (
               <div key={item.signal} className="py-2">
                 <h3 className="text-sm font-medium">{item.signal}</h3>
-                <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{item.detail}</p>
+                <p className="text-xs text-mu mt-1 leading-relaxed">{item.detail}</p>
               </div>
             ))}
           </div>
@@ -271,27 +280,32 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* AI in Production */}
       <FadeIn delay={300}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción", jp: "本番環境のAIシステム", fr: "Systèmes d'IA en production" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
-        <div className="rounded-lg border border-border bg-card p-6 space-y-5">
+        <SectionEyebrow index="04" as="h2">
+          {t(locale, { pt: "Sistemas de IA em produção", en: "AI Systems in Production", es: "Sistemas de IA en producción", jp: "本番環境のAIシステム", fr: "Systèmes d'IA en production" })}
+        </SectionEyebrow>
+        <div className="border border-line bg-card p-6 space-y-5">
           <p className="text-sm leading-relaxed">
             {t(locale, { pt: "Não chatbots — pipelines em produção onde IA é um componente em um sistema maior, com fallbacks, monitoramento e dados reais fluindo.", en: "Not chatbots — production pipelines where AI is a component in a larger system, with fallbacks, monitoring, and real data flowing through.", es: "No chatbots — pipelines en producción donde IA es un componente en un sistema mayor, con fallbacks, monitoreo y datos reales fluyendo.", jp: "チャットボットではなく — AIがより大きなシステムの一部として機能する本番パイプライン。フォールバック、モニタリング、実データの流れを伴う。", fr: "Pas de chatbots — des pipelines en production où l'IA est un composant d'un système plus large, avec fallbacks, monitoring et de vraies données qui circulent." })}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="rounded-md border border-border p-4">
+            <div className="border border-line p-4 md:col-span-2">
+              <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Classificação de idioma em conversas", en: "Conversation Language Classification", es: "Clasificación de idioma en conversaciones", jp: "会話の言語判定", fr: "Classification de langue des conversations" })}</h3>
+              <p className="text-xs text-mu leading-relaxed">
+                {t(locale, { pt: "Plataforma de customer engagement respondendo no idioma errado em ~30-40% das conversas. Classificação com Anthropic Claude via Vercel AI SDK antes do roteamento da resposta — caiu para <0,1%.", en: "A customer engagement platform replying in the wrong language in ~30-40% of conversations. Classification with Anthropic Claude via the Vercel AI SDK before response routing — down to <0.1%.", es: "Plataforma de customer engagement respondiendo en el idioma equivocado en ~30-40% de las conversaciones. Clasificación con Anthropic Claude vía Vercel AI SDK antes del ruteo de la respuesta — bajó a <0,1%.", jp: "カスタマーエンゲージメントプラットフォームで、会話の約30〜40%が誤った言語で応答していた。応答のルーティング前にVercel AI SDK経由のAnthropic Claudeで言語を判定 — 0.1%未満まで低下。", fr: "Plateforme de customer engagement répondant dans la mauvaise langue dans ~30-40% des conversations. Classification avec Anthropic Claude via le Vercel AI SDK avant le routage de la réponse — descendu à <0,1%." })}
+              </p>
+            </div>
+            <div className="border border-line p-4">
               <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Agente IA no WhatsApp", en: "WhatsApp AI Agent", es: "Agente IA en WhatsApp", jp: "WhatsApp上のAIエージェント", fr: "Agent IA sur WhatsApp" })}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-xs text-mu leading-relaxed">
                 {t(locale, { pt: "Agente com LLM para atendimento, recomendação de produtos e finalização de vendas. Mensagens processadas de forma assíncrona, dados registrados no PostgreSQL. Fallback para matching por regras quando LLM está indisponível.", en: "LLM-powered agent handling customer service, product recommendations and sales completion. Messages processed async, data registered back into PostgreSQL. Fallback to rule-based matching when LLM is unavailable.", es: "Agente con LLM para atención, recomendación de productos y cierre de ventas. Mensajes procesados de forma asíncrona, datos registrados en PostgreSQL. Fallback a matching por reglas cuando LLM no está disponible.", jp: "顧客対応、商品推薦、販売完了のためのLLMエージェント。メッセージは非同期で処理され、データはPostgreSQLに保存。LLMが利用できない場合はルールベースのマッチングにフォールバック。", fr: "Agent avec LLM pour le service client, la recommandation de produits et la finalisation des ventes. Messages traités de façon asynchrone, données enregistrées dans PostgreSQL. Fallback vers un matching par règles quand le LLM est indisponible." })}
               </p>
             </div>
-            <div className="rounded-md border border-border p-4">
+            <div className="border border-line p-4">
               <h3 className="text-sm font-medium mb-2">{t(locale, { pt: "Pipeline RAG (LangChain + pgVector)", en: "RAG Pipeline (LangChain + pgVector)", es: "Pipeline RAG (LangChain + pgVector)", jp: "RAGパイプライン（LangChain + pgVector）", fr: "Pipeline RAG (LangChain + pgVector)" })}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
+              <p className="text-xs text-mu leading-relaxed">
                 {t(locale, { pt: "Ingestão de documentos → chunking → geração de embeddings → armazenamento vetorial no PostgreSQL com pgVector → busca semântica com top-K como contexto para LLM.", en: "Document ingestion → chunk splitting → embedding generation → vector storage in PostgreSQL with pgVector → semantic search with top-K retrieval as LLM context.", es: "Ingestión de documentos → chunking → generación de embeddings → almacenamiento vectorial en PostgreSQL con pgVector → búsqueda semántica con top-K como contexto para LLM.", jp: "ドキュメント取り込み → チャンキング → 埋め込み生成 → pgVectorによるPostgreSQLへのベクトル保存 → top-Kの意味検索結果をLLMのコンテキストとして使用。", fr: "Ingestion de documents → chunking → génération d'embeddings → stockage vectoriel dans PostgreSQL avec pgVector → recherche sémantique avec top-K comme contexte pour le LLM." })}
               </p>
-              <Link href={localePath(locale, "/posts/rag-langchain-postgres-fullcycle")} className="text-xs text-primary hover:underline mt-2 inline-block">
+              <Link href={localePath(locale, "/posts/rag-langchain-postgres-fullcycle")} className="text-xs text-fg underline decoration-mu underline-offset-4 hover:decoration-fg mt-2 inline-block">
                 {t(locale, { pt: "Ler implementação completa →", en: "Read full implementation →", es: "Leer implementación completa →", jp: "実装の詳細を読む →", fr: "Lire l'implémentation complète →" })}
               </Link>
             </div>
@@ -303,15 +317,14 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* FAQ */}
       <FadeIn delay={400}>
       <section className="mb-12">
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Perguntas frequentes", en: "Frequently Asked Questions", es: "Preguntas frecuentes", jp: "よくある質問", fr: "Questions fréquentes" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="05" as="h2">
+          {t(locale, { pt: "Perguntas frequentes", en: "Frequently Asked Questions", es: "Preguntas frecuentes", jp: "よくある質問", fr: "Questions fréquentes" })}
+        </SectionEyebrow>
         <div className="space-y-4">
           {faq.map((item) => (
-            <div key={item.q} className="rounded-lg border border-border bg-card p-5">
+            <div key={item.q} className="border border-line bg-card p-5">
               <h3 className="text-sm font-semibold">{item.q}</h3>
-              <p className="text-xs text-muted-foreground mt-2 leading-relaxed">{item.a}</p>
+              <p className="text-xs text-mu mt-2 leading-relaxed">{item.a}</p>
             </div>
           ))}
         </div>
@@ -321,10 +334,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
       {/* Deep dives */}
       <FadeIn delay={500}>
       <section>
-        <div className="flex items-center gap-3 mb-5">
-          <h2 className="text-xl font-semibold">{t(locale, { pt: "Aprofundamentos", en: "Deep Dives", es: "Profundizaciones", jp: "詳細", fr: "Approfondissements" })}</h2>
-          <div className="h-px flex-1 bg-border" />
-        </div>
+        <SectionEyebrow index="06" as="h2">
+          {t(locale, { pt: "Aprofundamentos", en: "Deep Dives", es: "Profundizaciones", jp: "詳細", fr: "Approfondissements" })}
+        </SectionEyebrow>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
             { title: t(locale, { pt: "Inbox React em escala", en: "React Inbox at Scale", es: "Inbox React a escala", jp: "スケールするReactインボックス", fr: "Inbox React à grande échelle" }), desc: t(locale, { pt: "Cursor, virtualização, 6,7 MB → 19 KB por requisição", en: "Cursor, virtualization, 6.7 MB → 19 KB per request", es: "Cursor, virtualización, 6,7 MB → 19 KB por request", jp: "カーソル、仮想化、リクエストあたり6.7MB → 19KB", fr: "Cursor, virtualisation, 6,7 MB → 19 KB par requête" }), href: "/posts/inbox-cursor-pagination-virtualization" },
@@ -336,9 +348,9 @@ export default async function EngineeringPage({ searchParams }: PageProps) {
             { title: t(locale, { pt: "Docker para devs frontend", en: "Docker for Frontend Devs", es: "Docker para devs frontend", jp: "フロントエンド開発者のためのDocker", fr: "Docker pour les devs frontend" }), desc: t(locale, { pt: "Dockerfile, multi-stage builds, dev/prod", en: "Dockerfile, multi-stage builds, dev/prod", es: "Dockerfile, multi-stage builds, dev/prod", jp: "Dockerfile、マルチステージビルド、dev/prod", fr: "Dockerfile, multi-stage builds, dev/prod" }), href: "/posts/docker-for-frontend-devs" },
             { title: t(locale, { pt: "Iniciando no TypeScript", en: "Getting Started with TypeScript", es: "Iniciando en TypeScript", jp: "TypeScript入門", fr: "Démarrer avec TypeScript" }), desc: t(locale, { pt: "Tipos, interfaces, generics, utility types", en: "Types, interfaces, generics, utility types", es: "Tipos, interfaces, generics, utility types", jp: "型、インターフェース、ジェネリクス、ユーティリティ型", fr: "Types, interfaces, generics, utility types" }), href: "/posts/starting-typescript" },
           ].map((post) => (
-            <Link key={post.href} href={localePath(locale, post.href)} className="group rounded-lg border border-border bg-card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
-              <h3 className="text-sm font-semibold group-hover:text-primary transition-colors">{post.title}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{post.desc}</p>
+            <Link key={post.href} href={localePath(locale, post.href)} className="group border border-line bg-card p-5 hover:border-field hover:-translate-y-0.5 transition-all">
+              <h3 className="text-sm font-semibold text-fg">{post.title}</h3>
+              <p className="text-xs text-mu mt-1">{post.desc}</p>
             </Link>
           ))}
         </div>

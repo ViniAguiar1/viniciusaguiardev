@@ -47,9 +47,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(rawLocale)) return {}
   const locale: Locale = rawLocale
 
-  const title = t(locale, { pt: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", en: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", es: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering", jp: "Vinicius Aguiar — フロントエンドエンジニア | React・Next.js・パフォーマンスエンジニアリング", fr: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering" })
+  const title = t(locale, { pt: "Vinicius Aguiar — Senior Product Engineer | React, Next.js & Performance Engineering", en: "Vinicius Aguiar — Senior Product Engineer | React, Next.js & Performance Engineering", es: "Vinicius Aguiar — Senior Product Engineer | React, Next.js & Performance Engineering", jp: "Vinicius Aguiar — シニアプロダクトエンジニア | React・Next.js・パフォーマンスエンジニアリング", fr: "Vinicius Aguiar — Senior Product Engineer | React, Next.js & Performance Engineering" })
 
-  const description = t(locale, { pt: "Frontend Engineer — React, Next.js, TypeScript e performance engineering em SaaS de produção. Capacidade full-stack como diferencial: pagamentos, multi-tenant e IA.", en: "Frontend Engineer — React, Next.js, TypeScript and performance engineering on production SaaS. Full-stack range as a differentiator: payments, multi-tenant and AI.", es: "Frontend Engineer — React, Next.js, TypeScript y performance engineering en SaaS de producción. Capacidad full-stack como diferencial: pagos, multi-tenant e IA.", jp: "フロントエンドエンジニア — React、Next.js、TypeScript、本番SaaSのパフォーマンスエンジニアリング。決済、マルチテナント、AIまで扱えるフルスタック力が強み。", fr: "Frontend Engineer — React, Next.js, TypeScript et performance engineering sur des SaaS en production. Une polyvalence full-stack comme atout : paiements, multi-tenant et IA." })
+  const description = t(locale, { pt: "Senior Product Engineer — React, Next.js, TypeScript e performance engineering em SaaS de produção. Capacidade full-stack como diferencial: pagamentos, multi-tenant e IA.", en: "Senior Product Engineer — React, Next.js, TypeScript and performance engineering on production SaaS. Full-stack range as a differentiator: payments, multi-tenant and AI.", es: "Senior Product Engineer — React, Next.js, TypeScript y performance engineering en SaaS de producción. Capacidad full-stack como diferencial: pagos, multi-tenant e IA.", jp: "シニアプロダクトエンジニア — React、Next.js、TypeScript、本番SaaSのパフォーマンスエンジニアリング。決済、マルチテナント、AIまで扱えるフルスタック力が強み。", fr: "Senior Product Engineer — React, Next.js, TypeScript et performance engineering sur des SaaS en production. Une polyvalence full-stack comme atout : paiements, multi-tenant et IA." })
 
   const ogLocale = localeToOgLocale(locale)
 
@@ -74,14 +74,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
           url: "/og-image.png",
           width: 1200,
           height: 630,
-          alt: "Vinicius Aguiar — Frontend Engineer | React, Next.js & Performance Engineering",
+          alt: "Vinicius Aguiar — Senior Product Engineer | React, Next.js & Performance Engineering",
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: t(locale, { pt: "Frontend Engineer — React, Next.js e performance engineering em SaaS de produção.", en: "Frontend Engineer — React, Next.js and performance engineering on production SaaS.", es: "Frontend Engineer — React, Next.js y performance engineering en SaaS de producción.", jp: "フロントエンドエンジニア — React、Next.js、本番SaaSのパフォーマンスエンジニアリング。", fr: "Frontend Engineer — React, Next.js et performance engineering sur des SaaS en production." }),
+      description: t(locale, { pt: "Senior Product Engineer — React, Next.js e performance engineering em SaaS de produção.", en: "Senior Product Engineer — React, Next.js and performance engineering on production SaaS.", es: "Senior Product Engineer — React, Next.js y performance engineering en SaaS de producción.", jp: "シニアプロダクトエンジニア — React、Next.js、本番SaaSのパフォーマンスエンジニアリング。", fr: "Senior Product Engineer — React, Next.js et performance engineering sur des SaaS en production." }),
       images: ["/og-image.png"],
     },
   }
@@ -119,9 +119,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
           }}
         />
         <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
+          attribute="data-theme"
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <SidebarProvider>

@@ -3,6 +3,8 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
+import { SectionEyebrow } from "@/components/section-eyebrow"
+import { ProjectLogo } from "@/components/project-logo"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -344,7 +346,7 @@ export default async function IKroppPage() {
         {/* Back link */}
         <Link
           href={localePath(locale, "/projetos")}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-mu hover:text-fg transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -355,26 +357,18 @@ export default async function IKroppPage() {
         {/* Header */}
         <FadeIn>
           <header className="mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
               {c.badge}
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
-                <Image
-                  src="/images/ikropp.png"
-                  alt="iKropp"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <ProjectLogo src="/images/ikropp.png" name="iKropp" size={56} />
+              <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
             </div>
 
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-lg text-mu max-w-2xl">
               {c.subtitle}
             </p>
           </header>
@@ -383,10 +377,10 @@ export default async function IKroppPage() {
         {/* Purpose */}
         <FadeIn delay={100}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="01" as="h2">
               {c.purposeTitle}
-            </h2>
-            <div className="space-y-4 text-foreground/85 leading-relaxed">
+            </SectionEyebrow>
+            <div className="space-y-4 text-fg leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -397,14 +391,14 @@ export default async function IKroppPage() {
         {/* My Role */}
         <FadeIn delay={150}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-2">
+            <SectionEyebrow index="02" as="h2">
               {c.roleTitle}
-            </h2>
-            <p className="text-sm text-muted-foreground mb-4">{c.roleText}</p>
+            </SectionEyebrow>
+            <p className="text-sm text-mu mb-4">{c.roleText}</p>
             <ul className="space-y-2">
               {c.roleItems.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-foreground/85">
-                  <span className="text-muted-foreground mt-0.5 flex-shrink-0">-</span>
+                <li key={i} className="flex items-start gap-2 text-sm text-fg">
+                  <span className="text-mu mt-0.5 flex-shrink-0">-</span>
                   {item}
                 </li>
               ))}
@@ -415,14 +409,14 @@ export default async function IKroppPage() {
         {/* Challenges */}
         <FadeIn delay={200}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="03" as="h2">
               {c.challengesTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-border bg-card p-5"
+                  className="border border-line bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -432,7 +426,7 @@ export default async function IKroppPage() {
                       <h3 className="text-sm font-semibold mb-1">
                         {challenge.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-mu leading-relaxed">
                         {challenge.desc}
                       </p>
                     </div>
@@ -446,14 +440,17 @@ export default async function IKroppPage() {
         {/* Stats */}
         <FadeIn delay={250}>
           <section className="mb-12">
+            <SectionEyebrow index="04" as="h2">
+              {c.statsTitle}
+            </SectionEyebrow>
             <div className="grid grid-cols-2 gap-4">
               {c.stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-lg border border-border bg-card p-4 text-center"
+                  className="border border-line bg-card p-4 text-center"
                 >
                   <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground mt-1">
+                  <div className="text-xs text-mu mt-1">
                     {stat.label}
                   </div>
                 </div>
@@ -465,9 +462,9 @@ export default async function IKroppPage() {
         {/* Screenshots placeholder */}
         <FadeIn delay={300}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="05" as="h2">
               {c.screenshotsTitle}
-            </h2>
+            </SectionEyebrow>
             <ImageGallery
               images={[
                 {
@@ -490,14 +487,14 @@ export default async function IKroppPage() {
         {/* Stack */}
         <FadeIn delay={350}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="06" as="h2">
               {c.stackTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="flex flex-wrap gap-2">
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-line bg-card"
                 >
                   {tech}
                 </span>
@@ -513,7 +510,7 @@ export default async function IKroppPage() {
               href="https://ikropp.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

@@ -1,6 +1,6 @@
 {
   "slug": "case-study-vox-pet",
-  "order": 4,
+  "coverSubject": "two parallel structural frameworks standing side by side, one older and irregular, one newer and strictly modular, joined across the gap by a single continuous unbroken bridge",
   "title": "Case Study: Vox Pet Digital — migrando um SaaS veterinário de Express para NestJS sem downtime",
   "title_en": "Case Study: Vox Pet Digital — migrating a veterinary SaaS from Express to NestJS with zero downtime",
   "title_es": "Case Study: Vox Pet Digital — migrando un SaaS veterinario de Express a NestJS sin downtime",
@@ -16,7 +16,6 @@
   "tag": "Case Study",
   "tag_en": "Case Study",
   "tag_es": "Case Study",
-  "tagColor": "bg-emerald-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -793,6 +792,7 @@
   "title_fr": "Étude de cas : Vox Pet Digital — migrer un SaaS vétérinaire d'Express vers NestJS sans downtime",
   "description_fr": "95 modèles Prisma, multi-tenant + multi-filiale, IA sur WhatsApp avec RAG et Whisper, migration progressive v1→v2 et facturation avec fallback.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "14 min de lecture",
   "tag_fr": "Étude de cas",
   "blocks_fr": [

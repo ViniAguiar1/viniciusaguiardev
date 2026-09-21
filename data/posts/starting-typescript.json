@@ -1,5 +1,6 @@
 {
   "slug": "starting-typescript",
+  "coverSubject": "a loose pile of irregular broken fragments on one side of the frame gradually resolving into a neat lattice of identical interlocking pieces on the other side",
   "showOnHome": false,
   "title": "Iniciando no TypeScript: guia prático para devs JavaScript",
   "title_en": "Getting started with TypeScript: a practical guide for JS developers",
@@ -16,7 +17,6 @@
   "tag": "TypeScript",
   "tag_en": "TypeScript",
   "tag_es": "TypeScript",
-  "tagColor": "bg-blue-600",
   "blocks": [
     {
       "type": "paragraph",
@@ -885,6 +885,7 @@
   "title_fr": "Débuter en TypeScript : guide pratique pour les devs JavaScript",
   "description_fr": "Tout ce que vous devez savoir pour commencer à utiliser TypeScript dans des projets réels — typage, interfaces, generics, utility types et configuration.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "12 min de lecture",
   "tag_fr": "TypeScript",
   "blocks_fr": [

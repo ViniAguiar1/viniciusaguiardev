@@ -1,6 +1,6 @@
 {
   "slug": "webhook-architecture-payment-providers",
-  "order": 7,
+  "coverSubject": "several thin cables entering from outside the frame and converging into one single heavy junction block at the centre",
   "title": "Arquitetura de webhooks para provedores de pagamento em Node.js",
   "title_en": "Webhook architecture for payment providers in Node.js",
   "description": "Como estruturar o recebimento de webhooks de pagamento em produção — validação de assinatura, idempotência, processamento assíncrono, reconciliação e tratamento de falhas reais.",
@@ -16,7 +16,6 @@
   "readTime_en": "10 min read",
   "tag": "Arquitetura",
   "tag_en": "Architecture",
-  "tagColor": "bg-blue-700",
   "blocks": [
     {
       "type": "paragraph",
@@ -889,6 +888,7 @@
   "title_fr": "Architecture de webhooks pour les fournisseurs de paiement en Node.js",
   "description_fr": "Comment structurer la réception de webhooks de paiement en production — validation de signature, idempotence, traitement asynchrone, réconciliation et gestion des défaillances réelles.",
   "date_fr": "15 avril 2026",
+  "publishedAt": "2026-04-15",
   "readTime_fr": "10 min de lecture",
   "tag_fr": "Architecture",
   "blocks_fr": [

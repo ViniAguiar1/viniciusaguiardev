@@ -34,7 +34,7 @@ export function LanguageToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger
         suppressHydrationWarning
-        className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs text-foreground shadow-sm"
+        className="inline-flex items-center gap-1 border bg-canvas px-2 py-1 text-xs text-fg shadow-sm"
       >
         <span className="text-base leading-none">{flag}</span>
       </DropdownMenuTrigger>

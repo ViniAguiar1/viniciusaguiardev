@@ -3,6 +3,8 @@ import { localePath, buildAlternates } from "@/lib/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"
+import { SectionEyebrow } from "@/components/section-eyebrow"
+import { ProjectLogo } from "@/components/project-logo"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -269,7 +271,7 @@ export default async function VoxPetPage() {
         {/* Back link */}
         <Link
           href={localePath(locale, "/projetos")}
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition mb-8"
+          className="inline-flex items-center gap-1.5 text-sm text-mu hover:text-fg transition mb-8"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -280,30 +282,22 @@ export default async function VoxPetPage() {
         {/* Header */}
         <FadeIn>
           <header className="mb-12">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-full mb-4">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fg opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-fg" />
               </span>
               {c.badge}
             </span>
 
             <div className="flex items-center gap-4 mb-4">
-              <div className="flex-shrink-0 w-14 h-14 rounded-lg border border-border bg-muted/30 flex items-center justify-center overflow-hidden">
-                <Image
-                  src="/images/vox-pet-digital.png"
-                  alt="Vox Pet Digital"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              <ProjectLogo src="/images/vox-pet-digital.webp" name="Vox Pet Digital" size={56} />
+              <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
                 {c.title}
               </h1>
             </div>
 
-            <p className="text-lg text-muted-foreground max-w-2xl">
+            <p className="text-lg text-mu max-w-2xl">
               {c.subtitle}
             </p>
           </header>
@@ -312,10 +306,10 @@ export default async function VoxPetPage() {
         {/* Purpose */}
         <FadeIn delay={100}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="01" as="h2">
               {c.purposeTitle}
-            </h2>
-            <div className="space-y-4 text-foreground/85 leading-relaxed">
+            </SectionEyebrow>
+            <div className="space-y-4 text-fg leading-relaxed">
               <p>{c.purposeText1}</p>
               <p>{c.purposeText2}</p>
               <p>{c.purposeText3}</p>
@@ -326,14 +320,14 @@ export default async function VoxPetPage() {
         {/* Technical Challenges */}
         <FadeIn delay={200}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="02" as="h2">
               {c.challengesTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {c.challenges.map((challenge, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-border bg-card p-5"
+                  className="border border-line bg-card p-5"
                 >
                   <div className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
@@ -343,7 +337,7 @@ export default async function VoxPetPage() {
                       <h3 className="text-sm font-semibold mb-1">
                         {challenge.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-mu leading-relaxed">
                         {challenge.desc}
                       </p>
                     </div>
@@ -353,14 +347,12 @@ export default async function VoxPetPage() {
             </div>
           </section>
         </FadeIn>
-
-        {/* Numbers */}
         {/* Screenshots */}
         <FadeIn delay={300}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="03" as="h2">
               {c.screenshotsTitle}
-            </h2>
+            </SectionEyebrow>
             <ImageGallery
               images={[
                 {
@@ -387,14 +379,14 @@ export default async function VoxPetPage() {
         {/* Stack */}
         <FadeIn delay={400}>
           <section className="mb-12">
-            <h2 className="text-2xl font-semibold tracking-tight mb-4">
+            <SectionEyebrow index="04" as="h2">
               {c.stackTitle}
-            </h2>
+            </SectionEyebrow>
             <div className="flex flex-wrap gap-2">
               {c.stackItems.map((tech) => (
                 <span
                   key={tech}
-                  className="px-3 py-1.5 text-xs font-medium rounded-full border border-border bg-card"
+                  className="px-3 py-1.5 text-xs font-medium border border-line bg-card"
                 >
                   {tech}
                 </span>
@@ -408,7 +400,7 @@ export default async function VoxPetPage() {
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
               href={localePath(locale, "/posts/case-study-vox-pet")}
-              className="px-5 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:opacity-90 transition text-center"
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center"
             >
               {c.caseStudyCta}
             </Link>
@@ -416,7 +408,7 @@ export default async function VoxPetPage() {
               href="https://voxpetdigital.com.br/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 text-sm font-medium rounded-md border border-border hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+              className="px-5 py-2.5 text-sm font-medium border border-line hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
             >
               {c.visitCta}
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">

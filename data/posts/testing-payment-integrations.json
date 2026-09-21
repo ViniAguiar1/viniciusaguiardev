@@ -1,7 +1,6 @@
 {
   "slug": "testing-payment-integrations",
   "coverSubject": "a row of identical precision measuring gauges mounted on heavy machined blocks, arranged in a straight line with shallow depth of field",
-  "order": 5,
   "title": "Estratégia de testes para integrações de pagamento em Node.js",
   "title_en": "Testing strategy for payment integrations in Node.js",
   "title_es": "Estrategia de testing para integraciones de pago en Node.js",
@@ -861,6 +860,7 @@
   "title_fr": "Stratégie de tests pour les intégrations de paiement en Node.js",
   "description_fr": "Comment tester les webhooks, l'idempotence, le PIX et plusieurs gateways (Stripe, Asaas, Mercado Pago) sans facturer pour de vrai — sandbox, mocks, contrats et tests de résilience.",
   "date_fr": "17 avril 2026",
+  "publishedAt": "2026-04-17",
   "readTime_fr": "11 min de lecture",
   "tag_fr": "Ingénierie",
   "blocks_fr": [

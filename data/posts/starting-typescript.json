@@ -885,6 +885,7 @@
   "title_fr": "Débuter en TypeScript : guide pratique pour les devs JavaScript",
   "description_fr": "Tout ce que vous devez savoir pour commencer à utiliser TypeScript dans des projets réels — typage, interfaces, generics, utility types et configuration.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "12 min de lecture",
   "tag_fr": "TypeScript",
   "blocks_fr": [

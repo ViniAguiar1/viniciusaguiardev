@@ -961,6 +961,7 @@
   "title_fr": "Docker pour les devs frontend : de zéro au deploy",
   "description_fr": "Guide pratique de Docker pour ceux qui viennent du frontend — Dockerfile, docker-compose, environnements de dev, multi-stage builds et deploy en production.",
   "date_fr": "16 avril 2026",
+  "publishedAt": "2026-04-16",
   "readTime_fr": "10 min de lecture",
   "tag_fr": "DevOps",
   "blocks_fr": [

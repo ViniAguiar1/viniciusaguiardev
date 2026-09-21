@@ -1,7 +1,6 @@
 {
   "slug": "multi-tenant-architecture-postgresql",
   "coverSubject": "a single large monolithic slab divided internally by thin deep grooves into many equal sealed compartments, none of the compartments connected to another",
-  "order": 6,
   "title": "Arquitetura multi-tenant com PostgreSQL em aplicações SaaS",
   "title_en": "Multi-tenant architecture with PostgreSQL in SaaS applications",
   "description": "Um guia prático sobre como estruturar aplicações SaaS multi-tenant utilizando PostgreSQL — abordando isolamento de dados, modelagem de banco e boas práticas de arquitetura.",
@@ -549,6 +548,7 @@
   "title_fr": "Architecture multi-tenant avec PostgreSQL dans les applications SaaS",
   "description_fr": "Un guide pratique sur la façon de structurer des applications SaaS multi-tenant avec PostgreSQL — isolation des données, modélisation de la base de données et bonnes pratiques d'architecture.",
   "date_fr": "3 février 2026",
+  "publishedAt": "2026-02-03",
   "readTime_fr": "8 min de lecture",
   "tag_fr": "Architecture",
   "blocks_fr": [

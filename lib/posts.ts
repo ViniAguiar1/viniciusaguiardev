@@ -40,15 +40,19 @@ export type Post = {
   slug: string
   title: string
   description?: string
+  // Data já formatada para exibição, por locale ("16 de abril de 2026").
+  // Serve à leitura humana e a mais nada: não é ordenável nem parseável.
   date: string
+  // ISO 8601. É o que ordena as listagens e o que vai para o schema.org,
+  // que rejeita qualquer outro formato. Existe porque `date` é localizada:
+  // "2026年4月16日" e "16 avril 2026" são o mesmo dia e nenhuma das duas
+  // ordena.
+  publishedAt: string
   readTime?: string
   tag?: string
   content?: string
   blocks?: ContentBlock[]
-  featured?: boolean
   draft?: boolean
-  // Ordenação editorial entre posts featured (menor = primeiro)
-  order?: number
   // Imagem Open Graph própria do post (fallback: /og-image.png do site)
   ogImage?: string
   // false => fora da grid da home (continua em busca, sitemap e URL direta)
@@ -93,13 +97,12 @@ function buildPost(file: string, raw: RawPostData, locale: Locale): Post {
     title: data.title ?? slug,
     description: data.description ?? "",
     date: data.date ?? "",
+    publishedAt: typeof data.publishedAt === "string" ? data.publishedAt : "",
     readTime: data.readTime ?? "",
     tag: data.tag ?? "",
     content: data.content ?? "",
     blocks: normalizeBlocks(data),
-    featured: Boolean(data.featured),
     draft: Boolean(data.draft),
-    order: typeof data.order === "number" ? data.order : undefined,
     ogImage: typeof data.ogImage === "string" ? data.ogImage : undefined,
     showOnHome: data.showOnHome !== false,
     cover: fs.existsSync(path.join(coversDir, slug, "cover.webp")),
@@ -128,12 +131,16 @@ export const getAllPosts = cache((locale: Locale = "pt"): Post[] => {
     posts.push(post)
   }
 
-  // Featured primeiro, ordenados por `order` quando presente; sort estável
-  // preserva a ordem alfabética dentro de cada grupo
+  // Mais recente primeiro. Substituiu uma curadoria manual (featured + order)
+  // que acabou deixando três posts de frontend no topo de toda listagem e
+  // enterrando arquitetura, pagamentos e IA — o oposto do posicionamento.
+  //
+  // Desempate por slug, não pela ordem de leitura do diretório: cinco posts
+  // dividem a mesma data de importação e sem um critério estável a listagem
+  // mudaria conforme o sistema de arquivos.
   posts.sort((a, b) => {
-    const featuredDiff = Number(Boolean(b.featured)) - Number(Boolean(a.featured))
-    if (featuredDiff !== 0) return featuredDiff
-    return (a.order ?? Infinity) - (b.order ?? Infinity)
+    if (a.publishedAt !== b.publishedAt) return a.publishedAt < b.publishedAt ? 1 : -1
+    return a.slug.localeCompare(b.slug)
   })
 
   if (isProd) localePostsCache.set(locale, posts)

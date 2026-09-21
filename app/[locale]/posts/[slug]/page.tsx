@@ -68,7 +68,9 @@ export default async function PostPage({ params }: PageProps) {
           "@type": "Article",
           headline: post.title,
           description: post.description ?? "",
-          datePublished: post.date,
+          // ISO 8601, nunca `post.date`: aquela é localizada e o schema.org
+          // não parseia "16 de abril de 2026" nem "2026年4月16日".
+          datePublished: post.publishedAt,
           url: `${SITE_URL}${localePath(locale, `/posts/${slug}`)}`,
           author: {
             "@type": "Person",

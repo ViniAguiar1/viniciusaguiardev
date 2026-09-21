@@ -134,10 +134,11 @@ export default async function SobrePage() {
         
         <div className="mt-4 flex flex-wrap gap-2">
           {[
-            "React", "React Native", "Next.js", "Node.js", "TypeScript",
-            "HTML5", "CSS3", "Tailwind", "PostgreSQL", "Docker",
-            "AWS", "Git", "Swift (iOS)", "Flutter", "Go",
-            "Java", "CI/CD", "Testing", "Accessibility", "Design System",
+            "React", "React Native", "Next.js", "Node.js", "NestJS",
+            "TypeScript", "HTML5", "CSS3", "Tailwind", "PostgreSQL",
+            "MongoDB", "Firebase", "Docker", "Kubernetes", "AWS",
+            "Git", "Swift (iOS)", "Flutter", "Go", "Java",
+            "CI/CD", "Testing", "Accessibility", "Design System",
             "Linux/macOS",
           ].map((tag) => (
             <span key={tag} className={MONO_CHIP}>

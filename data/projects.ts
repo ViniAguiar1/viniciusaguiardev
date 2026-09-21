@@ -185,6 +185,10 @@ export const projects: Project[] = [
       fr: "Plateforme qui centralise les opérations des vendeurs sur plusieurs marketplaces, en automatisant la gestion des commandes, des stocks et de la tarification pour faire passer les ventes en ligne à l'échelle.",
     },
     category: "E-commerce",
+    // Os 4 primeiros sao os unicos visiveis no card (o resto vira "+N"), entao
+    // Go e Kubernetes vem na frente: React/Next/Node aparecem em todo projeto,
+    // esses dois so aqui.
+    stack: ["Next.js", "Go", "Kubernetes", "NestJS", "React", "Node.js", "AWS", "Firebase", "PostgreSQL", "MongoDB"],
     role: {
       pt: "Senior Software Engineer",
       en: "Senior Software Engineer",
@@ -212,6 +216,7 @@ export const projects: Project[] = [
       fr: "Système qui intègre catalogue, commandes, expédition et paiements dans un seul tableau de bord, permettant aux vendeurs de gérer leurs opérations et leurs finances avec une gouvernance par profils d'accès et des rapports en temps réel.",
     },
     category: "SaaS",
+    stack: ["Swift", "Next.js", "NestJS", "Firebase", "React", "Node.js", "Resend"],
     role: {
       pt: "Senior Software Engineer",
       en: "Senior Software Engineer",

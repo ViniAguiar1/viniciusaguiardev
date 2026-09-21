@@ -41,7 +41,7 @@ Notas importantes:
 
 ## Tech Stack
 
-React, React Native, Next.js, NestJS, Node.js, TypeScript, Swift UI (iOS), PostgreSQL, Firebase, Docker, AWS, Git, Tailwind CSS, Shadcn UI, Stripe, Asaas, Mercado Pago, OpenAI, Anthropic Claude, Vercel AI SDK, LangChain, pgVector, CI/CD, GitHub Actions.
+React, React Native, Next.js, NestJS, Node.js, TypeScript, Go, Swift UI (iOS), Flutter, PostgreSQL, MongoDB, Firebase, Docker, Kubernetes, AWS, Git, Tailwind CSS, Shadcn UI, Stripe, Asaas, Mercado Pago, Resend, OpenAI, Anthropic Claude, Vercel AI SDK, LangChain, pgVector, CI/CD, GitHub Actions.
 
 ## Contato
 

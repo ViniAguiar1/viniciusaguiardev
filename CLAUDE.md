@@ -15,9 +15,13 @@ pnpm aeo          # AEO readiness check (threshold 90/100, fails CI if below)
 
 Uses **pnpm** (not npm/yarn). Node 24 locally (via nvm), Node 20 in CI. Turbopack is the bundler for both dev and build.
 
+The pnpm version is pinned in `package.json#packageManager` and is the single source for all three environments — CI's `pnpm/action-setup` reads it (don't add a `version:` input back, the action errors on both) and Vercel resolves it from there. Never run `npm install` here: npm ignores `pnpm-lock.yaml` and resolves the tree from scratch.
+
 ## CI Pipeline
 
 Runs on every PR to `main`: lint → typecheck → build → AEO check. Deploy is automatic via Vercel (preview on PRs, production on merge).
+
+`vercel.json` sets the install command to `pnpm install --frozen-lockfile`. It exists because the Vercel project was configured to run `npm install`, which ignored the committed lockfile — deploys resolved dependencies fresh every time, and broke outright once `sharp` entered the tree (npm's `edgesOut` bug on `linux-x64`). Settings in `vercel.json` override the dashboard.
 
 ## Architecture
 

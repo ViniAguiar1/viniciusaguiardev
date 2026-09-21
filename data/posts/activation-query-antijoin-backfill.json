@@ -1,0 +1,625 @@
+{
+  "slug": "activation-query-antijoin-backfill",
+  "coverSubject": "a dense grid of small identical solid tiles filling the frame, with a scattered handful of tiles missing entirely and leaving clean empty sockets of pure black, the gaps reading as absence rather than damage, no text, no symbols",
+  "order": 2,
+  "date": "20 de set de 2026",
+  "date_en": "Sep 20, 2026",
+  "date_es": "20 de sept. de 2026",
+  "date_jp": "2026年9月20日",
+  "date_fr": "20 septembre 2026",
+  "readTime": "9 min de leitura",
+  "readTime_en": "9 min read",
+  "readTime_es": "9 min de lectura",
+  "readTime_jp": "9分で読めます",
+  "readTime_fr": "9 min de lecture",
+  "tag": "Arquitetura",
+  "tag_en": "Architecture",
+  "tag_es": "Arquitectura",
+  "tag_jp": "アーキテクチャ",
+  "tag_fr": "Architecture",
+  "title": "A query de ativação mente no primeiro dia: anti-join e backfill em PostgreSQL",
+  "title_en": "The activation query lies on day one: anti-joins and backfill in PostgreSQL",
+  "title_es": "La query de activación miente el primer día: anti-join y backfill en PostgreSQL",
+  "title_jp": "アクティベーションのクエリは初日から嘘をつく — PostgreSQLのアンチジョインとバックフィル",
+  "title_fr": "La requête d'activation ment dès le premier jour : anti-join et backfill en PostgreSQL",
+  "description": "Contas que pagam e nunca ativaram não aparecem na métrica de queda de uso — elas nem existem na tabela de eventos. Por que o defeito está no FROM, por que NOT IN devolve zero linhas em silêncio e por que o primeiro resultado dessa query quase sempre é falso.",
+  "description_en": "Accounts that pay and never activated do not show up in a usage-decline metric — they do not even exist in the events table. Why the defect is in the FROM, why NOT IN silently returns zero rows, and why the first result of this query is almost always false.",
+  "description_es": "Las cuentas que pagan y nunca se activaron no aparecen en la métrica de caída de uso — ni siquiera existen en la tabla de eventos. Por qué el defecto está en el FROM, por qué NOT IN devuelve cero filas en silencio y por qué el primer resultado de esta query casi siempre es falso.",
+  "description_jp": "支払っているのに一度も有効化されていないアカウントは、利用低下の指標には現れません — そもそもイベントテーブルに存在しないからです。欠陥がFROMにある理由、NOT INが黙ってゼロ件を返す理由、そしてこのクエリの最初の結果がほぼ必ず誤りである理由。",
+  "description_fr": "Les comptes qui paient sans jamais s'être activés n'apparaissent pas dans une métrique de baisse d'usage — ils n'existent même pas dans la table des événements. Pourquoi le défaut est dans le FROM, pourquoi NOT IN renvoie zéro ligne en silence, et pourquoi le premier résultat de cette requête est presque toujours faux.",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "A métrica de churn mais comum é uma razão: uso dos últimos 7 dias dividido pelo uso dos 7 dias anteriores. Ela funciona bem para detectar queda. E é cega para o caso pior — a conta que paga todo mês e nunca usou nada. Este post é sobre as três armadilhas de implementar essa métrica em PostgreSQL, e por que o primeiro resultado dela quase sempre é falso."
+    },
+    {
+      "type": "heading",
+      "text": "O problema nao e a divisao por zero",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A explicação intuitiva é que a razão divide por zero. Não é isso. Uma conta que nunca gerou evento **não produz nenhuma linha** na tabela de eventos — ela não chega no `GROUP BY`. Não existe divisão para dar errado, porque não existe linha. E `COALESCE` não resolve: não dá para aplicar valor padrão a uma linha ausente."
+    },
+    {
+      "type": "code",
+      "code": "-- Errado: o FROM parte de events. Uma conta que nunca gerou\n-- evento nao produz nenhuma linha aqui, entao ela nao chega\n-- no GROUP BY. Nao e uma razao 0/0 -- e uma conta ausente.\nSELECT\n  e.account_id,\n  count(*) FILTER (\n    WHERE e.created_at >= now() - interval '7 days'\n  )::numeric\n  / nullif(count(*) FILTER (\n      WHERE e.created_at >= now() - interval '14 days'\n        AND e.created_at <  now() - interval  '7 days'\n    ), 0) AS razao_uso\nFROM events e\nGROUP BY e.account_id;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "O defeito está no `FROM`, não na aritmética. Enquanto a query parte de `events`, o universo dela é \"contas que já fizeram alguma coisa\". Para enxergar quem nunca fez, o `FROM` precisa partir de `subscriptions` — a tabela que sabe quem paga — e procurar eventos a partir dali."
+    },
+    {
+      "type": "heading",
+      "text": "Anti-join, nao LEFT JOIN",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Invertido o `FROM`, a pergunta vira \"quais assinaturas não têm nenhuma linha correspondente em eventos\". Isso é um anti-join contra a sua maior tabela, e há duas formas populares de escrevê-lo errado. A primeira é `NOT IN`:"
+    },
+    {
+      "type": "code",
+      "code": "-- Pior ainda: se algum account_id retornado for NULL, o\n-- predicado inteiro vira UNKNOWN e a query devolve ZERO linhas.\n-- Nao da erro. So responde \"nao ha contas inativas\".\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.account_id NOT IN (\n    SELECT e.account_id FROM events e\n    WHERE e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Se `account_id` for anulável e qualquer linha retornar `NULL`, a comparação vira `UNKNOWN` para todas as contas e o resultado é um conjunto vazio. A query não falha, não avisa — apenas responde que está tudo bem."
+    },
+    {
+      "type": "paragraph",
+      "text": "A segunda é `LEFT JOIN ... WHERE e.id IS NULL`. Essa funciona: o planner do PostgreSQL reconhece o padrão e executa como anti-join. O problema é fragilidade, não desempenho. No dia em que alguém acrescentar um filtro sobre `e` no `WHERE` em vez do `ON`, o `LEFT JOIN` vira `INNER JOIN` silenciosamente e a query passa a descartar exatamente as linhas que você procurava. `NOT EXISTS` declara a intenção e não tem esse modo de falha:"
+    },
+    {
+      "type": "code",
+      "code": "-- O FROM parte de subscriptions: toda conta que paga entra,\n-- tenha evento ou nao. NOT EXISTS declara a intencao (anti-join)\n-- e o predicado correlacionado fica onde pertence.\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );\n\n-- Indice parcial: eventos relevantes sao uma fracao do total,\n-- entao o indice fica pequeno e e exatamente o que o anti-join\n-- sonda. CONCURRENTLY para nao travar a escrita em producao.\nCREATE INDEX CONCURRENTLY idx_events_relevantes\n  ON events (account_id)\n  WHERE type IN ('report_created', 'integration_connected');",
+      "language": "sql"
+    },
+    {
+      "type": "heading",
+      "text": "O backfill que nao existe",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Aqui está a armadilha que faz a métrica mentir no primeiro dia. `first_meaningful_event_at IS NULL` tem dois significados que a coluna não distingue: \"esta conta nunca ativou\" e \"a gente não instrumentava esse evento quando ela assinou\". Se você começou a emitir `report_created` em março, toda conta anterior a março parece inativa — e o número sai catastrófico por bug, não por realidade."
+    },
+    {
+      "type": "code",
+      "code": "-- Guarda contra o falso positivo: so conta assinaturas que\n-- comecaram depois que a instrumentacao existia. Antes disso,\n-- ausencia de evento nao significa ausencia de uso.\nSELECT sum(s.mrr_cents) AS mrr_sem_uso\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.started_at >= timestamp '2026-03-01'  -- instrumentacao\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Não existe conserto retroativo. Evento que não foi emitido não pode ser reconstruído, e nenhuma query recupera um dado que nunca foi escrito. O que dá para fazer é ser explícito sobre a fronteira: a métrica só vale para assinaturas que começaram depois da instrumentação. O recorte encolhe a amostra, mas o número passa a significar alguma coisa."
+    },
+    {
+      "type": "heading",
+      "text": "Onde a coluna mora",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Rodar esse anti-join sob demanda, num dashboard que atualiza a cada carregamento, é caro. A alternativa é manter uma coluna derivada — `first_meaningful_event_at` na conta — escrita uma única vez, quando o primeiro evento relevante chega:"
+    },
+    {
+      "type": "code",
+      "code": "-- Write-once: o WHERE ... IS NULL torna a escrita idempotente\n-- e segura sob concorrencia. Nao precisa ler antes, nao precisa\n-- transacao, e o segundo evento nao sobrescreve o primeiro.\nUPDATE accounts\n   SET first_meaningful_event_at = $2\n WHERE id = $1\n   AND first_meaningful_event_at IS NULL;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "O `WHERE ... IS NULL` faz o trabalho pesado: torna a escrita idempotente, dispensa leitura prévia e é segura sob concorrência, porque dois eventos simultâneos disputam a mesma linha e só o primeiro encontra `NULL`. A partir daí, a métrica vira uma varredura em `accounts`, sem tocar em `events`. O custo é o de sempre em coluna derivada: se a definição de \"uso relevante\" mudar, você precisa recalcular."
+    },
+    {
+      "type": "heading",
+      "text": "O que conta como uso relevante",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A parte que nenhuma query resolve é a definição. Login não é ativação — é a pessoa entrando para descobrir de novo que não sabe o que fazer ali. Uso relevante é a ação que produz o valor que a conta comprou:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Um relatório gerado, não um relatório aberto",
+        "Uma integração conectada e com dado fluindo, não um token salvo",
+        "Um convite aceito por um segundo usuário, não um convite enviado",
+        "Um registro criado pelo cliente, não os registros de exemplo do onboarding"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Escolher quais eventos entram nessa lista é decisão de produto. Fazer com que sejam emitidos de forma confiável, indexados e calculáveis sem derrubar o banco é decisão de engenharia. A métrica só é honesta quando as duas foram tomadas — e tomadas antes, não depois."
+    },
+    {
+      "type": "heading",
+      "text": "Leitura relacionada",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post trata da implementação. O argumento de produto — por que a conta esquecida é pior que a conta em queda, e por que ela deveria vir antes na fila — está em [Paga e nunca usou é pior que uso caiu](https://usekeep.dev/pt/blog/paga-e-nunca-usou) e em [The most uncomfortable number in your customer base](https://aguiarlabs.com.br/en/blog/the-most-uncomfortable-number-in-your-customer-base)."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "The most common churn metric is a ratio: usage over the last 7 days divided by usage over the previous 7. It is good at detecting decline. And it is blind to the worse case — the account that pays every month and has never used anything. This post is about the three traps in implementing that metric in PostgreSQL, and why its first result is almost always false."
+    },
+    {
+      "type": "heading",
+      "text": "The problem is not the division by zero",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The intuitive explanation is that the ratio divides by zero. It does not. An account that never generated an event **produces no rows at all** in the events table — it never reaches the `GROUP BY`. There is no division to go wrong, because there is no row. And `COALESCE` will not save you: you cannot default a row that is absent."
+    },
+    {
+      "type": "code",
+      "code": "-- Errado: o FROM parte de events. Uma conta que nunca gerou\n-- evento nao produz nenhuma linha aqui, entao ela nao chega\n-- no GROUP BY. Nao e uma razao 0/0 -- e uma conta ausente.\nSELECT\n  e.account_id,\n  count(*) FILTER (\n    WHERE e.created_at >= now() - interval '7 days'\n  )::numeric\n  / nullif(count(*) FILTER (\n      WHERE e.created_at >= now() - interval '14 days'\n        AND e.created_at <  now() - interval  '7 days'\n    ), 0) AS razao_uso\nFROM events e\nGROUP BY e.account_id;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "The defect is in the `FROM`, not in the arithmetic. As long as the query starts from `events`, its universe is \"accounts that have already done something\". To see the ones that never did, the `FROM` has to start from `subscriptions` — the table that knows who pays — and look for events from there."
+    },
+    {
+      "type": "heading",
+      "text": "Anti-join, not LEFT JOIN",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "With the `FROM` inverted, the question becomes \"which subscriptions have no matching row in events\". That is an anti-join against your largest table, and there are two popular ways to write it wrong. The first is `NOT IN`:"
+    },
+    {
+      "type": "code",
+      "code": "-- Pior ainda: se algum account_id retornado for NULL, o\n-- predicado inteiro vira UNKNOWN e a query devolve ZERO linhas.\n-- Nao da erro. So responde \"nao ha contas inativas\".\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.account_id NOT IN (\n    SELECT e.account_id FROM events e\n    WHERE e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "If `account_id` is nullable and any row comes back `NULL`, the comparison becomes `UNKNOWN` for every account and the result is an empty set. The query does not fail, does not warn — it just answers that everything is fine."
+    },
+    {
+      "type": "paragraph",
+      "text": "The second is `LEFT JOIN ... WHERE e.id IS NULL`. This one works: the PostgreSQL planner recognizes the pattern and executes it as an anti-join. The problem is fragility, not performance. The day someone adds a filter on `e` to the `WHERE` instead of the `ON`, the `LEFT JOIN` silently becomes an `INNER JOIN` and the query starts discarding exactly the rows you were looking for. `NOT EXISTS` states the intent and has no such failure mode:"
+    },
+    {
+      "type": "code",
+      "code": "-- O FROM parte de subscriptions: toda conta que paga entra,\n-- tenha evento ou nao. NOT EXISTS declara a intencao (anti-join)\n-- e o predicado correlacionado fica onde pertence.\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );\n\n-- Indice parcial: eventos relevantes sao uma fracao do total,\n-- entao o indice fica pequeno e e exatamente o que o anti-join\n-- sonda. CONCURRENTLY para nao travar a escrita em producao.\nCREATE INDEX CONCURRENTLY idx_events_relevantes\n  ON events (account_id)\n  WHERE type IN ('report_created', 'integration_connected');",
+      "language": "sql"
+    },
+    {
+      "type": "heading",
+      "text": "The backfill that does not exist",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the trap that makes the metric lie on day one. `first_meaningful_event_at IS NULL` has two meanings the column cannot tell apart: \"this account never activated\" and \"we were not emitting that event when it signed up\". If you started emitting `report_created` in March, every account older than March looks inactive — and the number comes out catastrophic because of a bug, not because of reality."
+    },
+    {
+      "type": "code",
+      "code": "-- Guarda contra o falso positivo: so conta assinaturas que\n-- comecaram depois que a instrumentacao existia. Antes disso,\n-- ausencia de evento nao significa ausencia de uso.\nSELECT sum(s.mrr_cents) AS mrr_sem_uso\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.started_at >= timestamp '2026-03-01'  -- instrumentacao\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "There is no retroactive fix. An event that was not emitted cannot be reconstructed, and no query recovers data that was never written. What you can do is be explicit about the boundary: the metric only holds for subscriptions that started after instrumentation. The cut shrinks the sample, but the number starts meaning something."
+    },
+    {
+      "type": "heading",
+      "text": "Where the column lives",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Running that anti-join on demand, in a dashboard that refreshes on every load, is expensive. The alternative is to maintain a derived column — `first_meaningful_event_at` on the account — written exactly once, when the first meaningful event arrives:"
+    },
+    {
+      "type": "code",
+      "code": "-- Write-once: o WHERE ... IS NULL torna a escrita idempotente\n-- e segura sob concorrencia. Nao precisa ler antes, nao precisa\n-- transacao, e o segundo evento nao sobrescreve o primeiro.\nUPDATE accounts\n   SET first_meaningful_event_at = $2\n WHERE id = $1\n   AND first_meaningful_event_at IS NULL;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "The `WHERE ... IS NULL` does the heavy lifting: it makes the write idempotent, removes the need for a prior read, and is safe under concurrency, because two simultaneous events race for the same row and only the first finds `NULL`. From then on the metric is a scan over `accounts`, never touching `events`. The cost is the usual one for derived columns: if the definition of \"meaningful use\" changes, you have to recompute."
+    },
+    {
+      "type": "heading",
+      "text": "What counts as meaningful use",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The part no query solves is the definition. A login is not activation — it is someone signing in to rediscover that they do not know what to do there. Meaningful use is the action that produces the value the account paid for:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "A report generated, not a report opened",
+        "An integration connected with data flowing, not a token saved",
+        "An invite accepted by a second user, not an invite sent",
+        "A record created by the customer, not the onboarding sample records"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Choosing which events belong on that list is a product decision. Making them emit reliably, index well and compute without melting the database is an engineering one. The metric is only honest once both have been made — and made beforehand, not after."
+    },
+    {
+      "type": "heading",
+      "text": "Further reading",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "This post is about the implementation. The product argument — why the forgotten account is worse than the declining one, and why it should come first in the queue — is in [Paga e nunca usou é pior que uso caiu](https://usekeep.dev/pt/blog/paga-e-nunca-usou) and in [The most uncomfortable number in your customer base](https://aguiarlabs.com.br/en/blog/the-most-uncomfortable-number-in-your-customer-base)."
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "La métrica de churn más común es una razón: uso de los últimos 7 días dividido por el uso de los 7 días anteriores. Funciona bien para detectar caídas. Y es ciega al caso peor — la cuenta que paga todos los meses y nunca usó nada. Este post trata de las tres trampas de implementar esa métrica en PostgreSQL, y de por qué su primer resultado casi siempre es falso."
+    },
+    {
+      "type": "heading",
+      "text": "El problema no es la division por cero",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La explicación intuitiva es que la razón divide por cero. No es eso. Una cuenta que nunca generó un evento **no produce ninguna fila** en la tabla de eventos — no llega al `GROUP BY`. No hay división que pueda fallar, porque no hay fila. Y `COALESCE` no resuelve: no se puede dar valor por defecto a una fila ausente."
+    },
+    {
+      "type": "code",
+      "code": "-- Errado: o FROM parte de events. Uma conta que nunca gerou\n-- evento nao produz nenhuma linha aqui, entao ela nao chega\n-- no GROUP BY. Nao e uma razao 0/0 -- e uma conta ausente.\nSELECT\n  e.account_id,\n  count(*) FILTER (\n    WHERE e.created_at >= now() - interval '7 days'\n  )::numeric\n  / nullif(count(*) FILTER (\n      WHERE e.created_at >= now() - interval '14 days'\n        AND e.created_at <  now() - interval  '7 days'\n    ), 0) AS razao_uso\nFROM events e\nGROUP BY e.account_id;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "El defecto está en el `FROM`, no en la aritmética. Mientras la query parta de `events`, su universo es \"cuentas que ya hicieron algo\". Para ver a quienes nunca hicieron nada, el `FROM` debe partir de `subscriptions` — la tabla que sabe quién paga — y buscar eventos desde ahí."
+    },
+    {
+      "type": "heading",
+      "text": "Anti-join, no LEFT JOIN",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Invertido el `FROM`, la pregunta pasa a ser \"qué suscripciones no tienen ninguna fila correspondiente en eventos\". Eso es un anti-join contra tu tabla más grande, y hay dos formas populares de escribirlo mal. La primera es `NOT IN`:"
+    },
+    {
+      "type": "code",
+      "code": "-- Pior ainda: se algum account_id retornado for NULL, o\n-- predicado inteiro vira UNKNOWN e a query devolve ZERO linhas.\n-- Nao da erro. So responde \"nao ha contas inativas\".\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.account_id NOT IN (\n    SELECT e.account_id FROM events e\n    WHERE e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Si `account_id` admite nulos y alguna fila devuelve `NULL`, la comparación se vuelve `UNKNOWN` para todas las cuentas y el resultado es un conjunto vacío. La query no falla, no avisa — simplemente responde que todo está bien."
+    },
+    {
+      "type": "paragraph",
+      "text": "La segunda es `LEFT JOIN ... WHERE e.id IS NULL`. Esa funciona: el planner de PostgreSQL reconoce el patrón y lo ejecuta como anti-join. El problema es la fragilidad, no el rendimiento. El día en que alguien agregue un filtro sobre `e` en el `WHERE` en vez del `ON`, el `LEFT JOIN` se convierte en `INNER JOIN` silenciosamente y la query empieza a descartar exactamente las filas que buscabas. `NOT EXISTS` declara la intención y no tiene ese modo de falla:"
+    },
+    {
+      "type": "code",
+      "code": "-- O FROM parte de subscriptions: toda conta que paga entra,\n-- tenha evento ou nao. NOT EXISTS declara a intencao (anti-join)\n-- e o predicado correlacionado fica onde pertence.\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );\n\n-- Indice parcial: eventos relevantes sao uma fracao do total,\n-- entao o indice fica pequeno e e exatamente o que o anti-join\n-- sonda. CONCURRENTLY para nao travar a escrita em producao.\nCREATE INDEX CONCURRENTLY idx_events_relevantes\n  ON events (account_id)\n  WHERE type IN ('report_created', 'integration_connected');",
+      "language": "sql"
+    },
+    {
+      "type": "heading",
+      "text": "El backfill que no existe",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Aquí está la trampa que hace que la métrica mienta el primer día. `first_meaningful_event_at IS NULL` tiene dos significados que la columna no distingue: \"esta cuenta nunca se activó\" y \"no emitíamos ese evento cuando se suscribió\". Si empezaste a emitir `report_created` en marzo, toda cuenta anterior a marzo parece inactiva — y el número sale catastrófico por un bug, no por la realidad."
+    },
+    {
+      "type": "code",
+      "code": "-- Guarda contra o falso positivo: so conta assinaturas que\n-- comecaram depois que a instrumentacao existia. Antes disso,\n-- ausencia de evento nao significa ausencia de uso.\nSELECT sum(s.mrr_cents) AS mrr_sem_uso\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.started_at >= timestamp '2026-03-01'  -- instrumentacao\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "No hay arreglo retroactivo. Un evento que no se emitió no se puede reconstruir, y ninguna query recupera un dato que nunca se escribió. Lo que sí se puede hacer es ser explícito sobre la frontera: la métrica solo vale para suscripciones que empezaron después de la instrumentación. El recorte achica la muestra, pero el número empieza a significar algo."
+    },
+    {
+      "type": "heading",
+      "text": "Donde vive la columna",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Correr ese anti-join bajo demanda, en un dashboard que se actualiza en cada carga, es caro. La alternativa es mantener una columna derivada — `first_meaningful_event_at` en la cuenta — escrita una sola vez, cuando llega el primer evento relevante:"
+    },
+    {
+      "type": "code",
+      "code": "-- Write-once: o WHERE ... IS NULL torna a escrita idempotente\n-- e segura sob concorrencia. Nao precisa ler antes, nao precisa\n-- transacao, e o segundo evento nao sobrescreve o primeiro.\nUPDATE accounts\n   SET first_meaningful_event_at = $2\n WHERE id = $1\n   AND first_meaningful_event_at IS NULL;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "El `WHERE ... IS NULL` hace el trabajo pesado: vuelve la escritura idempotente, elimina la lectura previa y es segura bajo concurrencia, porque dos eventos simultáneos compiten por la misma fila y solo el primero encuentra `NULL`. A partir de ahí, la métrica es un recorrido sobre `accounts`, sin tocar `events`. El costo es el habitual de toda columna derivada: si cambia la definición de \"uso relevante\", hay que recalcular."
+    },
+    {
+      "type": "heading",
+      "text": "Que cuenta como uso relevante",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La parte que ninguna query resuelve es la definición. Un login no es activación — es alguien entrando para redescubrir que no sabe qué hacer ahí. Uso relevante es la acción que produce el valor que la cuenta compró:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Un reporte generado, no un reporte abierto",
+        "Una integración conectada y con datos fluyendo, no un token guardado",
+        "Una invitación aceptada por un segundo usuario, no una invitación enviada",
+        "Un registro creado por el cliente, no los registros de ejemplo del onboarding"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Elegir qué eventos entran en esa lista es una decisión de producto. Lograr que se emitan de forma confiable, se indexen bien y se calculen sin tumbar la base es una decisión de ingeniería. La métrica solo es honesta cuando ambas fueron tomadas — y tomadas antes, no después."
+    },
+    {
+      "type": "heading",
+      "text": "Lectura relacionada",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post trata de la implementación. El argumento de producto — por qué la cuenta olvidada es peor que la cuenta en caída, y por qué debería ir primero en la fila — está en [Paga e nunca usou é pior que uso caiu](https://usekeep.dev/pt/blog/paga-e-nunca-usou) y en [The most uncomfortable number in your customer base](https://aguiarlabs.com.br/en/blog/the-most-uncomfortable-number-in-your-customer-base)."
+    }
+  ],
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "最も一般的なチャーン指標は比率です。直近7日間の利用量を、その前の7日間で割る。低下の検知には有効ですが、より深刻なケース — 毎月支払っているのに一度も使っていないアカウント — には完全に盲目です。本記事では、この指標をPostgreSQLで実装する際の3つの落とし穴と、最初の集計結果がほぼ必ず誤りになる理由を扱います。"
+    },
+    {
+      "type": "heading",
+      "text": "問題はゼロ除算ではない",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "直感的な説明は「比率がゼロ除算になる」というものですが、違います。イベントを一度も生成していないアカウントは、イベントテーブルに**行を1件も生成しません** — `GROUP BY`にすら到達しないのです。行が存在しない以上、失敗する除算も存在しません。`COALESCE`でも救えません。存在しない行にデフォルト値は適用できないからです。"
+    },
+    {
+      "type": "code",
+      "code": "-- Errado: o FROM parte de events. Uma conta que nunca gerou\n-- evento nao produz nenhuma linha aqui, entao ela nao chega\n-- no GROUP BY. Nao e uma razao 0/0 -- e uma conta ausente.\nSELECT\n  e.account_id,\n  count(*) FILTER (\n    WHERE e.created_at >= now() - interval '7 days'\n  )::numeric\n  / nullif(count(*) FILTER (\n      WHERE e.created_at >= now() - interval '14 days'\n        AND e.created_at <  now() - interval  '7 days'\n    ), 0) AS razao_uso\nFROM events e\nGROUP BY e.account_id;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "欠陥は算術ではなく`FROM`にあります。クエリが`events`から始まる限り、その母集団は「すでに何かをしたアカウント」です。何もしなかったアカウントを見るには、`FROM`が`subscriptions` — 誰が支払っているかを知っているテーブル — から始まり、そこからイベントを探しに行く必要があります。"
+    },
+    {
+      "type": "heading",
+      "text": "LEFT JOINではなくアンチジョイン",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "`FROM`を反転させると、問いは「イベントに対応する行が1件もないサブスクリプションはどれか」になります。これは最大のテーブルに対するアンチジョインであり、間違った書き方が2つ広く使われています。1つ目は`NOT IN`です。"
+    },
+    {
+      "type": "code",
+      "code": "-- Pior ainda: se algum account_id retornado for NULL, o\n-- predicado inteiro vira UNKNOWN e a query devolve ZERO linhas.\n-- Nao da erro. So responde \"nao ha contas inativas\".\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.account_id NOT IN (\n    SELECT e.account_id FROM events e\n    WHERE e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "`account_id`がNULL許容で、いずれかの行が`NULL`を返すと、比較はすべてのアカウントで`UNKNOWN`となり、結果は空集合になります。クエリは失敗もせず、警告も出さず、ただ「問題ありません」と答えます。"
+    },
+    {
+      "type": "paragraph",
+      "text": "2つ目は`LEFT JOIN ... WHERE e.id IS NULL`です。これは動作します。PostgreSQLのプランナはこのパターンを認識し、アンチジョインとして実行します。問題は性能ではなく脆さです。誰かが`e`に対するフィルタを`ON`ではなく`WHERE`に追加した日、`LEFT JOIN`は静かに`INNER JOIN`となり、クエリは探していたはずの行をちょうど捨て始めます。`NOT EXISTS`は意図を明示し、この失敗モードを持ちません。"
+    },
+    {
+      "type": "code",
+      "code": "-- O FROM parte de subscriptions: toda conta que paga entra,\n-- tenha evento ou nao. NOT EXISTS declara a intencao (anti-join)\n-- e o predicado correlacionado fica onde pertence.\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );\n\n-- Indice parcial: eventos relevantes sao uma fracao do total,\n-- entao o indice fica pequeno e e exatamente o que o anti-join\n-- sonda. CONCURRENTLY para nao travar a escrita em producao.\nCREATE INDEX CONCURRENTLY idx_events_relevantes\n  ON events (account_id)\n  WHERE type IN ('report_created', 'integration_connected');",
+      "language": "sql"
+    },
+    {
+      "type": "heading",
+      "text": "存在しないバックフィル",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ここが、指標が初日から嘘をつく原因となる落とし穴です。`first_meaningful_event_at IS NULL`には、カラムが区別できない2つの意味があります。「このアカウントは一度も有効化されなかった」と「契約時点でそのイベントを計測していなかった」です。`report_created`の送出を3月に開始したなら、3月より前のアカウントはすべて非アクティブに見えます — 数字が壊滅的になるのは現実のせいではなく、バグのせいです。"
+    },
+    {
+      "type": "code",
+      "code": "-- Guarda contra o falso positivo: so conta assinaturas que\n-- comecaram depois que a instrumentacao existia. Antes disso,\n-- ausencia de evento nao significa ausencia de uso.\nSELECT sum(s.mrr_cents) AS mrr_sem_uso\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.started_at >= timestamp '2026-03-01'  -- instrumentacao\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "遡って直す方法はありません。送出されなかったイベントは再構成できず、書き込まれなかったデータを回復するクエリも存在しません。できるのは境界を明示することだけです。この指標は、計測開始後に始まったサブスクリプションにのみ妥当します。範囲は狭まりますが、数字は意味を持ち始めます。"
+    },
+    {
+      "type": "heading",
+      "text": "カラムをどこに置くか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "このアンチジョインを、読み込みのたびに更新されるダッシュボードでオンデマンドに走らせるのは高くつきます。代替は導出カラムを保持することです — アカウント上の`first_meaningful_event_at`を、最初の意味あるイベントが到着したときに一度だけ書き込みます。"
+    },
+    {
+      "type": "code",
+      "code": "-- Write-once: o WHERE ... IS NULL torna a escrita idempotente\n-- e segura sob concorrencia. Nao precisa ler antes, nao precisa\n-- transacao, e o segundo evento nao sobrescreve o primeiro.\nUPDATE accounts\n   SET first_meaningful_event_at = $2\n WHERE id = $1\n   AND first_meaningful_event_at IS NULL;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "重い仕事をしているのは`WHERE ... IS NULL`です。書き込みを冪等にし、事前の読み取りを不要にし、並行実行下でも安全にします。同時に届いた2つのイベントは同じ行を奪い合い、`NULL`を見つけるのは最初の1つだけだからです。以降、指標は`events`に触れることなく`accounts`の走査になります。代償は導出カラムにつきものの、いつものものです。「意味のある利用」の定義が変われば、再計算が必要になります。"
+    },
+    {
+      "type": "heading",
+      "text": "何をもって「意味のある利用」とするか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "どんなクエリでも解決できないのが、この定義です。ログインは有効化ではありません — そこで何をすればいいか分からないことを再確認しに来ただけです。意味のある利用とは、そのアカウントが購入した価値を生み出す行為を指します。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "レポートを開いたのではなく、レポートが生成されたこと",
+        "トークンを保存したのではなく、連携が接続されデータが流れていること",
+        "招待を送ったのではなく、2人目のユーザーが招待を受け入れたこと",
+        "オンボーディングのサンプルではなく、顧客自身がレコードを作成したこと"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "どのイベントをこのリストに入れるかはプロダクトの判断です。それらが確実に送出され、適切にインデックスされ、データベースを落とさずに計算できるようにするのはエンジニアリングの判断です。指標が誠実になるのは、その両方が下されたとき — しかも事後ではなく事前に下されたときだけです。"
+    },
+    {
+      "type": "heading",
+      "text": "関連記事",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "本記事は実装についてのものです。プロダクト側の論点 — なぜ「忘れられたアカウント」は「低下したアカウント」より深刻で、なぜ優先順位で先に来るべきなのか — は[Paga e nunca usou é pior que uso caiu](https://usekeep.dev/pt/blog/paga-e-nunca-usou)と[The most uncomfortable number in your customer base](https://aguiarlabs.com.br/en/blog/the-most-uncomfortable-number-in-your-customer-base)にあります。"
+    }
+  ],
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "La métrique de churn la plus répandue est un ratio : usage des 7 derniers jours divisé par l'usage des 7 jours précédents. Elle détecte bien la baisse. Et elle est aveugle au cas le pire — le compte qui paie tous les mois et n'a jamais rien utilisé. Ce post porte sur les trois pièges de l'implémentation de cette métrique en PostgreSQL, et sur la raison pour laquelle son premier résultat est presque toujours faux."
+    },
+    {
+      "type": "heading",
+      "text": "Le probleme n'est pas la division par zero",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'explication intuitive est que le ratio divise par zéro. Ce n'est pas le cas. Un compte qui n'a jamais généré d'événement **ne produit aucune ligne** dans la table des événements — il n'atteint jamais le `GROUP BY`. Il n'y a pas de division qui échoue, parce qu'il n'y a pas de ligne. Et `COALESCE` n'y peut rien : on ne met pas de valeur par défaut sur une ligne absente."
+    },
+    {
+      "type": "code",
+      "code": "-- Errado: o FROM parte de events. Uma conta que nunca gerou\n-- evento nao produz nenhuma linha aqui, entao ela nao chega\n-- no GROUP BY. Nao e uma razao 0/0 -- e uma conta ausente.\nSELECT\n  e.account_id,\n  count(*) FILTER (\n    WHERE e.created_at >= now() - interval '7 days'\n  )::numeric\n  / nullif(count(*) FILTER (\n      WHERE e.created_at >= now() - interval '14 days'\n        AND e.created_at <  now() - interval  '7 days'\n    ), 0) AS razao_uso\nFROM events e\nGROUP BY e.account_id;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le défaut est dans le `FROM`, pas dans l'arithmétique. Tant que la requête part de `events`, son univers est « les comptes qui ont déjà fait quelque chose ». Pour voir ceux qui n'ont jamais rien fait, le `FROM` doit partir de `subscriptions` — la table qui sait qui paie — et aller chercher les événements à partir de là."
+    },
+    {
+      "type": "heading",
+      "text": "Anti-join, pas LEFT JOIN",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le `FROM` inversé, la question devient « quelles souscriptions n'ont aucune ligne correspondante dans les événements ». C'est un anti-join contre votre plus grosse table, et il existe deux façons répandues de l'écrire de travers. La première est `NOT IN` :"
+    },
+    {
+      "type": "code",
+      "code": "-- Pior ainda: se algum account_id retornado for NULL, o\n-- predicado inteiro vira UNKNOWN e a query devolve ZERO linhas.\n-- Nao da erro. So responde \"nao ha contas inativas\".\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.account_id NOT IN (\n    SELECT e.account_id FROM events e\n    WHERE e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Si `account_id` est nullable et qu'une ligne renvoie `NULL`, la comparaison devient `UNKNOWN` pour tous les comptes et le résultat est un ensemble vide. La requête n'échoue pas, n'avertit pas — elle répond simplement que tout va bien."
+    },
+    {
+      "type": "paragraph",
+      "text": "La seconde est `LEFT JOIN ... WHERE e.id IS NULL`. Celle-là fonctionne : le planner de PostgreSQL reconnaît le motif et l'exécute comme un anti-join. Le problème est la fragilité, pas la performance. Le jour où quelqu'un ajoute un filtre sur `e` dans le `WHERE` au lieu du `ON`, le `LEFT JOIN` devient silencieusement un `INNER JOIN` et la requête se met à écarter précisément les lignes que vous cherchiez. `NOT EXISTS` déclare l'intention et n'a pas ce mode de défaillance :"
+    },
+    {
+      "type": "code",
+      "code": "-- O FROM parte de subscriptions: toda conta que paga entra,\n-- tenha evento ou nao. NOT EXISTS declara a intencao (anti-join)\n-- e o predicado correlacionado fica onde pertence.\nSELECT s.account_id, s.mrr_cents\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );\n\n-- Indice parcial: eventos relevantes sao uma fracao do total,\n-- entao o indice fica pequeno e e exatamente o que o anti-join\n-- sonda. CONCURRENTLY para nao travar a escrita em producao.\nCREATE INDEX CONCURRENTLY idx_events_relevantes\n  ON events (account_id)\n  WHERE type IN ('report_created', 'integration_connected');",
+      "language": "sql"
+    },
+    {
+      "type": "heading",
+      "text": "Le backfill qui n'existe pas",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Voici le piège qui fait mentir la métrique dès le premier jour. `first_meaningful_event_at IS NULL` a deux sens que la colonne ne distingue pas : « ce compte ne s'est jamais activé » et « nous n'émettions pas cet événement au moment de la souscription ». Si vous avez commencé à émettre `report_created` en mars, tout compte antérieur à mars paraît inactif — et le nombre sort catastrophique à cause d'un bug, pas de la réalité."
+    },
+    {
+      "type": "code",
+      "code": "-- Guarda contra o falso positivo: so conta assinaturas que\n-- comecaram depois que a instrumentacao existia. Antes disso,\n-- ausencia de evento nao significa ausencia de uso.\nSELECT sum(s.mrr_cents) AS mrr_sem_uso\nFROM subscriptions s\nWHERE s.status = 'active'\n  AND s.started_at >= timestamp '2026-03-01'  -- instrumentacao\n  AND NOT EXISTS (\n    SELECT 1\n    FROM events e\n    WHERE e.account_id = s.account_id\n      AND e.type IN ('report_created', 'integration_connected')\n  );",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "Il n'y a pas de correctif rétroactif. Un événement non émis ne se reconstruit pas, et aucune requête ne récupère une donnée jamais écrite. Ce qu'on peut faire, c'est expliciter la frontière : la métrique ne vaut que pour les souscriptions démarrées après l'instrumentation. La coupe réduit l'échantillon, mais le nombre se met à vouloir dire quelque chose."
+    },
+    {
+      "type": "heading",
+      "text": "Ou vit la colonne",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Faire tourner cet anti-join à la demande, dans un dashboard qui se rafraîchit à chaque chargement, coûte cher. L'alternative est de maintenir une colonne dérivée — `first_meaningful_event_at` sur le compte — écrite une seule fois, à l'arrivée du premier événement pertinent :"
+    },
+    {
+      "type": "code",
+      "code": "-- Write-once: o WHERE ... IS NULL torna a escrita idempotente\n-- e segura sob concorrencia. Nao precisa ler antes, nao precisa\n-- transacao, e o segundo evento nao sobrescreve o primeiro.\nUPDATE accounts\n   SET first_meaningful_event_at = $2\n WHERE id = $1\n   AND first_meaningful_event_at IS NULL;",
+      "language": "sql"
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est le `WHERE ... IS NULL` qui fait le gros du travail : il rend l'écriture idempotente, supprime la lecture préalable et reste sûr en concurrence, car deux événements simultanés se disputent la même ligne et seul le premier trouve `NULL`. Ensuite, la métrique devient un parcours de `accounts`, sans jamais toucher `events`. Le coût est celui de toute colonne dérivée : si la définition de « usage pertinent » change, il faut recalculer."
+    },
+    {
+      "type": "heading",
+      "text": "Ce qui compte comme usage pertinent",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La part qu'aucune requête ne règle, c'est la définition. Un login n'est pas une activation — c'est quelqu'un qui se connecte pour redécouvrir qu'il ne sait pas quoi faire là. L'usage pertinent, c'est l'action qui produit la valeur que le compte a achetée :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Un rapport généré, pas un rapport ouvert",
+        "Une intégration connectée avec des données qui circulent, pas un token enregistré",
+        "Une invitation acceptée par un second utilisateur, pas une invitation envoyée",
+        "Un enregistrement créé par le client, pas les exemples de l'onboarding"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Choisir quels événements entrent dans cette liste est une décision produit. Faire en sorte qu'ils soient émis de façon fiable, bien indexés et calculables sans faire tomber la base est une décision d'ingénierie. La métrique n'est honnête qu'une fois les deux prises — et prises en amont, pas après."
+    },
+    {
+      "type": "heading",
+      "text": "Lectures associees",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce post porte sur l'implémentation. L'argument produit — pourquoi le compte oublié est pire que le compte en baisse, et pourquoi il devrait passer en premier — se trouve dans [Paga e nunca usou é pior que uso caiu](https://usekeep.dev/pt/blog/paga-e-nunca-usou) et dans [The most uncomfortable number in your customer base](https://aguiarlabs.com.br/en/blog/the-most-uncomfortable-number-in-your-customer-base)."
+    }
+  ]
+}

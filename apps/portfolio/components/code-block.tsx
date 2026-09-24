@@ -1,0 +1,100 @@
+"use client"
+
+import { useCallback, useEffect, useRef, useState } from "react"
+import { Copy, Check } from "lucide-react"
+import { cn } from "@repo/ui/utils"
+import Prism from "prismjs"
+import "prismjs/components/prism-markup"
+import "prismjs/components/prism-javascript"
+import "prismjs/components/prism-jsx"
+import "prismjs/components/prism-typescript"
+import "prismjs/components/prism-tsx"
+import "prismjs/components/prism-json"
+import "prismjs/components/prism-bash"
+import "prismjs/components/prism-markdown"
+import "prismjs/components/prism-css"
+import "prismjs/components/prism-sql"
+import "prismjs/components/prism-python"
+
+type Props = {
+  code: string
+  language?: string
+  className?: string
+}
+
+function normalizeLang(lang?: string): string {
+  const l = (lang || "").toLowerCase()
+  if (!l) return "markup"
+  if (["ts", "typescript"].includes(l)) return "typescript"
+  if (["tsx"].includes(l)) return "tsx"
+  if (["js", "javascript"].includes(l)) return "javascript"
+  if (["jsx"].includes(l)) return "jsx"
+  if (["json"].includes(l)) return "json"
+  if (["bash", "sh", "shell"].includes(l)) return "bash"
+  if (["md", "markdown"].includes(l)) return "markdown"
+  if (["html", "xml", "svg"].includes(l)) return "markup"
+  if (["css"].includes(l)) return "css"
+  if (["sql"].includes(l)) return "sql"
+  if (["python", "py"].includes(l)) return "python"
+  return l
+}
+
+export function CodeBlock({ code, language, className }: Props) {
+  const [copied, setCopied] = useState(false)
+  const codeRef = useRef<HTMLElement>(null)
+  const lang = normalizeLang(language)
+
+  useEffect(() => {
+    const el = codeRef.current
+    if (!el) return
+    try {
+      const grammar = Prism.languages[lang] ?? Prism.languages["markup"]
+      if (grammar) {
+        el.innerHTML = Prism.highlight(code, grammar, lang)
+      }
+    } catch {
+      // keep plain text
+    }
+  }, [code, lang])
+
+  const onCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // ignore
+    }
+  }, [code])
+
+  return (
+    <div className={cn("group relative min-w-0", className)}>
+      <button
+        type="button"
+        onClick={onCopy}
+        className={cn(
+          "absolute right-2 top-2 z-10 inline-flex items-center gap-1 border border-line bg-canvas/80 px-2 py-1 text-xs text-fg/80 shadow-sm backdrop-blur-sm transition-opacity",
+          "opacity-0 group-hover:opacity-100 focus:opacity-100"
+        )}
+        aria-label="Copiar código"
+      >
+        {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+        {copied ? "Copiado" : "Copiar"}
+      </button>
+      <pre
+        className={cn(
+          "border border-line bg-card font-mono text-[13.5px] leading-[1.65] overflow-x-auto p-[1.1em_1.25em]"
+        )}
+        suppressHydrationWarning
+      >
+        <code
+          ref={codeRef}
+          className={cn("whitespace-pre", `language-${lang}`)}
+          suppressHydrationWarning
+        >
+          {code}
+        </code>
+      </pre>
+    </div>
+  )
+}

@@ -3,7 +3,7 @@ Create a new blog post for the portfolio.
 ## Instructions
 
 1. Ask for: title (PT), topic, and key points to cover
-2. Create a JSON file in `data/posts/` following the existing format
+2. Create a JSON file in `apps/portfolio/data/posts/` following the existing format
 3. The post must cover **all five locales** — `pt` is the base, the other four use the
    `_${locale}` suffix (`en`, `es`, `jp`, `fr`). Required fields:
    - `slug` — kebab-case, used as filename and URL
@@ -18,7 +18,7 @@ Create a new blog post for the portfolio.
    Optional: `featured` (bool), `order` (number, lower = first among featured),
    `showOnHome: false` (keeps it out of the home grid), `ogImage`, `draft`.
 
-   `lib/i18n-coverage.test.ts` fails if any of the five is missing a field — it is
+   `apps/portfolio/lib/i18n-coverage.test.ts` fails if any of the five is missing a field — it is
    the guard, so run `pnpm test` before considering the post done.
 
 4. Format per locale:
@@ -45,6 +45,6 @@ Create a new blog post for the portfolio.
 
 ## Reference
 
-`data/posts/frontend-observability-checkout-crash.json` — most recent, covers all five
-locales, uses an inline SVG diagram from `public/`.
-`data/posts/webhook-architecture-payment-providers.json` — good example of writing style.
+`apps/portfolio/data/posts/frontend-observability-checkout-crash.json` — most recent, covers all five
+locales, uses an inline SVG diagram from `apps/portfolio/public/`.
+`apps/portfolio/data/posts/webhook-architecture-payment-providers.json` — good example of writing style.

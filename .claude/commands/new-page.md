@@ -7,7 +7,7 @@ Create a new page in the portfolio.
 
 ### Required Steps
 
-- [ ] Create `app/<route>/page.tsx`
+- [ ] Create `apps/portfolio/app/[locale]/<route>/page.tsx`
 - [ ] Use `generateMetadata()` (async, reads locale) — NOT static `export const metadata`
 - [ ] Add trilingual title and description using `t(locale, pt, en, es)`
 - [ ] Wrap sections in `<FadeIn>` component for scroll animations
@@ -15,9 +15,9 @@ Create a new page in the portfolio.
 
 ### Navigation
 
-- [ ] Add key to `Dictionary` type in `lib/i18n-server.ts`
+- [ ] Add key to `Dictionary` type in `packages/i18n/src/server.ts`
 - [ ] Add translations in `pt`, `en`, `es` dictionary objects
-- [ ] Add `<SidebarNavLink>` in `components/app-sidebar.tsx`
+- [ ] Add `<SidebarNavLink>` in `packages/shell/src/app-sidebar.tsx`
 
 ### SEO (if content-heavy page)
 

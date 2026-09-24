@@ -1,0 +1,423 @@
+import { getLocale, t } from "@repo/i18n/server"
+import { localePath, buildAlternates } from "@repo/i18n"
+import { SlideInPage } from "@/components/slide-in-page"
+import { FadeIn } from "@/components/fade-in"
+import { ImageGallery } from "@/components/image-gallery"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
+import { ProjectLogo } from "@/components/project-logo"
+import Image from "next/image"
+import Link from "next/link"
+
+export async function generateMetadata() {
+  const locale = await getLocale()
+  return {
+    title: t(locale, { pt: "Vox Pet Digital — SaaS para clínicas veterinárias", en: "Vox Pet Digital — Veterinary clinic SaaS", es: "Vox Pet Digital — SaaS para clínicas veterinarias", jp: "Vox Pet Digital — 動物病院向けSaaS", fr: "Vox Pet Digital — SaaS pour cliniques vétérinaires" }),
+    description: t(locale, { pt: "SaaS vertical com 95 modelos Prisma, IA no WhatsApp, migração Express→NestJS, multi-tenant + multi-filial.", en: "Vertical SaaS with 95 Prisma models, WhatsApp AI, Express→NestJS migration, multi-tenant + multi-branch.", es: "SaaS vertical con 95 modelos Prisma, IA en WhatsApp, migración Express→NestJS, multi-tenant + multi-filial.", jp: "95のPrismaモデルを持つバーティカルSaaS、WhatsApp上のAI、Express→NestJSへの移行、マルチテナント + マルチ拠点。", fr: "SaaS vertical avec 95 modèles Prisma, IA sur WhatsApp, migration Express→NestJS, multi-tenant + multi-filiale." }),
+    alternates: buildAlternates("/projetos/vox-pet-digital", locale),
+  }
+}
+
+export default async function VoxPetPage() {
+  const locale = await getLocale()
+
+  const content = {
+    pt: {
+      back: "Voltar aos projetos",
+      badge: "SaaS em produção",
+      title: "Vox Pet Digital",
+      subtitle:
+        "SaaS vertical para pet shops e clínicas veterinárias — do agendamento à NF-e, com IA no WhatsApp.",
+      purposeTitle: "O propósito",
+      purposeText1:
+        "Clínicas veterinárias e pet shops são negócios complexos: lidam com agendamentos, prontuários, vacinas, vendas, estoque, comissões, notas fiscais e atendimento ao cliente — tudo ao mesmo tempo. A maioria usa planilhas ou sistemas genéricos que não entendem a rotina do segmento.",
+      purposeText2:
+        "O Vox Pet Digital nasceu para ser o sistema que cobre o ciclo completo desse negócio. Uma plataforma única que integra gestão operacional, financeira e atendimento automatizado via WhatsApp — permitindo que clínicas foquem no cuidado animal, não em planilhas.",
+      purposeText3:
+        "O diferencial é que a plataforma cresce junto com o negócio: uma clínica com 1 unidade usa os mesmos módulos que uma rede com 5 filiais. Multi-tenant + multi-filial de verdade, não um workaround.",
+      challengesTitle: "Desafios técnicos",
+      challenges: [
+        {
+          title: "Migração Express → NestJS",
+          desc: "Strangler fig pattern: v1 (41 controllers) e v2 (12 módulos NestJS) coexistindo no mesmo processo, com regras rígidas pro código novo.",
+        },
+        {
+          title: "WhatsApp + IA 24h",
+          desc: "Agente com 10 tools, RAG por tenant, Whisper para áudio, memória de conversa e follow-up automático via cron.",
+        },
+        {
+          title: "Multi-tenant + multi-filial",
+          desc: "95 modelos Prisma, 93 com tenant_id, 76 com branch_id. Transferência de estoque entre filiais com workflow de aprovação.",
+        },
+        {
+          title: "NF-e com fallback",
+          desc: "Dois providers (Focus NFe + NFe.io), fila resiliente processando a cada 30s, import de XML de fornecedores.",
+        },
+      ],
+      screenshotsTitle: "A plataforma",
+      stackTitle: "Stack técnica",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "Ler case study técnico",
+      visitCta: "Acessar Vox Pet",
+    },
+    en: {
+      back: "Back to projects",
+      badge: "SaaS in production",
+      title: "Vox Pet Digital",
+      subtitle:
+        "Vertical SaaS for pet shops and veterinary clinics — from scheduling to invoices, with WhatsApp AI.",
+      purposeTitle: "The purpose",
+      purposeText1:
+        "Veterinary clinics and pet shops are complex businesses: they handle appointments, medical records, vaccines, sales, inventory, commissions, invoices and customer service — all at the same time. Most use spreadsheets or generic systems that don't understand the segment's routine.",
+      purposeText2:
+        "Vox Pet Digital was built to be the system that covers the complete cycle of this business. A single platform integrating operational management, financials and automated WhatsApp customer service — so clinics can focus on animal care, not spreadsheets.",
+      purposeText3:
+        "The differentiator is that the platform scales with the business: a clinic with 1 location uses the same modules as a chain with 5 branches. Real multi-tenant + multi-branch, not a workaround.",
+      challengesTitle: "Technical challenges",
+      challenges: [
+        {
+          title: "Express → NestJS migration",
+          desc: "Strangler fig pattern: v1 (41 controllers) and v2 (12 NestJS modules) coexisting in the same process, with strict rules for new code.",
+        },
+        {
+          title: "24/7 WhatsApp + AI",
+          desc: "Agent with 10 tools, per-tenant RAG, Whisper for audio, conversation memory and automated follow-up via cron.",
+        },
+        {
+          title: "Multi-tenant + multi-branch",
+          desc: "95 Prisma models, 93 with tenant_id, 76 with branch_id. Inter-branch stock transfers with approval workflow.",
+        },
+        {
+          title: "Invoices with fallback",
+          desc: "Two providers (Focus NFe + NFe.io), resilient queue processing every 30s, supplier XML import.",
+        },
+      ],
+      screenshotsTitle: "The platform",
+      stackTitle: "Tech stack",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "Read technical case study",
+      visitCta: "Visit Vox Pet",
+    },
+    es: {
+      back: "Volver a proyectos",
+      badge: "SaaS en producción",
+      title: "Vox Pet Digital",
+      subtitle:
+        "SaaS vertical para pet shops y clínicas veterinarias — del agendamiento a la facturación, con IA en WhatsApp.",
+      purposeTitle: "El propósito",
+      purposeText1:
+        "Las clínicas veterinarias y pet shops son negocios complejos: manejan citas, historiales médicos, vacunas, ventas, inventario, comisiones, facturas y atención al cliente — todo al mismo tiempo. La mayoría usa planillas o sistemas genéricos que no entienden la rutina del segmento.",
+      purposeText2:
+        "Vox Pet Digital nació para ser el sistema que cubre el ciclo completo de este negocio. Una plataforma única que integra gestión operacional, financiera y atención automatizada vía WhatsApp — permitiendo que las clínicas se enfoquen en el cuidado animal, no en planillas.",
+      purposeText3:
+        "El diferencial es que la plataforma crece junto con el negocio: una clínica con 1 sucursal usa los mismos módulos que una red con 5 sucursales. Multi-tenant + multi-filial de verdad, no un workaround.",
+      challengesTitle: "Desafíos técnicos",
+      challenges: [
+        {
+          title: "Migración Express → NestJS",
+          desc: "Strangler fig pattern: v1 (41 controllers) y v2 (12 módulos NestJS) coexistiendo en el mismo proceso, con reglas estrictas para el código nuevo.",
+        },
+        {
+          title: "WhatsApp + IA 24h",
+          desc: "Agente con 10 tools, RAG por tenant, Whisper para audio, memoria de conversación y follow-up automático vía cron.",
+        },
+        {
+          title: "Multi-tenant + multi-filial",
+          desc: "95 modelos Prisma, 93 con tenant_id, 76 con branch_id. Transferencia de inventario entre sucursales con workflow de aprobación.",
+        },
+        {
+          title: "NF-e con fallback",
+          desc: "Dos providers (Focus NFe + NFe.io), cola resiliente procesando cada 30s, import de XML de proveedores.",
+        },
+      ],
+      screenshotsTitle: "La plataforma",
+      stackTitle: "Stack técnico",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "Leer case study técnico",
+      visitCta: "Acceder a Vox Pet",
+    },
+    jp: {
+      back: "プロジェクト一覧に戻る",
+      badge: "本番稼働中のSaaS",
+      title: "Vox Pet Digital",
+      subtitle:
+        "ペットショップと動物病院向けのバーティカルSaaS — 予約管理から請求書発行まで、WhatsApp上のAIを備えています。",
+      purposeTitle: "目的",
+      purposeText1:
+        "動物病院やペットショップは複雑なビジネスです。予約、カルテ、ワクチン、販売、在庫、コミッション、請求書、顧客対応をすべて同時に扱います。多くの事業者は、この業界の業務フローを理解していない表計算ソフトや汎用システムを使っています。",
+      purposeText2:
+        "Vox Pet Digitalは、このビジネスのライフサイクル全体をカバーするシステムとして生まれました。運用管理、財務、WhatsAppを介した自動顧客対応を統合する単一のプラットフォームであり、これにより動物病院は表計算ではなく動物のケアに集中できます。",
+      purposeText3:
+        "差別化のポイントは、プラットフォームがビジネスとともに成長することです。1拠点の動物病院も、5拠点を持つチェーンも、同じモジュールを使用します。回避策ではなく、真のマルチテナント + マルチ拠点対応です。",
+      challengesTitle: "技術的な課題",
+      challenges: [
+        {
+          title: "Express → NestJS への移行",
+          desc: "Strangler fig パターン: v1（41のコントローラー）と v2（12のNestJSモジュール）を同一プロセス内で共存させ、新しいコードには厳格なルールを適用しています。",
+        },
+        {
+          title: "24時間稼働の WhatsApp + AI",
+          desc: "10個のツールを備えたエージェント、テナントごとのRAG、音声用のWhisper、会話メモリ、cronによる自動フォローアップ。",
+        },
+        {
+          title: "マルチテナント + マルチ拠点",
+          desc: "95のPrismaモデル、うち93がtenant_id、76がbranch_idを持ちます。承認ワークフロー付きの拠点間在庫移動。",
+        },
+        {
+          title: "フォールバック付きのNF-e",
+          desc: "2つのプロバイダー（Focus NFe + NFe.io）、30秒ごとに処理する耐障害性キュー、サプライヤーのXMLインポート。",
+        },
+      ],
+      screenshotsTitle: "プラットフォーム",
+      stackTitle: "技術スタック",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "技術ケーススタディを読む",
+      visitCta: "Vox Pet にアクセス",
+    },
+    fr: {
+      back: "Retour aux projets",
+      badge: "SaaS en production",
+      title: "Vox Pet Digital",
+      subtitle:
+        "SaaS vertical pour animaleries et cliniques vétérinaires — de la prise de rendez-vous à la facturation, avec l'IA sur WhatsApp.",
+      purposeTitle: "L'objectif",
+      purposeText1:
+        "Les cliniques vétérinaires et les animaleries sont des activités complexes : elles gèrent les rendez-vous, les dossiers médicaux, les vaccins, les ventes, les stocks, les commissions, les factures et le service client — tout en même temps. La plupart utilisent des tableurs ou des systèmes génériques qui ne comprennent pas le fonctionnement du secteur.",
+      purposeText2:
+        "Vox Pet Digital est né pour être le système qui couvre le cycle complet de cette activité. Une plateforme unique qui intègre la gestion opérationnelle, financière et le service client automatisé via WhatsApp — permettant aux cliniques de se concentrer sur le soin des animaux, et non sur les tableurs.",
+      purposeText3:
+        "La différence, c'est que la plateforme grandit avec l'activité : une clinique avec 1 établissement utilise les mêmes modules qu'un réseau avec 5 filiales. Un véritable multi-tenant + multi-filiale, pas un contournement.",
+      challengesTitle: "Défis techniques",
+      challenges: [
+        {
+          title: "Migration Express → NestJS",
+          desc: "Strangler fig pattern : v1 (41 controllers) et v2 (12 modules NestJS) coexistant dans le même processus, avec des règles strictes pour le nouveau code.",
+        },
+        {
+          title: "WhatsApp + IA 24h/24",
+          desc: "Agent avec 10 tools, RAG par tenant, Whisper pour l'audio, mémoire de conversation et follow-up automatique via cron.",
+        },
+        {
+          title: "Multi-tenant + multi-filiale",
+          desc: "95 modèles Prisma, 93 avec tenant_id, 76 avec branch_id. Transferts de stock entre filiales avec workflow d'approbation.",
+        },
+        {
+          title: "Facturation avec fallback",
+          desc: "Deux providers (Focus NFe + NFe.io), file résiliente traitée toutes les 30s, import XML des fournisseurs.",
+        },
+      ],
+      screenshotsTitle: "La plateforme",
+      stackTitle: "Stack technique",
+      stackItems: [
+        "Next.js 16 + React 19",
+        "NestJS + Express (v1/v2)",
+        "PostgreSQL 16 + Prisma",
+        "OpenAI (GPT-4o-mini + Whisper)",
+        "Baileys (WhatsApp)",
+        "Stripe + Mercado Pago + Asaas",
+        "Focus NFe + NFe.io",
+        "Firebase Admin",
+        "MUI v7 + shadcn/ui + Tailwind v4",
+      ],
+      caseStudyCta: "Lire l'étude de cas technique",
+      visitCta: "Accéder à Vox Pet",
+    },
+  }
+
+  const c = content[locale as keyof typeof content] ?? content.pt
+
+  return (
+    <SlideInPage>
+      <div className="w-full max-w-4xl mx-auto px-4 py-12">
+        {/* Back link */}
+        <Link
+          href={localePath(locale, "/projetos")}
+          className="inline-flex items-center gap-1.5 text-sm text-mu hover:text-fg transition mb-8"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+          {c.back}
+        </Link>
+
+        {/* Header */}
+        <FadeIn>
+          <header className="mb-12">
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-fg bg-surface border border-line px-2.5 py-1 mb-4">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-fg opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-fg" />
+              </span>
+              {c.badge}
+            </span>
+
+            <div className="flex items-center gap-4 mb-4">
+              <ProjectLogo src="/images/vox-pet-digital.webp" name="Vox Pet Digital" size={56} />
+              <h1 className="font-medium leading-[1.05] tracking-[-0.025em] text-fg [font-size:clamp(1.875rem,3.6vw,3rem)]">
+                {c.title}
+              </h1>
+            </div>
+
+            <p className="text-lg text-mu max-w-2xl">
+              {c.subtitle}
+            </p>
+          </header>
+        </FadeIn>
+
+        {/* Purpose */}
+        <FadeIn delay={100}>
+          <section className="mb-12">
+            <SectionEyebrow index="01" as="h2">
+              {c.purposeTitle}
+            </SectionEyebrow>
+            <div className="space-y-4 text-fg leading-relaxed">
+              <p>{c.purposeText1}</p>
+              <p>{c.purposeText2}</p>
+              <p>{c.purposeText3}</p>
+            </div>
+          </section>
+        </FadeIn>
+
+        {/* Technical Challenges */}
+        <FadeIn delay={200}>
+          <section className="mb-12">
+            <SectionEyebrow index="02" as="h2">
+              {c.challengesTitle}
+            </SectionEyebrow>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {c.challenges.map((challenge, i) => (
+                <div
+                  key={i}
+                  className="border border-line bg-card p-5"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="flex-shrink-0 w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold flex items-center justify-center mt-0.5">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <h3 className="text-sm font-semibold mb-1">
+                        {challenge.title}
+                      </h3>
+                      <p className="text-xs text-mu leading-relaxed">
+                        {challenge.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        </FadeIn>
+        {/* Screenshots */}
+        <FadeIn delay={300}>
+          <section className="mb-12">
+            <SectionEyebrow index="03" as="h2">
+              {c.screenshotsTitle}
+            </SectionEyebrow>
+            <ImageGallery
+              images={[
+                {
+                  src: "/vox/dashboard-vox.jpeg",
+                  alt: "Vox Pet Digital — Dashboard principal com métricas da clínica",
+                },
+                {
+                  src: "/vox/agenda-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Sistema de agendamento de consultas",
+                },
+                {
+                  src: "/vox/vendas-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Módulo de vendas e PDV",
+                },
+                {
+                  src: "/vox/whatsapp-vox.png.jpeg",
+                  alt: "Vox Pet Digital — Atendimento automatizado via WhatsApp com IA",
+                },
+              ]}
+            />
+          </section>
+        </FadeIn>
+
+        {/* Stack */}
+        <FadeIn delay={400}>
+          <section className="mb-12">
+            <SectionEyebrow index="04" as="h2">
+              {c.stackTitle}
+            </SectionEyebrow>
+            <div className="flex flex-wrap gap-2">
+              {c.stackItems.map((tech) => (
+                <span
+                  key={tech}
+                  className="px-3 py-1.5 text-xs font-medium border border-line bg-card"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </section>
+        </FadeIn>
+
+        {/* CTAs */}
+        <FadeIn delay={500}>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Link
+              href={localePath(locale, "/posts/case-study-vox-pet")}
+              className="px-5 py-2.5 text-sm font-medium bg-primary text-primary-foreground hover:opacity-90 transition text-center"
+            >
+              {c.caseStudyCta}
+            </Link>
+            <a
+              href="https://voxpetdigital.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 text-sm font-medium border border-line hover:bg-muted transition text-center inline-flex items-center justify-center gap-2"
+            >
+              {c.visitCta}
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-4.5-6H18m0 0v4.5m0-4.5L10.5 13.5" />
+              </svg>
+            </a>
+          </div>
+        </FadeIn>
+      </div>
+    </SlideInPage>
+  )
+}

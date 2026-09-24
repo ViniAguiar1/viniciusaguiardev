@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -11,14 +11,15 @@
 !.yarn/versions
 
 # testing
-/coverage
+/apps/*/coverage/
+/packages/*/coverage/
 
 # next.js
-/.next/
-/out/
+.next/
+/apps/*/out/
 
 # production
-/build
+/apps/*/build/
 
 # misc
 .DS_Store
@@ -49,3 +50,6 @@ next-env.d.ts
 
 # Micro frontend Angular — repo próprio (github.com/ViniAguiar1/mfe-angular-inspector)
 /mfe-angular-inspector/
+
+# turbo
+.turbo/

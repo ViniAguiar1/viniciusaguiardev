@@ -1,0 +1,7 @@
+@import "@repo/ui/globals.css";
+
+/* Tailwind 4 só gera as classes que encontra, e varre a partir do app. Os
+   pacotes vivem fora dele: sem estes @source, componentes da moldura saem sem
+   estilo e nenhum check acusa. Caminhos relativos a este arquivo. */
+@source "../../../packages/ui/src";
+@source "../../../packages/shell/src";

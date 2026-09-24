@@ -5,14 +5,13 @@ import { describe, it, expect } from "vitest"
 import { LOCALES, DEFAULT_LOCALE } from "@repo/i18n"
 import { getDictionary } from "@repo/i18n/server"
 
-// process.cwd() é a raiz do repo sob Vitest — mesmo padrão que lib/posts.ts já usa
+// process.cwd() é a raiz do app (apps/portfolio) sob Vitest — mesmo padrão que lib/posts.ts já usa
 const ROOT = process.cwd()
 
 // A moldura mora em packages/shell desde o monorepo: sem varrer lá, um texto
 // novo da sidebar em um idioma só passaria.
 const SCAN_DIRS = ["app", "components", path.join("..", "..", "packages", "shell", "src")]
 const SCAN_FILES = ["data/projects.ts", "data/experiences.ts"]
-const SKIPPED_DIR = path.join("components", "ui") // código gerado do Shadcn
 
 const POST_STRING_FIELDS = ["title", "description", "date", "readTime", "tag"] as const
 
@@ -21,7 +20,6 @@ function collectFiles(dir: string): string[] {
   for (const entry of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
     const rel = path.join(dir, entry.name)
     if (entry.isDirectory()) {
-      if (rel === SKIPPED_DIR) continue
       out.push(...collectFiles(rel))
       continue
     }

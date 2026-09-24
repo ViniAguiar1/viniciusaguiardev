@@ -2,7 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { describe, it, expect } from "vitest"
 
-// process.cwd() é a raiz do repo sob Vitest — mesmo padrão de lib/i18n-coverage.test.ts
+// process.cwd() é a raiz do app (apps/portfolio) sob Vitest — mesmo padrão de lib/i18n-coverage.test.ts
 const ROOT = process.cwd()
 
 // A moldura e o design system vivem em packages/ desde o monorepo: a varredura

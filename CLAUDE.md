@@ -21,13 +21,15 @@ The pnpm version is pinned in `package.json#packageManager` and is the single so
 
 ## CI Pipeline
 
-Runs on every PR to `main`: lint → typecheck → build → AEO check. Deploy is automatic via Vercel (preview on PRs, production on merge).
+Runs on every PR to `main`: lint → typecheck → test → build → AEO check (all via turbo). Deploy is automatic via Vercel (preview on PRs, production on merge).
 
 `apps/portfolio/vercel.json` sets the install command to `pnpm install --frozen-lockfile`. It exists because the Vercel project was configured to run `npm install`, which ignored the committed lockfile — deploys resolved dependencies fresh every time, and broke outright once `sharp` entered the tree (npm's `edgesOut` bug on `linux-x64`). Settings in `vercel.json` override the dashboard.
 
 ## Monorepo
 
-pnpm workspaces + Turborepo. The Vercel project's Root Directory is `apps/portfolio`.
+pnpm workspaces + Turborepo. The Vercel project's Root Directory is `apps/portfolio`, with "Include files outside the Root Directory in the Build Step" enabled (the build needs `packages/`). `pnpm blog:cover` reads `apps/portfolio/.env` (the script runs with the app as cwd).
+
+Turbo: every task depends on a `transit` node (`dependsOn: ["^transit"]`), so a change in any `packages/*` invalidates the cache of the apps that use it — without it, CI would replay a stale `portfolio#test` after a change only in the shell.
 
 ```
 apps/portfolio/     o site (páginas, data/, posts, scripts, public/)
@@ -77,7 +79,7 @@ Root layout wraps everything in `SidebarProvider` with three zones:
 - **Center:** `MobileHeader` (hamburger + search + toggles, visible below 1024px) + page content
 - **Right:** `RightSidebar` (home, search, language/theme toggles — hidden below 1024px)
 
-Mobile breakpoint is **1024px** (set in `hooks/use-mobile.ts`), not the default 768px. This covers tablets and iPads.
+Mobile breakpoint is **1024px** (set in `packages/ui/src/hooks/use-mobile.ts`), not the default 768px. This covers tablets and iPads.
 
 ### SEO / AEO
 
@@ -86,7 +88,7 @@ The `apps/portfolio/scripts/aeo-check.ts` validates (paths below are relative to
 ### Key Patterns
 
 - Shadcn UI components in `packages/ui/src/components/` (`@repo/ui/components/*`) — don't modify directly unless fixing Shadcn bugs
-- `cn()` utility from `lib/utils.ts` (clsx + tailwind-merge) for conditional classes
+- `cn()` utility from `@repo/ui/utils` (`packages/ui/src/utils.ts`) (clsx + tailwind-merge) for conditional classes
 - `FadeIn` component wraps sections for scroll-triggered animations (Intersection Observer)
 - `EngineeringTopic` opens content in a right-side Sheet (50% desktop, 100% mobile)
 - `SidebarNavLink` closes the mobile drawer on navigation

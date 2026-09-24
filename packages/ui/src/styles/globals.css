@@ -3,7 +3,7 @@
 
 /* O portfólio compartilha a paleta do aguiarlabs (~/Development/aguiarlabs).
    Os 7 tokens abaixo são a fonte da verdade; os tokens do shadcn apontam
-   para eles, de modo que components/ui/ funciona sem reescrita. */
+   para eles, de modo que src/components/ (shadcn) funciona sem reescrita. */
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
@@ -72,7 +72,7 @@
 
   /* Cantos retos. O @theme do Tailwind v4 faz merge com o tema padrão em vez
      de substituí-lo: sem estas quatro linhas, --radius-md volta a 0.375rem.
-     O guard de cantos (lib/design-system.test.ts) não varre components/ui/
+     O guard de cantos (apps/portfolio/lib/design-system.test.ts) não varre src/components/ (shadcn)
      (código gerado do Shadcn) — é este bloco, não o guard, que garante que um
      rounded-* reintroduzido lá (ex.: `npx shadcn add`) ainda renderize 0. */
   --radius-sm: 0;
@@ -97,7 +97,7 @@
 
 
 
-  /* Ver comentário em @theme inline: existe para blindar components/ui/. */
+  /* Ver comentário em @theme inline: existe para blindar src/components/ (shadcn). */
   --radius: 0;
 
   /* Compat shadcn. Como todos derivam dos 7 acima, o tema claro só precisa
@@ -117,7 +117,7 @@
   /* Um degrau acima de --popover (card), senão o hover do menu some. */
   --accent: var(--color-line);
   --accent-foreground: var(--color-fg);
-  /* Nunca renderizado: 0 usos fora de components/ui/. Existe para as
+  /* Nunca renderizado: 0 usos fora de src/components/ (shadcn). Existe para as
      variantes destructive do shadcn compilarem. */
   --destructive: #7A2E2E;
   --border: var(--color-line);

@@ -46,6 +46,10 @@ packages/config/    @repo/config — tsconfig base e ESLint compartilhados
 - Navegação da moldura passa por `ZoneLink` / `useZoneNavigate` (`@repo/shell/zone-link`), que decidem entre navegação client-side e de documento pelo mapa de zonas (`@repo/shell/zones`).
 - Fontes `next/font`, script Umami e JSON-LD `Organization` ficam no `layout.tsx` de cada app (o AEO lê o layout do app).
 
+### Zonas (micro frontend por rota)
+
+`/:locale/uses` é servida por `apps/uses` (porta 3001 em dev/start), atrás do domínio do portfólio via `rewrites` em `apps/portfolio/next.config.ts` (`usesRewrites`, `USES_ZONE_URL`). A zona usa `assetPrefix: "/uses-static"`, responde `x-zone: uses` e o `robots.txt` do domínio dela bloqueia tudo. Rodar as duas: `pnpm dev` (turbo sobe portfolio na 3000 e uses na 3001) e abrir `localhost:3000/pt/uses`. Cada app precisa do próprio `app/icon.png` (convenção de arquivo do Next). Na Vercel, cada zona é um projeto com Root Directory próprio e "Skip deployments when there are no changes to the root directory or its dependencies" ligado.
+
 ## Architecture
 
 Next.js 16 App Router portfolio with five locales (PT-BR / EN / ES / JA / FR).

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 import { getAllPosts } from "@/lib/posts"
-import { LOCALES, DEFAULT_LOCALE, SITE_URL, localePath, localeToHtmlLang, type Locale } from "@/lib/i18n"
+import { LOCALES, DEFAULT_LOCALE, SITE_URL, localePath, localeToHtmlLang, type Locale } from "@repo/i18n"
 
 type StaticEntry = {
   path: string

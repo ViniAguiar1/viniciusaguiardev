@@ -1,5 +1,5 @@
-import { getLocale, t } from "@/lib/i18n-server"
-import { buildAlternates, type Locale } from "@/lib/i18n"
+import { getLocale, t } from "@repo/i18n/server"
+import { buildAlternates, type Locale } from "@repo/i18n"
 import Link from "next/link"
 import { SectionEyebrow } from "@/components/section-eyebrow"
 import { EditorConfigSheet } from "@/components/editor-config-sheet"

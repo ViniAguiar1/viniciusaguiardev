@@ -1,6 +1,6 @@
 import { Suspense } from "react"
-import { getLocale, t } from "@/lib/i18n-server"
-import { buildAlternates } from "@/lib/i18n"
+import { getLocale, t } from "@repo/i18n/server"
+import { buildAlternates } from "@repo/i18n"
 import { getAllPosts } from "@/lib/posts"
 import { projects } from "@/data/projects"
 import { SearchContent } from "@/components/search-content"

@@ -6,8 +6,8 @@ import { CodeBlock } from "@/components/code-block"
 import { MicroFrontend } from "@/components/micro-frontend"
 import { renderInline } from "@/lib/inline-md"
 import React from "react"
-import { getLocale } from "@/lib/i18n-server"
-import { LOCALES, isLocale, buildAlternates, SITE_URL, localePath, type Locale } from "@/lib/i18n"
+import { getLocale } from "@repo/i18n/server"
+import { LOCALES, isLocale, buildAlternates, SITE_URL, localePath, type Locale } from "@repo/i18n"
 import { JsonLd } from "@/components/json-ld"
 
 type PageProps = {

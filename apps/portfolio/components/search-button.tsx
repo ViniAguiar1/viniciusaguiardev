@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 import { Search } from "lucide-react"
-import { DEFAULT_LOCALE, isLocale, localePath, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, isLocale, localePath, type Locale } from "@repo/i18n"
 
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split("/").filter(Boolean)[0]

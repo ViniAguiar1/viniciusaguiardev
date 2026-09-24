@@ -1,6 +1,6 @@
 import Image from "next/image"
-import { getDictionary, getLocale, t } from "@/lib/i18n-server"
-import { localePath } from "@/lib/i18n"
+import { getDictionary, getLocale, t } from "@repo/i18n/server"
+import { localePath } from "@repo/i18n"
 
 import {
   Sidebar,

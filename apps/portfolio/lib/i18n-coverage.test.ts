@@ -2,8 +2,8 @@ import fs from "node:fs"
 import path from "node:path"
 import ts from "typescript"
 import { describe, it, expect } from "vitest"
-import { LOCALES, DEFAULT_LOCALE } from "@/lib/i18n"
-import { getDictionary } from "@/lib/i18n-server"
+import { LOCALES, DEFAULT_LOCALE } from "@repo/i18n"
+import { getDictionary } from "@repo/i18n/server"
 
 // process.cwd() é a raiz do repo sob Vitest — mesmo padrão que lib/posts.ts já usa
 const ROOT = process.cwd()

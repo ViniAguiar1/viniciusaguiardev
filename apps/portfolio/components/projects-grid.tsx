@@ -8,7 +8,7 @@ import { XIcon } from "lucide-react"
 import { cn, MONO_CHIP } from "@/lib/utils"
 import { ProjectLogo } from "@/components/project-logo"
 import type { Project } from "@/data/projects"
-import { localePath, t, type Locale } from "@/lib/i18n"
+import { localePath, t, type Locale } from "@repo/i18n"
 
 interface ProjectsGridProps {
   projects: Project[]

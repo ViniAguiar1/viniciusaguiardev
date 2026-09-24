@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { t, type Locale } from "@/lib/i18n"
+import { t, type Locale } from "@repo/i18n"
 import { cn, MONO_CHIP } from "@/lib/utils"
 import type { Experience } from "@/data/experiences"
 

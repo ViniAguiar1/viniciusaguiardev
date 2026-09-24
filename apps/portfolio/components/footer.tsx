@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { getLocale, t } from "@/lib/i18n-server"
-import { localePath } from "@/lib/i18n"
+import { getLocale, t } from "@repo/i18n/server"
+import { localePath } from "@repo/i18n"
 
 export async function Footer() {
   const locale = await getLocale()

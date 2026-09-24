@@ -1,8 +1,8 @@
 import { headers } from "next/headers"
-import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, isLocale, type Locale } from "./index"
 
-export { LOCALES, DEFAULT_LOCALE, isLocale, localePath, stripLocale, localeToHtmlLang, t } from "@/lib/i18n"
-export type { Locale } from "@/lib/i18n"
+export { LOCALES, DEFAULT_LOCALE, isLocale, localePath, stripLocale, localeToHtmlLang, t } from "./index"
+export type { Locale } from "./index"
 
 export async function getLocale(): Promise<Locale> {
   try {

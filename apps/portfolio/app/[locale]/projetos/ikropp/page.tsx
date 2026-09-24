@@ -1,5 +1,5 @@
-import { getLocale, t } from "@/lib/i18n-server"
-import { localePath, buildAlternates } from "@/lib/i18n"
+import { getLocale, t } from "@repo/i18n/server"
+import { localePath, buildAlternates } from "@repo/i18n"
 import { SlideInPage } from "@/components/slide-in-page"
 import { FadeIn } from "@/components/fade-in"
 import { ImageGallery } from "@/components/image-gallery"

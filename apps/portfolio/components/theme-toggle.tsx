@@ -12,7 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { DEFAULT_LOCALE, isLocale, t, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, isLocale, t, type Locale } from "@repo/i18n"
 
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split("/").filter(Boolean)[0]

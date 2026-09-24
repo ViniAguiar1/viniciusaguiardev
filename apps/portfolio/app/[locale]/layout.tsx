@@ -18,7 +18,7 @@ import {
   SITE_URL,
   t,
   type Locale,
-} from "@/lib/i18n"
+} from "@repo/i18n"
 import "../globals.css"
 
 const geistSans = Geist({

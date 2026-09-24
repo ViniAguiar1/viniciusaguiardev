@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { cache } from "react"
-import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { DEFAULT_LOCALE, type Locale } from "@repo/i18n"
 import { isAllowedMfeSrc, isValidCustomElementTag } from "@/lib/mfe"
 
 export type ParagraphBlock = {

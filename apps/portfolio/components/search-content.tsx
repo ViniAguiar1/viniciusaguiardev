@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { Search } from "lucide-react"
-import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@repo/i18n"
 import { cn, MONO_CHIP } from "@/lib/utils"
 import { ProjectLogo } from "@/components/project-logo"
 

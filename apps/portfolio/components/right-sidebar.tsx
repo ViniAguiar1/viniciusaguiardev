@@ -11,8 +11,8 @@ import {
 import { ModeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
 import { SearchButton } from "@/components/search-button"
-import { getLocale, getDictionary } from "@/lib/i18n-server"
-import { localePath } from "@/lib/i18n"
+import { getLocale, getDictionary } from "@repo/i18n/server"
+import { localePath } from "@repo/i18n"
 
 export async function RightSidebar() {
   const locale = await getLocale()

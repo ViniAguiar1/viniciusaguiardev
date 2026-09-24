@@ -1,6 +1,6 @@
 import Link from "next/link"
-import { getLocale, t } from "@/lib/i18n-server"
-import { localePath, buildAlternates } from "@/lib/i18n"
+import { getLocale, t } from "@repo/i18n/server"
+import { localePath, buildAlternates } from "@repo/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"

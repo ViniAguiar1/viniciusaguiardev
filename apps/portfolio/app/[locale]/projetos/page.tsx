@@ -1,5 +1,5 @@
-import { getDictionary, getLocale, t } from "@/lib/i18n-server"
-import { buildAlternates } from "@/lib/i18n"
+import { getDictionary, getLocale, t } from "@repo/i18n/server"
+import { buildAlternates } from "@repo/i18n"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 import { FadeIn } from "@/components/fade-in"

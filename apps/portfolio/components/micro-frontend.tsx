@@ -2,7 +2,7 @@
 
 import { createElement, useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
-import { t, localeToHtmlLang, type Locale } from "@/lib/i18n"
+import { t, localeToHtmlLang, type Locale } from "@repo/i18n"
 import { loadRemoteModule } from "@/lib/mfe"
 import { parsePing, resolveTheme, type MfePing } from "@/lib/mfe-host"
 

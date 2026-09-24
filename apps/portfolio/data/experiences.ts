@@ -1,4 +1,4 @@
-import type { Locale } from "@/lib/i18n"
+import type { Locale } from "@repo/i18n"
 
 export type Localized = Record<Locale, string>
 

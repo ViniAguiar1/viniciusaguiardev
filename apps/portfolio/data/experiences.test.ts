@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { experiences } from "./experiences"
-import { LOCALES } from "@/lib/i18n"
+import { LOCALES } from "@repo/i18n"
 
 describe("experiences data", () => {
   // A timeline espelha o LinkedIn: mesmas empresas, mesma ordem. Easytogo

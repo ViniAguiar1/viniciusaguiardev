@@ -1,7 +1,7 @@
 "use client"
 
 import { Menu } from "lucide-react"
-import { useSidebar } from "@/components/ui/sidebar"
+import { useSidebar } from "@repo/ui/components/sidebar"
 import { ModeToggle } from "@/components/theme-toggle"
 import { LanguageToggle } from "@/components/language-toggle"
 import { SearchButton } from "@/components/search-button"

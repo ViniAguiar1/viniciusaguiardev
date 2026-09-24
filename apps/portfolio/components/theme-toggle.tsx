@@ -5,13 +5,13 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { usePathname } from "next/navigation"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/components/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@repo/ui/components/dropdown-menu"
 import { DEFAULT_LOCALE, isLocale, t, type Locale } from "@repo/i18n"
 
 function localeFromPath(pathname: string): Locale {

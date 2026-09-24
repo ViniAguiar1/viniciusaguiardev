@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { useSidebar } from "@/components/ui/sidebar"
+import { cn } from "@repo/ui/utils"
+import { useSidebar } from "@repo/ui/components/sidebar"
 
 interface SidebarNavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string

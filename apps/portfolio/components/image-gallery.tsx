@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { cn } from "@/lib/utils"
+import { cn } from "@repo/ui/utils"
 
 interface GalleryImage {
   src: string

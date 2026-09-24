@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Copy, Check } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@repo/ui/utils"
 import Prism from "prismjs"
 import "prismjs/components/prism-markup"
 import "prismjs/components/prism-javascript"

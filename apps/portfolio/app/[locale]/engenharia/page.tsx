@@ -4,8 +4,8 @@ import { localePath, buildAlternates } from "@repo/i18n"
 import { EngineeringTopic } from "@/components/engineering-topic"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
-import { SectionEyebrow } from "@/components/section-eyebrow"
-import { cn, MONO_CHIP } from "@/lib/utils"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
+import { cn, MONO_CHIP } from "@repo/ui/utils"
 
 const siteUrl = "https://viniciusaguiardev.com.br"
 

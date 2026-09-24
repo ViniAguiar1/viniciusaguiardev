@@ -1,11 +1,11 @@
 import Link from "next/link"
-import { cn, MONO_CHIP } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@repo/ui/utils"
 import { getDictionary, getLocale, t } from "@repo/i18n/server"
 import { buildAlternates, localePath } from "@repo/i18n"
 import { ExperienceItem } from "@/components/experience-item"
 import { experiences } from "@/data/experiences"
 import { FadeIn } from "@/components/fade-in"
-import { SectionEyebrow } from "@/components/section-eyebrow"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
 
 export async function generateMetadata() {
   const locale = await getLocale()

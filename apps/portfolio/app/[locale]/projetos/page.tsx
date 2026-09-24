@@ -3,7 +3,7 @@ import { buildAlternates } from "@repo/i18n"
 import { projects } from "@/data/projects"
 import { ProjectsGrid } from "@/components/projects-grid"
 import { FadeIn } from "@/components/fade-in"
-import { SectionEyebrow } from "@/components/section-eyebrow"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
 
 export async function generateMetadata() {
   const locale = await getLocale()

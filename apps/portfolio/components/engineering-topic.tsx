@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
-} from "@/components/ui/sheet"
+} from "@repo/ui/components/sheet"
 
 interface EngineeringTopicProps {
   id?: string

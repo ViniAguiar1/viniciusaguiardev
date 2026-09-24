@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@repo/ui/components/dropdown-menu"
 import { LOCALES, DEFAULT_LOCALE, isLocale, stripLocale, localePath, type Locale } from "@repo/i18n"
 
 const flags: Record<Locale, string> = { pt: "🇧🇷", en: "🇺🇸", es: "🇪🇸", jp: "🇯🇵", fr: "🇫🇷" }

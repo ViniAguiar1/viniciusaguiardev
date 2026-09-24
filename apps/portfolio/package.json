@@ -30,7 +30,8 @@
     "react-dom": "19.1.0",
     "react-icons": "^5.5.0",
     "tailwind-merge": "^3.3.1",
-    "@repo/i18n": "workspace:*"
+    "@repo/i18n": "workspace:*",
+    "@repo/ui": "workspace:*"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

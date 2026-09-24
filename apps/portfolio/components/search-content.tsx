@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Search } from "lucide-react"
 import { isLocale, localePath, DEFAULT_LOCALE, type Locale } from "@repo/i18n"
-import { cn, MONO_CHIP } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@repo/ui/utils"
 import { ProjectLogo } from "@/components/project-logo"
 
 type SearchPost = {

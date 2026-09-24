@@ -5,7 +5,7 @@ import { getAllPosts } from "@/lib/posts"
 import { projects } from "@/data/projects"
 import { SearchContent } from "@/components/search-content"
 import { FadeIn } from "@/components/fade-in"
-import { SectionEyebrow } from "@/components/section-eyebrow"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
 
 export async function generateMetadata() {
   const locale = await getLocale()

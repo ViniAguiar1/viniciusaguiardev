@@ -5,8 +5,12 @@ import { describe, it, expect } from "vitest"
 // process.cwd() é a raiz do repo sob Vitest — mesmo padrão de lib/i18n-coverage.test.ts
 const ROOT = process.cwd()
 
-const SCAN_DIRS = ["app", "components", "lib"]
-const SKIPPED_DIR = path.join("components", "ui") // código gerado do Shadcn
+// A moldura e o design system vivem em packages/ desde o monorepo: a varredura
+// precisa ir até lá, senão uma cor fora da paleta na sidebar passaria.
+const UI_COMPONENTS = path.join("..", "..", "packages", "ui", "src", "components")
+const SCAN_DIRS = ["app", "components", "lib", path.join("..", "..", "packages", "ui", "src")]
+// Código gerado do Shadcn fica de fora; section-eyebrow mora na mesma pasta e é nosso.
+const isGenerated = (rel: string) => rel.startsWith(UI_COMPONENTS + path.sep) && !rel.endsWith("section-eyebrow.tsx")
 
 const FAMILIES =
   "red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|gray|slate|zinc|neutral|stone"
@@ -32,12 +36,12 @@ function collectFiles(dir: string): string[] {
   for (const entry of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
     const rel = path.join(dir, entry.name)
     if (entry.isDirectory()) {
-      if (rel === SKIPPED_DIR) continue
       out.push(...collectFiles(rel))
       continue
     }
     if (!/\.tsx?$/.test(entry.name)) continue
     if (entry.name.includes(".test.")) continue
+    if (isGenerated(rel)) continue
     out.push(rel)
   }
   return out
@@ -89,5 +93,14 @@ describe("cantos", () => {
       }
     }
     expect(offenders).toEqual([])
+  })
+})
+
+describe("varredura", () => {
+  it("inclui o que é nosso em packages/ui e exclui o gerado pelo shadcn", () => {
+    const files = collectFiles(path.join("..", "..", "packages", "ui", "src"))
+    expect(files.some((f) => f.endsWith("section-eyebrow.tsx"))).toBe(true)
+    expect(files.some((f) => f.endsWith("utils.ts"))).toBe(true)
+    expect(files.some((f) => f.endsWith("sidebar.tsx"))).toBe(false)
   })
 })

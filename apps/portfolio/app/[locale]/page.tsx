@@ -1,12 +1,12 @@
 import { getAllPosts } from "@/lib/posts"
-import { cn, MONO_CHIP } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@repo/ui/utils"
 import Link from "next/link"
 import Image from "next/image"
 import { getDictionary, getLocale, t } from "@repo/i18n/server"
 import { localePath } from "@repo/i18n"
 import { JsonLd } from "@/components/json-ld"
 import { FadeIn } from "@/components/fade-in"
-import { SectionEyebrow } from "@/components/section-eyebrow"
+import { SectionEyebrow } from "@repo/ui/components/section-eyebrow"
 
 export default async function Home() {
   const locale = await getLocale()

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation"
 import { getAllPosts, getPostBySlug, ContentBlock } from "@/lib/posts"
-import { cn, MONO_CHIP } from "@/lib/utils"
+import { cn, MONO_CHIP } from "@repo/ui/utils"
 import Image from "next/image"
 import { CodeBlock } from "@/components/code-block"
 import { MicroFrontend } from "@/components/micro-frontend"

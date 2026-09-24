@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { cn } from "@/lib/utils"
+import { cn } from "@repo/ui/utils"
 
 /**
  * Ficha de logo de projeto. Sem asset, cai num monograma com as iniciais em

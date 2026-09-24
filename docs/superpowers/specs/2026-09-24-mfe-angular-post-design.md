@@ -44,6 +44,7 @@ A ideia é escrever um post sobre micro frontends em que **o próprio post é a 
 - Deploy: projeto próprio na Vercel, `https://mfe-angular-inspector.vercel.app/inspector.js`.
 - Headers do deploy:
   - `Access-Control-Allow-Origin: *` — `import()` de outra origem é uma requisição CORS; o arquivo é público.
+  - `Timing-Allow-Origin: *` — sem ele, a Resource Timing API zera `transferSize` para recursos de outra origem e o painel não consegue medir o próprio peso.
   - `Cache-Control` curto em `inspector.js` (ex.: `max-age=60, stale-while-revalidate=300`) — um deploy novo do MFE aparece no post **sem redeploy do portfólio**. É a independência que o post defende.
 
 ### Portfólio (hospedeiro)

@@ -19,7 +19,7 @@ Translate content to all supported languages (PT-BR, EN, ES).
 - Date format: PT "15 de abril de 2026" / EN "Apr 15, 2026" / ES "15 de abr. de 2026"
 - readTime: PT "X min de leitura" / EN "X min read" / ES "X min de lectura"
 
-### For projects (data/projects.ts)
+### For projects (apps/portfolio/data/projects.ts)
 
 - `tagline` and `description` use `{ pt: "...", en: "...", es: "..." }`
 - `es` is optional (falls back to `pt` when missing)

@@ -4,7 +4,7 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 
 **[viniciusaguiardev.com.br](https://viniciusaguiardev.com.br/)**
 
-![Preview](public/preview2.jpeg)
+![Preview](apps/portfolio/public/preview2.jpeg)
 
 ## What's inside
 
@@ -52,15 +52,14 @@ Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specia
 ## Project Structure
 
 ```
-app/              # Pages and layouts (App Router)
-components/       # React components
-  ui/             # Shadcn UI base components
-data/             # Blog posts (JSON) and projects data
-hooks/            # Custom React hooks
-lib/              # Utilities, i18n, post loading
-scripts/          # CI scripts (AEO check)
-public/           # Static assets, logos, images
+apps/portfolio/   # O site (Next.js App Router): páginas, dados, posts, scripts, public/
+packages/i18n/    # @repo/i18n — locales, t(), dicionários
+packages/ui/      # @repo/ui — Shadcn UI, tokens, globals.css
+packages/shell/   # @repo/shell — moldura do site (sidebars, header, footer) e mapa de zonas
+packages/config/  # @repo/config — tsconfig e ESLint compartilhados
 ```
+
+Monorepo com pnpm workspaces e Turborepo: `pnpm build`, `pnpm test`, `pnpm lint` e `pnpm typecheck` rodam em todos os apps e pacotes.
 
 ## License
 

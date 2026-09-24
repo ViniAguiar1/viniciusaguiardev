@@ -1,36 +1,40 @@
 {
   "slug": "micro-frontend-angular-inside-nextjs",
-  "draft": true,
-  "publishedAt": "2026-09-24",
-  "title": "Rascunho: micro frontend Angular",
-  "title_en": "Draft: Angular micro frontend",
-  "title_es": "Borrador: micro frontend Angular",
-  "title_jp": "下書き：Angularマイクロフロントエンド",
-  "title_fr": "Brouillon : micro frontend Angular",
-  "description": "Rascunho.",
-  "description_en": "Draft.",
-  "description_es": "Borrador.",
-  "description_jp": "下書き。",
-  "description_fr": "Brouillon.",
+  "coverSubject": "a small precisely machined object of a clearly different material and shape fitted exactly into a matching recess cut into a much larger monolithic block, the seam between them sharp and visible, no text, no symbols, no figures",
   "date": "24 de set de 2026",
   "date_en": "Sep 24, 2026",
   "date_es": "24 de sept. de 2026",
   "date_jp": "2026年9月24日",
   "date_fr": "24 septembre 2026",
-  "readTime": "1 min de leitura",
-  "readTime_en": "1 min read",
-  "readTime_es": "1 min de lectura",
-  "readTime_jp": "1分で読めます",
-  "readTime_fr": "1 min de lecture",
+  "publishedAt": "2026-09-24",
+  "readTime": "6 min de leitura",
+  "readTime_en": "6 min read",
+  "readTime_es": "6 min de lectura",
+  "readTime_jp": "6分で読めます",
+  "readTime_fr": "6 min de lecture",
   "tag": "Frontend",
   "tag_en": "Frontend",
   "tag_es": "Frontend",
   "tag_jp": "フロントエンド",
   "tag_fr": "Frontend",
+  "title": "Tem um app Angular dentro deste post em Next.js",
+  "title_en": "There's an Angular App Inside This Next.js Post",
+  "title_es": "Hay una app Angular dentro de este post en Next.js",
+  "title_jp": "このNext.jsの記事の中にAngularアプリが入っている",
+  "title_fr": "Il y a une app Angular dans cet article Next.js",
+  "description": "Um experimento: um app Angular 22, com repositório e deploy próprios, rodando como micro frontend dentro deste post em Next.js. O contrato, o custo medido e quando não vale a pena.",
+  "description_en": "An experiment: an Angular 22 app, with its own repo and deploy, running as a micro frontend inside this Next.js post. The contract, the measured cost, and when it isn't worth it.",
+  "description_es": "Un experimento: una app Angular 22, con su propio repositorio y deploy, funcionando como micro frontend dentro de este post en Next.js. El contrato, el costo medido y cuándo no vale la pena.",
+  "description_jp": "実験：独自のリポジトリとデプロイを持つAngular 22アプリを、このNext.jsの記事の中でマイクロフロントエンドとして動かす。コントラクト、計測したコスト、そして割に合わないとき。",
+  "description_fr": "Une expérience : une app Angular 22, avec son propre dépôt et son propre déploiement, qui tourne en micro frontend dans cet article Next.js. Le contrat, le coût mesuré, et quand ça n'en vaut pas la peine.",
   "blocks": [
     {
       "type": "paragraph",
-      "text": "Rascunho: o bloco abaixo é um micro frontend Angular."
+      "text": "Eu queria entender micro frontends construindo um, não lendo sobre eles. Então me dei uma restrição: o experimento tinha que viver dentro de uma página de verdade deste site, e a própria página tinha que ser a prova. Este post é essa página."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este site é Next.js 16 com React 19. O painel abaixo não é. Ele é um app Angular 22, com repositório próprio, build e deploy próprios, carregado em tempo de execução a partir de outro domínio. Tirando uma URL, nada no build deste site sabe que ele existe."
     },
     {
       "type": "mfe",
@@ -39,13 +43,142 @@
     },
     {
       "type": "paragraph",
-      "text": "—"
+      "text": "Experimente: troque o tema ou o idioma na sidebar, e o painel acompanha. Clique no botão dele, e a linha logo abaixo, que pertence ao site e não ao Angular, registra o evento. Tudo no painel é lido em tempo de execução: a versão do Angular, o domínio de onde ele veio, o commit em que foi buildado e quanto custou para baixar."
+    },
+    {
+      "type": "heading",
+      "text": "Três formas de compor um frontend",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Não existe um padrão único de micro frontends. Existem três comuns, e elas resolvem problemas diferentes."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Divisão por rota.** Cada área do produto é um app separado, e um proxy ou o edge manda cada caminho para o app certo. No Next.js isso se chama multi-zones. É simples de operar; o custo é um carregamento completo de página toda vez que você passa de um app para outro.",
+        "**Module Federation.** O hospedeiro carrega módulos de outros deploys em tempo de execução e compartilha dependências com eles. No mundo Angular, o Native Federation é a opção de fato. Brilha quando todas as partes usam o mesmo framework.",
+        "**Web Components.** O micro frontend é empacotado como custom element, e o hospedeiro só precisa renderizar uma tag. É a única interface que React e Angular entendem de forma nativa."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Aqui o hospedeiro é React e o micro frontend é Angular, então é composição entre frameworks. É nesse caso que Web Components são a resposta usual, e é exatamente para isso que o Angular Elements existe."
+    },
+    {
+      "type": "heading",
+      "text": "O contrato",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O jeito mais útil que eu encontrei de pensar num micro frontend é como um contrato: tudo o que um lado sabe sobre o outro. Aqui, são três coisas."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Entradas são atributos.** O site passa `locale` e `theme`. O painel tem o próprio dicionário para os cinco idiomas que este site suporta e as próprias cores para cada tema. Nada é herdado do CSS do site."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Saída é um evento DOM.** O painel não sabe que o React existe. Ele dispara um `CustomEvent`, e o site escuta:"
+    },
+    {
+      "type": "code",
+      "code": "this.host.nativeElement.dispatchEvent(\n  new CustomEvent(\"mfe:ping\", {\n    detail: { angularVersion: this.angularVersion, at: new Date().toISOString() },\n    bubbles: true,\n    composed: true,\n  }),\n)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Isolamento é Shadow DOM.** O CSS do painel não vaza para a página, e o Tailwind do site não vaza para o painel."
+    },
+    {
+      "type": "paragraph",
+      "text": "Do lado do Angular, o micro frontend inteiro se resume a registrar uma tag:"
+    },
+    {
+      "type": "code",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Do lado do site, carregar significa importar uma URL em que o bundler não pode mexer e depois esperar a tag ser definida:"
+    },
+    {
+      "type": "code",
+      "code": "loadRemoteModule(async () => {\n  // The bundler must not resolve this: the URL belongs to another deploy.\n  await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ src)\n  await customElements.whenDefined(tag)\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "heading",
+      "text": "O que custou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Estes números foram medidos no arquivo publicado, não estimados:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "O painel é entregue num único arquivo de 121 KB, ou 42 KB comprimido. Para um painel com um título, uma lista curta e um botão, esse é o preço de levar um segundo framework para a página.",
+        "Na minha conexão, a mediana de cinco cargas frias foi de 44 ms para baixar o arquivo e 50 ms até o elemento ficar pronto para uso.",
+        "Se o arquivo não carrega, o site mostra um aviso curto no lugar do painel em cerca de um terço de segundo, e o resto do post continua funcionando. Para o caso em que o servidor nunca responde, existe um timeout de 8 segundos."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "O arquivo só é pedido quando o painel se aproxima da tela, então quem nunca rola até aqui nunca paga pelo Angular."
+    },
+    {
+      "type": "heading",
+      "text": "O que os tutoriais pulam",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A maior parte do trabalho não foi o componente. Foram as bordas."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Confiar em código de outro domínio.** O site agora executa JavaScript que ele não buildou. Os dados do post só aceitam um micro frontend vindo de uma origem na lista de permitidas, via HTTPS; qualquer outra coisa é descartada antes de a página renderizar.",
+        "**Um arquivo, de propósito.** O site importa uma única URL. Se um dia o build do Angular se dividir em chunks, esse contrato quebra em silêncio, então o build falha alto em vez disso.",
+        "**Registrar duas vezes.** Sair da página e voltar pode importar o módulo de novo, e definir a mesma tag duas vezes lança erro. O registro confere antes.",
+        "**Medir entre origens.** Sem o header `Timing-Allow-Origin`, o navegador esconde o tamanho de arquivos de outros domínios, e o painel teria mostrado 0 KB.",
+        "**Deploy independente.** O arquivo é servido com cache de 60 segundos, então um deploy novo do micro frontend chega a este post sem rebuild do site."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Quando não vale a pena",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Para este site, micro frontend é exagero, e esse era o ponto: eu queria saber o custo antes de precisar pagar por ele. Um segundo framework, um segundo pipeline, um contrato para manter em sincronia e código de outro domínio rodando na página. Com um time só e uma base de código só, um monólito bem organizado entrega quase todos os benefícios por uma fração disso."
+    },
+    {
+      "type": "paragraph",
+      "text": "Começa a valer quando o problema é gente, não código: vários times, cada um com o próprio ritmo de release, pisando uns nos outros no mesmo frontend. Este site não tem esse problema. Agora eu sei quanto custa resolver."
+    },
+    {
+      "type": "paragraph",
+      "text": "O código do micro frontend é público: [github.com/ViniAguiar1/mfe-angular-inspector](https://github.com/ViniAguiar1/mfe-angular-inspector)."
     }
   ],
   "blocks_en": [
     {
       "type": "paragraph",
-      "text": "Draft: the block below is an Angular micro frontend."
+      "text": "I wanted to understand micro frontends by building one, not by reading about them. So I set myself a constraint: the experiment had to live inside a real page on this site, and the page itself had to be the proof. This post is that page."
+    },
+    {
+      "type": "paragraph",
+      "text": "This site is Next.js 16 with React 19. The panel below is not. It's an Angular 22 app, in its own repository, built and deployed on its own, and loaded at runtime from another domain. Apart from one URL, nothing in this site's build knows it exists."
     },
     {
       "type": "mfe",
@@ -54,13 +187,142 @@
     },
     {
       "type": "paragraph",
-      "text": "—"
+      "text": "Try it: switch the theme or the language in the sidebar, and the panel follows. Click its button, and the line under it, which belongs to the site and not to Angular, reports the event. Everything in the panel is read at runtime: the Angular version, the domain it came from, the commit it was built from, and how much it cost to download."
+    },
+    {
+      "type": "heading",
+      "text": "Three ways to compose a frontend",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "There isn't a single standard for micro frontends. There are three common ones, and they solve different problems."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Split by route.** Each area of the product is a separate app, and a proxy or the edge sends each path to the right one. In Next.js this is called multi-zones. It's simple to run; the cost is a full page load every time you cross from one app to another.",
+        "**Module Federation.** The host loads modules from other deploys at runtime and shares dependencies with them. In the Angular world, Native Federation is the de facto option. It shines when every piece uses the same framework.",
+        "**Web Components.** The micro frontend is packaged as a custom element, and the host only has to render a tag. It's the one interface that React and Angular both understand natively."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Here the host is React and the micro frontend is Angular, so this is composition across frameworks. That's where Web Components are the usual answer, and it's exactly what Angular Elements is for."
+    },
+    {
+      "type": "heading",
+      "text": "The contract",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The most useful way I found to think about a micro frontend is as a contract: everything one side knows about the other. Here, that's three things."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Inputs are attributes.** The site passes `locale` and `theme`. The panel keeps its own dictionary for the five languages this site supports and its own colors for each theme. Nothing is inherited from the site's CSS."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Output is a DOM event.** The panel doesn't know React exists. It dispatches a `CustomEvent`, and the site listens for it:"
+    },
+    {
+      "type": "code",
+      "code": "this.host.nativeElement.dispatchEvent(\n  new CustomEvent(\"mfe:ping\", {\n    detail: { angularVersion: this.angularVersion, at: new Date().toISOString() },\n    bubbles: true,\n    composed: true,\n  }),\n)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Isolation is Shadow DOM.** The panel's styles don't leak into the page, and the site's Tailwind doesn't leak into the panel."
+    },
+    {
+      "type": "paragraph",
+      "text": "On the Angular side, the whole micro frontend comes down to registering one tag:"
+    },
+    {
+      "type": "code",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "On the site side, loading it means importing a URL that the bundler must not touch, then waiting for the tag to be defined:"
+    },
+    {
+      "type": "code",
+      "code": "loadRemoteModule(async () => {\n  // The bundler must not resolve this: the URL belongs to another deploy.\n  await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ src)\n  await customElements.whenDefined(tag)\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "heading",
+      "text": "What it cost",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "These numbers were measured on the deployed file, not estimated:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "The panel ships as a single file of 121 KB, or 42 KB compressed. For a panel with a heading, a short list and a button, that's the price of shipping a second framework to the page.",
+        "Over my connection, the median of five cold loads was 44 ms to download the file and 50 ms until the element was ready to use.",
+        "If the file doesn't load, the site shows a short notice in place of the panel in about a third of a second, and the rest of the post keeps working. For the case where the server never answers, there's an 8-second timeout."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "The file is only requested when the panel gets close to the screen, so a reader who never scrolls this far never pays for Angular."
+    },
+    {
+      "type": "heading",
+      "text": "What the tutorials skip",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Most of the work wasn't the component. It was the edges."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Trusting code from another domain.** The site now runs JavaScript it didn't build. The post data only accepts a micro frontend from an allowlisted origin over HTTPS; anything else is discarded before the page renders.",
+        "**One file, on purpose.** The site imports a single URL. If the Angular build ever splits into chunks, that contract breaks silently, so the build fails loudly instead.",
+        "**Registering twice.** Leaving the page and coming back can import the module again, and defining the same tag twice throws an error. The registration checks first.",
+        "**Measuring across origins.** Without a `Timing-Allow-Origin` header, the browser hides the size of files from other domains, and the panel would have reported 0 KB.",
+        "**Deploying independently.** The file is served with a 60-second cache, so a new deploy of the micro frontend reaches this post without rebuilding the site."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "When it isn't worth it",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "For this site, a micro frontend is overkill, and that was the point: I wanted to know the cost before I ever needed to pay it. A second framework, a second pipeline, a contract to keep in sync, and code from another domain running on the page. With one team and one codebase, a well-organized monolith gets you almost all of the benefits for a fraction of that."
+    },
+    {
+      "type": "paragraph",
+      "text": "It starts to pay when the problem is people, not code: several teams, each with its own release cadence, stepping on each other in the same frontend. This site doesn't have that problem. Now I know what solving it costs."
+    },
+    {
+      "type": "paragraph",
+      "text": "The micro frontend's code is public: [github.com/ViniAguiar1/mfe-angular-inspector](https://github.com/ViniAguiar1/mfe-angular-inspector)."
     }
   ],
   "blocks_es": [
     {
       "type": "paragraph",
-      "text": "Borrador: el bloque de abajo es un micro frontend Angular."
+      "text": "Quería entender los micro frontends construyendo uno, no leyendo sobre ellos. Así que me puse una restricción: el experimento tenía que vivir dentro de una página real de este sitio, y la propia página tenía que ser la prueba. Este post es esa página."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este sitio es Next.js 16 con React 19. El panel de abajo no lo es. Es una app Angular 22, con su propio repositorio, su propio build y su propio deploy, cargada en tiempo de ejecución desde otro dominio. Aparte de una URL, nada en el build de este sitio sabe que existe."
     },
     {
       "type": "mfe",
@@ -69,13 +331,142 @@
     },
     {
       "type": "paragraph",
-      "text": "—"
+      "text": "Pruébalo: cambia el tema o el idioma en la barra lateral, y el panel lo sigue. Haz clic en su botón, y la línea de abajo, que pertenece al sitio y no a Angular, registra el evento. Todo en el panel se lee en tiempo de ejecución: la versión de Angular, el dominio del que vino, el commit con el que se construyó y cuánto costó descargarlo."
+    },
+    {
+      "type": "heading",
+      "text": "Tres formas de componer un frontend",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "No existe un único estándar de micro frontends. Hay tres comunes, y resuelven problemas distintos."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**División por ruta.** Cada área del producto es una app separada, y un proxy o el edge envía cada ruta a la app correcta. En Next.js esto se llama multi-zones. Es simple de operar; el costo es una carga completa de página cada vez que pasas de una app a otra.",
+        "**Module Federation.** El host carga módulos de otros deploys en tiempo de ejecución y comparte dependencias con ellos. En el mundo Angular, Native Federation es la opción de facto. Brilla cuando todas las piezas usan el mismo framework.",
+        "**Web Components.** El micro frontend se empaqueta como custom element, y el host solo tiene que renderizar una etiqueta. Es la única interfaz que React y Angular entienden de forma nativa."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Aquí el host es React y el micro frontend es Angular, así que es composición entre frameworks. En ese caso los Web Components son la respuesta habitual, y justamente para eso existe Angular Elements."
+    },
+    {
+      "type": "heading",
+      "text": "El contrato",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La forma más útil que encontré de pensar un micro frontend es como un contrato: todo lo que un lado sabe del otro. Aquí son tres cosas."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Las entradas son atributos.** El sitio pasa `locale` y `theme`. El panel tiene su propio diccionario para los cinco idiomas que soporta este sitio y sus propios colores para cada tema. Nada se hereda del CSS del sitio."
+    },
+    {
+      "type": "paragraph",
+      "text": "**La salida es un evento DOM.** El panel no sabe que React existe. Dispara un `CustomEvent`, y el sitio lo escucha:"
+    },
+    {
+      "type": "code",
+      "code": "this.host.nativeElement.dispatchEvent(\n  new CustomEvent(\"mfe:ping\", {\n    detail: { angularVersion: this.angularVersion, at: new Date().toISOString() },\n    bubbles: true,\n    composed: true,\n  }),\n)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "**El aislamiento es Shadow DOM.** Los estilos del panel no se filtran a la página, y el Tailwind del sitio no se filtra al panel."
+    },
+    {
+      "type": "paragraph",
+      "text": "Del lado de Angular, todo el micro frontend se reduce a registrar una etiqueta:"
+    },
+    {
+      "type": "code",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Del lado del sitio, cargarlo significa importar una URL que el bundler no puede tocar y luego esperar a que la etiqueta esté definida:"
+    },
+    {
+      "type": "code",
+      "code": "loadRemoteModule(async () => {\n  // The bundler must not resolve this: the URL belongs to another deploy.\n  await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ src)\n  await customElements.whenDefined(tag)\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "heading",
+      "text": "Lo que costó",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Estos números se midieron sobre el archivo publicado, no se estimaron:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "El panel se entrega en un único archivo de 121 KB, o 42 KB comprimido. Para un panel con un título, una lista corta y un botón, ese es el precio de llevar un segundo framework a la página.",
+        "Con mi conexión, la mediana de cinco cargas en frío fue de 44 ms para descargar el archivo y 50 ms hasta que el elemento estuvo listo para usarse.",
+        "Si el archivo no carga, el sitio muestra un aviso corto en lugar del panel en aproximadamente un tercio de segundo, y el resto del post sigue funcionando. Para el caso en que el servidor nunca responde, hay un timeout de 8 segundos."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "El archivo solo se pide cuando el panel se acerca a la pantalla, así que quien nunca llega hasta aquí nunca paga por Angular."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que los tutoriales se saltan",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La mayor parte del trabajo no fue el componente. Fueron los bordes."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Confiar en código de otro dominio.** El sitio ahora ejecuta JavaScript que no construyó. Los datos del post solo aceptan un micro frontend que venga de un origen en la lista de permitidos, por HTTPS; cualquier otra cosa se descarta antes de que la página se renderice.",
+        "**Un archivo, a propósito.** El sitio importa una única URL. Si algún día el build de Angular se divide en chunks, ese contrato se rompe en silencio, así que el build falla ruidosamente en su lugar.",
+        "**Registrar dos veces.** Salir de la página y volver puede importar el módulo otra vez, y definir la misma etiqueta dos veces lanza un error. El registro lo comprueba antes.",
+        "**Medir entre orígenes.** Sin el header `Timing-Allow-Origin`, el navegador oculta el tamaño de los archivos de otros dominios, y el panel habría mostrado 0 KB.",
+        "**Deploy independiente.** El archivo se sirve con una caché de 60 segundos, así que un nuevo deploy del micro frontend llega a este post sin reconstruir el sitio."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Cuándo no vale la pena",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Para este sitio, un micro frontend es excesivo, y ese era el punto: quería conocer el costo antes de necesitar pagarlo. Un segundo framework, un segundo pipeline, un contrato que mantener sincronizado y código de otro dominio ejecutándose en la página. Con un solo equipo y una sola base de código, un monolito bien organizado da casi todos los beneficios por una fracción de eso."
+    },
+    {
+      "type": "paragraph",
+      "text": "Empieza a valer la pena cuando el problema son las personas, no el código: varios equipos, cada uno con su propio ritmo de release, pisándose en el mismo frontend. Este sitio no tiene ese problema. Ahora sé cuánto cuesta resolverlo."
+    },
+    {
+      "type": "paragraph",
+      "text": "El código del micro frontend es público: [github.com/ViniAguiar1/mfe-angular-inspector](https://github.com/ViniAguiar1/mfe-angular-inspector)."
     }
   ],
   "blocks_jp": [
     {
       "type": "paragraph",
-      "text": "下書き：下のブロックはAngularのマイクロフロントエンドです。"
+      "text": "マイクロフロントエンドを、読むことではなく作ることで理解したいと思いました。そこで自分に一つの制約を課しました。実験はこのサイトの実際のページの中に置くこと、そしてそのページ自体を証拠にすること。この記事がそのページです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "このサイトはNext.js 16とReact 19で動いています。下のパネルは違います。独自のリポジトリを持ち、独自にビルドとデプロイが行われ、実行時に別のドメインから読み込まれるAngular 22のアプリです。URLが一つあるだけで、このサイトのビルドはその存在を何も知りません。"
     },
     {
       "type": "mfe",
@@ -84,13 +475,142 @@
     },
     {
       "type": "paragraph",
-      "text": "—"
+      "text": "試してみてください。サイドバーでテーマや言語を切り替えると、パネルも追従します。パネルのボタンをクリックすると、そのすぐ下の行（Angularではなくサイト側のもの）がイベントを表示します。パネルの内容はすべて実行時に読み取られています。Angularのバージョン、読み込み元のドメイン、ビルドされたコミット、そしてダウンロードにかかったコストです。"
+    },
+    {
+      "type": "heading",
+      "text": "フロントエンドを組み合わせる三つの方法",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "マイクロフロントエンドに唯一の標準はありません。よく使われるものが三つあり、それぞれ異なる問題を解決します。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**ルートによる分割。** プロダクトの各領域が別々のアプリで、プロキシやエッジが各パスを適切なアプリに振り分けます。Next.jsではマルチゾーンと呼ばれます。運用はシンプルですが、アプリをまたぐたびにページ全体の読み込みが発生します。",
+        "**Module Federation。** ホストが実行時に他のデプロイからモジュールを読み込み、依存関係を共有します。Angularの世界ではNative Federationが事実上の選択肢です。すべての部品が同じフレームワークを使うときに真価を発揮します。",
+        "**Web Components。** マイクロフロントエンドをカスタム要素としてパッケージし、ホストはタグを一つ描画するだけです。ReactとAngularの両方がネイティブに理解できる唯一のインターフェースです。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "ここではホストがReactで、マイクロフロントエンドがAngularなので、フレームワークをまたいだ組み合わせになります。その場合の定番がWeb Componentsで、Angular Elementsはまさにそのためにあります。"
+    },
+    {
+      "type": "heading",
+      "text": "コントラクト",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "マイクロフロントエンドについて考えるうえで一番役に立ったのは、それをコントラクト、つまり一方が他方について知っていることのすべてとして捉えることでした。ここでは三つです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "**入力は属性。** サイトは`locale`と`theme`を渡します。パネルはこのサイトが対応する五つの言語の辞書と、テーマごとの配色を自分で持っています。サイトのCSSから何も継承しません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "**出力はDOMイベント。** パネルはReactの存在を知りません。`CustomEvent`を発行し、サイトがそれを受け取ります。"
+    },
+    {
+      "type": "code",
+      "code": "this.host.nativeElement.dispatchEvent(\n  new CustomEvent(\"mfe:ping\", {\n    detail: { angularVersion: this.angularVersion, at: new Date().toISOString() },\n    bubbles: true,\n    composed: true,\n  }),\n)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "**分離はShadow DOM。** パネルのスタイルはページに漏れず、サイトのTailwindもパネルに入り込みません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "Angular側では、マイクロフロントエンド全体がタグを一つ登録することに集約されます。"
+    },
+    {
+      "type": "code",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "サイト側では、読み込みとは、バンドラーが触れてはいけないURLをimportし、タグが定義されるのを待つことです。"
+    },
+    {
+      "type": "code",
+      "code": "loadRemoteModule(async () => {\n  // The bundler must not resolve this: the URL belongs to another deploy.\n  await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ src)\n  await customElements.whenDefined(tag)\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "heading",
+      "text": "かかったコスト",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "以下の数値は推定ではなく、公開されたファイルで計測したものです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "パネルは121 KB（圧縮後42 KB）の単一ファイルとして配信されます。見出しと短いリストとボタンだけのパネルにとって、これが二つ目のフレームワークをページに載せる代償です。",
+        "私の回線では、コールドロード5回の中央値で、ファイルのダウンロードに44 ms、要素が使える状態になるまで50 msでした。",
+        "ファイルが読み込めない場合、サイトは約3分の1秒でパネルの代わりに短いお知らせを表示し、記事の残りはそのまま動作します。サーバーがまったく応答しない場合に備えて、8秒のタイムアウトもあります。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "ファイルはパネルが画面に近づいたときにだけリクエストされるので、ここまでスクロールしない読者はAngularのコストを払いません。"
+    },
+    {
+      "type": "heading",
+      "text": "チュートリアルが飛ばすこと",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "作業の大半はコンポーネントではありませんでした。境界の部分でした。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**別ドメインのコードを信頼すること。** サイトは自分でビルドしていないJavaScriptを実行するようになりました。記事のデータは、許可リストにあるオリジンからHTTPSで配信されるマイクロフロントエンドだけを受け入れ、それ以外はページの描画前に破棄します。",
+        "**意図的に一つのファイル。** サイトは一つのURLだけをimportします。もしAngularのビルドがチャンクに分かれたら、このコントラクトは黙って壊れるので、代わりにビルドを明示的に失敗させます。",
+        "**二重登録。** ページを離れて戻るとモジュールが再びimportされることがあり、同じタグを二度定義するとエラーになります。登録の前に確認しています。",
+        "**オリジンをまたいだ計測。** `Timing-Allow-Origin`ヘッダーがないと、ブラウザは他ドメインのファイルサイズを隠すので、パネルは0 KBと表示していたはずです。",
+        "**独立したデプロイ。** ファイルは60秒のキャッシュで配信されるので、マイクロフロントエンドの新しいデプロイは、サイトを再ビルドせずにこの記事に反映されます。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "割に合わないとき",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "このサイトにとってマイクロフロントエンドはやりすぎで、それこそが狙いでした。払う必要が出てくる前に、そのコストを知りたかったのです。二つ目のフレームワーク、二つ目のパイプライン、同期を保つべきコントラクト、そしてページ上で動く別ドメインのコード。チームが一つでコードベースも一つなら、よく整理されたモノリスが、その何分の一かのコストでほぼすべての利点をもたらします。"
+    },
+    {
+      "type": "paragraph",
+      "text": "割に合い始めるのは、問題がコードではなく人にあるときです。それぞれ独自のリリースサイクルを持つ複数のチームが、同じフロントエンドの中で互いの足を踏んでいる状態。このサイトにその問題はありません。でも今は、それを解決するのにいくらかかるのかを知っています。"
+    },
+    {
+      "type": "paragraph",
+      "text": "マイクロフロントエンドのコードは公開しています：[github.com/ViniAguiar1/mfe-angular-inspector](https://github.com/ViniAguiar1/mfe-angular-inspector)"
     }
   ],
   "blocks_fr": [
     {
       "type": "paragraph",
-      "text": "Brouillon : le bloc ci-dessous est un micro frontend Angular."
+      "text": "Je voulais comprendre les micro frontends en en construisant un, pas en lisant à leur sujet. Alors je me suis fixé une contrainte : l'expérience devait vivre dans une vraie page de ce site, et la page elle-même devait en être la preuve. Cet article est cette page."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce site tourne sur Next.js 16 avec React 19. Le panneau ci-dessous, non. C'est une app Angular 22, avec son propre dépôt, son propre build et son propre déploiement, chargée à l'exécution depuis un autre domaine. À part une URL, rien dans le build de ce site ne sait qu'elle existe."
     },
     {
       "type": "mfe",
@@ -99,7 +619,132 @@
     },
     {
       "type": "paragraph",
-      "text": "—"
+      "text": "Essayez : changez le thème ou la langue dans la barre latérale, et le panneau suit. Cliquez sur son bouton, et la ligne juste en dessous, qui appartient au site et non à Angular, affiche l'événement. Tout dans le panneau est lu à l'exécution : la version d'Angular, le domaine d'où il vient, le commit à partir duquel il a été buildé et ce qu'il a coûté à télécharger."
+    },
+    {
+      "type": "heading",
+      "text": "Trois façons de composer un frontend",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Il n'existe pas de standard unique pour les micro frontends. Il y en a trois courants, et ils résolvent des problèmes différents."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Découpage par route.** Chaque zone du produit est une app distincte, et un proxy ou l'edge envoie chaque chemin vers la bonne app. Dans Next.js, cela s'appelle multi-zones. C'est simple à exploiter ; le coût est un rechargement complet de la page chaque fois qu'on passe d'une app à l'autre.",
+        "**Module Federation.** L'hôte charge à l'exécution des modules venant d'autres déploiements et partage des dépendances avec eux. Dans le monde Angular, Native Federation est l'option de fait. Elle brille quand toutes les pièces utilisent le même framework.",
+        "**Web Components.** Le micro frontend est empaqueté en custom element, et l'hôte n'a qu'à afficher une balise. C'est la seule interface que React et Angular comprennent tous les deux nativement."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Ici, l'hôte est React et le micro frontend est Angular : c'est donc une composition entre frameworks. C'est là que les Web Components sont la réponse habituelle, et c'est exactement à ça que sert Angular Elements."
+    },
+    {
+      "type": "heading",
+      "text": "Le contrat",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La façon la plus utile que j'ai trouvée de penser un micro frontend, c'est comme un contrat : tout ce qu'un côté sait de l'autre. Ici, ça tient en trois choses."
+    },
+    {
+      "type": "paragraph",
+      "text": "**Les entrées sont des attributs.** Le site transmet `locale` et `theme`. Le panneau a son propre dictionnaire pour les cinq langues que ce site prend en charge et ses propres couleurs pour chaque thème. Rien n'est hérité du CSS du site."
+    },
+    {
+      "type": "paragraph",
+      "text": "**La sortie est un événement DOM.** Le panneau ne sait pas que React existe. Il émet un `CustomEvent`, et le site l'écoute :"
+    },
+    {
+      "type": "code",
+      "code": "this.host.nativeElement.dispatchEvent(\n  new CustomEvent(\"mfe:ping\", {\n    detail: { angularVersion: this.angularVersion, at: new Date().toISOString() },\n    bubbles: true,\n    composed: true,\n  }),\n)",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "**L'isolation, c'est le Shadow DOM.** Les styles du panneau ne débordent pas sur la page, et le Tailwind du site ne déborde pas dans le panneau."
+    },
+    {
+      "type": "paragraph",
+      "text": "Côté Angular, tout le micro frontend se résume à enregistrer une balise :"
+    },
+    {
+      "type": "code",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Côté site, le charger revient à importer une URL à laquelle le bundler ne doit pas toucher, puis à attendre que la balise soit définie :"
+    },
+    {
+      "type": "code",
+      "code": "loadRemoteModule(async () => {\n  // The bundler must not resolve this: the URL belongs to another deploy.\n  await import(/* webpackIgnore: true */ /* turbopackIgnore: true */ src)\n  await customElements.whenDefined(tag)\n})",
+      "language": "typescript"
+    },
+    {
+      "type": "heading",
+      "text": "Ce que ça a coûté",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Ces chiffres ont été mesurés sur le fichier publié, pas estimés :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "Le panneau est livré dans un seul fichier de 121 Ko, soit 42 Ko compressé. Pour un panneau avec un titre, une courte liste et un bouton, c'est le prix d'un second framework sur la page.",
+        "Sur ma connexion, la médiane de cinq chargements à froid était de 44 ms pour télécharger le fichier et de 50 ms jusqu'à ce que l'élément soit prêt à l'emploi.",
+        "Si le fichier ne se charge pas, le site affiche un court avertissement à la place du panneau en environ un tiers de seconde, et le reste de l'article continue de fonctionner. Pour le cas où le serveur ne répond jamais, il y a un timeout de 8 secondes."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Le fichier n'est demandé que lorsque le panneau approche de l'écran : un lecteur qui ne descend jamais jusqu'ici ne paie jamais pour Angular."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que les tutoriels passent sous silence",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "L'essentiel du travail n'était pas le composant. C'étaient les bords."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Faire confiance à du code d'un autre domaine.** Le site exécute désormais du JavaScript qu'il n'a pas buildé. Les données de l'article n'acceptent un micro frontend que s'il vient d'une origine autorisée, en HTTPS ; tout le reste est écarté avant le rendu de la page.",
+        "**Un seul fichier, volontairement.** Le site importe une seule URL. Si un jour le build Angular se découpe en chunks, ce contrat casse en silence, donc le build échoue bruyamment à la place.",
+        "**S'enregistrer deux fois.** Quitter la page et y revenir peut réimporter le module, et définir deux fois la même balise lève une erreur. L'enregistrement vérifie d'abord.",
+        "**Mesurer entre origines.** Sans l'en-tête `Timing-Allow-Origin`, le navigateur masque la taille des fichiers d'autres domaines, et le panneau aurait affiché 0 Ko.",
+        "**Déployer indépendamment.** Le fichier est servi avec un cache de 60 secondes : un nouveau déploiement du micro frontend arrive dans cet article sans rebuild du site."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Quand ça n'en vaut pas la peine",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Pour ce site, un micro frontend est excessif, et c'était tout l'intérêt : je voulais connaître le coût avant d'avoir besoin de le payer. Un second framework, un second pipeline, un contrat à garder synchronisé, et du code d'un autre domaine qui tourne sur la page. Avec une seule équipe et une seule base de code, un monolithe bien organisé apporte presque tous les bénéfices pour une fraction de ce coût."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ça commence à payer quand le problème, ce sont les gens et non le code : plusieurs équipes, chacune avec son propre rythme de release, qui se marchent dessus dans le même frontend. Ce site n'a pas ce problème. Maintenant, je sais ce que coûte de le résoudre."
+    },
+    {
+      "type": "paragraph",
+      "text": "Le code du micro frontend est public : [github.com/ViniAguiar1/mfe-angular-inspector](https://github.com/ViniAguiar1/mfe-angular-inspector)."
     }
   ]
 }

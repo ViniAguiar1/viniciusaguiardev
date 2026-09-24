@@ -1,0 +1,1400 @@
+{
+  "slug": "writing-code-stops-being-the-hard-part",
+  "coverSubject": "one small perfectly machined cube resting in sharp focus at the foot of a vastly larger rough unfinished monolithic form that rises out of the top of the frame, the monolith's raw uneven surface caught by a strong rim light along one edge, the extreme difference in scale dominating the composition, no text, no symbols, no figures",
+  "date": "23 de set de 2026",
+  "date_en": "Sep 23, 2026",
+  "date_es": "23 de sept. de 2026",
+  "date_jp": "2026年9月23日",
+  "date_fr": "23 septembre 2026",
+  "publishedAt": "2026-09-23",
+  "readTime": "10 min de leitura",
+  "readTime_en": "10 min read",
+  "readTime_es": "10 min de lectura",
+  "readTime_jp": "10分で読めます",
+  "readTime_fr": "10 min de lecture",
+  "tag": "Carreira",
+  "tag_en": "Career",
+  "tag_es": "Carrera",
+  "tag_jp": "キャリア",
+  "tag_fr": "Carrière",
+  "title": "Em algum momento, escrever código deixa de ser a parte difícil",
+  "title_en": "At Some Point, Writing Code Stops Being the Hard Part",
+  "title_es": "En algún momento, escribir código deja de ser la parte difícil",
+  "title_jp": "ある時点で、コードを書くことは難しい部分ではなくなる",
+  "title_fr": "À un moment donné, écrire du code cesse d'être la partie difficile",
+  "description": "Um olhar pessoal sobre a passagem de júnior a sênior: por que a parte difícil sai do código e vai para escopo, ownership, trade-offs e decidir o que construir.",
+  "description_en": "A personal look at going from junior to senior engineer: why the hard part shifts from writing code to scope, ownership, trade-offs and deciding what to build.",
+  "description_es": "Una mirada personal al paso de junior a senior: por qué lo difícil se mueve del código al alcance, el ownership, los trade-offs y decidir qué construir.",
+  "description_jp": "ジュニアからシニアへの変化を個人的に振り返る。難しさがコードを書くことから、担う範囲、オーナーシップ、トレードオフ、そして何を作るかの判断へと移っていく理由。",
+  "description_fr": "Un regard personnel sur le passage de junior à senior : pourquoi la difficulté quitte le code pour aller vers le périmètre, l'ownership, les trade-offs et le choix de quoi construire.",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "Por muito tempo eu medi minha evolução pelo que eu conseguia construir. Um framework novo aprendido, um tipo novo de app entregue, mais uma linha na seção de stack do currículo. Parecia o placar certo, porque no começo ele quase era."
+    },
+    {
+      "type": "paragraph",
+      "text": "O que eu não percebi foi o momento em que o placar parou de refletir o jogo. O código não ficou exatamente mais fácil. Ele só deixou de ser a parte que me tirava o sono. A parte difícil tinha ido para outro lugar: decidir o que construir, decidir o que não construir e conviver com as consequências das duas coisas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post é uma tentativa de descrever essa mudança do jeito que eu vivi. Não é um método para decidir quem é sênior. Títulos significam coisas diferentes em empresas diferentes e em mercados diferentes. Em 2025 eu fui Software Engineer numa empresa e Senior Software Engineer em outra, ao mesmo tempo, e alguns meses depois Full Stack Developer numa terceira. O trabalho por trás desses títulos era bem menos diferente do que as palavras. Então leia isto como a visão de um engenheiro sobre como os problemas mudaram, não como uma escada que todo mundo precisa subir."
+    },
+    {
+      "type": "heading",
+      "text": "Júnior: aprendendo a executar",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Eu comecei em 2022, prototipando um app de delivery, web e mobile, enquanto ainda estava na faculdade. Eu estava sozinho nele, o que significava que eu tomava todas as decisões: a arquitetura, o modelo de dados, como as peças conversavam entre si. Por um tempo eu tomei isso como sinal de que estava mais adiantado do que realmente estava."
+    },
+    {
+      "type": "paragraph",
+      "text": "Levei anos para entender a diferença. Tomar decisões que ninguém revisa não é a mesma coisa que tomar boas decisões. Ninguém me dizia que uma escolha estava errada, então eu presumia que não estava. Eu tomava decisões de arquitetura sem saber quais eram as alternativas, quanto elas custavam ou o que ia quebrar seis meses depois. Eu não sabia o que eu não sabia."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quando entrei num time em 2024, trabalhando em apps web e mobile com React, Next.js, React Native e Flutter, o formato do meu trabalho ficou mais claro, e sendo honesto, mais confortável. As tarefas chegavam bem definidas. Alguém já tinha decidido o que a tela devia fazer; meu trabalho era fazer ela fazer aquilo. A pergunta que eu fazia o dia inteiro era:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"Como eu implemento isso?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Essa não é uma pergunta pequena. Naquela fase ela é a pergunta certa. Você está aprendendo a stack, o código, as convenções que ninguém escreveu, e a diferença entre código que funciona na sua máquina e código que sobrevive ao review. Eu precisava de orientação com frequência, e precisava que ela fosse específica."
+    },
+    {
+      "type": "paragraph",
+      "text": "Olhando para trás, a principal coisa que eu estava construindo não eram features. Era execução: a capacidade de pegar algo definido e transformar em software funcionando, sem drama. Tudo o que veio depois depende disso. Não dá para raciocinar sobre trade-offs num código que você ainda tem dificuldade de escrever."
+    },
+    {
+      "type": "heading",
+      "text": "Pleno: aprendendo a ser dono",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A passagem para pleno não veio com um tipo novo de tarefa. Veio com menos instrução junto do mesmo tipo de tarefa."
+    },
+    {
+      "type": "paragraph",
+      "text": "Em vez de \"constrói essa tela\", passou a ser \"a gente precisa dessa integração\". Trabalhei em integrações com Mercado Livre, Shopee e Meta, e fiquei responsável por publicar e manter apps iOS pela [Apple Developer](https://developer.apple.com/): o ciclo de release, as diretrizes de revisão da App Store, a parte do trabalho que começa depois que o pull request é mergeado. Essa última parte me ensinou algo que o código nunca ensinou. Uma feature não está pronta quando funciona. Está pronta quando está na mão do usuário e continua funcionando."
+    },
+    {
+      "type": "paragraph",
+      "text": "Sistemas externos te obrigam a aprender isso. As APIs deles dão timeout, mudam sem aviso, mandam o mesmo evento duas vezes ou respondem com sucesso com metade dos dados faltando. Então as perguntas que eu fazia começaram a mudar. O que acontece quando essa chamada falha? E se esse webhook chegar duas vezes? Como eu testo isso sem cobrar um cartão de verdade? Como eu vou saber que quebrou em produção antes de um cliente me contar?"
+    },
+    {
+      "type": "paragraph",
+      "text": "A pergunta por baixo de todas elas era:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"Qual é o melhor jeito de resolver isso?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Essa pergunta parte do princípio de que o problema já está certo. Outra pessoa decidiu o que estamos resolvendo; eu decido como. Passei a ser responsável por edge cases, testes, performance e deploy, e precisava de cada vez menos detalhe no ticket para entregar."
+    },
+    {
+      "type": "paragraph",
+      "text": "É um degrau real, e por um tempo parece que é o trabalho inteiro. Confiam em você. Você entrega. As pessoas param de conferir cada linha. É fácil acreditar que o próximo passo é só mais do mesmo: features maiores, sistemas mais complexos, mais tecnologias."
+    },
+    {
+      "type": "paragraph",
+      "text": "Para mim não foi."
+    },
+    {
+      "type": "heading",
+      "text": "Sênior: aprendendo a decidir",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O sinal mais claro de que meu trabalho tinha mudado foi que eu comecei a receber problemas em vez de tarefas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Não \"constrói X\", mas \"essa tela está lenta\", \"esse sistema precisa sair do Firestore\", \"os clientes não conseguem pagar e a gente não sabe por quê\". Sem especificação, às vezes sem um dono claro, e muitas vezes com informação incompleta sobre o que estava acontecendo de verdade."
+    },
+    {
+      "type": "heading",
+      "text": "Novos problemas",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Os próprios problemas mudaram de formato. Passaram a ser menos sobre uma feature e mais sobre um sistema que já estava rodando, com gente dependendo dele."
+    },
+    {
+      "type": "paragraph",
+      "text": "Um ERP focado em gestão de frotas em que trabalhei precisava migrar o core do Firestore para o PostgreSQL, e seis produtos separados precisavam ser consolidados em um único deploy multi-tenant. A restrição que moldou tudo foi que a operação não podia parar. Escrever o schema novo não era a parte difícil. A parte difícil era decidir como migrar módulo a módulo, o que podia coexistir e por quanto tempo, e que risco a gente aceitava em cada etapa. Nada disso cabe num ticket."
+    },
+    {
+      "type": "heading",
+      "text": "Novas responsabilidades",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "As responsabilidades também mudaram, e foram mais difíceis de perceber, porque ninguém entrega elas num ticket."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**O que acontece depois do deploy.** Num produto web e mobile usado por milhares de pessoas, ser responsável significou crash reporting, logs e métricas: saber que algo quebrou antes de um cliente contar.",
+        "**Dinheiro e dados dos outros.** Pagamentos e webhooks, em que o mesmo evento pode chegar duas vezes e um retry descuidado cobra alguém de novo. E decidir o que não coletar: num fluxo de pagamento, o que ficou de fora da instrumentação importou tanto quanto o que foi capturado.",
+        "**Traduzir trade-offs.** Explicar para quem não lê código do que estamos abrindo mão, por quê, e quanto isso vai custar depois.",
+        "**Construir menos.** Questionar se a feature pedida resolve o problema, e às vezes argumentar contra construí-la.",
+        "**Assumir a decisão.** Decidir sem alguém validando cada passo, e assumir quando ela se mostra errada."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Construir um produto do zero de novo foi o que deixou a diferença óbvia para mim. Em 2022, sozinho no app de delivery, eu tomava todas as decisões e ninguém pagava por nenhuma delas. Construindo do zero uma plataforma multi-tenant de automação de marketplace, com integrações, pagamentos e fluxos de pedido, eu voltei a tomar a maior parte das decisões. A autonomia era a mesma. O peso era completamente outro: do outro lado de cada decisão havia clientes pagando."
+    },
+    {
+      "type": "paragraph",
+      "text": "Então a pergunta mudou de novo:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"Qual problema a gente está realmente tentando resolver?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Essa pergunta é desconfortável. Às vezes a resposta é que a feature que alguém pediu não resolve o problema que essa pessoa tem. Às vezes é \"eu ainda não sei, e é assim que a gente descobre\". De um jeito ou de outro, agora a resposta é minha."
+    },
+    {
+      "type": "heading",
+      "text": "Confiante, e parado",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Tem uma parte desse período que eu não esperava. Quanto mais eu crescia, mais confiante eu me sentia. E, ao mesmo tempo, mais parado. Eu conseguia entregar. Conhecia bem a stack, os sistemas, a produção. Essa confiança ajudava a tomar decisões, mas era péssima para me mostrar onde eu tinha parado de crescer."
+    },
+    {
+      "type": "paragraph",
+      "text": "O que me fez andar de novo não foi uma tecnologia nova. Foram pessoas. Passei a ter mais ajuda de devs mais experientes: staffs, managers, seniors, pessoas que tinham de experiência o que eu tenho de idade. Isso me ensinou muito, e pouquíssimo disso era sobre sintaxe. Boa parte do que eu descrevi acima, as perguntas que eu faço antes de escrever qualquer coisa, eu aprendi vendo como elas trabalhavam."
+    },
+    {
+      "type": "paragraph",
+      "text": "A outra direção me surpreendeu mais. Ajudar pessoas que estão no começo da carreira também me ajudou. Explicar uma coisa é o jeito mais rápido de descobrir se você realmente entende, e responder às dúvidas de outra pessoa te obriga a organizar o que você sabe. Isso moldou como eu estudo, como eu aplico o que aprendo e como eu repasso o conhecimento."
+    },
+    {
+      "type": "paragraph",
+      "text": "Acho que essa é a parte da senioridade que não cabe num currículo: aprender com quem está à sua frente enquanto ajuda quem está começando, ao mesmo tempo."
+    },
+    {
+      "type": "heading",
+      "text": "O problema muda",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Se eu tivesse que resumir a mudança inteira numa frase, seria esta: o código continua difícil, mas deixa de ser o gargalo."
+    },
+    {
+      "type": "paragraph",
+      "text": "O que passa a ser difícil:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Descobrir o que realmente precisa ser construído.** Os requisitos chegam incompletos, e a parte que falta costuma ser a parte importante.",
+        "**Escolher trade-offs.** Toda opção custa alguma coisa. O trabalho é saber o quê, e dizer isso em voz alta.",
+        "**Trabalhar dentro de sistemas existentes.** A maior parte do trabalho real não é greenfield. É mudar algo de que as pessoas dependem enquanto elas estão usando.",
+        "**Prever consequências.** O schema que você escolhe hoje decide o que vai ser barato e o que vai ser doloroso pelos próximos dois anos.",
+        "**Trabalhar com incerteza.** Decidir com 60% da informação porque esperar pelos 100% custa mais.",
+        "**Equilibrar velocidade e qualidade.** Não como slogan. Como uma escolha concreta, numa feature específica, nesta semana.",
+        "**Entender o impacto.** Um erro de frontend no checkout não é bug de UI. É receita perdida que nenhum dashboard técnico mostra."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Nada disso substitui código. Fica em cima dele. Você ainda precisa escrever a query, o componente, a migration. Mas a hora mais difícil da semana raramente acontece no editor."
+    },
+    {
+      "type": "heading",
+      "text": "O mercado percebe",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Demorei para perceber que o mercado acompanhava essa mesma mudança, só que com atraso."
+    },
+    {
+      "type": "paragraph",
+      "text": "No começo, o jeito como você é avaliado é quase todo legível num currículo: quais tecnologias você conhece, quais frameworks, quais projetos construiu, quantos anos de experiência tem, se consegue implementar uma feature. Faz sentido. Nessa fase, esses são mesmo os melhores sinais de que você consegue executar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Conforme o escopo cresce, esses sinais deixam de bastar. O que passa a importar é mais difícil de listar:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "ownership: se as coisas que você toca chegam ao fim, incluindo o que vem depois do deploy",
+        "autonomia: quanta direção você precisa para fazer um problema andar",
+        "tomada de decisão, e se você consegue explicar as decisões que tomou",
+        "arquitetura, não como diagrama, mas como consequência",
+        "impacto no produto, não só volume de entrega",
+        "comunicação, principalmente sobre trade-offs e risco",
+        "conforto com ambiguidade",
+        "a capacidade de conectar uma escolha técnica ao que o negócio está tentando fazer"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "O que muda não é só como você é avaliado. É o tipo de oportunidade que aparece. Tarefas com escopo fechado viram problemas abertos. \"Você consegue construir isso?\" vira \"você consegue descobrir o que a gente deveria fazer aqui?\". A confiança é outra, e a responsabilidade que vem junto também."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quero tomar cuidado aqui. Isto não é uma promessa de salário nem um caminho de carreira garantido. Mercados mudam, empresas mudam, e muita gente é subestimada ou superestimada por motivos que não têm nada a ver com nada disso. É só o que eu percebi: o valor percebido tende a acompanhar o tamanho dos problemas que confiam a você, mais do que o tamanho da sua lista de stack."
+    },
+    {
+      "type": "heading",
+      "text": "O que mudou para mim",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Se você comparar minha stack de 2022 com a de hoje, ela cresceu. Mas não foi isso que mudou. Eu poderia listar todas as tecnologias que já usei e isso não explicaria a diferença entre como eu trabalhava naquela época e como trabalho agora."
+    },
+    {
+      "type": "paragraph",
+      "text": "O que mudou foi por onde eu começo. Eu começava pela implementação. Hoje começo pelo problema, e tento desconfiar dele antes de confiar. Pergunto o que acontece depois do deploy, quem percebe quando quebra e do que a gente está abrindo mão. Parei de tratar \"ninguém se opôs\" como \"estava certo\"."
+    },
+    {
+      "type": "paragraph",
+      "text": "Também mudei o que considero pronto. Pronto já significou mergeado. Depois significou em produção. Hoje significa que o problema foi de fato resolvido, e que eu consigo explicar por que esta solução e não outra."
+    },
+    {
+      "type": "paragraph",
+      "text": "E quase nada disso eu descobri sozinho. Veio de pessoas que já tinham passado por ali antes de mim, e de ter que explicar para quem ainda não tinha passado."
+    },
+    {
+      "type": "heading",
+      "text": "Ainda estou aprendendo",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Não acho que cheguei a lugar nenhum. Tem coisas em que eu ainda estou trabalhando: saber quando o bom o suficiente realmente é suficiente, distinguir um trade-off de um atalho, e dizer \"eu errei\" mais rápido do que eu dizia. E continuo aprendendo do mesmo jeito que aprendi quase tudo: com quem está mais à frente, e explicando para quem está começando."
+    },
+    {
+      "type": "paragraph",
+      "text": "E tenho quase certeza de que parte do que eu acredito hoje vai me parecer ingênuo daqui a alguns anos, do mesmo jeito que minhas primeiras decisões de arquitetura me parecem agora. Tudo bem. Acho que esse é o ponto."
+    },
+    {
+      "type": "paragraph",
+      "text": "Código vai continuar fazendo parte do trabalho. Eu ainda gosto dele, e desconfio de engenheiros que param de se importar com ele. Mas em algum momento, escrever código deixa de ser a parte difícil. A parte difícil é tudo em volta: entender o problema, escolher do que abrir mão e assumir o resultado."
+    },
+    {
+      "type": "paragraph",
+      "text": "Essa é a parte que eu ainda estou aprendendo."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "For a long time I measured my progress by what I could build. A new framework learned, a new kind of app shipped, one more line on the stack section of my CV. It felt like the right scoreboard, because early on it mostly was."
+    },
+    {
+      "type": "paragraph",
+      "text": "What I didn't notice was the moment the scoreboard stopped matching the game. The code didn't get easier, exactly. It just stopped being the part that kept me up at night. The hard part had moved somewhere else: deciding what to build, deciding what not to build, and living with the consequences of both."
+    },
+    {
+      "type": "paragraph",
+      "text": "This post is my attempt to describe that shift as I lived it. It's not a framework for deciding who is senior. Titles mean different things in different companies and different markets. In 2025 I was a Software Engineer at one company and a Senior Software Engineer at another, at the same time, and a few months later a Full Stack Developer at a third. The work behind those titles wasn't nearly as different as the words. So read this as one engineer's view of how the problems changed, not as a ladder anyone has to climb."
+    },
+    {
+      "type": "heading",
+      "text": "Junior: learning to execute",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "I started in 2022, prototyping a delivery app, web and mobile, while I was still in college. I was alone on it, which meant I made every decision: the architecture, the data model, how the pieces talked to each other. For a while I took that as a sign I was further along than I was."
+    },
+    {
+      "type": "paragraph",
+      "text": "It took me years to understand the difference. Making decisions nobody reviews is not the same as making good decisions. Nobody told me a choice was wrong, so I assumed it wasn't. I was making architecture decisions without knowing what the alternatives were, what they cost, or what would break six months later. I didn't know what I didn't know."
+    },
+    {
+      "type": "paragraph",
+      "text": "When I joined a team in 2024, working on web and mobile apps with React, Next.js, React Native and Flutter, the shape of my work became clearer, and honestly more comfortable. Tasks came well defined. Someone had already decided what the screen should do; my job was to make it do that. The question I asked all day was:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"How do I implement this?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "That question is not a small one. At that stage it's the right question. You're learning the stack, the codebase, the conventions nobody wrote down, and the difference between code that works on your machine and code that survives review. I needed guidance often, and I needed it to be specific."
+    },
+    {
+      "type": "paragraph",
+      "text": "Looking back, the main thing I was building wasn't features. It was execution: the ability to take something defined and turn it into working software without drama. Everything that came later depends on that. You can't reason about trade-offs in code you still struggle to write."
+    },
+    {
+      "type": "heading",
+      "text": "Mid-level: learning to own",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The change to mid-level didn't come with a new kind of task. It came with less instruction attached to the same kind of task."
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of \"build this screen,\" it became \"we need this integration.\" I worked on integrations with Mercado Livre, Shopee and Meta, and I owned publishing and maintaining iOS apps through [Apple Developer](https://developer.apple.com/): the release cycle, the App Store review guidelines, the part of the work that starts after the pull request is merged. That last part taught me something the code never did. A feature isn't done when it works. It's done when it's in users' hands and still working."
+    },
+    {
+      "type": "paragraph",
+      "text": "External systems force this lesson on you. Their APIs time out, change without notice, send the same event twice, or answer successfully with half the data missing. So the questions I asked started to change. What happens when this call fails? What if this webhook arrives twice? How do I test this without charging a real card? How will I know it broke in production before a customer tells me?"
+    },
+    {
+      "type": "paragraph",
+      "text": "The question underneath all of them was:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"What's the best way to solve this?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "That question assumes the problem is already correct. Someone else decided what we're solving; I decide how. I became responsible for edge cases, tests, performance and deploys, and I needed less and less detail in the ticket to get it done."
+    },
+    {
+      "type": "paragraph",
+      "text": "It's a real step, and for a while it feels like the whole job. You're trusted. You ship. People stop checking every line. It's easy to believe that the next step is just more of the same: bigger features, more complex systems, more technologies."
+    },
+    {
+      "type": "paragraph",
+      "text": "For me it wasn't."
+    },
+    {
+      "type": "heading",
+      "text": "Senior: learning to decide",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The clearest sign that my work had changed was that I started getting problems instead of tasks."
+    },
+    {
+      "type": "paragraph",
+      "text": "Not \"build X,\" but \"this screen is slow,\" \"this system needs to move off Firestore,\" \"customers can't pay and we don't know why.\" No spec, sometimes no clear owner, and often incomplete information about what was actually happening."
+    },
+    {
+      "type": "heading",
+      "text": "New problems",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "The problems themselves took a different shape. They were less often about a feature and more often about a system that was already running, with people depending on it."
+    },
+    {
+      "type": "paragraph",
+      "text": "An ERP focused on fleet management that I worked on had to move its core from Firestore to PostgreSQL, and six separate products had to be consolidated into one multi-tenant deployment. The constraint that shaped everything was that the operation couldn't stop. Writing the new schema was not the hard part. The hard part was deciding how to migrate module by module, what could coexist and for how long, and what risk we were willing to accept at each step. None of that fits in a ticket."
+    },
+    {
+      "type": "heading",
+      "text": "New responsibilities",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "The responsibilities changed too, and they were harder to notice, because nobody hands them to you in a ticket."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**What happens after deploy.** On a web and mobile product used by thousands of people, being responsible meant crash reporting, logs and metrics: knowing something broke before a customer tells you.",
+        "**Other people's money and data.** Payments and webhooks, where the same event can arrive twice and a careless retry charges someone again. And deciding what not to collect: in a payment flow, what we left out of the instrumentation mattered as much as what we captured.",
+        "**Translating trade-offs.** Explaining to people who don't read code what we're giving up, why, and what it will cost later.",
+        "**Building less.** Questioning whether the requested feature solves the problem, and sometimes arguing against building it.",
+        "**Owning the call.** Deciding without someone validating each step, and owning it when it turns out wrong."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Building a product from scratch again is what made the difference obvious to me. In 2022, alone on the delivery app, I made every decision and nobody paid for any of them. Building a multi-tenant marketplace automation platform from zero, with integrations, payments and order flows, I was again making most of the decisions. The autonomy was the same. The weight was completely different: there were paying customers on the other side of each one."
+    },
+    {
+      "type": "paragraph",
+      "text": "So the question moved again:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"What problem are we actually trying to solve?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "That question is uncomfortable. Sometimes the answer is that the feature someone asked for doesn't solve the problem they have. Sometimes it's \"I don't know yet, and here's how we find out.\" Either way, the answer is now mine to give."
+    },
+    {
+      "type": "heading",
+      "text": "Confident, and stuck",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "There's a part of this stretch I didn't expect. The more I grew, the more confident I felt. And, at the same time, the more stuck I felt. I could deliver. I knew my way around the stack, the systems, production. That confidence was useful for making decisions, but it was bad at showing me where I had stopped growing."
+    },
+    {
+      "type": "paragraph",
+      "text": "What got me moving again wasn't a new technology. It was people. I started getting more help from more experienced engineers: staff engineers, managers, seniors, people with as many years of experience as I have years of age. That taught me a lot, and very little of it was about syntax. A good part of what I described above, the questions I ask before writing anything, I learned by watching how they worked."
+    },
+    {
+      "type": "paragraph",
+      "text": "The other direction surprised me more. Helping people at the very start of their careers helped me too. Explaining something is the fastest way to find out whether you really understand it, and answering someone else's questions forces you to organize what you know. It shaped how I study, how I apply what I learn, and how I pass it on."
+    },
+    {
+      "type": "paragraph",
+      "text": "I think that's the part of seniority that doesn't fit on a CV: learning from the people ahead of you while helping the people who are just starting, at the same time."
+    },
+    {
+      "type": "heading",
+      "text": "The problem changes",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "If I had to put the whole shift in one sentence, it would be this: the code stays hard, but it stops being the bottleneck."
+    },
+    {
+      "type": "paragraph",
+      "text": "What becomes hard instead:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Figuring out what actually needs to be built.** Requirements arrive incomplete, and the missing part is usually the important part.",
+        "**Choosing trade-offs.** Every option costs something. The job is to know what, and to say it out loud.",
+        "**Working inside existing systems.** Most real work isn't greenfield. It's changing something people depend on while they're using it.",
+        "**Predicting consequences.** The schema you pick today decides what's cheap and what's painful for the next two years.",
+        "**Working with uncertainty.** Deciding with 60% of the information because waiting for 100% costs more.",
+        "**Balancing speed and quality.** Not as a slogan. As a concrete choice, on a specific feature, this week.",
+        "**Understanding impact.** A frontend error in checkout isn't a UI bug. It's lost revenue that no technical dashboard shows."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "None of these replace code. They sit on top of it. You still need to write the query, the component, the migration. But the hardest hour of the week is rarely spent in the editor anymore."
+    },
+    {
+      "type": "heading",
+      "text": "The market notices",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "It took me a while to see that the market was tracking the same shift, just with a delay."
+    },
+    {
+      "type": "paragraph",
+      "text": "Early on, the way you get evaluated is mostly legible from a CV: which technologies you know, which frameworks, which projects you built, how many years you have, whether you can implement a feature. That makes sense. At that stage, those really are the best signals of whether you can execute."
+    },
+    {
+      "type": "paragraph",
+      "text": "As the scope grows, those signals stop being enough. The things that start to matter are harder to list:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "ownership: whether things you touch get finished, including the parts after deploy",
+        "autonomy: how much direction you need to move a problem forward",
+        "decision-making, and whether you can explain the decisions you made",
+        "architecture, not as diagrams but as consequences",
+        "impact on the product, not just output",
+        "communication, especially about trade-offs and risk",
+        "comfort with ambiguity",
+        "the ability to connect a technical choice to what the business is trying to do"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "What changes isn't only how you're evaluated. It's the kind of opportunity that shows up. Scoped tasks turn into open problems. \"Can you build this?\" turns into \"can you figure out what we should do here?\" The trust is different, and so is the responsibility that comes with it."
+    },
+    {
+      "type": "paragraph",
+      "text": "I want to be careful here. This isn't a promise about salary or a guaranteed career path. Markets differ, companies differ, and plenty of people are underrated or overrated for reasons that have nothing to do with any of this. It's just what I've noticed: perceived value tends to follow the size of the problems you're trusted with, more than the length of your stack list."
+    },
+    {
+      "type": "heading",
+      "text": "What changed for me",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "If you compare my stack from 2022 with my stack today, it grew. But that's not what changed. I could list every technology I've used and it wouldn't explain the difference between how I worked then and how I work now."
+    },
+    {
+      "type": "paragraph",
+      "text": "What changed is where I start. I used to start with the implementation. Now I start with the problem, and I try to be suspicious of it before I trust it. I ask what happens after deploy, who notices when it breaks, and what we're giving up. I've stopped treating \"nobody objected\" as \"it was right.\""
+    },
+    {
+      "type": "paragraph",
+      "text": "I also changed what I consider done. Done used to mean merged. Then it meant deployed. Now it means the problem is actually solved, and I can explain why this solution and not another."
+    },
+    {
+      "type": "paragraph",
+      "text": "And most of that I didn't figure out alone. It came from people who had been there before me, and from having to explain it to people who hadn't yet."
+    },
+    {
+      "type": "heading",
+      "text": "I'm still learning",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "I don't think I've arrived anywhere. There are things I'm still working on: knowing when good enough really is enough, telling the difference between a trade-off and a shortcut, and saying \"I was wrong\" faster than I used to. I still learn most of it the same way: from the people further ahead, and by explaining it to the people just starting."
+    },
+    {
+      "type": "paragraph",
+      "text": "And I'm pretty sure some of what I believe today will look naive to me in a few years, the same way my first architecture decisions look now. That's fine. I think it's the whole point."
+    },
+    {
+      "type": "paragraph",
+      "text": "Code will keep being part of the job. I still enjoy it, and I don't trust engineers who stop caring about it. But at some point, writing code stops being the hard part. The hard part is everything around it: understanding the problem, choosing what to give up, and owning the result."
+    },
+    {
+      "type": "paragraph",
+      "text": "That's the part I'm still learning."
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "Durante mucho tiempo medí mi evolución por lo que era capaz de construir. Un framework nuevo aprendido, un tipo nuevo de app entregada, una línea más en la sección de stack del currículum. Parecía el marcador correcto, porque al principio casi lo era."
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que no noté fue el momento en que el marcador dejó de reflejar el juego. El código no se volvió exactamente más fácil. Solo dejó de ser la parte que me quitaba el sueño. Lo difícil se había movido a otro lugar: decidir qué construir, decidir qué no construir y convivir con las consecuencias de ambas cosas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Este post es un intento de describir ese cambio tal como lo viví. No es un método para decidir quién es senior. Los títulos significan cosas distintas en empresas distintas y en mercados distintos. En 2025 fui Software Engineer en una empresa y Senior Software Engineer en otra, al mismo tiempo, y unos meses después Full Stack Developer en una tercera. El trabajo detrás de esos títulos era mucho menos distinto que las palabras. Así que léelo como la mirada de un ingeniero sobre cómo cambiaron los problemas, no como una escalera que todos tienen que subir."
+    },
+    {
+      "type": "heading",
+      "text": "Junior: aprender a ejecutar",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Empecé en 2022, prototipando una app de delivery, web y mobile, mientras todavía estaba en la facultad. Estaba solo en ella, lo que significaba que tomaba todas las decisiones: la arquitectura, el modelo de datos, cómo se comunicaban las piezas. Durante un tiempo lo tomé como una señal de que estaba más avanzado de lo que realmente estaba."
+    },
+    {
+      "type": "paragraph",
+      "text": "Me llevó años entender la diferencia. Tomar decisiones que nadie revisa no es lo mismo que tomar buenas decisiones. Nadie me decía que una elección estaba mal, así que asumía que no lo estaba. Tomaba decisiones de arquitectura sin saber cuáles eran las alternativas, cuánto costaban o qué se iba a romper seis meses después. No sabía lo que no sabía."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cuando entré a un equipo en 2024, trabajando en apps web y mobile con React, Next.js, React Native y Flutter, la forma de mi trabajo se volvió más clara y, siendo honesto, más cómoda. Las tareas llegaban bien definidas. Alguien ya había decidido qué debía hacer la pantalla; mi trabajo era hacer que lo hiciera. La pregunta que me hacía todo el día era:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"¿Cómo implemento esto?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "No es una pregunta pequeña. En esa etapa es la pregunta correcta. Estás aprendiendo el stack, el código, las convenciones que nadie escribió y la diferencia entre código que funciona en tu máquina y código que sobrevive al review. Necesitaba orientación a menudo, y necesitaba que fuera específica."
+    },
+    {
+      "type": "paragraph",
+      "text": "Mirando hacia atrás, lo principal que estaba construyendo no eran features. Era ejecución: la capacidad de tomar algo definido y convertirlo en software que funciona, sin drama. Todo lo que vino después depende de eso. No se puede razonar sobre trade-offs en un código que todavía cuesta escribir."
+    },
+    {
+      "type": "heading",
+      "text": "Mid-level: aprender a hacerse cargo",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El paso a mid-level no llegó con un tipo nuevo de tarea. Llegó con menos instrucciones acompañando el mismo tipo de tarea."
+    },
+    {
+      "type": "paragraph",
+      "text": "En lugar de \"construye esta pantalla\", pasó a ser \"necesitamos esta integración\". Trabajé en integraciones con Mercado Livre, Shopee y Meta, y me hice cargo de publicar y mantener apps iOS a través de [Apple Developer](https://developer.apple.com/): el ciclo de release, las pautas de revisión de la App Store, la parte del trabajo que empieza después de que el pull request se mergea. Esa última parte me enseñó algo que el código nunca me enseñó. Una feature no está terminada cuando funciona. Está terminada cuando está en manos de los usuarios y sigue funcionando."
+    },
+    {
+      "type": "paragraph",
+      "text": "Los sistemas externos te obligan a aprender eso. Sus APIs dan timeout, cambian sin aviso, envían el mismo evento dos veces o responden con éxito con la mitad de los datos faltando. Así que las preguntas que me hacía empezaron a cambiar. ¿Qué pasa cuando esta llamada falla? ¿Y si este webhook llega dos veces? ¿Cómo pruebo esto sin cobrar una tarjeta real? ¿Cómo voy a saber que se rompió en producción antes de que un cliente me lo diga?"
+    },
+    {
+      "type": "paragraph",
+      "text": "La pregunta debajo de todas ellas era:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"¿Cuál es la mejor forma de resolver esto?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Esa pregunta asume que el problema ya es el correcto. Otra persona decidió qué estamos resolviendo; yo decido cómo. Pasé a ser responsable de edge cases, tests, performance y deploys, y necesitaba cada vez menos detalle en el ticket para entregar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Es un paso real, y durante un tiempo parece que es todo el trabajo. Confían en ti. Entregas. La gente deja de revisar cada línea. Es fácil creer que el siguiente paso es solo más de lo mismo: features más grandes, sistemas más complejos, más tecnologías."
+    },
+    {
+      "type": "paragraph",
+      "text": "Para mí no lo fue."
+    },
+    {
+      "type": "heading",
+      "text": "Senior: aprender a decidir",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La señal más clara de que mi trabajo había cambiado fue que empecé a recibir problemas en lugar de tareas."
+    },
+    {
+      "type": "paragraph",
+      "text": "No \"construye X\", sino \"esta pantalla está lenta\", \"este sistema tiene que salir de Firestore\", \"los clientes no pueden pagar y no sabemos por qué\". Sin especificación, a veces sin un responsable claro, y muchas veces con información incompleta sobre lo que realmente estaba pasando."
+    },
+    {
+      "type": "heading",
+      "text": "Nuevos problemas",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Los problemas mismos cambiaron de forma. Pasaron a ser menos sobre una feature y más sobre un sistema que ya estaba funcionando, con gente que dependía de él."
+    },
+    {
+      "type": "paragraph",
+      "text": "Un ERP enfocado en la gestión de flotas en el que trabajé tenía que migrar su core de Firestore a PostgreSQL, y seis productos separados tenían que consolidarse en un único deploy multi-tenant. La restricción que definió todo fue que la operación no podía detenerse. Escribir el schema nuevo no era la parte difícil. Lo difícil era decidir cómo migrar módulo a módulo, qué podía coexistir y por cuánto tiempo, y qué riesgo estábamos dispuestos a aceptar en cada etapa. Nada de eso cabe en un ticket."
+    },
+    {
+      "type": "heading",
+      "text": "Nuevas responsabilidades",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Las responsabilidades también cambiaron, y fueron más difíciles de notar, porque nadie te las entrega en un ticket."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Lo que pasa después del deploy.** En un producto web y mobile usado por miles de personas, ser responsable significó crash reporting, logs y métricas: saber que algo se rompió antes de que un cliente te lo diga.",
+        "**El dinero y los datos de otros.** Pagos y webhooks, donde el mismo evento puede llegar dos veces y un retry descuidado le cobra a alguien de nuevo. Y decidir qué no recolectar: en un flujo de pago, lo que dejamos fuera de la instrumentación importó tanto como lo que capturamos.",
+        "**Traducir trade-offs.** Explicar a quien no lee código a qué estamos renunciando, por qué y cuánto va a costar después.",
+        "**Construir menos.** Cuestionar si la feature pedida resuelve el problema, y a veces argumentar en contra de construirla.",
+        "**Hacerse cargo de la decisión.** Decidir sin que alguien valide cada paso, y hacerse cargo cuando resulta equivocada."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Construir un producto desde cero otra vez fue lo que me hizo evidente la diferencia. En 2022, solo con la app de delivery, tomaba todas las decisiones y nadie pagaba por ninguna. Construyendo desde cero una plataforma multi-tenant de automatización de marketplace, con integraciones, pagos y flujos de pedidos, volví a tomar la mayoría de las decisiones. La autonomía era la misma. El peso era completamente otro: del otro lado de cada decisión había clientes pagando."
+    },
+    {
+      "type": "paragraph",
+      "text": "Así que la pregunta cambió otra vez:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**\"¿Qué problema estamos intentando resolver realmente?\"**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Esa pregunta es incómoda. A veces la respuesta es que la feature que alguien pidió no resuelve el problema que tiene. A veces es \"todavía no lo sé, y así es como lo averiguamos\". De una forma u otra, ahora la respuesta me toca a mí."
+    },
+    {
+      "type": "heading",
+      "text": "Seguro, y estancado",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Hay una parte de esta etapa que no esperaba. Cuanto más crecía, más seguro me sentía. Y, al mismo tiempo, más estancado. Podía entregar. Conocía bien el stack, los sistemas, la producción. Esa seguridad servía para tomar decisiones, pero era pésima para mostrarme dónde había dejado de crecer."
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que me hizo avanzar otra vez no fue una tecnología nueva. Fueron personas. Empecé a recibir más ayuda de devs con más experiencia: staff engineers, managers, seniors, personas que tenían de experiencia los años que yo tengo de edad. Eso me enseñó muchísimo, y casi nada tenía que ver con sintaxis. Buena parte de lo que describí arriba, las preguntas que hago antes de escribir cualquier cosa, lo aprendí viendo cómo trabajaban."
+    },
+    {
+      "type": "paragraph",
+      "text": "La otra dirección me sorprendió más. Ayudar a personas que están empezando su carrera también me ayudó a mí. Explicar algo es la forma más rápida de descubrir si realmente lo entiendes, y responder las dudas de otra persona te obliga a ordenar lo que sabes. Eso moldeó cómo estudio, cómo aplico lo que aprendo y cómo transmito el conocimiento."
+    },
+    {
+      "type": "paragraph",
+      "text": "Creo que esa es la parte de la seniority que no cabe en un currículum: aprender de quienes van por delante mientras ayudas a quienes están empezando, al mismo tiempo."
+    },
+    {
+      "type": "heading",
+      "text": "El problema cambia",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si tuviera que resumir todo el cambio en una frase, sería esta: el código sigue siendo difícil, pero deja de ser el cuello de botella."
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que pasa a ser difícil:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Descubrir qué hay que construir realmente.** Los requisitos llegan incompletos, y la parte que falta suele ser la importante.",
+        "**Elegir trade-offs.** Toda opción cuesta algo. El trabajo es saber qué, y decirlo en voz alta.",
+        "**Trabajar dentro de sistemas existentes.** La mayor parte del trabajo real no es greenfield. Es cambiar algo de lo que la gente depende mientras lo está usando.",
+        "**Prever consecuencias.** El schema que eliges hoy decide qué será barato y qué será doloroso durante los próximos dos años.",
+        "**Trabajar con incertidumbre.** Decidir con el 60% de la información porque esperar el 100% cuesta más.",
+        "**Equilibrar velocidad y calidad.** No como eslogan. Como una elección concreta, en una feature específica, esta semana.",
+        "**Entender el impacto.** Un error de frontend en el checkout no es un bug de UI. Es ingreso perdido que ningún dashboard técnico muestra."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Nada de esto reemplaza al código. Se apoya sobre él. Todavía hay que escribir la query, el componente, la migration. Pero la hora más difícil de la semana rara vez pasa en el editor."
+    },
+    {
+      "type": "heading",
+      "text": "El mercado lo nota",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Me llevó un tiempo ver que el mercado seguía el mismo cambio, solo que con retraso."
+    },
+    {
+      "type": "paragraph",
+      "text": "Al principio, la forma en que te evalúan es casi toda legible en un currículum: qué tecnologías conoces, qué frameworks, qué proyectos construiste, cuántos años de experiencia tienes, si puedes implementar una feature. Tiene sentido. En esa etapa, esas son realmente las mejores señales de que puedes ejecutar."
+    },
+    {
+      "type": "paragraph",
+      "text": "A medida que crece el alcance, esas señales dejan de ser suficientes. Lo que empieza a importar es más difícil de enumerar:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "ownership: si las cosas que tocas llegan a terminarse, incluida la parte después del deploy",
+        "autonomía: cuánta dirección necesitas para hacer avanzar un problema",
+        "toma de decisiones, y si puedes explicar las decisiones que tomaste",
+        "arquitectura, no como diagramas sino como consecuencias",
+        "impacto en el producto, no solo volumen de entrega",
+        "comunicación, sobre todo acerca de trade-offs y riesgo",
+        "comodidad con la ambigüedad",
+        "la capacidad de conectar una elección técnica con lo que el negocio intenta lograr"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que cambia no es solo cómo te evalúan. Es el tipo de oportunidad que aparece. Las tareas acotadas se convierten en problemas abiertos. \"¿Puedes construir esto?\" se convierte en \"¿puedes descubrir qué deberíamos hacer aquí?\". La confianza es otra, y la responsabilidad que viene con ella también."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quiero tener cuidado aquí. Esto no es una promesa de salario ni un camino de carrera garantizado. Los mercados cambian, las empresas cambian, y mucha gente es subestimada o sobreestimada por razones que no tienen nada que ver con todo esto. Es solo lo que he notado: el valor percibido tiende a seguir el tamaño de los problemas que te confían, más que el largo de tu lista de stack."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que cambió para mí",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si comparas mi stack de 2022 con la de hoy, creció. Pero no es eso lo que cambió. Podría listar todas las tecnologías que usé y no explicaría la diferencia entre cómo trabajaba entonces y cómo trabajo ahora."
+    },
+    {
+      "type": "paragraph",
+      "text": "Lo que cambió es por dónde empiezo. Antes empezaba por la implementación. Ahora empiezo por el problema, y trato de desconfiar de él antes de confiar. Pregunto qué pasa después del deploy, quién se entera cuando se rompe y a qué estamos renunciando. Dejé de tratar \"nadie se opuso\" como \"estaba bien\"."
+    },
+    {
+      "type": "paragraph",
+      "text": "También cambié lo que considero terminado. Terminado significaba mergeado. Después significó en producción. Ahora significa que el problema está realmente resuelto, y que puedo explicar por qué esta solución y no otra."
+    },
+    {
+      "type": "paragraph",
+      "text": "Y casi nada de eso lo descubrí solo. Vino de personas que ya habían pasado por ahí antes que yo, y de tener que explicárselo a quienes todavía no."
+    },
+    {
+      "type": "heading",
+      "text": "Todavía estoy aprendiendo",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "No creo haber llegado a ningún lado. Hay cosas en las que todavía estoy trabajando: saber cuándo lo suficientemente bueno realmente es suficiente, distinguir un trade-off de un atajo, y decir \"me equivoqué\" más rápido que antes. Y sigo aprendiendo de la misma forma en que aprendí casi todo: de quienes van más adelante, y explicándoselo a quienes están empezando."
+    },
+    {
+      "type": "paragraph",
+      "text": "Y estoy casi seguro de que parte de lo que creo hoy me va a parecer ingenuo dentro de unos años, igual que mis primeras decisiones de arquitectura me lo parecen ahora. Está bien. Creo que de eso se trata."
+    },
+    {
+      "type": "paragraph",
+      "text": "El código va a seguir siendo parte del trabajo. Todavía lo disfruto, y desconfío de los ingenieros que dejan de preocuparse por él. Pero en algún momento, escribir código deja de ser la parte difícil. La parte difícil es todo lo que lo rodea: entender el problema, elegir a qué renunciar y hacerse cargo del resultado."
+    },
+    {
+      "type": "paragraph",
+      "text": "Esa es la parte que todavía estoy aprendiendo."
+    }
+  ],
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "長い間、私は自分の成長を「何を作れるか」で測っていました。新しいフレームワークを覚え、新しい種類のアプリをリリースし、履歴書の技術スタック欄に一行増える。それが正しいスコアボードだと感じていましたし、最初のうちはほぼその通りでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "気づかなかったのは、そのスコアボードが実際の試合と噛み合わなくなった瞬間です。コードが簡単になったわけではありません。ただ、夜も眠れなくなるほど悩む部分ではなくなりました。難しさは別の場所に移っていたのです。何を作るかを決めること、何を作らないかを決めること、そしてその両方の結果を引き受けること。"
+    },
+    {
+      "type": "paragraph",
+      "text": "この記事は、その変化を自分が経験したとおりに書こうとする試みです。誰がシニアかを判定するための枠組みではありません。肩書きの意味は会社によっても市場によっても違います。2025年、私はある会社ではSoftware Engineer、別の会社ではSenior Software Engineerとして同時に働き、数か月後には3社目でFull Stack Developerでした。その肩書きの裏にある仕事は、言葉ほど違ってはいませんでした。だからこれは、誰もが登るべき階段としてではなく、問題の性質がどう変わったかについての一人のエンジニアの見方として読んでください。"
+    },
+    {
+      "type": "heading",
+      "text": "ジュニア：実行することを学ぶ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "私は2022年、まだ大学に通いながら、Webとモバイルのデリバリーアプリをプロトタイプとして作ることから始めました。一人で作っていたので、アーキテクチャ、データモデル、各部分の連携方法など、すべての判断を自分で下していました。しばらくの間、それを自分が実際以上に先へ進んでいる証拠だと受け取っていました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "その違いを理解するのに何年もかかりました。誰にもレビューされない判断を下すことは、良い判断を下すことと同じではありません。誰も選択が間違っていると言わなかったので、間違っていないと思い込んでいました。他の選択肢が何か、それがどれだけのコストを伴うのか、半年後に何が壊れるのかも知らないまま、アーキテクチャの判断をしていました。自分が何を知らないのかを知らなかったのです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "2024年にチームに加わり、React、Next.js、React Native、FlutterでWebとモバイルのアプリを作るようになると、仕事の形ははっきりし、正直に言えば居心地も良くなりました。タスクは明確に定義された状態で届きました。画面が何をすべきかは誰かがすでに決めていて、私の仕事はそれを実現することでした。一日中自分に問いかけていたのは、この質問です。"
+    },
+    {
+      "type": "paragraph",
+      "text": "**「これをどう実装するか？」**"
+    },
+    {
+      "type": "paragraph",
+      "text": "これは小さな問いではありません。その段階では正しい問いです。技術スタック、コードベース、誰も書き残していない慣習、そして自分のマシンで動くコードとレビューを通るコードの違いを学んでいる最中だからです。私は頻繁に助言を必要としていましたし、それも具体的な助言が必要でした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "振り返ると、私が主に築いていたのは機能ではありませんでした。実行力です。定義されたものを受け取り、揉めることなく動くソフトウェアに変える力。その後のすべてはこれに依存しています。まだ書くのに苦労しているコードについて、トレードオフを考えることはできません。"
+    },
+    {
+      "type": "heading",
+      "text": "ミドル：オーナーシップを学ぶ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ミドルへの移行は、新しい種類のタスクとともに訪れたわけではありませんでした。同じ種類のタスクに付いてくる指示が減った、という形で訪れました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "「この画面を作って」ではなく、「この連携が必要だ」になりました。Mercado Livre、Shopee、Metaとの連携に取り組み、[Apple Developer](https://developer.apple.com/)を通じたiOSアプリの公開と保守を担当しました。リリースサイクル、App Storeの審査ガイドライン、プルリクエストがマージされた後に始まる仕事の部分です。この最後の部分は、コードが教えてくれなかったことを教えてくれました。機能は動いたときに完成するのではありません。ユーザーの手に届き、動き続けているときに完成するのです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "外部システムはこの教訓を否応なく突きつけてきます。APIはタイムアウトし、予告なく仕様が変わり、同じイベントを二度送り、データの半分が欠けたまま成功を返してきます。だから自分への問いが変わり始めました。この呼び出しが失敗したらどうなるか。このWebhookが二度届いたら？本物のカードに課金せずにどうテストするか。顧客に言われる前に、本番で壊れたことにどう気づくか。"
+    },
+    {
+      "type": "paragraph",
+      "text": "それらすべての根底にあった問いはこれです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "**「これを解決する最善の方法は何か？」**"
+    },
+    {
+      "type": "paragraph",
+      "text": "この問いは、問題そのものがすでに正しいことを前提にしています。何を解決するかは誰かが決め、どう解決するかを私が決める。エッジケース、テスト、パフォーマンス、デプロイに責任を持つようになり、チケットに書かれた詳細が少なくても仕事を進められるようになりました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "これは本物の前進で、しばらくはそれが仕事のすべてのように感じられます。信頼され、リリースし、誰も一行ずつ確認しなくなる。次のステップも同じことの延長、つまりより大きな機能、より複雑なシステム、より多くの技術だと信じやすくなります。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私の場合は、そうではありませんでした。"
+    },
+    {
+      "type": "heading",
+      "text": "シニア：決めることを学ぶ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "仕事が変わったことを示す一番はっきりしたサインは、タスクではなく問題を受け取るようになったことでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "「Xを作って」ではなく、「この画面が遅い」「このシステムをFirestoreから移行する必要がある」「顧客が支払えず、理由が分からない」。仕様はなく、明確な担当者がいないこともあり、実際に何が起きているのかについての情報も不完全なことが多い。"
+    },
+    {
+      "type": "heading",
+      "text": "新しい問題",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "問題そのものの形が変わりました。一つの機能についての問題は減り、すでに稼働していて、人々が頼っているシステムについての問題が増えました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私が関わった、フリート管理に特化したERPでは、コアをFirestoreからPostgreSQLへ移行し、6つの別々のプロダクトを1つのマルチテナントのデプロイに統合する必要がありました。すべてを形作った制約は、業務を止められないということでした。新しいスキーマを書くことは難しい部分ではありませんでした。難しかったのは、モジュールごとにどう移行するか、何をどれだけの期間共存させるか、各段階でどのリスクを受け入れるかを決めることでした。そのどれもチケットには収まりません。"
+    },
+    {
+      "type": "heading",
+      "text": "新しい責任",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "責任も変わりました。そしてそれは気づきにくいものでした。誰もチケットで渡してはくれないからです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**デプロイの後に起きること。** 何千人もの人が使うWebとモバイルのプロダクトでは、責任を持つとはクラッシュレポート、ログ、メトリクスを意味しました。顧客に言われる前に、何かが壊れたことに気づくこと。",
+        "**他人のお金とデータ。** 同じイベントが二度届くことがあり、不注意なリトライが誰かに二重に課金してしまう決済とWebhook。そして何を収集しないかを決めること。決済フローでは、計測から外したものが、取得したものと同じくらい重要でした。",
+        "**トレードオフを伝えること。** コードを読まない人に、何を手放しているのか、なぜなのか、後でどれだけのコストになるのかを説明すること。",
+        "**作る量を減らすこと。** 依頼された機能が問題を解決するのかを問い、ときには作らないことを主張すること。",
+        "**判断を引き受けること。** 一歩ごとに誰かの承認を得ることなく判断し、それが間違っていたときには自分で引き受けること。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "もう一度ゼロからプロダクトを作ったことで、その違いがはっきりしました。2022年、一人でデリバリーアプリを作っていたとき、私はすべての判断を下していましたが、そのどれにも誰もお金を払っていませんでした。連携、決済、注文フローを備えたマルチテナントのマーケットプレイス自動化プラットフォームをゼロから作ったとき、私は再び判断の大部分を下していました。自律性は同じでした。重みはまったく違いました。一つひとつの判断の向こう側に、お金を払っている顧客がいたのです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そして問いはまた変わりました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "**「私たちは実際にどんな問題を解決しようとしているのか？」**"
+    },
+    {
+      "type": "paragraph",
+      "text": "この問いは居心地の悪いものです。依頼された機能が、依頼した人の抱える問題を解決しないという答えになることもあります。「まだ分からない。だから、こうやって確かめよう」という答えになることもあります。いずれにしても、今はその答えを出すのは私です。"
+    },
+    {
+      "type": "heading",
+      "text": "自信と停滞",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "この時期には、予想していなかった側面がありました。成長すればするほど自信がつきました。そして同時に、停滞しているとも感じるようになりました。成果は出せました。技術スタックも、システムも、本番環境もよく分かっていました。その自信は判断を下すには役立ちましたが、自分がどこで成長を止めてしまったのかを教えてはくれませんでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "再び前に進ませてくれたのは、新しい技術ではありませんでした。人でした。スタッフエンジニア、マネージャー、シニア、私の年齢と同じくらいの年数の経験を持つ人たちなど、より経験豊富なエンジニアから助けてもらう機会が増えました。そこから本当に多くを学びましたが、構文に関することはほとんどありませんでした。ここまでに書いたことの多く、つまり何かを書く前に自分に投げかける問いは、彼らの働き方を見て学んだものです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "逆の方向は、もっと意外でした。キャリアを始めたばかりの人を助けることが、私自身の助けにもなったのです。何かを説明することは、自分が本当に理解しているかを確かめる一番の近道であり、誰かの疑問に答えることは、自分の知識を整理することを強いてくれます。それが、私の学び方、学んだことの活かし方、そして知識の伝え方を形づくりました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "それこそが、履歴書には書けないシニアリティの一部だと思います。先を行く人から学びながら、同時に、始めたばかりの人を助けること。"
+    },
+    {
+      "type": "heading",
+      "text": "問題が変わる",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "この変化全体を一文にまとめるなら、こうなります。コードは難しいままだが、ボトルネックではなくなる。"
+    },
+    {
+      "type": "paragraph",
+      "text": "代わりに難しくなるのは、次のようなことです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**本当に作るべきものを見極めること。** 要件は不完全な状態で届き、欠けている部分こそが重要な部分であることが多い。",
+        "**トレードオフを選ぶこと。** どの選択肢にもコストがある。仕事は、それが何かを知り、声に出して言うこと。",
+        "**既存のシステムの中で働くこと。** 現実の仕事のほとんどはグリーンフィールドではない。人々が使っている最中に、彼らが頼っているものを変えること。",
+        "**結果を予測すること。** 今日選んだスキーマが、今後2年間、何が安く何が苦痛になるかを決める。",
+        "**不確実性の中で働くこと。** 100%を待つほうが高くつくから、60%の情報で判断する。",
+        "**スピードと品質のバランスを取ること。** スローガンとしてではなく、今週、特定の機能における具体的な選択として。",
+        "**影響を理解すること。** チェックアウトでのフロントエンドのエラーはUIのバグではない。どの技術ダッシュボードにも表れない売上の損失だ。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "これらはどれもコードを置き換えるものではありません。コードの上に積み重なるものです。クエリも、コンポーネントも、マイグレーションも、今でも書く必要があります。ただ、一週間で最も難しい一時間が、エディタの中で過ぎることはほとんどなくなりました。"
+    },
+    {
+      "type": "heading",
+      "text": "市場は気づく",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "市場も同じ変化を、少し遅れて追いかけていることに気づくまで、時間がかかりました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "最初のうち、評価のされ方はほとんど履歴書から読み取れます。どの技術を知っているか、どのフレームワークか、どんなプロジェクトを作ったか、経験は何年か、機能を実装できるか。それは理にかなっています。その段階では、それらが実行できるかどうかを示す本当に最良のシグナルだからです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "担う範囲が広がるにつれて、それらのシグナルだけでは足りなくなります。重要になり始めるものは、リストにしにくいものです。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "オーナーシップ：関わったものが、デプロイ後の部分も含めて最後までやり遂げられるか",
+        "自律性：問題を前に進めるのに、どれだけの指示が必要か",
+        "意思決定、そして下した判断を説明できるか",
+        "図としてではなく、結果としてのアーキテクチャ",
+        "アウトプットの量ではなく、プロダクトへの影響",
+        "コミュニケーション、特にトレードオフとリスクについて",
+        "曖昧さへの耐性",
+        "技術的な選択を、ビジネスが目指していることにつなげる力"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "変わるのは評価のされ方だけではありません。巡ってくる機会の種類が変わります。範囲の決まったタスクが、開かれた問題になります。「これを作れますか？」が「ここで何をすべきか見極められますか？」になる。信頼の質が違い、それに伴う責任も違います。"
+    },
+    {
+      "type": "paragraph",
+      "text": "ここは慎重に書きたいと思います。これは給与の約束でも、保証されたキャリアパスでもありません。市場も会社も違いますし、これとはまったく関係のない理由で過小評価されたり過大評価されたりする人はたくさんいます。これは私が気づいたことにすぎません。認識される価値は、技術スタックのリストの長さよりも、任される問題の大きさについていく傾向がある、ということです。"
+    },
+    {
+      "type": "heading",
+      "text": "私にとって何が変わったか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "2022年の私の技術スタックと今のものを比べれば、増えてはいます。でも、変わったのはそこではありません。使ったことのある技術をすべて並べても、当時の働き方と今の働き方の違いは説明できないでしょう。"
+    },
+    {
+      "type": "paragraph",
+      "text": "変わったのは、どこから始めるかです。以前は実装から始めていました。今は問題から始め、信じる前にまず疑うようにしています。デプロイの後に何が起きるか、壊れたときに誰が気づくか、何を手放しているのかを問います。「誰も反対しなかった」を「正しかった」と見なすのはやめました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "完了の定義も変わりました。かつて完了とはマージされたことでした。次に、デプロイされたことになりました。今は、問題が実際に解決され、なぜ他の方法ではなくこの解決策なのかを説明できることを意味します。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そして、そのほとんどは一人で気づいたものではありません。先にその道を通った人たちから、そしてまだ通っていない人たちに説明しなければならなかったことから得たものです。"
+    },
+    {
+      "type": "heading",
+      "text": "まだ学んでいる",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "どこかに辿り着いたとは思っていません。今も取り組んでいることがあります。十分に良いものが本当に十分なのはいつかを見極めること、トレードオフと手抜きの違いを見分けること、そして以前より早く「私が間違っていた」と言えるようになること。そして今も、ほとんどのことを学んできたのと同じやり方で学んでいます。先を行く人たちから、そして始めたばかりの人たちに説明することを通して。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そして、今信じていることの一部は、数年後には未熟に見えるだろうとほぼ確信しています。最初のアーキテクチャの判断が今そう見えるのと同じように。それでいいのです。それこそが大事なところだと思います。"
+    },
+    {
+      "type": "paragraph",
+      "text": "コードはこれからも仕事の一部であり続けます。今でも書くのは楽しいですし、コードを気にかけなくなったエンジニアを私は信用しません。それでもある時点で、コードを書くことは難しい部分ではなくなります。難しいのはその周りのすべてです。問題を理解すること、何を手放すかを選ぶこと、そして結果を引き受けること。"
+    },
+    {
+      "type": "paragraph",
+      "text": "それが、私がまだ学んでいる部分です。"
+    }
+  ],
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Pendant longtemps, j'ai mesuré ma progression à ce que j'étais capable de construire. Un nouveau framework appris, un nouveau type d'app livré, une ligne de plus dans la section stack de mon CV. Ça ressemblait au bon tableau de score, parce qu'au début, c'était à peu près le cas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce que je n'ai pas remarqué, c'est le moment où le tableau de score a cessé de refléter la partie. Le code n'est pas vraiment devenu plus facile. Il a simplement cessé d'être ce qui m'empêchait de dormir. La difficulté s'était déplacée ailleurs : décider quoi construire, décider quoi ne pas construire, et vivre avec les conséquences des deux."
+    },
+    {
+      "type": "paragraph",
+      "text": "Cet article est une tentative de décrire ce changement tel que je l'ai vécu. Ce n'est pas une grille pour décider qui est senior. Les titres ne veulent pas dire la même chose d'une entreprise à l'autre, ni d'un marché à l'autre. En 2025, j'étais Software Engineer dans une entreprise et Senior Software Engineer dans une autre, en même temps, puis quelques mois plus tard Full Stack Developer dans une troisième. Le travail derrière ces titres était bien moins différent que les mots. Lisez donc ceci comme le regard d'un ingénieur sur la façon dont les problèmes ont changé, pas comme une échelle que tout le monde devrait gravir."
+    },
+    {
+      "type": "heading",
+      "text": "Junior : apprendre à exécuter",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "J'ai commencé en 2022, en prototypant une app de livraison, web et mobile, alors que j'étais encore étudiant. J'étais seul dessus, ce qui voulait dire que je prenais toutes les décisions : l'architecture, le modèle de données, la façon dont les pièces communiquaient. Pendant un temps, j'y ai vu le signe que j'étais plus avancé que je ne l'étais réellement."
+    },
+    {
+      "type": "paragraph",
+      "text": "Il m'a fallu des années pour comprendre la différence. Prendre des décisions que personne ne relit, ce n'est pas la même chose que prendre de bonnes décisions. Personne ne me disait qu'un choix était mauvais, alors je supposais qu'il ne l'était pas. Je prenais des décisions d'architecture sans savoir quelles étaient les alternatives, ce qu'elles coûtaient, ni ce qui allait casser six mois plus tard. Je ne savais pas ce que je ne savais pas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Quand j'ai rejoint une équipe en 2024, sur des apps web et mobiles en React, Next.js, React Native et Flutter, la forme de mon travail est devenue plus claire, et honnêtement plus confortable. Les tâches arrivaient bien définies. Quelqu'un avait déjà décidé ce que l'écran devait faire ; mon travail était de le lui faire faire. La question que je me posais toute la journée était :"
+    },
+    {
+      "type": "paragraph",
+      "text": "**« Comment est-ce que j'implémente ça ? »**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce n'est pas une petite question. À ce stade, c'est la bonne. On apprend la stack, la base de code, les conventions que personne n'a écrites, et la différence entre du code qui marche sur sa machine et du code qui survit à la review. J'avais souvent besoin d'être guidé, et j'avais besoin que ce soit précis."
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec le recul, ce que je construisais surtout, ce n'étaient pas des features. C'était l'exécution : la capacité de prendre quelque chose de défini et d'en faire un logiciel qui fonctionne, sans drame. Tout ce qui est venu ensuite en dépend. On ne peut pas raisonner sur des trade-offs dans un code qu'on a encore du mal à écrire."
+    },
+    {
+      "type": "heading",
+      "text": "Mid-level : apprendre à porter",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le passage à mid-level n'est pas venu avec un nouveau type de tâche. Il est venu avec moins d'instructions autour du même type de tâche."
+    },
+    {
+      "type": "paragraph",
+      "text": "Au lieu de « construis cet écran », c'est devenu « on a besoin de cette intégration ». J'ai travaillé sur des intégrations avec Mercado Livre, Shopee et Meta, et j'étais responsable de la publication et de la maintenance d'apps iOS via [Apple Developer](https://developer.apple.com/) : le cycle de release, les règles de validation de l'App Store, la partie du travail qui commence après le merge de la pull request. Cette dernière partie m'a appris quelque chose que le code ne m'avait jamais appris. Une feature n'est pas finie quand elle fonctionne. Elle est finie quand elle est entre les mains des utilisateurs et qu'elle fonctionne toujours."
+    },
+    {
+      "type": "paragraph",
+      "text": "Les systèmes externes vous imposent cette leçon. Leurs API tombent en timeout, changent sans prévenir, envoient le même événement deux fois ou répondent avec succès alors que la moitié des données manque. Alors les questions que je me posais ont commencé à changer. Que se passe-t-il quand cet appel échoue ? Et si ce webhook arrive deux fois ? Comment tester ça sans débiter une vraie carte ? Comment saurai-je que ça a cassé en production avant qu'un client me le dise ?"
+    },
+    {
+      "type": "paragraph",
+      "text": "La question sous-jacente à toutes celles-là était :"
+    },
+    {
+      "type": "paragraph",
+      "text": "**« Quelle est la meilleure façon de résoudre ça ? »**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Cette question suppose que le problème est déjà le bon. Quelqu'un d'autre a décidé ce qu'on résout ; moi, je décide comment. Je suis devenu responsable des edge cases, des tests, de la performance et des déploiements, et j'avais besoin de moins en moins de détails dans le ticket pour livrer."
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est une vraie étape, et pendant un temps elle ressemble au métier tout entier. On vous fait confiance. Vous livrez. Les gens arrêtent de vérifier chaque ligne. Il est facile de croire que l'étape suivante, c'est simplement plus de la même chose : des features plus grosses, des systèmes plus complexes, plus de technologies."
+    },
+    {
+      "type": "paragraph",
+      "text": "Pour moi, ça ne l'a pas été."
+    },
+    {
+      "type": "heading",
+      "text": "Senior : apprendre à décider",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le signe le plus clair que mon travail avait changé, c'est que j'ai commencé à recevoir des problèmes plutôt que des tâches."
+    },
+    {
+      "type": "paragraph",
+      "text": "Pas « construis X », mais « cet écran est lent », « ce système doit sortir de Firestore », « les clients n'arrivent pas à payer et on ne sait pas pourquoi ». Pas de spécification, parfois pas de responsable clair, et souvent une information incomplète sur ce qui se passait réellement."
+    },
+    {
+      "type": "heading",
+      "text": "De nouveaux problèmes",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Les problèmes eux-mêmes ont changé de forme. Ils portaient moins souvent sur une feature, et plus souvent sur un système déjà en production, dont des gens dépendaient."
+    },
+    {
+      "type": "paragraph",
+      "text": "Un ERP centré sur la gestion de flotte, sur lequel j'ai travaillé, devait migrer son cœur de Firestore vers PostgreSQL, et six produits distincts devaient être consolidés en un seul déploiement multi-tenant. La contrainte qui a tout façonné, c'est que l'activité ne pouvait pas s'arrêter. Écrire le nouveau schéma n'était pas la partie difficile. La partie difficile, c'était de décider comment migrer module par module, ce qui pouvait coexister et pendant combien de temps, et quel risque on acceptait à chaque étape. Rien de tout ça ne tient dans un ticket."
+    },
+    {
+      "type": "heading",
+      "text": "De nouvelles responsabilités",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Les responsabilités ont changé aussi, et elles étaient plus difficiles à remarquer, parce que personne ne vous les donne dans un ticket."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Ce qui se passe après le déploiement.** Sur un produit web et mobile utilisé par des milliers de personnes, être responsable voulait dire crash reporting, logs et métriques : savoir que quelque chose a cassé avant qu'un client vous le dise.",
+        "**L'argent et les données des autres.** Paiements et webhooks, où le même événement peut arriver deux fois et où un retry imprudent débite quelqu'un une seconde fois. Et décider quoi ne pas collecter : dans un flux de paiement, ce qu'on a laissé hors de l'instrumentation a compté autant que ce qu'on a capturé.",
+        "**Traduire les trade-offs.** Expliquer à des gens qui ne lisent pas de code à quoi on renonce, pourquoi, et ce que ça coûtera plus tard.",
+        "**Construire moins.** Se demander si la feature demandée résout le problème, et parfois plaider pour ne pas la construire.",
+        "**Assumer la décision.** Trancher sans que quelqu'un valide chaque étape, et l'assumer quand elle s'avère fausse."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est en construisant à nouveau un produit de zéro que la différence m'est apparue clairement. En 2022, seul sur l'app de livraison, je prenais toutes les décisions et personne n'en payait aucune. En construisant de zéro une plateforme multi-tenant d'automatisation de marketplace, avec intégrations, paiements et flux de commandes, je prenais à nouveau la plupart des décisions. L'autonomie était la même. Le poids était complètement différent : de l'autre côté de chaque décision, il y avait des clients qui payaient."
+    },
+    {
+      "type": "paragraph",
+      "text": "Alors la question a changé à nouveau :"
+    },
+    {
+      "type": "paragraph",
+      "text": "**« Quel problème essaie-t-on vraiment de résoudre ? »**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Cette question est inconfortable. Parfois la réponse, c'est que la feature demandée ne résout pas le problème de la personne qui l'a demandée. Parfois, c'est « je ne sais pas encore, et voilà comment on va le découvrir ». Dans tous les cas, c'est désormais à moi de répondre."
+    },
+    {
+      "type": "heading",
+      "text": "Confiant, et à l'arrêt",
+      "level": 3
+    },
+    {
+      "type": "paragraph",
+      "text": "Il y a une partie de cette période à laquelle je ne m'attendais pas. Plus je progressais, plus je me sentais confiant. Et en même temps, plus je me sentais à l'arrêt. Je savais livrer. Je connaissais bien la stack, les systèmes, la production. Cette confiance aidait à prendre des décisions, mais elle était très mauvaise pour me montrer où j'avais arrêté de progresser."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce qui m'a remis en mouvement, ce n'est pas une nouvelle technologie. Ce sont des personnes. J'ai commencé à recevoir davantage d'aide de développeurs plus expérimentés : des staff engineers, des managers, des seniors, des gens qui avaient autant d'années d'expérience que j'ai d'années tout court. Ça m'a énormément appris, et presque rien de tout ça ne concernait la syntaxe. Une bonne partie de ce que j'ai décrit plus haut, les questions que je me pose avant d'écrire quoi que ce soit, je l'ai appris en les regardant travailler."
+    },
+    {
+      "type": "paragraph",
+      "text": "L'autre sens m'a surpris davantage. Aider des personnes tout au début de leur carrière m'a aidé moi aussi. Expliquer quelque chose est le moyen le plus rapide de savoir si on le comprend vraiment, et répondre aux questions de quelqu'un d'autre oblige à organiser ce qu'on sait. Ça a façonné ma manière d'étudier, d'appliquer ce que j'apprends et de transmettre."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je crois que c'est la partie de la séniorité qui ne tient pas sur un CV : apprendre de ceux qui sont devant soi tout en aidant ceux qui débutent, en même temps."
+    },
+    {
+      "type": "heading",
+      "text": "Le problème change",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "S'il fallait résumer tout ce changement en une phrase, ce serait celle-ci : le code reste difficile, mais il cesse d'être le goulot d'étranglement."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce qui devient difficile à la place :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Comprendre ce qu'il faut vraiment construire.** Les besoins arrivent incomplets, et la partie manquante est généralement la partie importante.",
+        "**Choisir des trade-offs.** Chaque option coûte quelque chose. Le travail consiste à savoir quoi, et à le dire à voix haute.",
+        "**Travailler dans des systèmes existants.** L'essentiel du vrai travail n'est pas du greenfield. C'est modifier quelque chose dont les gens dépendent pendant qu'ils s'en servent.",
+        "**Anticiper les conséquences.** Le schéma choisi aujourd'hui décide de ce qui sera simple et de ce qui sera douloureux pendant les deux prochaines années.",
+        "**Travailler dans l'incertitude.** Décider avec 60 % de l'information parce qu'attendre les 100 % coûte plus cher.",
+        "**Équilibrer vitesse et qualité.** Pas comme un slogan. Comme un choix concret, sur une feature précise, cette semaine.",
+        "**Comprendre l'impact.** Une erreur frontend dans le checkout n'est pas un bug d'UI. C'est du chiffre d'affaires perdu qu'aucun dashboard technique ne montre."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Rien de tout ça ne remplace le code. Ça se pose par-dessus. Il faut toujours écrire la requête, le composant, la migration. Mais l'heure la plus difficile de la semaine se passe rarement dans l'éditeur."
+    },
+    {
+      "type": "heading",
+      "text": "Le marché le remarque",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Il m'a fallu du temps pour voir que le marché suivait le même changement, simplement avec du retard."
+    },
+    {
+      "type": "paragraph",
+      "text": "Au début, la façon dont on est évalué se lit presque entièrement sur un CV : quelles technologies on connaît, quels frameworks, quels projets on a construits, combien d'années d'expérience on a, si on sait implémenter une feature. C'est logique. À ce stade, ce sont vraiment les meilleurs signaux de la capacité à exécuter."
+    },
+    {
+      "type": "paragraph",
+      "text": "À mesure que le périmètre grandit, ces signaux ne suffisent plus. Ce qui commence à compter est plus difficile à lister :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "l'ownership : est-ce que ce que vous touchez va jusqu'au bout, y compris après le déploiement",
+        "l'autonomie : de combien de direction vous avez besoin pour faire avancer un problème",
+        "la prise de décision, et la capacité à expliquer les décisions prises",
+        "l'architecture, non pas comme des schémas mais comme des conséquences",
+        "l'impact sur le produit, pas seulement le volume livré",
+        "la communication, surtout sur les trade-offs et le risque",
+        "l'aisance face à l'ambiguïté",
+        "la capacité à relier un choix technique à ce que l'entreprise cherche à accomplir"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce qui change, ce n'est pas seulement la façon dont on est évalué. C'est le type d'opportunité qui se présente. Les tâches cadrées deviennent des problèmes ouverts. « Tu peux construire ça ? » devient « tu peux trouver ce qu'on devrait faire ici ? ». La confiance est différente, et la responsabilité qui l'accompagne aussi."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je veux être prudent ici. Ce n'est pas une promesse de salaire ni un parcours de carrière garanti. Les marchés diffèrent, les entreprises diffèrent, et beaucoup de gens sont sous-estimés ou surestimés pour des raisons qui n'ont rien à voir avec tout ça. C'est seulement ce que j'ai remarqué : la valeur perçue a tendance à suivre la taille des problèmes qu'on vous confie, plus que la longueur de votre liste de technologies."
+    },
+    {
+      "type": "heading",
+      "text": "Ce qui a changé pour moi",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si vous comparez ma stack de 2022 avec celle d'aujourd'hui, elle a grandi. Mais ce n'est pas ça qui a changé. Je pourrais lister toutes les technologies que j'ai utilisées, ça n'expliquerait pas la différence entre ma façon de travailler à l'époque et celle d'aujourd'hui."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce qui a changé, c'est par où je commence. Avant, je commençais par l'implémentation. Maintenant, je commence par le problème, et j'essaie de m'en méfier avant de lui faire confiance. Je demande ce qui se passe après le déploiement, qui s'en aperçoit quand ça casse, et à quoi on renonce. J'ai arrêté de considérer « personne n'a objecté » comme « c'était juste »."
+    },
+    {
+      "type": "paragraph",
+      "text": "J'ai aussi changé ce que je considère comme fini. Fini voulait dire mergé. Puis déployé. Aujourd'hui, ça veut dire que le problème est réellement résolu, et que je peux expliquer pourquoi cette solution et pas une autre."
+    },
+    {
+      "type": "paragraph",
+      "text": "Et presque rien de tout ça, je ne l'ai découvert seul. Ça vient de gens qui étaient passés par là avant moi, et d'avoir dû l'expliquer à ceux qui n'y étaient pas encore passés."
+    },
+    {
+      "type": "heading",
+      "text": "J'apprends encore",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Je ne pense pas être arrivé quelque part. Il y a des choses sur lesquelles je travaille encore : savoir quand « assez bien » est vraiment assez, faire la différence entre un trade-off et un raccourci, et dire « je me suis trompé » plus vite qu'avant. Et j'apprends toujours de la même façon que j'ai appris presque tout : auprès de ceux qui sont plus loin, et en l'expliquant à ceux qui débutent."
+    },
+    {
+      "type": "paragraph",
+      "text": "Et je suis à peu près sûr qu'une partie de ce que je crois aujourd'hui me paraîtra naïve dans quelques années, comme mes premières décisions d'architecture me le paraissent maintenant. C'est normal. Je crois que c'est tout l'intérêt."
+    },
+    {
+      "type": "paragraph",
+      "text": "Le code restera une partie du métier. J'aime toujours en écrire, et je me méfie des ingénieurs qui cessent de s'en soucier. Mais à un moment donné, écrire du code cesse d'être la partie difficile. La partie difficile, c'est tout ce qui l'entoure : comprendre le problème, choisir à quoi renoncer, et assumer le résultat."
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est la partie que j'apprends encore."
+    }
+  ]
+}

@@ -39,7 +39,7 @@ A ideia é escrever um post sobre micro frontends em que **o próprio post é a 
 ### Micro frontend (`mfe-angular-inspector/`, repo próprio)
 
 - Angular estável atual (`@angular/core` 22.2.0 em 2026-09-24), componentes standalone, **zoneless**.
-- `@angular/elements`: `createCustomElement` registra `<mfe-inspector>` — com guarda `if (!customElements.get("mfe-inspector"))`, porque registrar o mesmo nome duas vezes lança erro.
+- `@angular/elements`: `createCustomElement` registra `<mfe-inspector>` — com guarda `customElements.get("mfe-inspector")` antes **e depois** do `await createApplication()`. Navegar e voltar não reavalia o módulo (uma avaliação por URL); a guarda protege o caso do mesmo arquivo vindo de duas URLs, em que as duas avaliações passariam pelo primeiro check.
 - Build gera **um único ES module**, `inspector.js`, com commit (SHA curto) e horário do build injetados em tempo de build.
 - Deploy: projeto próprio na Vercel, `https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js`.
 - Headers do deploy:

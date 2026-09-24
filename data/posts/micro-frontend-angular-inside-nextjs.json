@@ -43,7 +43,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Experimente: troque o tema ou o idioma na sidebar, e o painel acompanha. Clique no botão dele, e a linha logo abaixo, que pertence ao site e não ao Angular, registra o evento. Tudo no painel é lido em tempo de execução: a versão do Angular, o domínio de onde ele veio, o commit em que foi buildado e quanto custou para baixar."
+      "text": "Experimente: troque o tema ou o idioma do site, e o painel acompanha. Clique no botão dele, e a linha logo abaixo, que pertence ao site e não ao Angular, registra o evento. Tudo no painel é lido em tempo de execução: a versão do Angular, o domínio de onde ele veio, o commit em que foi buildado e quanto custou para baixar."
     },
     {
       "type": "heading",
@@ -78,7 +78,7 @@
     },
     {
       "type": "paragraph",
-      "text": "**Entradas são atributos.** O site passa `locale` e `theme`. O painel tem o próprio dicionário para os cinco idiomas que este site suporta e as próprias cores para cada tema. Nada é herdado do CSS do site."
+      "text": "**Entradas são `locale` e `theme`.** Este site as define como propriedades do elemento; uma página HTML simples pode defini-las como atributos, e o Angular Elements mapeia os dois. O painel tem o próprio dicionário para os cinco idiomas que este site suporta e as próprias cores para cada tema. Nada é herdado do CSS do site."
     },
     {
       "type": "paragraph",
@@ -99,7 +99,7 @@
     },
     {
       "type": "code",
-      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nexport const TAG = \"mfe-inspector\"\n\nexport async function registerInspector(): Promise<void> {\n  if (customElements.get(TAG)) return\n  const app = await createApplication({ providers: [provideZonelessChangeDetection()] })\n  // Checked again: two evaluations of this file can both pass the first check.\n  if (customElements.get(TAG)) return\n  customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n}",
       "language": "typescript"
     },
     {
@@ -123,7 +123,7 @@
     {
       "type": "list",
       "items": [
-        "O painel é entregue num único arquivo de 121 KB, ou 42 KB comprimido. Para um painel com um título, uma lista curta e um botão, esse é o preço de levar um segundo framework para a página.",
+        "O painel é entregue num único arquivo de 119 KB, ou 42 KB comprimido. Para um painel com um título, uma lista curta e um botão, esse é o preço de levar um segundo framework para a página.",
         "Na minha conexão, a mediana de cinco cargas frias foi de 44 ms para baixar o arquivo e 50 ms até o elemento ficar pronto para uso.",
         "Se o arquivo não carrega, o site mostra um aviso curto no lugar do painel em cerca de um terço de segundo, e o resto do post continua funcionando. Para o caso em que o servidor nunca responde, existe um timeout de 8 segundos."
       ],
@@ -147,9 +147,9 @@
       "items": [
         "**Confiar em código de outro domínio.** O site agora executa JavaScript que ele não buildou. Os dados do post só aceitam um micro frontend vindo de uma origem na lista de permitidas, via HTTPS; qualquer outra coisa é descartada antes de a página renderizar.",
         "**Um arquivo, de propósito.** O site importa uma única URL. Se um dia o build do Angular se dividir em chunks, esse contrato quebra em silêncio, então o build falha alto em vez disso.",
-        "**Registrar duas vezes.** Sair da página e voltar pode importar o módulo de novo, e definir a mesma tag duas vezes lança erro. O registro confere antes.",
-        "**Medir entre origens.** Sem o header `Timing-Allow-Origin`, o navegador esconde o tamanho de arquivos de outros domínios, e o painel teria mostrado 0 KB.",
-        "**Deploy independente.** O arquivo é servido com cache de 60 segundos, então um deploy novo do micro frontend chega a este post sem rebuild do site."
+        "**Registrar duas vezes.** Eu esperava que sair da página e voltar rodasse o módulo de novo e lançasse erro na segunda definição da tag. Não acontece: o navegador avalia um módulo uma vez por URL. O que lança erro é o mesmo arquivo carregado de duas URLs, e ali uma checagem simples também não bastava, porque as duas avaliações passam por ela antes de qualquer uma registrar. Então a checagem roda de novo depois que o Angular sobe.",
+        "**Medir entre origens.** Sem o header `Timing-Allow-Origin`, o navegador informa 0 bytes para arquivos de outros domínios, e o painel não conseguiria distinguir o próprio peso de uma cópia em cache. Uma revalidação 304 tem a mesma armadilha: só os headers trafegam, então o painel diz cache em vez de afirmar que o módulo pesa 0,3 KB.",
+        "**Deploy independente.** O site carrega o arquivo em tempo de execução, então um deploy novo do micro frontend chega a este post sem rebuild do site. Testei publicando uma mudança visível só no painel. O cache curto (60 segundos, mais até 5 minutos servindo a versão anterior enquanto revalida) só limita por quanto tempo quem volta pode ver a antiga."
       ],
       "ordered": false
     },
@@ -187,7 +187,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Try it: switch the theme or the language in the sidebar, and the panel follows. Click its button, and the line under it, which belongs to the site and not to Angular, reports the event. Everything in the panel is read at runtime: the Angular version, the domain it came from, the commit it was built from, and how much it cost to download."
+      "text": "Try it: switch this site's theme or language, and the panel follows. Click its button, and the line under it, which belongs to the site and not to Angular, reports the event. Everything in the panel is read at runtime: the Angular version, the domain it came from, the commit it was built from, and how much it cost to download."
     },
     {
       "type": "heading",
@@ -222,7 +222,7 @@
     },
     {
       "type": "paragraph",
-      "text": "**Inputs are attributes.** The site passes `locale` and `theme`. The panel keeps its own dictionary for the five languages this site supports and its own colors for each theme. Nothing is inherited from the site's CSS."
+      "text": "**Inputs are `locale` and `theme`.** This site sets them as properties on the element; a plain HTML page can set them as attributes, and Angular Elements maps both. The panel keeps its own dictionary for the five languages this site supports and its own colors for each theme. Nothing is inherited from the site's CSS."
     },
     {
       "type": "paragraph",
@@ -243,7 +243,7 @@
     },
     {
       "type": "code",
-      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nexport const TAG = \"mfe-inspector\"\n\nexport async function registerInspector(): Promise<void> {\n  if (customElements.get(TAG)) return\n  const app = await createApplication({ providers: [provideZonelessChangeDetection()] })\n  // Checked again: two evaluations of this file can both pass the first check.\n  if (customElements.get(TAG)) return\n  customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n}",
       "language": "typescript"
     },
     {
@@ -267,7 +267,7 @@
     {
       "type": "list",
       "items": [
-        "The panel ships as a single file of 121 KB, or 42 KB compressed. For a panel with a heading, a short list and a button, that's the price of shipping a second framework to the page.",
+        "The panel ships as a single file of 119 KB, or 42 KB compressed. For a panel with a heading, a short list and a button, that's the price of shipping a second framework to the page.",
         "Over my connection, the median of five cold loads was 44 ms to download the file and 50 ms until the element was ready to use.",
         "If the file doesn't load, the site shows a short notice in place of the panel in about a third of a second, and the rest of the post keeps working. For the case where the server never answers, there's an 8-second timeout."
       ],
@@ -291,9 +291,9 @@
       "items": [
         "**Trusting code from another domain.** The site now runs JavaScript it didn't build. The post data only accepts a micro frontend from an allowlisted origin over HTTPS; anything else is discarded before the page renders.",
         "**One file, on purpose.** The site imports a single URL. If the Angular build ever splits into chunks, that contract breaks silently, so the build fails loudly instead.",
-        "**Registering twice.** Leaving the page and coming back can import the module again, and defining the same tag twice throws an error. The registration checks first.",
-        "**Measuring across origins.** Without a `Timing-Allow-Origin` header, the browser hides the size of files from other domains, and the panel would have reported 0 KB.",
-        "**Deploying independently.** The file is served with a 60-second cache, so a new deploy of the micro frontend reaches this post without rebuilding the site."
+        "**Registering twice.** I expected leaving the page and coming back to run the module again and throw on a second definition of the tag. It doesn't: the browser evaluates a module once per URL. What does throw is the same file loaded from two URLs, and a simple check wasn't enough there either, because both evaluations pass it before either one registers. So the check runs again after Angular starts.",
+        "**Measuring across origins.** Without a `Timing-Allow-Origin` header, the browser reports 0 bytes for files from other domains, and the panel couldn't tell its own weight from a cached copy. A 304 revalidation has the same trap: only headers travel, so the panel says cache instead of claiming the module weighs 0.3 KB.",
+        "**Deploying independently.** The site loads the file at runtime, so a new deploy of the micro frontend reaches this post without rebuilding the site. I tested it by publishing a visible change to the panel alone. The short cache (60 seconds, plus up to 5 minutes serving the previous version while it revalidates) only limits how long a returning visitor can see the old one."
       ],
       "ordered": false
     },
@@ -331,7 +331,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Pruébalo: cambia el tema o el idioma en la barra lateral, y el panel lo sigue. Haz clic en su botón, y la línea de abajo, que pertenece al sitio y no a Angular, registra el evento. Todo en el panel se lee en tiempo de ejecución: la versión de Angular, el dominio del que vino, el commit con el que se construyó y cuánto costó descargarlo."
+      "text": "Pruébalo: cambia el tema o el idioma del sitio, y el panel lo sigue. Haz clic en su botón, y la línea de abajo, que pertenece al sitio y no a Angular, registra el evento. Todo en el panel se lee en tiempo de ejecución: la versión de Angular, el dominio del que vino, el commit con el que se construyó y cuánto costó descargarlo."
     },
     {
       "type": "heading",
@@ -366,7 +366,7 @@
     },
     {
       "type": "paragraph",
-      "text": "**Las entradas son atributos.** El sitio pasa `locale` y `theme`. El panel tiene su propio diccionario para los cinco idiomas que soporta este sitio y sus propios colores para cada tema. Nada se hereda del CSS del sitio."
+      "text": "**Las entradas son `locale` y `theme`.** Este sitio las define como propiedades del elemento; una página HTML simple puede definirlas como atributos, y Angular Elements mapea ambas. El panel tiene su propio diccionario para los cinco idiomas que soporta este sitio y sus propios colores para cada tema. Nada se hereda del CSS del sitio."
     },
     {
       "type": "paragraph",
@@ -387,7 +387,7 @@
     },
     {
       "type": "code",
-      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nexport const TAG = \"mfe-inspector\"\n\nexport async function registerInspector(): Promise<void> {\n  if (customElements.get(TAG)) return\n  const app = await createApplication({ providers: [provideZonelessChangeDetection()] })\n  // Checked again: two evaluations of this file can both pass the first check.\n  if (customElements.get(TAG)) return\n  customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n}",
       "language": "typescript"
     },
     {
@@ -411,7 +411,7 @@
     {
       "type": "list",
       "items": [
-        "El panel se entrega en un único archivo de 121 KB, o 42 KB comprimido. Para un panel con un título, una lista corta y un botón, ese es el precio de llevar un segundo framework a la página.",
+        "El panel se entrega en un único archivo de 119 KB, o 42 KB comprimido. Para un panel con un título, una lista corta y un botón, ese es el precio de llevar un segundo framework a la página.",
         "Con mi conexión, la mediana de cinco cargas en frío fue de 44 ms para descargar el archivo y 50 ms hasta que el elemento estuvo listo para usarse.",
         "Si el archivo no carga, el sitio muestra un aviso corto en lugar del panel en aproximadamente un tercio de segundo, y el resto del post sigue funcionando. Para el caso en que el servidor nunca responde, hay un timeout de 8 segundos."
       ],
@@ -435,9 +435,9 @@
       "items": [
         "**Confiar en código de otro dominio.** El sitio ahora ejecuta JavaScript que no construyó. Los datos del post solo aceptan un micro frontend que venga de un origen en la lista de permitidos, por HTTPS; cualquier otra cosa se descarta antes de que la página se renderice.",
         "**Un archivo, a propósito.** El sitio importa una única URL. Si algún día el build de Angular se divide en chunks, ese contrato se rompe en silencio, así que el build falla ruidosamente en su lugar.",
-        "**Registrar dos veces.** Salir de la página y volver puede importar el módulo otra vez, y definir la misma etiqueta dos veces lanza un error. El registro lo comprueba antes.",
-        "**Medir entre orígenes.** Sin el header `Timing-Allow-Origin`, el navegador oculta el tamaño de los archivos de otros dominios, y el panel habría mostrado 0 KB.",
-        "**Deploy independiente.** El archivo se sirve con una caché de 60 segundos, así que un nuevo deploy del micro frontend llega a este post sin reconstruir el sitio."
+        "**Registrar dos veces.** Esperaba que salir de la página y volver ejecutara el módulo otra vez y lanzara un error en la segunda definición de la etiqueta. No pasa: el navegador evalúa un módulo una vez por URL. Lo que sí lanza error es el mismo archivo cargado desde dos URLs, y ahí una comprobación simple tampoco alcanzaba, porque las dos evaluaciones la pasan antes de que cualquiera registre. Así que la comprobación se repite después de que Angular arranca.",
+        "**Medir entre orígenes.** Sin el header `Timing-Allow-Origin`, el navegador informa 0 bytes para archivos de otros dominios, y el panel no podría distinguir su propio peso de una copia en caché. Una revalidación 304 tiene la misma trampa: solo viajan los headers, así que el panel dice caché en lugar de afirmar que el módulo pesa 0,3 KB.",
+        "**Deploy independiente.** El sitio carga el archivo en tiempo de ejecución, así que un nuevo deploy del micro frontend llega a este post sin reconstruir el sitio. Lo probé publicando un cambio visible solo en el panel. La caché corta (60 segundos, más hasta 5 minutos sirviendo la versión anterior mientras revalida) solo limita cuánto tiempo quien vuelve puede ver la antigua."
       ],
       "ordered": false
     },
@@ -475,7 +475,7 @@
     },
     {
       "type": "paragraph",
-      "text": "試してみてください。サイドバーでテーマや言語を切り替えると、パネルも追従します。パネルのボタンをクリックすると、そのすぐ下の行（Angularではなくサイト側のもの）がイベントを表示します。パネルの内容はすべて実行時に読み取られています。Angularのバージョン、読み込み元のドメイン、ビルドされたコミット、そしてダウンロードにかかったコストです。"
+      "text": "試してみてください。このサイトのテーマや言語を切り替えると、パネルも追従します。パネルのボタンをクリックすると、そのすぐ下の行（Angularではなくサイト側のもの）がイベントを表示します。パネルの内容はすべて実行時に読み取られています。Angularのバージョン、読み込み元のドメイン、ビルドされたコミット、そしてダウンロードにかかったコストです。"
     },
     {
       "type": "heading",
@@ -510,7 +510,7 @@
     },
     {
       "type": "paragraph",
-      "text": "**入力は属性。** サイトは`locale`と`theme`を渡します。パネルはこのサイトが対応する五つの言語の辞書と、テーマごとの配色を自分で持っています。サイトのCSSから何も継承しません。"
+      "text": "**入力は`locale`と`theme`。** このサイトはそれらを要素のプロパティとして設定します。普通のHTMLページなら属性として設定でき、Angular Elementsはその両方を対応付けます。パネルはこのサイトが対応する五つの言語の辞書と、テーマごとの配色を自分で持っています。サイトのCSSから何も継承しません。"
     },
     {
       "type": "paragraph",
@@ -531,7 +531,7 @@
     },
     {
       "type": "code",
-      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nexport const TAG = \"mfe-inspector\"\n\nexport async function registerInspector(): Promise<void> {\n  if (customElements.get(TAG)) return\n  const app = await createApplication({ providers: [provideZonelessChangeDetection()] })\n  // Checked again: two evaluations of this file can both pass the first check.\n  if (customElements.get(TAG)) return\n  customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n}",
       "language": "typescript"
     },
     {
@@ -555,7 +555,7 @@
     {
       "type": "list",
       "items": [
-        "パネルは121 KB（圧縮後42 KB）の単一ファイルとして配信されます。見出しと短いリストとボタンだけのパネルにとって、これが二つ目のフレームワークをページに載せる代償です。",
+        "パネルは119 KB（圧縮後42 KB）の単一ファイルとして配信されます。見出しと短いリストとボタンだけのパネルにとって、これが二つ目のフレームワークをページに載せる代償です。",
         "私の回線では、コールドロード5回の中央値で、ファイルのダウンロードに44 ms、要素が使える状態になるまで50 msでした。",
         "ファイルが読み込めない場合、サイトは約3分の1秒でパネルの代わりに短いお知らせを表示し、記事の残りはそのまま動作します。サーバーがまったく応答しない場合に備えて、8秒のタイムアウトもあります。"
       ],
@@ -579,9 +579,9 @@
       "items": [
         "**別ドメインのコードを信頼すること。** サイトは自分でビルドしていないJavaScriptを実行するようになりました。記事のデータは、許可リストにあるオリジンからHTTPSで配信されるマイクロフロントエンドだけを受け入れ、それ以外はページの描画前に破棄します。",
         "**意図的に一つのファイル。** サイトは一つのURLだけをimportします。もしAngularのビルドがチャンクに分かれたら、このコントラクトは黙って壊れるので、代わりにビルドを明示的に失敗させます。",
-        "**二重登録。** ページを離れて戻るとモジュールが再びimportされることがあり、同じタグを二度定義するとエラーになります。登録の前に確認しています。",
-        "**オリジンをまたいだ計測。** `Timing-Allow-Origin`ヘッダーがないと、ブラウザは他ドメインのファイルサイズを隠すので、パネルは0 KBと表示していたはずです。",
-        "**独立したデプロイ。** ファイルは60秒のキャッシュで配信されるので、マイクロフロントエンドの新しいデプロイは、サイトを再ビルドせずにこの記事に反映されます。"
+        "**二重登録。** ページを離れて戻るとモジュールが再実行され、タグの二度目の定義でエラーになると予想していました。実際にはそうなりません。ブラウザはモジュールをURLごとに一度しか評価しないからです。エラーになるのは同じファイルが二つのURLから読み込まれた場合で、そこでは単純なチェックでも足りませんでした。どちらかが登録する前に、二つの評価の両方がチェックを通過してしまうからです。そこで、Angularの起動後にもう一度チェックしています。",
+        "**オリジンをまたいだ計測。** `Timing-Allow-Origin`ヘッダーがないと、ブラウザは他ドメインのファイルを0バイトと報告し、パネルは自分の重さとキャッシュされたコピーを区別できません。304の再検証にも同じ落とし穴があります。やり取りされるのはヘッダーだけなので、パネルはモジュールが0.3 KBだと主張する代わりに「キャッシュ」と表示します。",
+        "**独立したデプロイ。** サイトはファイルを実行時に読み込むので、マイクロフロントエンドの新しいデプロイは、サイトを再ビルドせずにこの記事に届きます。パネルだけに目に見える変更を公開して確かめました。短いキャッシュ（60秒、さらに再検証中は最大5分間前のバージョンを配信）は、再訪した人が古いバージョンを見る時間の上限を決めているだけです。"
       ],
       "ordered": false
     },
@@ -619,7 +619,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Essayez : changez le thème ou la langue dans la barre latérale, et le panneau suit. Cliquez sur son bouton, et la ligne juste en dessous, qui appartient au site et non à Angular, affiche l'événement. Tout dans le panneau est lu à l'exécution : la version d'Angular, le domaine d'où il vient, le commit à partir duquel il a été buildé et ce qu'il a coûté à télécharger."
+      "text": "Essayez : changez le thème ou la langue du site, et le panneau suit. Cliquez sur son bouton, et la ligne juste en dessous, qui appartient au site et non à Angular, affiche l'événement. Tout dans le panneau est lu à l'exécution : la version d'Angular, le domaine d'où il vient, le commit à partir duquel il a été buildé et ce qu'il a coûté à télécharger."
     },
     {
       "type": "heading",
@@ -654,7 +654,7 @@
     },
     {
       "type": "paragraph",
-      "text": "**Les entrées sont des attributs.** Le site transmet `locale` et `theme`. Le panneau a son propre dictionnaire pour les cinq langues que ce site prend en charge et ses propres couleurs pour chaque thème. Rien n'est hérité du CSS du site."
+      "text": "**Les entrées sont `locale` et `theme`.** Ce site les définit comme propriétés de l'élément ; une simple page HTML peut les définir comme attributs, et Angular Elements fait le lien dans les deux cas. Le panneau a son propre dictionnaire pour les cinq langues que ce site prend en charge et ses propres couleurs pour chaque thème. Rien n'est hérité du CSS du site."
     },
     {
       "type": "paragraph",
@@ -675,7 +675,7 @@
     },
     {
       "type": "code",
-      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nconst TAG = \"mfe-inspector\"\n\n// Defining the same tag twice throws, and the host may import this module again.\nif (!customElements.get(TAG)) {\n  createApplication({ providers: [provideZonelessChangeDetection()] }).then((app) => {\n    customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n  })\n}",
+      "code": "import { provideZonelessChangeDetection } from \"@angular/core\"\nimport { createApplication } from \"@angular/platform-browser\"\nimport { createCustomElement } from \"@angular/elements\"\nimport { InspectorComponent } from \"./app/inspector.component\"\n\nexport const TAG = \"mfe-inspector\"\n\nexport async function registerInspector(): Promise<void> {\n  if (customElements.get(TAG)) return\n  const app = await createApplication({ providers: [provideZonelessChangeDetection()] })\n  // Checked again: two evaluations of this file can both pass the first check.\n  if (customElements.get(TAG)) return\n  customElements.define(TAG, createCustomElement(InspectorComponent, { injector: app.injector }))\n}",
       "language": "typescript"
     },
     {
@@ -699,7 +699,7 @@
     {
       "type": "list",
       "items": [
-        "Le panneau est livré dans un seul fichier de 121 Ko, soit 42 Ko compressé. Pour un panneau avec un titre, une courte liste et un bouton, c'est le prix d'un second framework sur la page.",
+        "Le panneau est livré dans un seul fichier de 119 Ko, soit 42 Ko compressé. Pour un panneau avec un titre, une courte liste et un bouton, c'est le prix d'un second framework sur la page.",
         "Sur ma connexion, la médiane de cinq chargements à froid était de 44 ms pour télécharger le fichier et de 50 ms jusqu'à ce que l'élément soit prêt à l'emploi.",
         "Si le fichier ne se charge pas, le site affiche un court avertissement à la place du panneau en environ un tiers de seconde, et le reste de l'article continue de fonctionner. Pour le cas où le serveur ne répond jamais, il y a un timeout de 8 secondes."
       ],
@@ -723,9 +723,9 @@
       "items": [
         "**Faire confiance à du code d'un autre domaine.** Le site exécute désormais du JavaScript qu'il n'a pas buildé. Les données de l'article n'acceptent un micro frontend que s'il vient d'une origine autorisée, en HTTPS ; tout le reste est écarté avant le rendu de la page.",
         "**Un seul fichier, volontairement.** Le site importe une seule URL. Si un jour le build Angular se découpe en chunks, ce contrat casse en silence, donc le build échoue bruyamment à la place.",
-        "**S'enregistrer deux fois.** Quitter la page et y revenir peut réimporter le module, et définir deux fois la même balise lève une erreur. L'enregistrement vérifie d'abord.",
-        "**Mesurer entre origines.** Sans l'en-tête `Timing-Allow-Origin`, le navigateur masque la taille des fichiers d'autres domaines, et le panneau aurait affiché 0 Ko.",
-        "**Déployer indépendamment.** Le fichier est servi avec un cache de 60 secondes : un nouveau déploiement du micro frontend arrive dans cet article sans rebuild du site."
+        "**S'enregistrer deux fois.** Je m'attendais à ce que quitter la page et y revenir réexécute le module et lève une erreur à la seconde définition de la balise. Ce n'est pas le cas : le navigateur évalue un module une seule fois par URL. Ce qui lève une erreur, c'est le même fichier chargé depuis deux URL, et là une simple vérification ne suffisait pas non plus, car les deux évaluations la passent avant que l'une ou l'autre n'enregistre. La vérification est donc refaite après le démarrage d'Angular.",
+        "**Mesurer entre origines.** Sans l'en-tête `Timing-Allow-Origin`, le navigateur indique 0 octet pour les fichiers d'autres domaines, et le panneau ne pourrait pas distinguer son propre poids d'une copie en cache. Une revalidation 304 a le même piège : seuls les en-têtes transitent, donc le panneau indique cache au lieu d'affirmer que le module pèse 0,3 Ko.",
+        "**Déployer indépendamment.** Le site charge le fichier à l'exécution : un nouveau déploiement du micro frontend arrive dans cet article sans rebuild du site. Je l'ai testé en publiant un changement visible sur le panneau seul. Le cache court (60 secondes, plus jusqu'à 5 minutes à servir la version précédente pendant la revalidation) limite seulement combien de temps un visiteur qui revient peut voir l'ancienne."
       ],
       "ordered": false
     },

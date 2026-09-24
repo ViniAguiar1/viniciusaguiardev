@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["**/*.test.ts"],
-    exclude: ["node_modules", ".next", "scripts"],
+    exclude: ["node_modules", ".next", "scripts", "mfe-angular-inspector"],
   },
   resolve: {
     alias: {

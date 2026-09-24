@@ -58,6 +58,28 @@ describe("applyLocaleToData", () => {
 })
 
 describe("normalizeBlocks", () => {
+  it("aceita bloco mfe com origem permitida e tag valida", () => {
+    const result = normalizeBlocks({
+      blocks: [{ type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" }],
+    })
+    expect(result).toEqual([
+      { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
+    ])
+  })
+
+  it("descarta bloco mfe com origem fora da allowlist, sem https ou com tag invalida", () => {
+    const result = normalizeBlocks({
+      blocks: [
+        { type: "mfe", src: "https://evil.example.com/x.js", tag: "mfe-inspector" },
+        { type: "mfe", src: "http://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
+        { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "inspector" },
+        { type: "mfe", tag: "mfe-inspector" },
+        { type: "paragraph", text: "sobra" },
+      ],
+    })
+    expect(result).toEqual([{ type: "paragraph", text: "sobra" }])
+  })
+
   it("normalizes paragraph blocks", () => {
     const result = normalizeBlocks({
       blocks: [{ type: "paragraph", text: "hello" }],

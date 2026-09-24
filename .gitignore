@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Candidatas de capa de post (so a escolhida vai para public/blog/)
 .covers/
+
+# Micro frontend Angular — repo próprio (github.com/ViniAguiar1/mfe-angular-inspector)
+/mfe-angular-inspector/

@@ -3,6 +3,7 @@ import { getAllPosts, getPostBySlug, ContentBlock } from "@/lib/posts"
 import { cn, MONO_CHIP } from "@/lib/utils"
 import Image from "next/image"
 import { CodeBlock } from "@/components/code-block"
+import { MicroFrontend } from "@/components/micro-frontend"
 import { renderInline } from "@/lib/inline-md"
 import React from "react"
 import { getLocale } from "@/lib/i18n-server"
@@ -150,6 +151,8 @@ export default async function PostPage({ params }: PageProps) {
                   </ListTag>
                 )
               }
+              case "mfe":
+                return <MicroFrontend key={i} src={block.src} tag={block.tag} locale={locale} />
               default:
                 return null
             }

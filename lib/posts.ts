@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path"
 import { cache } from "react"
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n"
+import { isAllowedMfeSrc, isValidCustomElementTag } from "@/lib/mfe"
 
 export type ParagraphBlock = {
   type: "paragraph"
@@ -34,7 +35,16 @@ export type ListBlock = {
   items: string[]
 }
 
-export type ContentBlock = ParagraphBlock | CodeBlock | ImageBlock | HeadingBlock | ListBlock
+// Micro frontend carregado em runtime. `src` passa por allowlist de origem
+// em normalizeBlocks: o site executa esse código, então ele só pode vir de
+// um deploy nosso.
+export type MfeBlock = {
+  type: "mfe"
+  src: string
+  tag: string
+}
+
+export type ContentBlock = ParagraphBlock | CodeBlock | ImageBlock | HeadingBlock | ListBlock | MfeBlock
 
 export type Post = {
   slug: string
@@ -189,6 +199,10 @@ export function normalizeBlocks(data: Omit<Partial<Post>, "blocks"> & { blocks?:
         if (items.length) {
           const ordered = Boolean((b as { ordered?: unknown }).ordered)
           allowed.push({ type: "list", ordered, items })
+        }
+      } else if (type === "mfe" && typeof b.src === "string" && typeof b.tag === "string") {
+        if (isAllowedMfeSrc(b.src) && isValidCustomElementTag(b.tag)) {
+          allowed.push({ type: "mfe", src: b.src, tag: b.tag })
         }
       }
     }

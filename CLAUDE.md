@@ -13,6 +13,7 @@ pnpm typecheck    # tsc --noEmit em apps e pacotes
 pnpm test         # Vitest em apps e pacotes
 pnpm aeo          # AEO readiness check do portfolio (threshold 90/100, fails CI if below)
 pnpm --filter portfolio <script>   # rodar um script de um app só
+USES_ZONE_URL=http://localhost:3001 pnpm build   # o build de produção do portfolio exige a URL da zona /uses
 ```
 
 Uses **pnpm** (not npm/yarn). Node 24 locally (via nvm), Node 20 in CI. Turbopack is the bundler for both dev and build.

@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TURBO_CACHE_DIR: .turbo
+      # O build do portfólio grava o rewrite de /uses para a zona e falha sem
+      # esta URL. Aqui só precisa ser válida: o CI não acessa a zona.
+      USES_ZONE_URL: http://localhost:3001
 
     steps:
       - uses: actions/checkout@v4

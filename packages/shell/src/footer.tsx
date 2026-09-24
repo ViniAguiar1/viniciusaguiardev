@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { ZoneLink } from "./zone-link"
 import { getLocale, t } from "@repo/i18n/server"
 import { localePath } from "@repo/i18n"
 
@@ -53,15 +53,15 @@ export async function Footer() {
 
           {/* Right — nav */}
           <div className="flex items-center gap-4 text-sm text-mu">
-            <Link href={localePath(locale, "/projetos")} className="hover:text-fg transition">
+            <ZoneLink href={localePath(locale, "/projetos")} className="hover:text-fg transition">
               {t(locale, { pt: "Projetos", en: "Projects", es: "Proyectos", jp: "プロジェクト", fr: "Projets" })}
-            </Link>
-            <Link href={localePath(locale, "/engenharia")} className="hover:text-fg transition">
+            </ZoneLink>
+            <ZoneLink href={localePath(locale, "/engenharia")} className="hover:text-fg transition">
               {t(locale, { pt: "Engenharia", en: "Engineering", es: "Ingeniería", jp: "エンジニアリング", fr: "Ingénierie" })}
-            </Link>
-            <Link href={localePath(locale, "/sobre")} className="hover:text-fg transition">
+            </ZoneLink>
+            <ZoneLink href={localePath(locale, "/sobre")} className="hover:text-fg transition">
               {t(locale, { pt: "Sobre", en: "About", es: "Acerca", jp: "プロフィール", fr: "À propos" })}
-            </Link>
+            </ZoneLink>
           </div>
         </div>
       </div>

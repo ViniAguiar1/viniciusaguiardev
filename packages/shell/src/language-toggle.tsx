@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu"
 import { LOCALES, DEFAULT_LOCALE, isLocale, stripLocale, localePath, type Locale } from "@repo/i18n"
+import { useZoneNavigate } from "./zone-link"
 
 const flags: Record<Locale, string> = { pt: "🇧🇷", en: "🇺🇸", es: "🇪🇸", jp: "🇯🇵", fr: "🇫🇷" }
 const labels: Record<Locale, string> = { pt: "Português", en: "English", es: "Español", jp: "日本語", fr: "Français" }
@@ -19,7 +20,7 @@ function localeFromPath(pathname: string): Locale {
 }
 
 export function LanguageToggle() {
-  const router = useRouter()
+  const navigate = useZoneNavigate()
   const pathname = usePathname() ?? "/"
   const lang = localeFromPath(pathname)
   const flag = useMemo(() => flags[lang], [lang])
@@ -27,7 +28,7 @@ export function LanguageToggle() {
   function setLanguage(next: Locale) {
     if (next === lang) return
     const rest = stripLocale(pathname)
-    router.push(localePath(next, rest))
+    navigate(localePath(next, rest))
   }
 
   return (

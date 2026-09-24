@@ -4,3 +4,4 @@
    pacotes vivem fora dele: sem estes @source, componentes da moldura saem sem
    estilo e nenhum check acusa. Caminhos relativos a este arquivo. */
 @source "../../../packages/ui/src";
+@source "../../../packages/shell/src";

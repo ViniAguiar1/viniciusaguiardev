@@ -2,9 +2,9 @@
 
 import { Menu } from "lucide-react"
 import { useSidebar } from "@repo/ui/components/sidebar"
-import { ModeToggle } from "@/components/theme-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
-import { SearchButton } from "@/components/search-button"
+import { ModeToggle } from "./theme-toggle"
+import { LanguageToggle } from "./language-toggle"
+import { SearchButton } from "./search-button"
 
 export function MobileHeader() {
   const { setOpenMobile } = useSidebar()

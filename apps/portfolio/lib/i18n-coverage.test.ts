@@ -8,7 +8,9 @@ import { getDictionary } from "@repo/i18n/server"
 // process.cwd() é a raiz do repo sob Vitest — mesmo padrão que lib/posts.ts já usa
 const ROOT = process.cwd()
 
-const SCAN_DIRS = ["app", "components"]
+// A moldura mora em packages/shell desde o monorepo: sem varrer lá, um texto
+// novo da sidebar em um idioma só passaria.
+const SCAN_DIRS = ["app", "components", path.join("..", "..", "packages", "shell", "src")]
 const SCAN_FILES = ["data/projects.ts", "data/experiences.ts"]
 const SKIPPED_DIR = path.join("components", "ui") // código gerado do Shadcn
 
@@ -63,6 +65,11 @@ function findGaps(relPath: string): string[] {
 }
 
 describe("cobertura de i18n", () => {
+  it("varre a moldura em packages/shell", () => {
+    const files = collectFiles(path.join("..", "..", "packages", "shell", "src"))
+    expect(files.some((f) => f.endsWith("footer.tsx"))).toBe(true)
+  })
+
   it("traduz todo object literal com chave pt para todos os locales", () => {
     const files = [...SCAN_DIRS.flatMap(collectFiles), ...SCAN_FILES]
     const gaps = files.flatMap(findGaps)

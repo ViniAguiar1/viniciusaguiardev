@@ -32,6 +32,9 @@ importers:
       '@repo/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
+      '@repo/shell':
+        specifier: workspace:*
+        version: link:../../packages/shell
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -132,6 +135,55 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+
+  packages/shell:
+    dependencies:
+      '@repo/i18n':
+        specifier: workspace:*
+        version: link:../i18n
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../ui
+      lucide-react:
+        specifier: ^0.545.0
+        version: 0.545.0(react@19.1.0)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-icons:
+        specifier: ^5.5.0
+        version: 5.6.0(react@19.1.0)
+    devDependencies:
+      '@repo/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/node':
+        specifier: ^20
+        version: 20.19.37
+      '@types/react':
+        specifier: ^19
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19
+        version: 19.2.3(@types/react@19.2.14)
+      eslint:
+        specifier: ^9
+        version: 9.39.4(jiti@2.6.1)
+      next:
+        specifier: 16.1.6
+        version: 16.1.6(@babel/core@7.29.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react:
+        specifier: 19.1.0
+        version: 19.1.0
+      react-dom:
+        specifier: 19.1.0
+        version: 19.1.0(react@19.1.0)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+      vitest:
+        specifier: ^4.1.5
+        version: 4.1.5(@types/node@20.19.37)(vite@8.0.10(@types/node@20.19.37)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0))
 
   packages/ui:
     dependencies:

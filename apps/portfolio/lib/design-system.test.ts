@@ -8,7 +8,13 @@ const ROOT = process.cwd()
 // A moldura e o design system vivem em packages/ desde o monorepo: a varredura
 // precisa ir até lá, senão uma cor fora da paleta na sidebar passaria.
 const UI_COMPONENTS = path.join("..", "..", "packages", "ui", "src", "components")
-const SCAN_DIRS = ["app", "components", "lib", path.join("..", "..", "packages", "ui", "src")]
+const SCAN_DIRS = [
+  "app",
+  "components",
+  "lib",
+  path.join("..", "..", "packages", "ui", "src"),
+  path.join("..", "..", "packages", "shell", "src"),
+]
 // Código gerado do Shadcn fica de fora; section-eyebrow mora na mesma pasta e é nosso.
 const isGenerated = (rel: string) => rel.startsWith(UI_COMPONENTS + path.sep) && !rel.endsWith("section-eyebrow.tsx")
 

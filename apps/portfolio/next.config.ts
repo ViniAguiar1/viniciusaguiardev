@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Pacotes do monorepo vivem fora do app: a raiz do Turbopack é a do repo.
   turbopack: { root: path.join(__dirname, "../..") },
-  transpilePackages: ["@repo/i18n", "@repo/ui"],
+  transpilePackages: ["@repo/i18n", "@repo/ui", "@repo/shell"],
   images: {
     remotePatterns: [
       {

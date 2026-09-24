@@ -6,7 +6,7 @@ import {
   Sidebar,
   SidebarContent,
 } from "@repo/ui/components/sidebar"
-import { SidebarNavLink } from "@/components/sidebar-nav-link"
+import { SidebarNavLink } from "./sidebar-nav-link"
 
 import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 

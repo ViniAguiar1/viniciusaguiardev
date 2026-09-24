@@ -1,5 +1,5 @@
 import { Home } from "lucide-react"
-import Link from "next/link"
+import { ZoneLink } from "./zone-link"
 
 import {
   Sidebar,
@@ -8,9 +8,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar"
-import { ModeToggle } from "@/components/theme-toggle"
-import { LanguageToggle } from "@/components/language-toggle"
-import { SearchButton } from "@/components/search-button"
+import { ModeToggle } from "./theme-toggle"
+import { LanguageToggle } from "./language-toggle"
+import { SearchButton } from "./search-button"
 import { getLocale, getDictionary } from "@repo/i18n/server"
 import { localePath } from "@repo/i18n"
 
@@ -29,9 +29,9 @@ export async function RightSidebar() {
           <SidebarMenu className="flex flex-col items-center gap-3">
             <SidebarMenuItem>
               <SidebarMenuButton asChild size="sm" className="w-8 h-8 p-0 text-mu hover:text-fg">
-                <Link href={localePath(locale, "/")} title={dict.nav.home} className="flex items-center justify-center">
+                <ZoneLink href={localePath(locale, "/")} title={dict.nav.home} className="flex items-center justify-center">
                   <Home className="w-5 h-5" />
-                </Link>
+                </ZoneLink>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

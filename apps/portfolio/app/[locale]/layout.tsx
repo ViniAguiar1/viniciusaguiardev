@@ -2,13 +2,8 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { Geist, Geist_Mono } from "next/font/google"
 import Script from "next/script"
-import { SidebarProvider } from "@repo/ui/components/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
-import { RightSidebar } from "@/components/right-sidebar"
-import { MobileHeader } from "@/components/mobile-header"
-import { ThemeProvider } from "@/components/theme-provider"
+import { SiteShell } from "@repo/shell/site-shell"
 import { JsonLd } from "@/components/json-ld"
-import { Footer } from "@/components/footer"
 import {
   LOCALES,
   isLocale,
@@ -118,22 +113,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             ],
           }}
         />
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
-              <MobileHeader />
-              {children}
-              <Footer />
-            </main>
-            <RightSidebar />
-          </SidebarProvider>
-        </ThemeProvider>
+        <SiteShell zone="portfolio">{children}</SiteShell>
       </body>
     </html>
   )

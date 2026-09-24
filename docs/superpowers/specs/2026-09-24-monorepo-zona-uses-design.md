@@ -48,7 +48,7 @@ packages/
                       components/section-eyebrow.tsx, globals.css → @repo/ui/*
   shell/              app-sidebar, right-sidebar, mobile-header, footer, sidebar-nav-link,
                       search-button, language-toggle, theme-toggle, theme-provider,
-                      fontes, SiteShell (moldura do <body>), zones.ts, ZoneLink, navigate
+                      SiteShell (moldura do <body>), zones.ts, ZoneLink, navigate
                                                                 → @repo/shell/*
   config/             tsconfig base, ESLint compartilhado       → @repo/config/*
 turbo.json
@@ -63,7 +63,7 @@ Critério de fronteira: um arquivo vai para um pacote se **as duas zonas** preci
 - Nome `@repo/<nome>`, `"private": true`, `exports` apontando para os `.ts/.tsx` fonte.
 - Apps listam os pacotes em `transpilePackages` no `next.config.ts`.
 - Alias `@/` continua válido **dentro de cada app**. Dentro dos pacotes, imports relativos ou `@repo/*` — nunca `@/`.
-- `SiteShell` recebe `zone` (ver Etapa 2) e renderiza o que hoje está dentro de `<body>` no layout (Umami, JSON-LD Organization, `ThemeProvider`, `SidebarProvider`, sidebars, header mobile, `children`, footer). O `<html>`, `generateMetadata` e fontes continuam no layout de cada app, que importa as fontes de `@repo/shell/fonts`.
+- `SiteShell` recebe `zone` (ver Etapa 2) e renderiza a moldura de dentro do `<body>`: `ThemeProvider`, `SidebarProvider`, sidebars, header mobile, `children`, footer. O `<html>`, `generateMetadata`, as fontes (`next/font`), o script Umami e o JSON-LD `Organization` **continuam no layout de cada app** — o check de AEO lê o `layout.tsx` do app procurando o `Organization`, e `next/font` dentro de pacote é terreno instável; a duplicação é de ~20 linhas e a comparação de HTML garante saída idêntica.
 
 ### Tailwind 4
 

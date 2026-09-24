@@ -1,0 +1,585 @@
+{
+  "slug": "distribution-was-the-product",
+  "coverSubject": "a single immaculate finished object resting on a low pedestal in the middle of a vast empty dark hall, softly lit from above, with no path, no door and no footprints leading toward it, the empty floor around it dominating the frame, no text, no symbols, no figures",
+  "date": "24 de set de 2026",
+  "date_en": "Sep 24, 2026",
+  "date_es": "24 de sept. de 2026",
+  "date_jp": "2026年9月24日",
+  "date_fr": "24 septembre 2026",
+  "publishedAt": "2026-09-24",
+  "readTime": "5 min de leitura",
+  "readTime_en": "5 min read",
+  "readTime_es": "5 min de lectura",
+  "readTime_jp": "5分で読めます",
+  "readTime_fr": "5 min de lecture",
+  "tag": "Produto",
+  "tag_en": "Product",
+  "tag_es": "Producto",
+  "tag_jp": "プロダクト",
+  "tag_fr": "Produit",
+  "title": "A gente construiu o produto. A distribuição era o produto.",
+  "title_en": "We Built the Product. Distribution Was the Product.",
+  "title_es": "Construimos el producto. La distribución era el producto.",
+  "title_jp": "私たちはプロダクトを作った。ディストリビューションこそがプロダクトだった。",
+  "title_fr": "On a construit le produit. La distribution, c'était le produit.",
+  "description": "Em 2025 lancei meu primeiro produto: sócios, contatos no nicho, lançamento e conversas com investidores. No fim do ano, engavetamos. Por que quem decidiu foi a distribuição, e não o código.",
+  "description_en": "In 2025 I launched my first product: partners, contacts in the niche, a launch and investor conversations. By the end of the year, we shelved it. Why distribution, not code, decided it.",
+  "description_es": "En 2025 lancé mi primer producto: socios, contactos en el nicho, lanzamiento y conversaciones con inversores. A fin de año, lo archivamos. Por qué lo decidió la distribución, y no el código.",
+  "description_jp": "2025年、初めてのプロダクトを公開した。パートナー、業界の人脈、リリース、投資家との対話。それでも年末には棚上げになった。決め手がコードではなくディストリビューションだった理由。",
+  "description_fr": "En 2025, j'ai lancé mon premier produit : des associés, des contacts dans le secteur, un lancement et des discussions avec des investisseurs. En fin d'année, on l'a mis au placard. Pourquoi c'est la distribution, pas le code, qui a tranché.",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "No começo de 2025, eu lancei meu primeiro produto ao público. Não era projeto de cliente, nem um protótipo que vivia no meu notebook: era um produto nosso, construído do zero, com gente de verdade se cadastrando. No fim do mesmo ano, a gente engavetou."
+    },
+    {
+      "type": "paragraph",
+      "text": "Não foi um produto malfeito, nem um time que se desfez, nem uma ideia em que ninguém acreditava. A gente tinha quase tudo que dizem que importa. Mesmo assim, não andou. Este post é uma tentativa de explicar por quê, do jeito mais honesto que eu consigo, do ponto de vista de quem era responsável por construir."
+    },
+    {
+      "type": "heading",
+      "text": "O que a gente tinha",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "O produto era uma plataforma web e mobile para nutricionistas e personal trainers: um lugar para prescrever planos alimentares e treinos, acompanhar o progresso de cada cliente e gerenciar consultas, tudo num app só."
+    },
+    {
+      "type": "paragraph",
+      "text": "A gente era um bom grupo de sócios, cada um com a sua função bem definida. Eu era o \"CTO\", entre aspas, porque o título é generoso para uma empresa daquele tamanho. A gente tinha contatos dentro do mercado que estava atacando. Construímos do zero, lançamos e fizemos as reuniões que vêm depois de um lançamento. Chegamos a sentar com investidores: conversas e negociação, nenhum dinheiro no fim, mas interesse de verdade no que a gente tinha construído."
+    },
+    {
+      "type": "paragraph",
+      "text": "Se você me mostrasse essa lista antes de começar, eu diria que era uma boa posição. Produto, time, rede de contatos, lançamento, interesse de investidor. A maioria dos projetos que eu já tinha visto morrer não tinha metade disso."
+    },
+    {
+      "type": "heading",
+      "text": "Onde eu achava que estava o risco",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Como quem estava construindo, eu achava que o risco era principalmente técnico. O app vai ser estável? O pagamento vai funcionar? Vai aguentar quando as pessoas usarem de verdade? Essas eram as perguntas em que eu gastava a maior parte da minha energia, e eram as que eu sabia responder."
+    },
+    {
+      "type": "paragraph",
+      "text": "Olhando para trás, esse era o lugar mais confortável para colocar o risco. Era a parte que eu controlava. Se o problema fosse técnico, dava para resolver com mais trabalho. Eu não tinha um plano para o caso em que o produto funcionasse e as pessoas mesmo assim não viessem."
+    },
+    {
+      "type": "heading",
+      "text": "Onde travou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Algumas pessoas vieram. Alguns profissionais usaram a plataforma com os próprios clientes dentro dela. Então não é verdade que o produto não funcionou para ninguém. Ele só nunca chegou no ponto de crescer sozinho."
+    },
+    {
+      "type": "paragraph",
+      "text": "A gente tentou os canais de sempre: Meta Ads, Google e contato direto com gente do nicho. O problema não foi escolher o canal errado. Foi o que o cliente encontrava do outro lado de cada canal: um mercado com concorrentes estabelecidos, que se sobressaíam mais do que a gente."
+    },
+    {
+      "type": "paragraph",
+      "text": "E quando as pessoas testavam, a gente esbarrava em duas coisas que eu subestimei. A primeira foi suporte. Um profissional que roda parte do negócio dele no seu app precisa de resposta rápida, e a gente pecava nisso. A segunda foram features que simplesmente não tinham passado pela nossa cabeça: os edge cases do uso real, as coisas que só aparecem quando a rotina de verdade de alguém encontra o seu produto. Cada uma era pequena. Juntas, eram a diferença entre testar o produto e ficar nele."
+    },
+    {
+      "type": "paragraph",
+      "text": "Nada disso é problema de código. Eu poderia ter escrito um código melhor e nada dessa lista teria mudado."
+    },
+    {
+      "type": "heading",
+      "text": "Como acabou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Não teve um dia em que ele morreu. O produto foi morrendo aos poucos, e em algum momento uma conversa entre os sócios oficializou o que já era verdade. No fim de 2025, a gente engavetou."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ser o \"CTO\" de algo que claramente deu errado é uma sensação estranha. A parte pela qual você era responsável se sustentou. A empresa não. E você começa a perceber que a linha entre essas duas coisas nunca foi tão clara quanto você achava."
+    },
+    {
+      "type": "heading",
+      "text": "O que eu faria hoje",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Se eu começasse hoje, sei por onde começaria, e não seria pelo código."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Validar a tese antes de construir.** Não se as pessoas gostam da ideia, mas se o mercado precisa mesmo desse produto, vindo da gente, a ponto de trocar o que já usa.",
+        "**Distribuição desde o primeiro dia.** Não como uma fase que começa depois que o produto está pronto, mas como parte do produto. Quem vai ficar sabendo disso, e por que acreditaria na gente?",
+        "**Posicionamento.** Num mercado com concorrentes estabelecidos, \"a gente também faz isso\" não é motivo para trocar. Saber exatamente para quem é, e por que é melhor para essa pessoa, é um trabalho que precisa acontecer antes do primeiro anúncio.",
+        "**Build in public.** Mostrar o trabalho enquanto ele está sendo feito, para as pessoas verem que é bom. A confiança num produto muitas vezes começa como confiança em quem está construindo, e essa confiança demora mais para construir do que qualquer feature.",
+        "**Suporte como parte do produto.** Para quem roda o próprio trabalho na sua plataforma, a velocidade da sua resposta faz parte do que essa pessoa está pagando."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "O que eu levei disso",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "No [meu último post](/pt/posts/writing-code-stops-being-the-hard-part) eu escrevi que, em algum momento, escrever código deixa de ser a parte difícil. Foi aqui que eu aprendi isso do jeito caro. A gente construiu o produto. O que a gente não construiu foi um motivo para alguém escolher ele."
+    },
+    {
+      "type": "paragraph",
+      "text": "Eu ainda levo isso para o jeito como trabalho em produtos hoje. Não como \"engenheiro tem que fazer marketing\", mas como perguntas que eu faço bem mais cedo do que fazia: para quem é isso, como essas pessoas vão encontrar, e por que confiariam? Código responde muita pergunta. Essas não estão entre elas."
+    },
+    {
+      "type": "paragraph",
+      "text": "A gente construiu o produto. A distribuição era o produto."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "At the start of 2025, I launched my first product to the public. Not a client project, not a prototype that lived on my laptop: a product of our own, built from scratch, with real people signing up. By the end of the same year, we had shelved it."
+    },
+    {
+      "type": "paragraph",
+      "text": "It wasn't a product nobody built properly, or a team that fell apart, or an idea nobody believed in. We had most of the things that are supposed to matter. It still didn't move forward. This post is my attempt to explain why, as honestly as I can, from the point of view of the person who was responsible for building it."
+    },
+    {
+      "type": "heading",
+      "text": "What we had",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The product was a web and mobile platform for nutritionists and personal trainers: a place to prescribe meal plans and workouts, follow each client's progress and manage appointments, all in one app."
+    },
+    {
+      "type": "paragraph",
+      "text": "We were a good group of partners, each with a clearly defined role. I was the \"CTO\", in quotes, because the title is generous for a company that small. We had contacts inside the market we were going after. We built it from zero, launched it, and took the meetings that come after a launch. We even sat down with investors: conversations and negotiation, no money in the end, but real interest in what we had built."
+    },
+    {
+      "type": "paragraph",
+      "text": "If you had shown me that list before we started, I would have called it a good position to be in. Product, team, network, launch, investor interest. Most of the projects I had seen die didn't have half of that."
+    },
+    {
+      "type": "heading",
+      "text": "Where I thought the risk was",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "As the person building it, I thought the risk was mostly technical. Would the app be stable? Would payments work? Would it hold up once people used it for real? Those were the questions I spent most of my energy on, and they were the ones I knew how to answer."
+    },
+    {
+      "type": "paragraph",
+      "text": "Looking back, that was the most comfortable place to put the risk. It was the part I controlled. If the problem was technical, I could fix it with more work. I didn't have a plan for the case where the product worked and people still didn't come."
+    },
+    {
+      "type": "heading",
+      "text": "Where it stalled",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Some people did come. A few professionals used the platform with their own clients on it. So it isn't true that the product didn't work for anyone. It just never reached the point where it could grow on its own."
+    },
+    {
+      "type": "paragraph",
+      "text": "We tried the usual channels: Meta Ads, Google, and direct contact with people in the niche. The problem wasn't that we picked the wrong channel. It was what the customer found on the other side of every channel: a market with established competitors who stood out more than we did."
+    },
+    {
+      "type": "paragraph",
+      "text": "And when people did try us, we ran into two things I had underestimated. The first was support. A professional who runs part of their business on your app needs answers quickly, and we fell short there. The second was features we simply hadn't thought of: the edge cases of real use, the things that only show up when someone's actual routine meets your product. Each one was small. Together, they were the difference between trying the product and staying on it."
+    },
+    {
+      "type": "paragraph",
+      "text": "None of that is a coding problem. I could have written better code, and nothing on this list would have changed."
+    },
+    {
+      "type": "heading",
+      "text": "How it ended",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "There was no single day when it died. The product faded slowly, and at some point a conversation between the partners made official what was already true. By the end of 2025, we put it on the shelf."
+    },
+    {
+      "type": "paragraph",
+      "text": "Being the \"CTO\" of something that clearly didn't work is a strange feeling. The part you were responsible for held up. The company didn't. And you start to see that the line between those two things was never as clear as you thought."
+    },
+    {
+      "type": "heading",
+      "text": "What I'd do today",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "If I started it today, I know where I'd begin, and it wouldn't be the code."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Validate the thesis before building.** Not whether people like the idea, but whether the market actually needs this product, from us, enough to switch from what they already use.",
+        "**Distribution from day one.** Not as a phase that starts after the product is ready, but as part of the product. Who is going to hear about this, and why would they believe us?",
+        "**Positioning.** In a market with established competitors, \"we also do this\" is not a reason to switch. Knowing exactly who it's for, and why it's better for them, is work that has to happen before the first ad.",
+        "**Build in public.** Show the work while it's being done, so people can see it's good. Trust in a product often starts as trust in the people building it, and that trust takes longer to build than any feature.",
+        "**Support as part of the product.** For someone running their work on your platform, how fast you answer is part of what they're paying for."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "What I took from it",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "In [my last post](/en/posts/writing-code-stops-being-the-hard-part) I wrote that at some point, writing code stops being the hard part. This was where I learned it the expensive way. We built the product. What we didn't build was a reason for anyone to choose it."
+    },
+    {
+      "type": "paragraph",
+      "text": "I still carry that into how I work on products today. Not as \"engineers should do marketing,\" but as questions I ask much earlier than I used to: who is this for, how will they find it, and why would they trust it? Code can answer a lot of questions. Those aren't among them."
+    },
+    {
+      "type": "paragraph",
+      "text": "We built the product. Distribution was the product."
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "A principios de 2025 lancé mi primer producto al público. No era un proyecto para un cliente, ni un prototipo que vivía en mi notebook: era un producto nuestro, construido desde cero, con gente real registrándose. A finales del mismo año, lo archivamos."
+    },
+    {
+      "type": "paragraph",
+      "text": "No fue un producto mal hecho, ni un equipo que se deshizo, ni una idea en la que nadie creía. Teníamos casi todo lo que se supone que importa. Aun así, no avanzó. Este post es un intento de explicar por qué, de la forma más honesta que puedo, desde el punto de vista de quien era responsable de construirlo."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que teníamos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "El producto era una plataforma web y mobile para nutricionistas y entrenadores personales: un lugar para prescribir planes de alimentación y entrenamientos, seguir el progreso de cada cliente y gestionar las consultas, todo en una sola app."
+    },
+    {
+      "type": "paragraph",
+      "text": "Éramos un buen grupo de socios, cada uno con su función bien definida. Yo era el \"CTO\", entre comillas, porque el título es generoso para una empresa de ese tamaño. Teníamos contactos dentro del mercado al que apuntábamos. Lo construimos desde cero, lo lanzamos e hicimos las reuniones que vienen después de un lanzamiento. Incluso nos sentamos con inversores: conversaciones y negociación, nada de dinero al final, pero interés real en lo que habíamos construido."
+    },
+    {
+      "type": "paragraph",
+      "text": "Si me hubieras mostrado esa lista antes de empezar, habría dicho que era una buena posición. Producto, equipo, red de contactos, lanzamiento, interés de inversores. La mayoría de los proyectos que yo había visto morir no tenían ni la mitad de eso."
+    },
+    {
+      "type": "heading",
+      "text": "Dónde creía que estaba el riesgo",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Como quien lo estaba construyendo, creía que el riesgo era sobre todo técnico. ¿La app va a ser estable? ¿Los pagos van a funcionar? ¿Va a aguantar cuando la gente la use de verdad? Esas eran las preguntas en las que gastaba la mayor parte de mi energía, y eran las que sabía responder."
+    },
+    {
+      "type": "paragraph",
+      "text": "Mirando hacia atrás, ese era el lugar más cómodo para poner el riesgo. Era la parte que yo controlaba. Si el problema era técnico, se podía resolver con más trabajo. No tenía un plan para el caso en que el producto funcionara y aun así la gente no viniera."
+    },
+    {
+      "type": "heading",
+      "text": "Dónde se trabó",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Alguna gente vino. Algunos profesionales usaron la plataforma con sus propios clientes dentro. Así que no es cierto que el producto no le funcionó a nadie. Simplemente nunca llegó al punto de crecer por sí solo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Probamos los canales de siempre: Meta Ads, Google y contacto directo con gente del nicho. El problema no fue elegir el canal equivocado. Fue lo que el cliente encontraba del otro lado de cada canal: un mercado con competidores establecidos, que se destacaban más que nosotros."
+    },
+    {
+      "type": "paragraph",
+      "text": "Y cuando la gente nos probaba, chocábamos con dos cosas que subestimé. La primera fue el soporte. Un profesional que maneja parte de su negocio en tu app necesita respuestas rápidas, y ahí fallábamos. La segunda fueron features que simplemente no se nos habían ocurrido: los edge cases del uso real, las cosas que solo aparecen cuando la rutina real de alguien se encuentra con tu producto. Cada una era pequeña. Juntas, eran la diferencia entre probar el producto y quedarse en él."
+    },
+    {
+      "type": "paragraph",
+      "text": "Nada de eso es un problema de código. Podría haber escrito mejor código y nada de esta lista habría cambiado."
+    },
+    {
+      "type": "heading",
+      "text": "Cómo terminó",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "No hubo un día en que murió. El producto se fue apagando de a poco, y en algún momento una conversación entre los socios hizo oficial lo que ya era verdad. A finales de 2025, lo archivamos."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ser el \"CTO\" de algo que claramente salió mal es una sensación extraña. La parte de la que eras responsable se sostuvo. La empresa no. Y empiezas a ver que la línea entre esas dos cosas nunca fue tan clara como creías."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que haría hoy",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si empezara hoy, sé por dónde empezaría, y no sería por el código."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Validar la tesis antes de construir.** No si a la gente le gusta la idea, sino si el mercado realmente necesita este producto, viniendo de nosotros, como para cambiar lo que ya usa.",
+        "**Distribución desde el primer día.** No como una fase que empieza cuando el producto está listo, sino como parte del producto. ¿Quién se va a enterar de esto, y por qué nos creería?",
+        "**Posicionamiento.** En un mercado con competidores establecidos, \"nosotros también hacemos esto\" no es una razón para cambiar. Saber exactamente para quién es, y por qué es mejor para esa persona, es un trabajo que tiene que pasar antes del primer anuncio.",
+        "**Build in public.** Mostrar el trabajo mientras se hace, para que la gente vea que es bueno. La confianza en un producto muchas veces empieza como confianza en quienes lo construyen, y esa confianza tarda más en construirse que cualquier feature.",
+        "**El soporte como parte del producto.** Para quien maneja su propio trabajo en tu plataforma, la velocidad con la que respondes es parte de lo que está pagando."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Lo que me llevé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "En [mi último post](/es/posts/writing-code-stops-being-the-hard-part) escribí que, en algún momento, escribir código deja de ser la parte difícil. Aquí fue donde lo aprendí de la forma cara. Construimos el producto. Lo que no construimos fue una razón para que alguien lo eligiera."
+    },
+    {
+      "type": "paragraph",
+      "text": "Todavía llevo eso a la forma en que trabajo en productos hoy. No como \"los ingenieros tienen que hacer marketing\", sino como preguntas que hago mucho antes que antes: ¿para quién es esto, cómo lo van a encontrar y por qué confiarían? El código responde muchas preguntas. Esas no están entre ellas."
+    },
+    {
+      "type": "paragraph",
+      "text": "Construimos el producto. La distribución era el producto."
+    }
+  ],
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "2025年の初め、私は初めて自分たちのプロダクトを一般に公開しました。クライアントの案件でも、ノートパソコンの中だけにあったプロトタイプでもありません。ゼロから作った自分たちのプロダクトで、実際に人が登録してくれました。そして同じ年の終わりに、私たちはそれを棚上げにしました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "出来の悪いプロダクトだったわけでも、チームが崩壊したわけでも、誰も信じていないアイデアだったわけでもありません。重要だとされているもののほとんどは揃っていました。それでも前に進みませんでした。この記事は、それを作る責任を負っていた立場から、できるだけ正直にその理由を説明しようとするものです。"
+    },
+    {
+      "type": "heading",
+      "text": "私たちが持っていたもの",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "プロダクトは、栄養士とパーソナルトレーナーのためのWebとモバイルのプラットフォームでした。食事プランやトレーニングを処方し、クライアント一人ひとりの進捗を追い、予約を管理する。それをすべて一つのアプリで行えるものです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私たちは良いパートナーの集まりで、それぞれの役割は明確でした。私は「CTO」でした。括弧付きなのは、あの規模の会社には大げさな肩書きだからです。狙っていた市場の中に人脈もありました。ゼロから作り、リリースし、リリース後のミーティングもこなしました。投資家とも席を共にしました。会話と交渉までで、最終的に資金は入りませんでしたが、私たちが作ったものへの関心は本物でした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "始める前にこのリストを見せられていたら、良い立ち位置だと言っていたでしょう。プロダクト、チーム、人脈、リリース、投資家の関心。私がそれまでに見てきた、消えていったプロジェクトの多くは、その半分も持っていませんでした。"
+    },
+    {
+      "type": "heading",
+      "text": "リスクがあると思っていた場所",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "作る側として、私はリスクの大半が技術的なものだと思っていました。アプリは安定するか。決済は動くか。実際に使われ始めても耐えられるか。私が最もエネルギーを注いでいたのはそうした問いで、それは自分が答え方を知っている問いでもありました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "振り返ると、そこはリスクを置くのに一番居心地のいい場所でした。自分がコントロールできる部分だったからです。問題が技術的なら、もっと働けば解決できる。プロダクトはちゃんと動くのに、それでも人が来ない、という場合の計画はありませんでした。"
+    },
+    {
+      "type": "heading",
+      "text": "どこで止まったか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "来てくれた人もいました。何人かのプロフェッショナルは、自分のクライアントをプラットフォームに載せて使ってくれました。だから、プロダクトが誰の役にも立たなかったというのは事実ではありません。ただ、自力で成長できる地点には一度も届きませんでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私たちは定番のチャネルを試しました。Meta広告、Google、そしてその分野の人たちへの直接のアプローチ。問題は、チャネルの選択を誤ったことではありませんでした。どのチャネルの向こう側でも、顧客が目にするのは、私たちより目立つ、すでに地位を築いた競合がいる市場だったのです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そして試してもらえたときには、私が過小評価していた二つのことにぶつかりました。一つはサポートです。仕事の一部をあなたのアプリで回しているプロフェッショナルには素早い回答が必要で、私たちはそこが足りていませんでした。もう一つは、単純に思いつかなかった機能です。実際の利用で出てくるエッジケース、誰かの本当の日常があなたのプロダクトに出会ったときに初めて現れるもの。一つひとつは小さなものでした。でも合わさると、プロダクトを試すことと使い続けることの差になっていました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そのどれもコードの問題ではありません。もっと良いコードを書いていたとしても、このリストの何一つ変わらなかったでしょう。"
+    },
+    {
+      "type": "heading",
+      "text": "どう終わったか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "それが終わった特定の日はありませんでした。プロダクトは少しずつ弱っていき、ある時点で、パートナー同士の会話が、すでに事実になっていたことを正式なものにしました。2025年の終わりに、私たちはそれを棚上げにしました。"
+    },
+    {
+      "type": "paragraph",
+      "text": "明らかにうまくいかなかったものの「CTO」であることは、奇妙な感覚です。自分が責任を負っていた部分は持ちこたえた。会社は持ちこたえなかった。そして、その二つの境界線は、自分が思っていたほど明確ではなかったのだと気づき始めます。"
+    },
+    {
+      "type": "heading",
+      "text": "今ならどうするか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "今始めるなら、どこから始めるかは分かっています。そしてそれはコードではありません。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**作る前にテーゼを検証する。** 人々がそのアイデアを気に入るかではなく、市場が本当にこのプロダクトを、私たちから、今使っているものから乗り換えるほど必要としているか。",
+        "**初日からのディストリビューション。** プロダクトが完成してから始まるフェーズとしてではなく、プロダクトの一部として。誰がこれを知ることになり、なぜ私たちを信じるのか。",
+        "**ポジショニング。** 地位を築いた競合がいる市場では、「私たちもこれができます」は乗り換える理由になりません。誰のためのものか、なぜその人にとってより良いのかを正確に知ることは、最初の広告より前に済ませておくべき仕事です。",
+        "**Build in public。** 作っている途中の仕事を見せ、それが良いものだと人々に分かってもらう。プロダクトへの信頼は、多くの場合、それを作る人への信頼として始まります。そしてその信頼は、どんな機能よりも築くのに時間がかかります。",
+        "**プロダクトの一部としてのサポート。** 自分の仕事をあなたのプラットフォームで回している人にとって、返答の速さは支払っている対価の一部です。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "そこから持ち帰ったもの",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "[前回の記事](/jp/posts/writing-code-stops-being-the-hard-part)で、ある時点でコードを書くことは難しい部分ではなくなると書きました。それを高い授業料を払って学んだのがここでした。私たちはプロダクトを作りました。作らなかったのは、誰かがそれを選ぶ理由でした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "今でもそれを、プロダクトに取り組むときの姿勢に持ち込んでいます。「エンジニアもマーケティングをすべきだ」という意味ではなく、以前よりずっと早い段階で投げかける問いとしてです。これは誰のためのものか、その人たちはどうやってこれを見つけるのか、そしてなぜ信頼してくれるのか。コードは多くの問いに答えられます。でも、これらはその中に入っていません。"
+    },
+    {
+      "type": "paragraph",
+      "text": "私たちはプロダクトを作りました。ディストリビューションこそがプロダクトでした。"
+    }
+  ],
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Début 2025, j'ai lancé mon premier produit auprès du public. Pas un projet client, pas un prototype qui vivait sur mon ordinateur : un produit à nous, construit de zéro, avec de vraies personnes qui s'inscrivaient. À la fin de la même année, on l'a mis au placard."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce n'était pas un produit mal fait, ni une équipe qui s'est défaite, ni une idée à laquelle personne ne croyait. On avait presque tout ce qui est censé compter. Et pourtant, ça n'a pas avancé. Cet article est une tentative d'expliquer pourquoi, aussi honnêtement que possible, du point de vue de celui qui était responsable de le construire."
+    },
+    {
+      "type": "heading",
+      "text": "Ce qu'on avait",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Le produit était une plateforme web et mobile pour nutritionnistes et coachs sportifs : un endroit pour prescrire des plans alimentaires et des entraînements, suivre la progression de chaque client et gérer les rendez-vous, le tout dans une seule app."
+    },
+    {
+      "type": "paragraph",
+      "text": "On formait un bon groupe d'associés, chacun avec un rôle bien défini. J'étais le « CTO », entre guillemets, parce que le titre est généreux pour une entreprise de cette taille. On avait des contacts dans le marché qu'on visait. On l'a construit de zéro, on l'a lancé, et on a enchaîné les réunions qui suivent un lancement. On s'est même assis avec des investisseurs : des discussions et des négociations, pas d'argent au final, mais un vrai intérêt pour ce qu'on avait construit."
+    },
+    {
+      "type": "paragraph",
+      "text": "Si vous m'aviez montré cette liste avant qu'on commence, j'aurais dit que c'était une bonne position. Produit, équipe, réseau, lancement, intérêt d'investisseurs. La plupart des projets que j'avais vus mourir n'en avaient pas la moitié."
+    },
+    {
+      "type": "heading",
+      "text": "Là où je pensais que se trouvait le risque",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "En tant que celui qui le construisait, je pensais que le risque était surtout technique. L'app sera-t-elle stable ? Les paiements vont-ils fonctionner ? Est-ce que ça tiendra quand les gens l'utiliseront vraiment ? C'étaient les questions sur lesquelles je dépensais le plus d'énergie, et c'étaient celles auxquelles je savais répondre."
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec le recul, c'était l'endroit le plus confortable où placer le risque. C'était la partie que je contrôlais. Si le problème était technique, je pouvais le régler avec plus de travail. Je n'avais pas de plan pour le cas où le produit fonctionnerait et où les gens ne viendraient quand même pas."
+    },
+    {
+      "type": "heading",
+      "text": "Là où ça a bloqué",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Certaines personnes sont venues. Quelques professionnels ont utilisé la plateforme avec leurs propres clients dessus. Ce n'est donc pas vrai que le produit n'a marché pour personne. Il n'a simplement jamais atteint le point où il pouvait grandir tout seul."
+    },
+    {
+      "type": "paragraph",
+      "text": "On a essayé les canaux habituels : Meta Ads, Google et le contact direct avec des gens du secteur. Le problème n'était pas d'avoir choisi le mauvais canal. C'était ce que le client trouvait de l'autre côté de chaque canal : un marché avec des concurrents installés, qui se démarquaient plus que nous."
+    },
+    {
+      "type": "paragraph",
+      "text": "Et quand les gens nous essayaient, on se heurtait à deux choses que j'avais sous-estimées. La première, c'était le support. Un professionnel qui fait tourner une partie de son activité sur votre app a besoin de réponses rapides, et on était en défaut là-dessus. La seconde, c'étaient des features auxquelles on n'avait tout simplement pas pensé : les edge cases de l'usage réel, les choses qui n'apparaissent que quand la vraie routine de quelqu'un rencontre votre produit. Chacune était petite. Ensemble, elles faisaient la différence entre essayer le produit et y rester."
+    },
+    {
+      "type": "paragraph",
+      "text": "Rien de tout ça n'est un problème de code. J'aurais pu écrire un meilleur code, et rien sur cette liste n'aurait changé."
+    },
+    {
+      "type": "heading",
+      "text": "Comment ça s'est terminé",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Il n'y a pas eu de jour où il est mort. Le produit s'est éteint petit à petit, et à un moment, une conversation entre associés a rendu officiel ce qui était déjà vrai. Fin 2025, on l'a mis au placard."
+    },
+    {
+      "type": "paragraph",
+      "text": "Être le « CTO » de quelque chose qui n'a clairement pas marché est une sensation étrange. La partie dont vous étiez responsable a tenu. L'entreprise, non. Et on commence à voir que la frontière entre les deux n'a jamais été aussi nette qu'on le croyait."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que je ferais aujourd'hui",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Si je recommençais aujourd'hui, je sais par où je commencerais, et ce ne serait pas par le code."
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Valider la thèse avant de construire.** Pas savoir si les gens aiment l'idée, mais si le marché a vraiment besoin de ce produit, venant de nous, au point de quitter ce qu'il utilise déjà.",
+        "**La distribution dès le premier jour.** Pas comme une phase qui commence quand le produit est prêt, mais comme une partie du produit. Qui va en entendre parler, et pourquoi nous croirait-on ?",
+        "**Le positionnement.** Dans un marché avec des concurrents installés, « on fait ça aussi » n'est pas une raison de changer. Savoir exactement pour qui c'est, et pourquoi c'est mieux pour ces personnes, est un travail qui doit se faire avant la première pub.",
+        "**Build in public.** Montrer le travail pendant qu'il se fait, pour que les gens voient qu'il est bon. La confiance dans un produit commence souvent comme une confiance dans ceux qui le construisent, et cette confiance prend plus de temps à bâtir que n'importe quelle feature.",
+        "**Le support comme partie du produit.** Pour quelqu'un qui fait tourner son propre travail sur votre plateforme, la rapidité de votre réponse fait partie de ce qu'il paie."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Ce que j'en ai retenu",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Dans [mon dernier article](/fr/posts/writing-code-stops-being-the-hard-part), j'écrivais qu'à un moment donné, écrire du code cesse d'être la partie difficile. C'est ici que je l'ai appris, et ça m'a coûté cher. On a construit le produit. Ce qu'on n'a pas construit, c'est une raison pour que quelqu'un le choisisse."
+    },
+    {
+      "type": "paragraph",
+      "text": "Je porte encore ça dans ma façon de travailler sur des produits aujourd'hui. Pas comme « les ingénieurs doivent faire du marketing », mais comme des questions que je pose bien plus tôt qu'avant : pour qui c'est, comment ces personnes vont le trouver, et pourquoi elles lui feraient confiance ? Le code répond à beaucoup de questions. Pas à celles-là."
+    },
+    {
+      "type": "paragraph",
+      "text": "On a construit le produit. La distribution, c'était le produit."
+    }
+  ]
+}

@@ -3,16 +3,16 @@ import { isAllowedMfeSrc, isValidCustomElementTag, loadRemoteModule, MFE_TIMEOUT
 
 describe("isAllowedMfeSrc", () => {
   it("aceita https na origem permitida", () => {
-    expect(isAllowedMfeSrc("https://mfe-angular-inspector.vercel.app/inspector.js")).toBe(true)
+    expect(isAllowedMfeSrc("https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js")).toBe(true)
   })
   it("recusa outra origem", () => {
     expect(isAllowedMfeSrc("https://evil.example.com/inspector.js")).toBe(false)
   })
   it("recusa subdomínio que só começa igual", () => {
-    expect(isAllowedMfeSrc("https://mfe-angular-inspector.vercel.app.evil.com/x.js")).toBe(false)
+    expect(isAllowedMfeSrc("https://mfe-angular-inspector.aguiarlabs.com.br.evil.com/x.js")).toBe(false)
   })
   it("recusa http", () => {
-    expect(isAllowedMfeSrc("http://mfe-angular-inspector.vercel.app/inspector.js")).toBe(false)
+    expect(isAllowedMfeSrc("http://mfe-angular-inspector.aguiarlabs.com.br/inspector.js")).toBe(false)
   })
   it("recusa lixo", () => {
     expect(isAllowedMfeSrc("not a url")).toBe(false)

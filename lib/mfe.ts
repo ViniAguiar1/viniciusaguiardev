@@ -1,7 +1,7 @@
 // Tudo que decide se o site executa código de outra origem mora aqui,
 // sem React, para ser testável em Node.
 
-export const MFE_ORIGINS: readonly string[] = ["https://mfe-angular-inspector.vercel.app"]
+export const MFE_ORIGINS: readonly string[] = ["https://mfe-angular-inspector.aguiarlabs.com.br"]
 
 export const MFE_TIMEOUT_MS = 8000
 

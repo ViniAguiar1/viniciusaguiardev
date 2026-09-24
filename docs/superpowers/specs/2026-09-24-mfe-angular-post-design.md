@@ -30,7 +30,7 @@ A ideia é escrever um post sobre micro frontends em que **o próprio post é a 
 ## Fora do escopo
 
 - Module Federation / Native Federation e multi-zones — citados no post, não implementados.
-- Subdomínio próprio para o MFE. Usa `mfe-angular-inspector.vercel.app`; troca depois se quiser.
+- Subdomínio próprio para o MFE. Usa `mfe-angular-inspector.aguiarlabs.com.br`; troca depois se quiser.
 - Content Security Policy. O site não tem CSP hoje; **se passar a ter**, o domínio do MFE precisa entrar em `script-src`.
 - SSR do Angular. O custom element só existe no cliente.
 
@@ -41,7 +41,7 @@ A ideia é escrever um post sobre micro frontends em que **o próprio post é a 
 - Angular estável atual (`@angular/core` 22.2.0 em 2026-09-24), componentes standalone, **zoneless**.
 - `@angular/elements`: `createCustomElement` registra `<mfe-inspector>` — com guarda `if (!customElements.get("mfe-inspector"))`, porque registrar o mesmo nome duas vezes lança erro.
 - Build gera **um único ES module**, `inspector.js`, com commit (SHA curto) e horário do build injetados em tempo de build.
-- Deploy: projeto próprio na Vercel, `https://mfe-angular-inspector.vercel.app/inspector.js`.
+- Deploy: projeto próprio na Vercel, `https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js`.
 - Headers do deploy:
   - `Access-Control-Allow-Origin: *` — `import()` de outra origem é uma requisição CORS; o arquivo é público.
   - `Timing-Allow-Origin: *` — sem ele, a Resource Timing API zera `transferSize` para recursos de outra origem e o painel não consegue medir o próprio peso.
@@ -61,7 +61,7 @@ A ideia é escrever um post sobre micro frontends em que **o próprio post é a 
   ```
 
   `normalizeBlocks()` aceita o bloco só se:
-  - `src` é string cuja **origem** está na allowlist `MFE_ORIGINS = ["https://mfe-angular-inspector.vercel.app"]`;
+  - `src` é string cuja **origem** está na allowlist `MFE_ORIGINS = ["https://mfe-angular-inspector.aguiarlabs.com.br"]`;
   - `tag` casa `/^[a-z][a-z0-9]*-[a-z0-9-]*$/` (nome válido de custom element).
 
   Caso contrário, o bloco é descartado, como os outros blocos malformados.
@@ -138,7 +138,7 @@ Capa via `pnpm blog:cover` (estilo `render3d`), com `coverSubject` definido na e
 - `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`, `pnpm aeo` (≥ 90).
 
 **Verificação real** — build de produção do portfólio servido localmente, apontando para o deploy real do MFE:
-1. O painel carrega de `mfe-angular-inspector.vercel.app` (Network: request cross-origin, 200).
+1. O painel carrega de `mfe-angular-inspector.aguiarlabs.com.br` (Network: request cross-origin, 200).
 2. Trocar o tema na sidebar repinta o painel.
 3. Trocar o idioma troca os textos do painel.
 4. Clicar no botão faz a linha do evento aparecer no hospedeiro.

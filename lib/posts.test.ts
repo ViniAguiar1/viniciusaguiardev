@@ -60,10 +60,10 @@ describe("applyLocaleToData", () => {
 describe("normalizeBlocks", () => {
   it("aceita bloco mfe com origem permitida e tag valida", () => {
     const result = normalizeBlocks({
-      blocks: [{ type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" }],
+      blocks: [{ type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" }],
     })
     expect(result).toEqual([
-      { type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" },
+      { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
     ])
   })
 
@@ -71,8 +71,8 @@ describe("normalizeBlocks", () => {
     const result = normalizeBlocks({
       blocks: [
         { type: "mfe", src: "https://evil.example.com/x.js", tag: "mfe-inspector" },
-        { type: "mfe", src: "http://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" },
-        { type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "inspector" },
+        { type: "mfe", src: "http://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
+        { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "inspector" },
         { type: "mfe", tag: "mfe-inspector" },
         { type: "paragraph", text: "sobra" },
       ],

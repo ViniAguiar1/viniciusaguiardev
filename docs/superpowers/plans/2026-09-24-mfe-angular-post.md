@@ -15,8 +15,8 @@
 - Sempre `nvm use 24` antes de `pnpm` (só existe sob Node 24). Gerenciador: **pnpm** nos dois projetos; nunca `npm install`.
 - Portfólio: tudo numa branch só, `feat/blog-mfe-angular`.
 - MFE mora em `mfe-angular-inspector/` na raiz do portfólio, **no `.gitignore` do portfólio**, com git próprio → `https://github.com/ViniAguiar1/mfe-angular-inspector` (repo hoje vazio e privado; vira público).
-- URL do módulo: `https://mfe-angular-inspector.vercel.app/inspector.js`. Tag: `mfe-inspector`.
-- Allowlist de origem: `MFE_ORIGINS = ["https://mfe-angular-inspector.vercel.app"]`. Tag válida: `/^[a-z][a-z0-9]*-[a-z0-9-]*$/`.
+- URL do módulo: `https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js`. Tag: `mfe-inspector`.
+- Allowlist de origem: `MFE_ORIGINS = ["https://mfe-angular-inspector.aguiarlabs.com.br"]`. Tag válida: `/^[a-z][a-z0-9]*-[a-z0-9-]*$/`.
 - Timeout de carregamento: **8000 ms**. IntersectionObserver `rootMargin: "200px"`. Placeholder com altura mínima **320px**.
 - Headers de `inspector.js`: `Access-Control-Allow-Origin: *`, `Timing-Allow-Origin: *`, `Cache-Control: public, max-age=60, stale-while-revalidate=300`.
 - Contrato: entradas `locale` (`pt|en|es|jp|fr`, desconhecido → `pt`) e `theme` (`light|dark`); saída `CustomEvent("mfe:ping", { detail: { angularVersion, at }, bubbles: true, composed: true })`; `ViewEncapsulation.ShadowDom`.
@@ -157,16 +157,16 @@ import { isAllowedMfeSrc, isValidCustomElementTag, loadRemoteModule, MFE_TIMEOUT
 
 describe("isAllowedMfeSrc", () => {
   it("aceita https na origem permitida", () => {
-    expect(isAllowedMfeSrc("https://mfe-angular-inspector.vercel.app/inspector.js")).toBe(true)
+    expect(isAllowedMfeSrc("https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js")).toBe(true)
   })
   it("recusa outra origem", () => {
     expect(isAllowedMfeSrc("https://evil.example.com/inspector.js")).toBe(false)
   })
   it("recusa subdomínio que só começa igual", () => {
-    expect(isAllowedMfeSrc("https://mfe-angular-inspector.vercel.app.evil.com/x.js")).toBe(false)
+    expect(isAllowedMfeSrc("https://mfe-angular-inspector.aguiarlabs.com.br.evil.com/x.js")).toBe(false)
   })
   it("recusa http", () => {
-    expect(isAllowedMfeSrc("http://mfe-angular-inspector.vercel.app/inspector.js")).toBe(false)
+    expect(isAllowedMfeSrc("http://mfe-angular-inspector.aguiarlabs.com.br/inspector.js")).toBe(false)
   })
   it("recusa lixo", () => {
     expect(isAllowedMfeSrc("not a url")).toBe(false)
@@ -218,7 +218,7 @@ Expected: FAIL — `Cannot find module './mfe'`.
 // Tudo que decide se o site executa código de outra origem mora aqui,
 // sem React, para ser testável em Node.
 
-export const MFE_ORIGINS: readonly string[] = ["https://mfe-angular-inspector.vercel.app"]
+export const MFE_ORIGINS: readonly string[] = ["https://mfe-angular-inspector.aguiarlabs.com.br"]
 
 export const MFE_TIMEOUT_MS = 8000
 
@@ -284,10 +284,10 @@ git commit -m "feat(mfe): allowlist de origem, validacao de tag e carregamento c
 ```ts
   it("aceita bloco mfe com origem permitida e tag valida", () => {
     const result = normalizeBlocks({
-      blocks: [{ type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" }],
+      blocks: [{ type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" }],
     })
     expect(result).toEqual([
-      { type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" },
+      { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
     ])
   })
 
@@ -295,8 +295,8 @@ git commit -m "feat(mfe): allowlist de origem, validacao de tag e carregamento c
     const result = normalizeBlocks({
       blocks: [
         { type: "mfe", src: "https://evil.example.com/x.js", tag: "mfe-inspector" },
-        { type: "mfe", src: "http://mfe-angular-inspector.vercel.app/inspector.js", tag: "mfe-inspector" },
-        { type: "mfe", src: "https://mfe-angular-inspector.vercel.app/inspector.js", tag: "inspector" },
+        { type: "mfe", src: "http://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "mfe-inspector" },
+        { type: "mfe", src: "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", tag: "inspector" },
         { type: "mfe", tag: "mfe-inspector" },
         { type: "paragraph", text: "sobra" },
       ],
@@ -1028,11 +1028,11 @@ vercel git connect
 vercel --prod
 ```
 
-Se o CLI (57.x) não criar o projeto com esse nome ou o domínio `mfe-angular-inspector.vercel.app` não ficar disponível, **parar** e avisar: a URL entra na allowlist e no JSON do post, então muda em três lugares (`lib/mfe.ts`, `lib/mfe.test.ts`, `lib/posts.test.ts`).
+Se o CLI (57.x) não criar o projeto com esse nome ou o domínio `mfe-angular-inspector.aguiarlabs.com.br` não ficar disponível, **parar** e avisar: a URL entra na allowlist e no JSON do post, então muda em três lugares (`lib/mfe.ts`, `lib/mfe.test.ts`, `lib/posts.test.ts`).
 
 - [ ] **Step 5: Verificar o deploy de fora**
 
-Run: `curl -sI https://mfe-angular-inspector.vercel.app/inspector.js`
+Run: `curl -sI https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js`
 Expected: `200`, `content-type` JavaScript, `access-control-allow-origin: *`, `timing-allow-origin: *`, `cache-control: public, max-age=60, stale-while-revalidate=300`.
 
 ---
@@ -1048,7 +1048,7 @@ Expected: `200`, `content-type` JavaScript, `access-control-allow-origin: *`, `t
 JSON com os 5 locales de `title`, `description`, `date`, `readTime`, `tag`, `publishedAt: "2026-09-24"`, `"draft": true`, e em `blocks` + os quatro `blocks_<locale>` um parágrafo e o bloco:
 
 ```json
-{ "type": "mfe", "src": "https://mfe-angular-inspector.vercel.app/inspector.js", "tag": "mfe-inspector" }
+{ "type": "mfe", "src": "https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js", "tag": "mfe-inspector" }
 ```
 
 (O draft não aparece em listagens, mas abre por URL direta.)
@@ -1082,7 +1082,7 @@ await page.locator("mfe-inspector").scrollIntoViewIfNeeded()
 await page.waitForFunction(() => customElements.get("mfe-inspector"), null, { timeout: 10000 })
 
 const text = () => page.locator("mfe-inspector").evaluate((el) => el.shadowRoot.textContent)
-console.log("1 origem remota:", requests.some((u) => u.startsWith("https://mfe-angular-inspector.vercel.app/inspector.js")))
+console.log("1 origem remota:", requests.some((u) => u.startsWith("https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js")))
 console.log("1 texto pt:", (await text()).includes("Carregado de"))
 
 // THEME_TOGGLE: seletor real do toggle, lido do HTML servido antes de rodar
@@ -1108,7 +1108,7 @@ Expected: as cinco linhas `true`.
 
 - [ ] **Step 4: Caminho de falha**
 
-Trocar temporariamente o `src` do rascunho para `https://mfe-angular-inspector.vercel.app/nao-existe.js`, rebuild, e verificar com o Playwright que a página mostra "O micro frontend não carregou" e que o título e os parágrafos continuam renderizados. Restaurar o `src`.
+Trocar temporariamente o `src` do rascunho para `https://mfe-angular-inspector.aguiarlabs.com.br/nao-existe.js`, rebuild, e verificar com o Playwright que a página mostra "O micro frontend não carregou" e que o título e os parágrafos continuam renderizados. Restaurar o `src`.
 
 - [ ] **Step 5: Navegar e voltar**
 
@@ -1138,10 +1138,10 @@ git commit -m "feat(blog): rascunho do post com o bloco mfe"
 - [ ] **Step 1: Peso do módulo**
 
 ```bash
-curl -s https://mfe-angular-inspector.vercel.app/inspector.js -o /tmp/claude-501/inspector.js
+curl -s https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js -o /tmp/claude-501/inspector.js
 wc -c /tmp/claude-501/inspector.js
-curl -s -H "Accept-Encoding: br" -o /dev/null -w "%{size_download}\n" https://mfe-angular-inspector.vercel.app/inspector.js
-curl -s -H "Accept-Encoding: gzip" -o /dev/null -w "%{size_download}\n" https://mfe-angular-inspector.vercel.app/inspector.js
+curl -s -H "Accept-Encoding: br" -o /dev/null -w "%{size_download}\n" https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js
+curl -s -H "Accept-Encoding: gzip" -o /dev/null -w "%{size_download}\n" https://mfe-angular-inspector.aguiarlabs.com.br/inspector.js
 ```
 
 - [ ] **Step 2: Tempo de carregamento** — no Playwright, `performance.getEntriesByName(url)[0]` → `duration` e `transferSize`, 5 cargas frias (contexto novo por carga); registrar mediana.

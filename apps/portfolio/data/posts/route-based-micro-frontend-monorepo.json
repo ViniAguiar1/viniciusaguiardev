@@ -30,7 +30,7 @@
   "blocks": [
     {
       "type": "paragraph",
-      "text": "No [post anterior](/pt/posts/micro-frontend-angular-inside-nextjs) eu coloquei um app Angular dentro de uma página deste site: um micro frontend composto dentro da página. Esse é um modelo. O que as empresas mais usam é mais simples de descrever: dividir por rota. Um caminho do site pertence a outro app, com build e deploy próprios, e o domínio continua o mesmo."
+      "text": "No [post anterior](/pt/posts/micro-frontend-angular-inside-nextjs) eu coloquei um app Angular dentro de uma página deste site: um micro frontend composto dentro da página. Esse é um modelo. Outro é mais simples de descrever: dividir por rota. Um caminho do site pertence a outro app, com build e deploy próprios, e o domínio continua o mesmo."
     },
     {
       "type": "paragraph",
@@ -132,9 +132,9 @@
       "type": "list",
       "items": [
         "**O salto a mais.** Servida direto, a zona respondeu em 224 ms; passando pelo rewrite do portfólio, em 267 ms.",
-        "**Client-side não é automaticamente mais rápido.** Trocar o idioma dentro da zona (client-side) levou 534 ms, enquanto atravessar da zona para a home (documento completo) levou 318 ms. A transição client-side também atravessa o rewrite para buscar os dados e, sem pré-carregamento dentro da zona, paga essa viagem a cada clique.",
+        "**Client-side não é automaticamente mais rápido.** Trocar o idioma dentro da zona (client-side) levou 534 ms, enquanto atravessar da zona para a home (documento completo) levou 318 ms. A transição client-side busca os dados da página através do rewrite: uma ida e volta a mais a cada troca.",
         "**Os deploys são independentes de verdade.** Um commit só na zona rebuilda só a zona; um commit só no portfólio rebuilda só o portfólio; uma mudança na moldura rebuilda os dois, porque os dois dependem dela.",
-        "**A falha tem outro formato.** Se a zona cair, `/uses` falha e o resto do site continua funcionando. No experimento com Angular, um micro frontend com falha derrubava um bloco e deixava a página de pé."
+        "**A falha tem outro formato.** Se a zona cair, `/uses` falharia e o resto do site continuaria funcionando: rewrite não tem fallback. No experimento com Angular, um micro frontend com falha derrubava um bloco e deixava a página de pé."
       ],
       "ordered": false
     },
@@ -150,19 +150,19 @@
     {
       "type": "list",
       "items": [
-        "**Os pré-carregamentos falhavam pelo rewrite.** O Next.js 16 pré-carrega uma rota segmento por segmento, com um header especial. Chamada direto, a zona respondia essas requisições. Pelo portfólio, respondia 404: o rewrite definido na configuração do Next.js chegava à zona com o caminho já reescrito para o formato RSC, junto com um header de segmento com o qual ele não combina. A navegação continuava funcionando, só que sem pré-carregamento. Minha primeira correção, mover o rewrite para a camada da plataforma (`vercel.json`), não mudou nada. O que funcionou foi desligar o pré-carregamento dos links dentro da zona: a requisição que falhava simplesmente deixou de existir.",
+        "**Os pré-carregamentos falhavam pelo rewrite.** O Next.js 16 pré-carrega uma rota segmento por segmento, com um header especial. Chamada direto, a zona respondia essas requisições. Pelo portfólio, a mesma requisição atravessava o rewrite e chegava à zona de um jeito que ela não sabia servir: 404. Os pedidos completos da página passavam normalmente; só o pré-carregamento quebrava. A navegação continuava funcionando, só que sem pré-carregamento. Minha primeira correção, mover o rewrite para a camada da plataforma (`vercel.json`), não mudou nada. O que funcionou foi desligar o pré-carregamento dos links dentro da zona: a requisição que falhava simplesmente deixou de existir.",
         "**A resposta de revalidação vinha sem headers.** No experimento com Angular, o painel mostrava 0,3 KB como custo do módulo para quem voltava ao post. O 304 que a plataforma manda na revalidação não traz nenhum dos headers de CORS e de timing, então o navegador só reporta o tamanho dos headers. O painel agora trata isso como cache."
       ],
       "ordered": false
     },
     {
       "type": "heading",
-      "text": "O que a versão paga teria feito",
+      "text": "O que o produto gerenciado teria feito",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "A Vercel tem um produto de Microfrontends que faz esse roteamento no edge, a partir de um único arquivo de configuração, com prefetch entre zonas e um proxy local. Fiz com rewrites comuns do Next.js porque não queria pagar por um experimento. A diferença é quem opera o encanamento, não se o modelo funciona."
+      "text": "A Vercel tem um produto de Microfrontends que faz esse roteamento no edge, a partir de um único arquivo de configuração, com prefetch entre zonas e um proxy local. Fiz com rewrites comuns do Next.js para um experimento não depender de um produto que poderia ter custo. A diferença é quem opera o encanamento, não se o modelo funciona."
     },
     {
       "type": "heading",
@@ -186,7 +186,7 @@
   "blocks_en": [
     {
       "type": "paragraph",
-      "text": "In [my last post](/en/posts/micro-frontend-angular-inside-nextjs) I put an Angular app inside a page on this site: a micro frontend composed within the page. That's one model. The one companies use most is simpler to describe: split by route. A path of the site belongs to a different app, with its own build and its own deploy, and the domain stays the same."
+      "text": "In [my last post](/en/posts/micro-frontend-angular-inside-nextjs) I put an Angular app inside a page on this site: a micro frontend composed within the page. That's one model. Another is simpler to describe: split by route. A path of the site belongs to a different app, with its own build and its own deploy, and the domain stays the same."
     },
     {
       "type": "paragraph",
@@ -288,9 +288,9 @@
       "type": "list",
       "items": [
         "**The extra hop.** Served directly, the zone answered in 224 ms; through the portfolio's rewrite, in 267 ms.",
-        "**Client-side is not automatically faster.** Switching language inside the zone (client-side) took 534 ms, while crossing from the zone to the home page (a full document) took 318 ms. The client-side transition also crosses the rewrite to fetch its data, and with prefetching off inside the zone, it pays for that trip on every click.",
+        "**Client-side is not automatically faster.** Switching language inside the zone (client-side) took 534 ms, while crossing from the zone to the home page (a full document) took 318 ms. The client-side transition fetches the page's data through the rewrite: one extra round trip on every switch.",
         "**Deploys really are independent.** A commit only in the zone rebuilds only the zone; a commit only in the portfolio rebuilds only the portfolio; a change in the frame rebuilds both, because both depend on it.",
-        "**Failure has a different shape.** If the zone is down, `/uses` fails and the rest of the site keeps working. In the Angular experiment, a failing micro frontend took down a block and left the page standing."
+        "**Failure has a different shape.** If the zone goes down, `/uses` would fail while the rest of the site keeps working: a rewrite has no fallback. In the Angular experiment, a failing micro frontend took down a block and left the page standing."
       ],
       "ordered": false
     },
@@ -306,19 +306,19 @@
     {
       "type": "list",
       "items": [
-        "**Prefetches failed through the rewrite.** Next.js 16 prefetches a route segment by segment, with a special header. Called directly, the zone answered those requests. Through the portfolio, it answered 404: the rewrite defined in the Next.js config reached the zone with the path already rewritten to the RSC format, next to a segment header it can't combine with. Navigation kept working, just without prefetching. My first fix, moving the rewrite to the platform layer (`vercel.json`), changed nothing. What worked was turning prefetching off for links inside the zone: the request that failed simply stopped happening.",
+        "**Prefetches failed through the rewrite.** Next.js 16 prefetches a route segment by segment, with a special header. Called directly, the zone answered those requests. Through the portfolio, the same request crossed the rewrite and reached the zone in a form it couldn't serve: 404. Full requests for the page went through fine; only the prefetch broke. Navigation kept working, just without prefetching. My first fix, moving the rewrite to the platform layer (`vercel.json`), changed nothing. What worked was turning prefetching off for links inside the zone: the request that failed simply stopped happening.",
         "**The revalidation response had no headers.** In the Angular experiment, the panel showed 0.3 KB as the module's cost for returning visitors. The 304 the platform sends on revalidation carries none of the CORS and timing headers, so the browser only reports the size of the headers. The panel now treats that as cache."
       ],
       "ordered": false
     },
     {
       "type": "heading",
-      "text": "What the paid version would have done",
+      "text": "What the managed product would have done",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "Vercel has a Microfrontends product that does this routing at the edge, from a single config file, with prefetching between zones and a local proxy. I did it with plain Next.js rewrites because I didn't want to pay for an experiment. The difference is who operates the plumbing, not whether the model works."
+      "text": "Vercel has a Microfrontends product that does this routing at the edge, from a single config file, with prefetching between zones and a local proxy. I did it with plain Next.js rewrites so an experiment wouldn't depend on a product that could cost money. The difference is who operates the plumbing, not whether the model works."
     },
     {
       "type": "heading",
@@ -342,7 +342,7 @@
   "blocks_es": [
     {
       "type": "paragraph",
-      "text": "En [mi post anterior](/es/posts/micro-frontend-angular-inside-nextjs) puse una app Angular dentro de una página de este sitio: un micro frontend compuesto dentro de la página. Ese es un modelo. El que más usan las empresas es más simple de describir: dividir por ruta. Una ruta del sitio pertenece a otra app, con su propio build y su propio deploy, y el dominio sigue siendo el mismo."
+      "text": "En [mi post anterior](/es/posts/micro-frontend-angular-inside-nextjs) puse una app Angular dentro de una página de este sitio: un micro frontend compuesto dentro de la página. Ese es un modelo. Otro es más simple de describir: dividir por ruta. Una ruta del sitio pertenece a otra app, con su propio build y su propio deploy, y el dominio sigue siendo el mismo."
     },
     {
       "type": "paragraph",
@@ -444,9 +444,9 @@
       "type": "list",
       "items": [
         "**El salto extra.** Servida directamente, la zona respondió en 224 ms; a través del rewrite del portfolio, en 267 ms.",
-        "**Client-side no es automáticamente más rápido.** Cambiar de idioma dentro de la zona (client-side) tomó 534 ms, mientras que cruzar de la zona a la home (documento completo) tomó 318 ms. La transición client-side también cruza el rewrite para buscar los datos y, sin prefetch dentro de la zona, paga ese viaje en cada clic.",
+        "**Client-side no es automáticamente más rápido.** Cambiar de idioma dentro de la zona (client-side) tomó 534 ms, mientras que cruzar de la zona a la home (documento completo) tomó 318 ms. La transición client-side busca los datos de la página a través del rewrite: un viaje de ida y vuelta extra en cada cambio.",
         "**Los deploys son independientes de verdad.** Un commit solo en la zona reconstruye solo la zona; un commit solo en el portfolio reconstruye solo el portfolio; un cambio en el marco reconstruye los dos, porque los dos dependen de él.",
-        "**La falla tiene otra forma.** Si la zona se cae, `/uses` falla y el resto del sitio sigue funcionando. En el experimento con Angular, un micro frontend con falla tumbaba un bloque y dejaba la página en pie."
+        "**La falla tiene otra forma.** Si la zona se cae, `/uses` fallaría y el resto del sitio seguiría funcionando: un rewrite no tiene fallback. En el experimento con Angular, un micro frontend con falla tumbaba un bloque y dejaba la página en pie."
       ],
       "ordered": false
     },
@@ -462,19 +462,19 @@
     {
       "type": "list",
       "items": [
-        "**Los prefetch fallaban a través del rewrite.** Next.js 16 hace prefetch de una ruta segmento por segmento, con un header especial. Llamada directamente, la zona respondía esas peticiones. A través del portfolio, respondía 404: el rewrite definido en la configuración de Next.js llegaba a la zona con la ruta ya reescrita al formato RSC, junto a un header de segmento con el que no combina. La navegación seguía funcionando, solo que sin prefetch. Mi primera corrección, mover el rewrite a la capa de la plataforma (`vercel.json`), no cambió nada. Lo que funcionó fue desactivar el prefetch de los links dentro de la zona: la petición que fallaba simplemente dejó de existir.",
+        "**Los prefetch fallaban a través del rewrite.** Next.js 16 hace prefetch de una ruta segmento por segmento, con un header especial. Llamada directamente, la zona respondía esas peticiones. A través del portfolio, la misma petición cruzaba el rewrite y llegaba a la zona de una forma que no sabía servir: 404. Las peticiones completas de la página pasaban sin problema; solo se rompía el prefetch. La navegación seguía funcionando, solo que sin prefetch. Mi primera corrección, mover el rewrite a la capa de la plataforma (`vercel.json`), no cambió nada. Lo que funcionó fue desactivar el prefetch de los links dentro de la zona: la petición que fallaba simplemente dejó de existir.",
         "**La respuesta de revalidación llegaba sin headers.** En el experimento con Angular, el panel mostraba 0,3 KB como costo del módulo para quien volvía al post. El 304 que la plataforma envía al revalidar no trae ninguno de los headers de CORS y de timing, así que el navegador solo reporta el tamaño de los headers. El panel ahora lo trata como caché."
       ],
       "ordered": false
     },
     {
       "type": "heading",
-      "text": "Lo que habría hecho la versión paga",
+      "text": "Lo que habría hecho el producto gestionado",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "Vercel tiene un producto de Microfrontends que hace este enrutamiento en el edge, desde un único archivo de configuración, con prefetch entre zonas y un proxy local. Yo lo hice con rewrites comunes de Next.js porque no quería pagar por un experimento. La diferencia es quién opera la plomería, no si el modelo funciona."
+      "text": "Vercel tiene un producto de Microfrontends que hace este enrutamiento en el edge, desde un único archivo de configuración, con prefetch entre zonas y un proxy local. Yo lo hice con rewrites comunes de Next.js para que un experimento no dependiera de un producto que podría tener costo. La diferencia es quién opera la plomería, no si el modelo funciona."
     },
     {
       "type": "heading",
@@ -498,7 +498,7 @@
   "blocks_jp": [
     {
       "type": "paragraph",
-      "text": "[前回の記事](/jp/posts/micro-frontend-angular-inside-nextjs)では、このサイトのページの中にAngularアプリを組み込みました。ページ内で合成するマイクロフロントエンドです。それは一つのモデルです。企業で最もよく使われているのは、もっと説明しやすいモデル、つまりルートによる分割です。サイトのあるパスが、独自のビルドとデプロイを持つ別のアプリに属し、ドメインは同じままです。"
+      "text": "[前回の記事](/jp/posts/micro-frontend-angular-inside-nextjs)では、このサイトのページの中にAngularアプリを組み込みました。ページ内で合成するマイクロフロントエンドです。それは一つのモデルです。もう一つは、もっと説明しやすいモデル、つまりルートによる分割です。サイトのあるパスが、独自のビルドとデプロイを持つ別のアプリに属し、ドメインは同じままです。"
     },
     {
       "type": "paragraph",
@@ -600,9 +600,9 @@
       "type": "list",
       "items": [
         "**余分なホップ。** 直接配信した場合、ゾーンは224 msで応答し、ポートフォリオのrewrite経由では267 msでした。",
-        "**クライアントサイドが自動的に速いわけではない。** ゾーン内の言語切り替え（クライアントサイド）は534 msかかり、ゾーンからホームへの移動（完全なドキュメント）は318 msでした。クライアントサイドの遷移もデータ取得のためにrewriteを通り、ゾーン内ではプリフェッチがないため、クリックのたびにその往復を払います。",
+        "**クライアントサイドが自動的に速いわけではない。** ゾーン内の言語切り替え（クライアントサイド）は534 msかかり、ゾーンからホームへの移動（完全なドキュメント）は318 msでした。クライアントサイドの遷移はページのデータをrewrite経由で取得するため、切り替えのたびに往復が一回増えます。",
         "**デプロイは本当に独立している。** ゾーンだけのコミットはゾーンだけを、ポートフォリオだけのコミットはポートフォリオだけを再ビルドします。枠組みの変更は両方を再ビルドします。両方がそれに依存しているからです。",
-        "**障害の形が違う。** ゾーンが落ちると`/uses`は失敗し、サイトの残りは動き続けます。Angularの実験では、障害のあるマイクロフロントエンドはブロックを一つ落とし、ページは残りました。"
+        "**障害の形が違う。** ゾーンが落ちれば`/uses`は失敗し、サイトの残りは動き続けるはずです。rewriteにはフォールバックがないからです。Angularの実験では、障害のあるマイクロフロントエンドはブロックを一つ落とし、ページは残りました。"
       ],
       "ordered": false
     },
@@ -618,19 +618,19 @@
     {
       "type": "list",
       "items": [
-        "**rewrite経由のプリフェッチが失敗していた。** Next.js 16は特別なヘッダーを付けて、ルートをセグメントごとにプリフェッチします。直接呼び出すと、ゾーンはそのリクエストに応答しました。ポートフォリオ経由では404でした。Next.jsの設定で定義したrewriteは、パスがすでにRSC形式に書き換えられた状態で、組み合わせられないセグメントヘッダーと一緒にゾーンに届いていたのです。ナビゲーションは動き続けましたが、プリフェッチはありませんでした。最初の修正として、rewriteをプラットフォームの層（`vercel.json`）に移しましたが、何も変わりませんでした。効いたのは、ゾーン内のリンクのプリフェッチを無効にすることでした。失敗していたリクエストそのものが発生しなくなったのです。",
+        "**rewrite経由のプリフェッチが失敗していた。** Next.js 16は特別なヘッダーを付けて、ルートをセグメントごとにプリフェッチします。直接呼び出すと、ゾーンはそのリクエストに応答しました。ポートフォリオ経由では、同じリクエストがrewriteを通り、ゾーンが処理できない形で届いて404になりました。ページへの通常のリクエストは問題なく通り、壊れていたのはプリフェッチだけでした。ナビゲーションは動き続けましたが、プリフェッチはありませんでした。最初の修正として、rewriteをプラットフォームの層（`vercel.json`）に移しましたが、何も変わりませんでした。効いたのは、ゾーン内のリンクのプリフェッチを無効にすることでした。失敗していたリクエストそのものが発生しなくなったのです。",
         "**再検証のレスポンスにヘッダーがなかった。** Angularの実験では、記事に戻ってきた訪問者に対して、パネルがモジュールのコストを0.3 KBと表示していました。プラットフォームが再検証で返す304にはCORSとタイミングのヘッダーが一つもなく、ブラウザはヘッダーのサイズしか報告しません。パネルは今それをキャッシュとして扱います。"
       ],
       "ordered": false
     },
     {
       "type": "heading",
-      "text": "有料版なら何をしていたか",
+      "text": "マネージド製品なら何をしていたか",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "VercelにはMicrofrontendsという製品があり、一つの設定ファイルから、このルーティングをエッジで行い、ゾーン間のプリフェッチとローカルプロキシも提供します。実験にお金を払いたくなかったので、私は普通のNext.jsのrewriteで実装しました。違いは配管を誰が運用するかであって、モデルが機能するかどうかではありません。"
+      "text": "VercelにはMicrofrontendsという製品があり、一つの設定ファイルから、このルーティングをエッジで行い、ゾーン間のプリフェッチとローカルプロキシも提供します。実験を、費用がかかるかもしれない製品に依存させたくなかったので、私は普通のNext.jsのrewriteで実装しました。違いは配管を誰が運用するかであって、モデルが機能するかどうかではありません。"
     },
     {
       "type": "heading",
@@ -654,7 +654,7 @@
   "blocks_fr": [
     {
       "type": "paragraph",
-      "text": "Dans [mon dernier article](/fr/posts/micro-frontend-angular-inside-nextjs), j'ai mis une app Angular à l'intérieur d'une page de ce site : un micro frontend composé dans la page. C'est un modèle. Celui que les entreprises utilisent le plus est plus simple à décrire : le découpage par route. Un chemin du site appartient à une autre app, avec son propre build et son propre déploiement, et le domaine reste le même."
+      "text": "Dans [mon dernier article](/fr/posts/micro-frontend-angular-inside-nextjs), j'ai mis une app Angular à l'intérieur d'une page de ce site : un micro frontend composé dans la page. C'est un modèle. Un autre est plus simple à décrire : le découpage par route. Un chemin du site appartient à une autre app, avec son propre build et son propre déploiement, et le domaine reste le même."
     },
     {
       "type": "paragraph",
@@ -756,9 +756,9 @@
       "type": "list",
       "items": [
         "**Le saut supplémentaire.** Servie directement, la zone répondait en 224 ms ; via le rewrite du portfolio, en 267 ms.",
-        "**Le côté client n'est pas automatiquement plus rapide.** Changer de langue dans la zone (côté client) a pris 534 ms, alors que passer de la zone à l'accueil (document complet) a pris 318 ms. La transition côté client traverse elle aussi le rewrite pour chercher les données et, sans préchargement dans la zone, paie ce trajet à chaque clic.",
+        "**Le côté client n'est pas automatiquement plus rapide.** Changer de langue dans la zone (côté client) a pris 534 ms, alors que passer de la zone à l'accueil (document complet) a pris 318 ms. La transition côté client va chercher les données de la page à travers le rewrite : un aller-retour de plus à chaque changement.",
         "**Les déploiements sont vraiment indépendants.** Un commit dans la seule zone ne rebuilde que la zone ; un commit dans le seul portfolio ne rebuilde que le portfolio ; un changement dans le cadre rebuilde les deux, parce que les deux en dépendent.",
-        "**La panne a une autre forme.** Si la zone tombe, `/uses` échoue et le reste du site continue de fonctionner. Dans l'expérience Angular, un micro frontend en panne faisait tomber un bloc et laissait la page debout."
+        "**La panne a une autre forme.** Si la zone tombe, `/uses` échouerait et le reste du site continuerait de fonctionner : un rewrite n'a pas de repli. Dans l'expérience Angular, un micro frontend en panne faisait tomber un bloc et laissait la page debout."
       ],
       "ordered": false
     },
@@ -774,19 +774,19 @@
     {
       "type": "list",
       "items": [
-        "**Les prefetchs échouaient à travers le rewrite.** Next.js 16 précharge une route segment par segment, avec un en-tête spécial. Appelée directement, la zone répondait à ces requêtes. Via le portfolio, elle répondait 404 : le rewrite défini dans la configuration Next.js arrivait à la zone avec le chemin déjà réécrit au format RSC, à côté d'un en-tête de segment avec lequel il ne se combine pas. La navigation continuait de fonctionner, simplement sans préchargement. Ma première correction, déplacer le rewrite vers la couche de la plateforme (`vercel.json`), n'a rien changé. Ce qui a marché, c'est de désactiver le préchargement des liens à l'intérieur de la zone : la requête qui échouait a tout simplement cessé d'exister.",
+        "**Les prefetchs échouaient à travers le rewrite.** Next.js 16 précharge une route segment par segment, avec un en-tête spécial. Appelée directement, la zone répondait à ces requêtes. Via le portfolio, la même requête traversait le rewrite et arrivait à la zone sous une forme qu'elle ne savait pas servir : 404. Les requêtes complètes de la page passaient normalement ; seul le préchargement cassait. La navigation continuait de fonctionner, simplement sans préchargement. Ma première correction, déplacer le rewrite vers la couche de la plateforme (`vercel.json`), n'a rien changé. Ce qui a marché, c'est de désactiver le préchargement des liens à l'intérieur de la zone : la requête qui échouait a tout simplement cessé d'exister.",
         "**La réponse de revalidation arrivait sans en-têtes.** Dans l'expérience Angular, le panneau affichait 0,3 Ko comme coût du module pour les visiteurs qui revenaient. Le 304 que la plateforme renvoie à la revalidation ne porte aucun des en-têtes CORS et de timing, donc le navigateur ne rapporte que la taille des en-têtes. Le panneau traite désormais ce cas comme du cache."
       ],
       "ordered": false
     },
     {
       "type": "heading",
-      "text": "Ce que la version payante aurait fait",
+      "text": "Ce que le produit géré aurait fait",
       "level": 2
     },
     {
       "type": "paragraph",
-      "text": "Vercel a un produit Microfrontends qui fait ce routage à l'edge, à partir d'un seul fichier de configuration, avec du préchargement entre zones et un proxy local. Je l'ai fait avec de simples rewrites Next.js parce que je ne voulais pas payer pour une expérience. La différence, c'est qui opère la tuyauterie, pas si le modèle fonctionne."
+      "text": "Vercel a un produit Microfrontends qui fait ce routage à l'edge, à partir d'un seul fichier de configuration, avec du préchargement entre zones et un proxy local. Je l'ai fait avec de simples rewrites Next.js pour qu'une expérience ne dépende pas d'un produit qui pouvait être payant. La différence, c'est qui opère la tuyauterie, pas si le modèle fonctionne."
     },
     {
       "type": "heading",

@@ -1,0 +1,6 @@
+# Cada zona tem dono próprio. Num time maior, apps/uses seria de outro time,
+# e a moldura (packages/) de um time de plataforma — o repositório é um só,
+# o deploy e a responsabilidade não.
+/apps/portfolio/  @ViniAguiar1
+/apps/uses/       @ViniAguiar1
+/packages/        @ViniAguiar1

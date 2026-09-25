@@ -1,10 +1,18 @@
+import { LOCALES } from "@repo/i18n"
+
 // A que app (zona) pertence cada caminho do domínio. Navegar dentro da mesma
 // zona pode ser client-side; atravessar zonas exige carregar o documento,
 // porque a rota não existe no app atual.
-export type Zone = "portfolio"
+export type Zone = "portfolio" | "uses"
 
-export function zoneFor(_pathname: string): Zone {
-  return "portfolio"
+const LOCALE_GROUP = `(?:${LOCALES.join("|")})`
+const USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)
+
+// Parâmetro de locale no formato path-to-regexp, para os rewrites do portfólio.
+export const USES_LOCALE_PARAM = `:locale(${LOCALES.join("|")})`
+
+export function zoneFor(pathname: string): Zone {
+  return USES.test(pathname) ? "uses" : "portfolio"
 }
 
 export type LinkMode = "client" | "document" | "external"

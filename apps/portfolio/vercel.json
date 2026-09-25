@@ -1,4 +1,22 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "pnpm install --frozen-lockfile"
+  "installCommand": "pnpm install --frozen-lockfile",
+  "rewrites": [
+    {
+      "source": "/:locale(pt|en|es|jp|fr)/uses",
+      "destination": "https://uses-three.vercel.app/:locale/uses"
+    },
+    {
+      "source": "/:locale(pt|en|es|jp|fr)/uses/:path*",
+      "destination": "https://uses-three.vercel.app/:locale/uses/:path*"
+    },
+    {
+      "source": "/uses",
+      "destination": "https://uses-three.vercel.app/uses"
+    },
+    {
+      "source": "/uses-static/:path*",
+      "destination": "https://uses-three.vercel.app/uses-static/:path*"
+    }
+  ]
 }

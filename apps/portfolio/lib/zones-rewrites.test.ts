@@ -22,3 +22,16 @@ describe("usesRewrites", () => {
     expect(() => usesRewrites({ NODE_ENV: "production" })).toThrow(/USES_ZONE_URL/)
   })
 })
+
+describe("vercel.json", () => {
+  // Na Vercel, o rewrite da zona vive no vercel.json (camada de rede, repassa o
+  // caminho intacto). O do next.config serve o dev local. Os dois não podem
+  // divergir nas rotas que encaminham.
+  it("encaminha as mesmas rotas que usesRewrites, para uma URL https", async () => {
+    const { default: vercel } = await import("../vercel.json", { with: { type: "json" } })
+    const fromVercel = (vercel.rewrites ?? []).map((r: { source: string; destination: string }) => r)
+    const zone = new URL(fromVercel[0]?.destination ?? "http://x").origin
+    expect(zone.startsWith("https://")).toBe(true)
+    expect(fromVercel).toEqual(usesRewrites({ USES_ZONE_URL: zone, NODE_ENV: "production" }))
+  })
+})

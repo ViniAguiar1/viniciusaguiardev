@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { LOCALES } from "@repo/i18n"
-import { zoneFor, linkMode, USES_LOCALE_PARAM } from "./zones"
+import { zoneFor, linkMode, shouldPrefetch, USES_LOCALE_PARAM } from "./zones"
 
 describe("zoneFor", () => {
   it("uses em todos os locales, com ou sem barra final e subcaminhos", () => {
@@ -42,5 +42,12 @@ describe("linkMode", () => {
 describe("USES_LOCALE_PARAM", () => {
   it("é o parâmetro path-to-regexp com os locales do site", () => {
     expect(USES_LOCALE_PARAM).toBe(`:locale(${LOCALES.join("|")})`)
+  })
+})
+
+describe("shouldPrefetch", () => {
+  it("só a zona principal pré-carrega; zonas servidas por rewrite não", () => {
+    expect(shouldPrefetch("portfolio")).toBe(true)
+    expect(shouldPrefetch("uses")).toBe(false)
   })
 })

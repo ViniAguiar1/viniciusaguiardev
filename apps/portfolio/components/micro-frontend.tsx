@@ -2,6 +2,8 @@
 
 import { createElement, useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
+import { toast } from "sonner"
+import { Toaster } from "@repo/ui/components/sonner"
 import { t, localeToHtmlLang, type Locale } from "@repo/i18n"
 import { loadRemoteModule } from "@/lib/mfe"
 import { parsePing, resolveTheme, type MfePing } from "@/lib/mfe-host"
@@ -47,14 +49,28 @@ export function MicroFrontend({ src, tag, locale }: Props) {
     if (status !== "ready" || !el) return
     const onPing = (event: Event) => {
       const parsed = parsePing((event as CustomEvent).detail)
-      if (parsed) setPing(parsed)
+      if (!parsed) return
+      setPing(parsed)
+      // O evento nasceu dentro do custom element Angular e atravessou a
+      // fronteira: o toast é do site, não do micro frontend.
+      toast.success(
+        t(locale, {
+          pt: "Evento recebido do micro frontend",
+          en: "Event received from the micro frontend",
+          es: "Evento recibido del micro frontend",
+          jp: "マイクロフロントエンドからイベントを受信",
+          fr: "Événement reçu du micro frontend",
+        }),
+        { description: `Angular ${parsed.angularVersion} · ${new Date(parsed.at).toLocaleTimeString(localeToHtmlLang(locale))}` },
+      )
     }
     el.addEventListener("mfe:ping", onPing)
     return () => el.removeEventListener("mfe:ping", onPing)
-  }, [status])
+  }, [status, locale])
 
   return (
     <div ref={wrapperRef} className="not-prose">
+      <Toaster position="top-right" offset={{ right: 88 }} />
       <div className="min-h-[320px] border border-line">
         {status === "ready" ? (
           createElement(tag, { ref: elementRef, locale, theme })

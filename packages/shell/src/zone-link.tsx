@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createContext, useCallback, useContext, type AnchorHTMLAttributes, type ReactNode } from "react"
-import { linkMode, type Zone } from "./zones"
+import { linkMode, shouldPrefetch, type Zone } from "./zones"
 
 export const ZoneContext = createContext<Zone>("portfolio")
 
@@ -20,7 +20,7 @@ export function ZoneLink({ href, children, ...rest }: Props) {
   const zone = useContext(ZoneContext)
   if (linkMode(zone, href) === "client") {
     return (
-      <Link href={href} {...rest}>
+      <Link href={href} prefetch={shouldPrefetch(zone) ? undefined : false} {...rest}>
         {children}
       </Link>
     )

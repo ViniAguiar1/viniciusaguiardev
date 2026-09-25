@@ -189,15 +189,23 @@ describe("getAllPosts", () => {
   // Uma data ausente ou malformada não quebraria o build: ordenaria por
   // último em silêncio e iria para o schema.org como lixo, que é o bug que
   // este campo veio corrigir. Só um teste pega isso.
+  // Data (AAAA-MM-DD) ou data com hora UTC (AAAA-MM-DDTHH:MM:SSZ): a hora
+  // desempata posts do mesmo dia pela ordem real de publicação, e as duas
+  // formas ordenam certo como string e são aceitas pelo schema.org.
   it("gives every post a valid ISO 8601 publication date", () => {
     const invalidos = getAllPosts("pt")
-      .filter((p) => !/^\d{4}-\d{2}-\d{2}$/.test(p.publishedAt) || Number.isNaN(Date.parse(p.publishedAt)))
+      .filter((p) => !/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}Z)?$/.test(p.publishedAt) || Number.isNaN(Date.parse(p.publishedAt)))
       .map((p) => `${p.slug}: ${JSON.stringify(p.publishedAt)}`)
     expect(invalidos).toEqual([])
   })
 
   // O desempate por slug é o que mantém a listagem estável entre máquinas;
   // sem ele, cinco posts que dividem a mesma data ordenariam pelo readdir.
+  it("orders same-day posts by publication time when it is given", () => {
+    const slugs = getAllPosts("pt").map((p) => p.slug)
+    expect(slugs.indexOf("micro-frontend-angular-inside-nextjs")).toBeLessThan(slugs.indexOf("distribution-was-the-product"))
+  })
+
   it("breaks same-date ties by slug, not by filesystem order", () => {
     const posts = getAllPosts("pt")
     const empatados = posts.filter((p, i) => i > 0 && posts[i - 1].publishedAt === p.publishedAt)

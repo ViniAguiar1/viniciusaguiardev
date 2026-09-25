@@ -1,0 +1,810 @@
+{
+  "slug": "route-based-micro-frontend-monorepo",
+  "coverSubject": "two separate solid blocks of different finishes standing side by side with a narrow gap between them, both enclosed by one single continuous thin frame that wraps around the pair and binds them into one object, no text, no symbols, no figures",
+  "date": "25 de set de 2026",
+  "date_en": "Sep 25, 2026",
+  "date_es": "25 de sept. de 2026",
+  "date_jp": "2026年9月25日",
+  "date_fr": "25 septembre 2026",
+  "publishedAt": "2026-09-25",
+  "readTime": "6 min de leitura",
+  "readTime_en": "6 min read",
+  "readTime_es": "6 min de lectura",
+  "readTime_jp": "6分で読めます",
+  "readTime_fr": "6 min de lecture",
+  "tag": "Arquitetura",
+  "tag_en": "Architecture",
+  "tag_es": "Arquitectura",
+  "tag_jp": "アーキテクチャ",
+  "tag_fr": "Architecture",
+  "title": "A página tinha 514 linhas. A moldura, 2.560.",
+  "title_en": "The Page Was 514 Lines. The Frame Was 2,560.",
+  "title_es": "La página tenía 514 líneas. El marco, 2.560.",
+  "title_jp": "ページは514行。枠組みは2,560行。",
+  "title_fr": "La page faisait 514 lignes. Le cadre, 2 560.",
+  "description": "Um experimento de micro frontend por rota: a página Ferramentas passou a ser servida por outro app Next.js, no mesmo domínio. Por que a parte cara foi a moldura, o monorepo que isso exigiu e o que só apareceu em produção.",
+  "description_en": "A route-based micro frontend experiment: the Uses page is now served by another Next.js app on the same domain. Why the expensive part was the frame, the monorepo it took, and what only showed up in production.",
+  "description_es": "Un experimento de micro frontend por ruta: la página Herramientas pasó a servirla otra app Next.js, en el mismo dominio. Por qué la parte cara fue el marco, el monorepo que exigió y lo que solo apareció en producción.",
+  "description_jp": "ルート分割のマイクロフロントエンドの実験：ツールページを、同じドメインのまま別のNext.jsアプリから配信するようにした。高くついたのが枠組みだった理由、そのために必要になったモノレポ、そして本番でしか現れなかったこと。",
+  "description_fr": "Une expérience de micro frontend par route : la page Outils est désormais servie par une autre app Next.js, sur le même domaine. Pourquoi la partie coûteuse a été le cadre, le monorepo que ça a exigé et ce qui n'est apparu qu'en production.",
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "No [post anterior](/pt/posts/micro-frontend-angular-inside-nextjs) eu coloquei um app Angular dentro de uma página deste site: um micro frontend composto dentro da página. Esse é um modelo. Outro é mais simples de descrever: dividir por rota. Um caminho do site pertence a outro app, com build e deploy próprios, e o domínio continua o mesmo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Então fiz isso aqui. A página [Ferramentas](/pt/uses) agora é servida por um segundo app Next.js. Abra o DevTools nela e a resposta traz um header que este site não manda em nenhum outro lugar: `x-zone: uses`."
+    },
+    {
+      "type": "heading",
+      "text": "A página era a parte barata",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A página em si tem 514 linhas: uma lista de ferramentas em cinco idiomas. Levar isso para outro app deveria ser copiar e colar."
+    },
+    {
+      "type": "paragraph",
+      "text": "Não é, porque a página não vive sozinha. Ela fica dentro da sidebar, do header do mobile, do footer, do atalho de busca, das trocas de idioma e de tema, dos tokens de design e das traduções. Contando, essa moldura tem umas 2.560 linhas, cinco vezes a página. Um micro frontend por rota não precisa de uma página; precisa da moldura inteira em volta dela, idêntica, em dois apps."
+    },
+    {
+      "type": "paragraph",
+      "text": "Foi aí que estava a decisão de verdade. Copiar a moldura significa duas sidebars divergindo com o tempo. Dar ao app novo uma moldura mínima significa uma página que parece outro site. A resposta que escala é um monorepo com a moldura como pacote compartilhado."
+    },
+    {
+      "type": "heading",
+      "text": "Passo um: um monorepo que não muda nada",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Antes de criar qualquer app novo, transformei o repositório num monorepo com pnpm e Turborepo: o site foi para `apps/portfolio`, e a moldura, o design system e as traduções viraram pacotes. A regra era que quem visita não podia perceber nada."
+    },
+    {
+      "type": "paragraph",
+      "text": "\"Idêntico\" tinha que ser medido, não presumido. Antes de mover um único arquivo, salvei o HTML das 122 páginas e o conjunto completo de seletores CSS, e comparei depois de cada passo. Essa comparação se pagou duas vezes:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**58 classes CSS sumiram.** O Tailwind varria o repositório inteiro, incluindo exemplos de código na documentação, e gerava CSS para eles. Quando passou a varrer só o app, esse CSS morto foi embora. Conferi uma por uma antes de aceitar.",
+        "**A moldura perdeu o estilo quando tirei uma linha.** O Tailwind só gera as classes que encontra, e os pacotes ficam fora do app. Sem um `@source` explícito apontando para eles, a sidebar sai sem estilo e todos os checks continuam verdes."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Depois, uma revisão independente pegou mais um: o Turborepo não sabia que o app dependia dos pacotes, então uma mudança só na moldura reaproveitava o resultado antigo dos testes do app. O CI teria aprovado uma tradução faltando. Uma regra de dependência resolveu."
+    },
+    {
+      "type": "heading",
+      "text": "Passo dois: a zona",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Com a moldura como pacote, o app novo é pequeno. Ele serve uma rota, usa a mesma moldura e prefixa os próprios assets para não colidirem com os do portfólio no mesmo domínio:"
+    },
+    {
+      "type": "code",
+      "code": "const nextConfig: NextConfig = {\n  // The zone's assets must not collide with the portfolio's on the same domain.\n  assetPrefix: \"/uses-static\",\n  transpilePackages: [\"@repo/i18n\", \"@repo/ui\", \"@repo/shell\"],\n  async headers() {\n    return [{ source: \"/(.*)\", headers: [{ key: \"x-zone\", value: \"uses\" }] }]\n  },\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "O portfólio encaminha a rota para ele. Se a URL da zona faltar num build de produção, o build falha em vez de publicar um rewrite apontando para lugar nenhum:"
+    },
+    {
+      "type": "code",
+      "code": "export function usesRewrites(env: { USES_ZONE_URL?: string; NODE_ENV?: string }) {\n  const raw = env.USES_ZONE_URL ?? (env.NODE_ENV === \"production\" ? undefined : \"http://localhost:3001\")\n  if (!raw) throw new Error(\"USES_ZONE_URL is required in production builds\")\n  const zone = raw.replace(/\\/$/, \"\")\n  return [\n    { source: `/${USES_LOCALE_PARAM}/uses`, destination: `${zone}/:locale/uses` },\n    { source: `/${USES_LOCALE_PARAM}/uses/:path*`, destination: `${zone}/:locale/uses/:path*` },\n    { source: \"/uses\", destination: `${zone}/uses` },\n    { source: \"/uses-static/:path*\", destination: `${zone}/uses-static/:path*` },\n  ]\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "O domínio próprio da zona serve um `robots.txt` que bloqueia tudo. Os buscadores chegam à página pelo domínio principal, e a URL canônica já aponta para lá."
+    },
+    {
+      "type": "heading",
+      "text": "Um link que sabe para onde vai",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A parte sutil foi a navegação. Navegação client-side só funciona dentro do mesmo app: da página Ferramentas, ir para a home com uma rota client-side pediria a rota a um app que não a tem. Então a moldura aprendeu a que app pertence cada caminho:"
+    },
+    {
+      "type": "code",
+      "code": "export type Zone = \"portfolio\" | \"uses\"\n\nconst LOCALE_GROUP = `(?:${LOCALES.join(\"|\")})`\nconst USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)\n\nexport function zoneFor(pathname: string): Zone {\n  return USES.test(pathname) ? \"uses\" : \"portfolio\"\n}\n\nexport function linkMode(current: Zone, href: string): \"client\" | \"document\" | \"external\" {\n  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith(\"//\")) return \"external\"\n  const pathname = href.split(/[?#]/)[0] || \"/\"\n  return zoneFor(pathname) === current ? \"client\" : \"document\"\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Todo link e toda navegação programática da moldura passam por essa decisão. Trocar o idioma dentro de Ferramentas continua client-side. Ir de Ferramentas para a home, ou para a busca, carrega um documento novo, de propósito."
+    },
+    {
+      "type": "heading",
+      "text": "O que custou",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**O salto a mais.** Servida direto, a zona respondeu em 224 ms; passando pelo rewrite do portfólio, em 267 ms.",
+        "**Client-side não é automaticamente mais rápido.** Trocar o idioma dentro da zona (client-side) levou 534 ms, enquanto atravessar da zona para a home (documento completo) levou 318 ms. A transição client-side busca os dados da página através do rewrite: uma ida e volta a mais a cada troca.",
+        "**Os deploys são independentes de verdade.** Um commit só na zona rebuilda só a zona; um commit só no portfólio rebuilda só o portfólio; uma mudança na moldura rebuilda os dois, porque os dois dependem dela.",
+        "**A falha tem outro formato.** Se a zona cair, `/uses` falharia e o resto do site continuaria funcionando: rewrite não tem fallback. No experimento com Angular, um micro frontend com falha derrubava um bloco e deixava a página de pé."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "O que só a produção mostrou",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tudo passou localmente. Duas coisas só apareceram com os dois apps publicados:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Os pré-carregamentos falhavam pelo rewrite.** O Next.js 16 pré-carrega uma rota segmento por segmento, com um header especial. Chamada direto, a zona respondia essas requisições. Pelo portfólio, a mesma requisição atravessava o rewrite e chegava à zona de um jeito que ela não sabia servir: 404. Os pedidos completos da página passavam normalmente; só o pré-carregamento quebrava. A navegação continuava funcionando, só que sem pré-carregamento. Minha primeira correção, mover o rewrite para a camada da plataforma (`vercel.json`), não mudou nada. O que funcionou foi desligar o pré-carregamento dos links dentro da zona: a requisição que falhava simplesmente deixou de existir.",
+        "**A resposta de revalidação vinha sem headers.** No experimento com Angular, o painel mostrava 0,3 KB como custo do módulo para quem voltava ao post. O 304 que a plataforma manda na revalidação não traz nenhum dos headers de CORS e de timing, então o navegador só reporta o tamanho dos headers. O painel agora trata isso como cache."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "O que o produto gerenciado teria feito",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A Vercel tem um produto de Microfrontends que faz esse roteamento no edge, a partir de um único arquivo de configuração, com prefetch entre zonas e um proxy local. Fiz com rewrites comuns do Next.js para um experimento não depender de um produto que poderia ter custo. A diferença é quem opera o encanamento, não se o modelo funciona."
+    },
+    {
+      "type": "heading",
+      "text": "Um repositório, dois donos",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Uma pergunta justa é se o app novo não deveria morar num repositório próprio. Micro frontend é sobre deploy e dono independentes, não sobre repositório. Aqui a zona tem app próprio, projeto próprio na Vercel e deploy próprio, e um arquivo `CODEOWNERS` deixa a responsabilidade explícita. Um repositório separado me obrigaria a publicar a moldura como pacote versionado e manter dois apps sincronizados com ela, que é exatamente a divergência que eu queria evitar. O experimento com Angular ganhou repositório próprio porque não compartilhava nada com o site."
+    },
+    {
+      "type": "heading",
+      "text": "Quando não vale a pena",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Para uma pessoa e uma página, isto é exagero, e esse era o ponto. O custo não é a página: é a moldura, o monorepo, os rewrites e um modo de falha novo. Começa a valer quando vários times precisam publicar partes do mesmo site no próprio ritmo. Agora eu sei como é o primeiro passo disso."
+    }
+  ],
+  "blocks_en": [
+    {
+      "type": "paragraph",
+      "text": "In [my last post](/en/posts/micro-frontend-angular-inside-nextjs) I put an Angular app inside a page on this site: a micro frontend composed within the page. That's one model. Another is simpler to describe: split by route. A path of the site belongs to a different app, with its own build and its own deploy, and the domain stays the same."
+    },
+    {
+      "type": "paragraph",
+      "text": "So I did it here. The [Uses](/en/uses) page is now served by a second Next.js app. Open DevTools on it and the response carries a header this site doesn't send anywhere else: `x-zone: uses`."
+    },
+    {
+      "type": "heading",
+      "text": "The page was the cheap part",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The page itself is 514 lines: a list of tools in five languages. Moving it to another app should be a copy and paste."
+    },
+    {
+      "type": "paragraph",
+      "text": "It isn't, because the page doesn't live alone. It sits inside the sidebar, the mobile header, the footer, the search shortcut, the language and theme switchers, the design tokens and the translations. Counted, that frame is about 2,560 lines, five times the page. A route-based micro frontend doesn't need a page; it needs the whole frame around it, identical, in two apps."
+    },
+    {
+      "type": "paragraph",
+      "text": "That's where the real decision was. Copying the frame means two sidebars drifting apart. Giving the new app a minimal frame means a page that looks like a different site. The answer that scales is a monorepo with the frame as a shared package."
+    },
+    {
+      "type": "heading",
+      "text": "Step one: a monorepo that changes nothing",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Before creating any new app, I turned the repository into a pnpm and Turborepo monorepo: the site moved to `apps/portfolio`, and the frame, the design system and the translations became packages. The rule was that visitors couldn't see any of it."
+    },
+    {
+      "type": "paragraph",
+      "text": "\"Identical\" had to be measured, not assumed. Before moving a single file, I saved the HTML of all 122 pages and the full set of CSS selectors, and compared them after every step. That comparison earned its keep twice:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**58 CSS classes disappeared.** Tailwind used to scan the whole repository, including code examples in documentation, and generated CSS for them. Once it scanned only the app, that dead CSS went away. I checked every one of them before accepting it.",
+        "**The frame lost its styles when I removed one line.** Tailwind only generates classes it finds, and the packages live outside the app. Without an explicit `@source` pointing at them, the sidebar renders unstyled and every check stays green."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "An independent review then caught one more: Turborepo didn't know the app depended on the packages, so a change only in the frame reused the app's cached test results. CI would have passed a missing translation. One dependency rule fixed it."
+    },
+    {
+      "type": "heading",
+      "text": "Step two: the zone",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "With the frame as a package, the new app is small. It serves one route, uses the same frame, and prefixes its assets so they don't collide with the portfolio's on the same domain:"
+    },
+    {
+      "type": "code",
+      "code": "const nextConfig: NextConfig = {\n  // The zone's assets must not collide with the portfolio's on the same domain.\n  assetPrefix: \"/uses-static\",\n  transpilePackages: [\"@repo/i18n\", \"@repo/ui\", \"@repo/shell\"],\n  async headers() {\n    return [{ source: \"/(.*)\", headers: [{ key: \"x-zone\", value: \"uses\" }] }]\n  },\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "The portfolio forwards the route to it. If the zone's URL is missing in a production build, the build fails instead of shipping a rewrite to nowhere:"
+    },
+    {
+      "type": "code",
+      "code": "export function usesRewrites(env: { USES_ZONE_URL?: string; NODE_ENV?: string }) {\n  const raw = env.USES_ZONE_URL ?? (env.NODE_ENV === \"production\" ? undefined : \"http://localhost:3001\")\n  if (!raw) throw new Error(\"USES_ZONE_URL is required in production builds\")\n  const zone = raw.replace(/\\/$/, \"\")\n  return [\n    { source: `/${USES_LOCALE_PARAM}/uses`, destination: `${zone}/:locale/uses` },\n    { source: `/${USES_LOCALE_PARAM}/uses/:path*`, destination: `${zone}/:locale/uses/:path*` },\n    { source: \"/uses\", destination: `${zone}/uses` },\n    { source: \"/uses-static/:path*\", destination: `${zone}/uses-static/:path*` },\n  ]\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "The zone's own domain serves a `robots.txt` that blocks everything. Search engines reach the page through the main domain, and the canonical URL already points there."
+    },
+    {
+      "type": "heading",
+      "text": "A link that knows where it's going",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The subtle part was navigation. Client-side navigation only works inside the same app: from the Uses page, going to the home page with a client-side route would ask an app that doesn't have that route. So the frame learned which paths belong to which app:"
+    },
+    {
+      "type": "code",
+      "code": "export type Zone = \"portfolio\" | \"uses\"\n\nconst LOCALE_GROUP = `(?:${LOCALES.join(\"|\")})`\nconst USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)\n\nexport function zoneFor(pathname: string): Zone {\n  return USES.test(pathname) ? \"uses\" : \"portfolio\"\n}\n\nexport function linkMode(current: Zone, href: string): \"client\" | \"document\" | \"external\" {\n  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith(\"//\")) return \"external\"\n  const pathname = href.split(/[?#]/)[0] || \"/\"\n  return zoneFor(pathname) === current ? \"client\" : \"document\"\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Every link and every programmatic navigation in the frame goes through that decision. Switching language inside Uses stays client-side. Going from Uses to the home page, or to search, loads a new document, on purpose."
+    },
+    {
+      "type": "heading",
+      "text": "What it cost",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**The extra hop.** Served directly, the zone answered in 224 ms; through the portfolio's rewrite, in 267 ms.",
+        "**Client-side is not automatically faster.** Switching language inside the zone (client-side) took 534 ms, while crossing from the zone to the home page (a full document) took 318 ms. The client-side transition fetches the page's data through the rewrite: one extra round trip on every switch.",
+        "**Deploys really are independent.** A commit only in the zone rebuilds only the zone; a commit only in the portfolio rebuilds only the portfolio; a change in the frame rebuilds both, because both depend on it.",
+        "**Failure has a different shape.** If the zone goes down, `/uses` would fail while the rest of the site keeps working: a rewrite has no fallback. In the Angular experiment, a failing micro frontend took down a block and left the page standing."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "What only production showed",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Everything passed locally. Two things only appeared once both apps were deployed:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Prefetches failed through the rewrite.** Next.js 16 prefetches a route segment by segment, with a special header. Called directly, the zone answered those requests. Through the portfolio, the same request crossed the rewrite and reached the zone in a form it couldn't serve: 404. Full requests for the page went through fine; only the prefetch broke. Navigation kept working, just without prefetching. My first fix, moving the rewrite to the platform layer (`vercel.json`), changed nothing. What worked was turning prefetching off for links inside the zone: the request that failed simply stopped happening.",
+        "**The revalidation response had no headers.** In the Angular experiment, the panel showed 0.3 KB as the module's cost for returning visitors. The 304 the platform sends on revalidation carries none of the CORS and timing headers, so the browser only reports the size of the headers. The panel now treats that as cache."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "What the managed product would have done",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vercel has a Microfrontends product that does this routing at the edge, from a single config file, with prefetching between zones and a local proxy. I did it with plain Next.js rewrites so an experiment wouldn't depend on a product that could cost money. The difference is who operates the plumbing, not whether the model works."
+    },
+    {
+      "type": "heading",
+      "text": "One repository, two owners",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "A fair question is whether the new app shouldn't live in its own repository. Micro frontends are about independent deploys and ownership, not repositories. Here the zone has its own app, its own Vercel project and its own deploy, and a `CODEOWNERS` file makes ownership explicit. A separate repository would have forced me to publish the frame as a versioned package and keep two apps in sync with it, which is the drift I was trying to avoid. The Angular experiment did get its own repository, because it shared nothing with the site."
+    },
+    {
+      "type": "heading",
+      "text": "When it isn't worth it",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "For one person and one page, this is overkill, and that was the point. The cost isn't the page: it's the frame, the monorepo, the rewrites and a new failure mode. It starts to pay when several teams need to ship parts of the same site on their own schedule. Now I know what the first step of that looks like."
+    }
+  ],
+  "blocks_es": [
+    {
+      "type": "paragraph",
+      "text": "En [mi post anterior](/es/posts/micro-frontend-angular-inside-nextjs) puse una app Angular dentro de una página de este sitio: un micro frontend compuesto dentro de la página. Ese es un modelo. Otro es más simple de describir: dividir por ruta. Una ruta del sitio pertenece a otra app, con su propio build y su propio deploy, y el dominio sigue siendo el mismo."
+    },
+    {
+      "type": "paragraph",
+      "text": "Así que lo hice aquí. La página [Herramientas](/es/uses) ahora la sirve una segunda app Next.js. Abre el DevTools en ella y la respuesta trae un header que este sitio no envía en ningún otro lugar: `x-zone: uses`."
+    },
+    {
+      "type": "heading",
+      "text": "La página era la parte barata",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La página en sí tiene 514 líneas: una lista de herramientas en cinco idiomas. Llevarla a otra app debería ser copiar y pegar."
+    },
+    {
+      "type": "paragraph",
+      "text": "No lo es, porque la página no vive sola. Está dentro de la barra lateral, el header móvil, el footer, el atajo de búsqueda, los selectores de idioma y de tema, los tokens de diseño y las traducciones. Contado, ese marco tiene unas 2.560 líneas, cinco veces la página. Un micro frontend por ruta no necesita una página; necesita todo el marco alrededor, idéntico, en dos apps."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ahí estaba la decisión real. Copiar el marco significa dos barras laterales que se van separando con el tiempo. Darle a la app nueva un marco mínimo significa una página que parece otro sitio. La respuesta que escala es un monorepo con el marco como paquete compartido."
+    },
+    {
+      "type": "heading",
+      "text": "Paso uno: un monorepo que no cambia nada",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Antes de crear cualquier app nueva, convertí el repositorio en un monorepo con pnpm y Turborepo: el sitio pasó a `apps/portfolio`, y el marco, el design system y las traducciones se volvieron paquetes. La regla era que quien visita no podía notar nada."
+    },
+    {
+      "type": "paragraph",
+      "text": "\"Idéntico\" tenía que medirse, no suponerse. Antes de mover un solo archivo, guardé el HTML de las 122 páginas y el conjunto completo de selectores CSS, y los comparé después de cada paso. Esa comparación se pagó dos veces:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Desaparecieron 58 clases CSS.** Tailwind escaneaba todo el repositorio, incluidos ejemplos de código en la documentación, y generaba CSS para ellos. Cuando pasó a escanear solo la app, ese CSS muerto se fue. Revisé cada una antes de aceptarlo.",
+        "**El marco perdió los estilos al quitar una línea.** Tailwind solo genera las clases que encuentra, y los paquetes viven fuera de la app. Sin un `@source` explícito que apunte a ellos, la barra lateral sale sin estilo y todos los checks siguen en verde."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Después, una revisión independiente encontró uno más: Turborepo no sabía que la app dependía de los paquetes, así que un cambio solo en el marco reutilizaba los resultados de tests en caché de la app. El CI habría aprobado una traducción faltante. Una regla de dependencia lo resolvió."
+    },
+    {
+      "type": "heading",
+      "text": "Paso dos: la zona",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Con el marco como paquete, la app nueva es pequeña. Sirve una ruta, usa el mismo marco y pone un prefijo a sus assets para que no choquen con los del portfolio en el mismo dominio:"
+    },
+    {
+      "type": "code",
+      "code": "const nextConfig: NextConfig = {\n  // The zone's assets must not collide with the portfolio's on the same domain.\n  assetPrefix: \"/uses-static\",\n  transpilePackages: [\"@repo/i18n\", \"@repo/ui\", \"@repo/shell\"],\n  async headers() {\n    return [{ source: \"/(.*)\", headers: [{ key: \"x-zone\", value: \"uses\" }] }]\n  },\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "El portfolio le reenvía la ruta. Si falta la URL de la zona en un build de producción, el build falla en lugar de publicar un rewrite hacia ninguna parte:"
+    },
+    {
+      "type": "code",
+      "code": "export function usesRewrites(env: { USES_ZONE_URL?: string; NODE_ENV?: string }) {\n  const raw = env.USES_ZONE_URL ?? (env.NODE_ENV === \"production\" ? undefined : \"http://localhost:3001\")\n  if (!raw) throw new Error(\"USES_ZONE_URL is required in production builds\")\n  const zone = raw.replace(/\\/$/, \"\")\n  return [\n    { source: `/${USES_LOCALE_PARAM}/uses`, destination: `${zone}/:locale/uses` },\n    { source: `/${USES_LOCALE_PARAM}/uses/:path*`, destination: `${zone}/:locale/uses/:path*` },\n    { source: \"/uses\", destination: `${zone}/uses` },\n    { source: \"/uses-static/:path*\", destination: `${zone}/uses-static/:path*` },\n  ]\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "El dominio propio de la zona sirve un `robots.txt` que bloquea todo. Los buscadores llegan a la página por el dominio principal, y la URL canónica ya apunta allí."
+    },
+    {
+      "type": "heading",
+      "text": "Un link que sabe a dónde va",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La parte sutil fue la navegación. La navegación client-side solo funciona dentro de la misma app: desde la página Herramientas, ir a la home con una ruta client-side le pediría esa ruta a una app que no la tiene. Así que el marco aprendió a qué app pertenece cada ruta:"
+    },
+    {
+      "type": "code",
+      "code": "export type Zone = \"portfolio\" | \"uses\"\n\nconst LOCALE_GROUP = `(?:${LOCALES.join(\"|\")})`\nconst USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)\n\nexport function zoneFor(pathname: string): Zone {\n  return USES.test(pathname) ? \"uses\" : \"portfolio\"\n}\n\nexport function linkMode(current: Zone, href: string): \"client\" | \"document\" | \"external\" {\n  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith(\"//\")) return \"external\"\n  const pathname = href.split(/[?#]/)[0] || \"/\"\n  return zoneFor(pathname) === current ? \"client\" : \"document\"\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Cada link y cada navegación programática del marco pasa por esa decisión. Cambiar de idioma dentro de Herramientas sigue siendo client-side. Ir de Herramientas a la home, o a la búsqueda, carga un documento nuevo, a propósito."
+    },
+    {
+      "type": "heading",
+      "text": "Lo que costó",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**El salto extra.** Servida directamente, la zona respondió en 224 ms; a través del rewrite del portfolio, en 267 ms.",
+        "**Client-side no es automáticamente más rápido.** Cambiar de idioma dentro de la zona (client-side) tomó 534 ms, mientras que cruzar de la zona a la home (documento completo) tomó 318 ms. La transición client-side busca los datos de la página a través del rewrite: un viaje de ida y vuelta extra en cada cambio.",
+        "**Los deploys son independientes de verdad.** Un commit solo en la zona reconstruye solo la zona; un commit solo en el portfolio reconstruye solo el portfolio; un cambio en el marco reconstruye los dos, porque los dos dependen de él.",
+        "**La falla tiene otra forma.** Si la zona se cae, `/uses` fallaría y el resto del sitio seguiría funcionando: un rewrite no tiene fallback. En el experimento con Angular, un micro frontend con falla tumbaba un bloque y dejaba la página en pie."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Lo que solo la producción mostró",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Todo pasó localmente. Dos cosas solo aparecieron con las dos apps publicadas:"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Los prefetch fallaban a través del rewrite.** Next.js 16 hace prefetch de una ruta segmento por segmento, con un header especial. Llamada directamente, la zona respondía esas peticiones. A través del portfolio, la misma petición cruzaba el rewrite y llegaba a la zona de una forma que no sabía servir: 404. Las peticiones completas de la página pasaban sin problema; solo se rompía el prefetch. La navegación seguía funcionando, solo que sin prefetch. Mi primera corrección, mover el rewrite a la capa de la plataforma (`vercel.json`), no cambió nada. Lo que funcionó fue desactivar el prefetch de los links dentro de la zona: la petición que fallaba simplemente dejó de existir.",
+        "**La respuesta de revalidación llegaba sin headers.** En el experimento con Angular, el panel mostraba 0,3 KB como costo del módulo para quien volvía al post. El 304 que la plataforma envía al revalidar no trae ninguno de los headers de CORS y de timing, así que el navegador solo reporta el tamaño de los headers. El panel ahora lo trata como caché."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Lo que habría hecho el producto gestionado",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vercel tiene un producto de Microfrontends que hace este enrutamiento en el edge, desde un único archivo de configuración, con prefetch entre zonas y un proxy local. Yo lo hice con rewrites comunes de Next.js para que un experimento no dependiera de un producto que podría tener costo. La diferencia es quién opera la plomería, no si el modelo funciona."
+    },
+    {
+      "type": "heading",
+      "text": "Un repositorio, dos dueños",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Una pregunta justa es si la app nueva no debería vivir en su propio repositorio. Los micro frontends tratan de deploys y dueños independientes, no de repositorios. Aquí la zona tiene su propia app, su propio proyecto en Vercel y su propio deploy, y un archivo `CODEOWNERS` hace explícita la responsabilidad. Un repositorio separado me habría obligado a publicar el marco como paquete versionado y mantener dos apps sincronizadas con él, que es justamente la divergencia que quería evitar. El experimento con Angular sí tuvo su propio repositorio, porque no compartía nada con el sitio."
+    },
+    {
+      "type": "heading",
+      "text": "Cuándo no vale la pena",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Para una persona y una página, esto es excesivo, y ese era el punto. El costo no es la página: es el marco, el monorepo, los rewrites y un modo de falla nuevo. Empieza a valer la pena cuando varios equipos necesitan publicar partes del mismo sitio a su propio ritmo. Ahora sé cómo se ve el primer paso de eso."
+    }
+  ],
+  "blocks_jp": [
+    {
+      "type": "paragraph",
+      "text": "[前回の記事](/jp/posts/micro-frontend-angular-inside-nextjs)では、このサイトのページの中にAngularアプリを組み込みました。ページ内で合成するマイクロフロントエンドです。それは一つのモデルです。もう一つは、もっと説明しやすいモデル、つまりルートによる分割です。サイトのあるパスが、独自のビルドとデプロイを持つ別のアプリに属し、ドメインは同じままです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そこで、ここでそれを実践しました。[ツール](/jp/uses)ページは今、二つ目のNext.jsアプリから配信されています。そのページでDevToolsを開くと、このサイトの他のどこでも返さないヘッダーがレスポンスに含まれています：`x-zone: uses`。"
+    },
+    {
+      "type": "heading",
+      "text": "ページは安い部分だった",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ページ自体は514行です。五つの言語で書かれたツールの一覧です。別のアプリに移すのはコピー＆ペーストで済むはずでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "そうはいきません。ページは単独では存在しないからです。サイドバー、モバイルヘッダー、フッター、検索のショートカット、言語とテーマの切り替え、デザイントークン、翻訳の中にあります。数えると、この枠組みは約2,560行、ページの5倍です。ルート分割のマイクロフロントエンドに必要なのはページではなく、その周りの枠組み全体を、二つのアプリで同一に保つことです。"
+    },
+    {
+      "type": "paragraph",
+      "text": "本当の判断はそこにありました。枠組みをコピーすれば、二つのサイドバーは時間とともにずれていきます。新しいアプリに最小限の枠組みを与えれば、別のサイトのように見えるページになります。スケールする答えは、枠組みを共有パッケージにしたモノレポです。"
+    },
+    {
+      "type": "heading",
+      "text": "ステップ1：何も変えないモノレポ",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "新しいアプリを作る前に、リポジトリをpnpmとTurborepoのモノレポに変えました。サイトは`apps/portfolio`に移り、枠組み、デザインシステム、翻訳はパッケージになりました。ルールは、訪問者が何も気づかないことでした。"
+    },
+    {
+      "type": "paragraph",
+      "text": "「同一」は推測ではなく計測する必要がありました。ファイルを一つも動かす前に、122ページすべてのHTMLとCSSセレクターの完全な集合を保存し、各ステップの後に比較しました。この比較は二度役に立ちました。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**58個のCSSクラスが消えた。** Tailwindはドキュメント内のコード例を含むリポジトリ全体をスキャンし、それらのCSSまで生成していました。アプリだけをスキャンするようになると、その死んだCSSはなくなりました。受け入れる前に一つずつ確認しました。",
+        "**一行消すと枠組みのスタイルが消えた。** Tailwindは見つけたクラスしか生成せず、パッケージはアプリの外にあります。それらを指す明示的な`@source`がなければ、サイドバーはスタイルなしで表示され、すべてのチェックは緑のままです。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "その後、独立したレビューがもう一つ見つけました。Turborepoはアプリがパッケージに依存していることを知らなかったため、枠組みだけの変更ではアプリのテスト結果のキャッシュが再利用されていました。CIは翻訳の欠落を通していたでしょう。依存関係のルール一つで直りました。"
+    },
+    {
+      "type": "heading",
+      "text": "ステップ2：ゾーン",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "枠組みがパッケージになれば、新しいアプリは小さくなります。一つのルートを配信し、同じ枠組みを使い、同じドメイン上でポートフォリオのアセットと衝突しないようにアセットにプレフィックスを付けます。"
+    },
+    {
+      "type": "code",
+      "code": "const nextConfig: NextConfig = {\n  // The zone's assets must not collide with the portfolio's on the same domain.\n  assetPrefix: \"/uses-static\",\n  transpilePackages: [\"@repo/i18n\", \"@repo/ui\", \"@repo/shell\"],\n  async headers() {\n    return [{ source: \"/(.*)\", headers: [{ key: \"x-zone\", value: \"uses\" }] }]\n  },\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "ポートフォリオがそのルートを転送します。本番ビルドでゾーンのURLがなければ、どこにも向かわないrewriteを公開する代わりに、ビルドが失敗します。"
+    },
+    {
+      "type": "code",
+      "code": "export function usesRewrites(env: { USES_ZONE_URL?: string; NODE_ENV?: string }) {\n  const raw = env.USES_ZONE_URL ?? (env.NODE_ENV === \"production\" ? undefined : \"http://localhost:3001\")\n  if (!raw) throw new Error(\"USES_ZONE_URL is required in production builds\")\n  const zone = raw.replace(/\\/$/, \"\")\n  return [\n    { source: `/${USES_LOCALE_PARAM}/uses`, destination: `${zone}/:locale/uses` },\n    { source: `/${USES_LOCALE_PARAM}/uses/:path*`, destination: `${zone}/:locale/uses/:path*` },\n    { source: \"/uses\", destination: `${zone}/uses` },\n    { source: \"/uses-static/:path*\", destination: `${zone}/uses-static/:path*` },\n  ]\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "ゾーン自身のドメインは、すべてをブロックする`robots.txt`を返します。検索エンジンはメインドメインからページにたどり着き、canonical URLはすでにそちらを指しています。"
+    },
+    {
+      "type": "heading",
+      "text": "行き先を知っているリンク",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "微妙だったのはナビゲーションです。クライアントサイドのナビゲーションは同じアプリの中でしか機能しません。ツールページからクライアントサイドのルートでホームに行こうとすると、そのルートを持たないアプリに要求することになります。そこで枠組みは、各パスがどのアプリに属するかを学びました。"
+    },
+    {
+      "type": "code",
+      "code": "export type Zone = \"portfolio\" | \"uses\"\n\nconst LOCALE_GROUP = `(?:${LOCALES.join(\"|\")})`\nconst USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)\n\nexport function zoneFor(pathname: string): Zone {\n  return USES.test(pathname) ? \"uses\" : \"portfolio\"\n}\n\nexport function linkMode(current: Zone, href: string): \"client\" | \"document\" | \"external\" {\n  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith(\"//\")) return \"external\"\n  const pathname = href.split(/[?#]/)[0] || \"/\"\n  return zoneFor(pathname) === current ? \"client\" : \"document\"\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "枠組みのすべてのリンクとプログラムによるナビゲーションは、この判定を通ります。ツールページ内での言語切り替えはクライアントサイドのままです。ツールページからホームや検索に移るときは、意図的に新しいドキュメントを読み込みます。"
+    },
+    {
+      "type": "heading",
+      "text": "かかったコスト",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**余分なホップ。** 直接配信した場合、ゾーンは224 msで応答し、ポートフォリオのrewrite経由では267 msでした。",
+        "**クライアントサイドが自動的に速いわけではない。** ゾーン内の言語切り替え（クライアントサイド）は534 msかかり、ゾーンからホームへの移動（完全なドキュメント）は318 msでした。クライアントサイドの遷移はページのデータをrewrite経由で取得するため、切り替えのたびに往復が一回増えます。",
+        "**デプロイは本当に独立している。** ゾーンだけのコミットはゾーンだけを、ポートフォリオだけのコミットはポートフォリオだけを再ビルドします。枠組みの変更は両方を再ビルドします。両方がそれに依存しているからです。",
+        "**障害の形が違う。** ゾーンが落ちれば`/uses`は失敗し、サイトの残りは動き続けるはずです。rewriteにはフォールバックがないからです。Angularの実験では、障害のあるマイクロフロントエンドはブロックを一つ落とし、ページは残りました。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "本番でしか見えなかったこと",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "ローカルではすべて通りました。二つのことは、両方のアプリを公開して初めて現れました。"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**rewrite経由のプリフェッチが失敗していた。** Next.js 16は特別なヘッダーを付けて、ルートをセグメントごとにプリフェッチします。直接呼び出すと、ゾーンはそのリクエストに応答しました。ポートフォリオ経由では、同じリクエストがrewriteを通り、ゾーンが処理できない形で届いて404になりました。ページへの通常のリクエストは問題なく通り、壊れていたのはプリフェッチだけでした。ナビゲーションは動き続けましたが、プリフェッチはありませんでした。最初の修正として、rewriteをプラットフォームの層（`vercel.json`）に移しましたが、何も変わりませんでした。効いたのは、ゾーン内のリンクのプリフェッチを無効にすることでした。失敗していたリクエストそのものが発生しなくなったのです。",
+        "**再検証のレスポンスにヘッダーがなかった。** Angularの実験では、記事に戻ってきた訪問者に対して、パネルがモジュールのコストを0.3 KBと表示していました。プラットフォームが再検証で返す304にはCORSとタイミングのヘッダーが一つもなく、ブラウザはヘッダーのサイズしか報告しません。パネルは今それをキャッシュとして扱います。"
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "マネージド製品なら何をしていたか",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "VercelにはMicrofrontendsという製品があり、一つの設定ファイルから、このルーティングをエッジで行い、ゾーン間のプリフェッチとローカルプロキシも提供します。実験を、費用がかかるかもしれない製品に依存させたくなかったので、私は普通のNext.jsのrewriteで実装しました。違いは配管を誰が運用するかであって、モデルが機能するかどうかではありません。"
+    },
+    {
+      "type": "heading",
+      "text": "一つのリポジトリ、二人のオーナー",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "新しいアプリは独自のリポジトリに置くべきではないか、というのはもっともな疑問です。マイクロフロントエンドの本質は、独立したデプロイとオーナーシップであって、リポジトリではありません。ここではゾーンが独自のアプリ、独自のVercelプロジェクト、独自のデプロイを持ち、`CODEOWNERS`ファイルが責任を明示しています。別のリポジトリにすれば、枠組みをバージョン付きのパッケージとして公開し、二つのアプリをそれに同期させ続けなければなりません。それこそ避けたかったずれです。Angularの実験は、サイトと何も共有していなかったので独自のリポジトリにしました。"
+    },
+    {
+      "type": "heading",
+      "text": "割に合わないとき",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "一人で一ページなら、これはやりすぎで、それこそが狙いでした。コストはページではありません。枠組み、モノレポ、rewrite、そして新しい障害モードです。複数のチームが同じサイトの一部をそれぞれのペースで公開する必要が出てきたとき、割に合い始めます。今は、その最初の一歩がどんなものか分かっています。"
+    }
+  ],
+  "blocks_fr": [
+    {
+      "type": "paragraph",
+      "text": "Dans [mon dernier article](/fr/posts/micro-frontend-angular-inside-nextjs), j'ai mis une app Angular à l'intérieur d'une page de ce site : un micro frontend composé dans la page. C'est un modèle. Un autre est plus simple à décrire : le découpage par route. Un chemin du site appartient à une autre app, avec son propre build et son propre déploiement, et le domaine reste le même."
+    },
+    {
+      "type": "paragraph",
+      "text": "Alors je l'ai fait ici. La page [Outils](/fr/uses) est désormais servie par une deuxième app Next.js. Ouvrez les DevTools dessus : la réponse porte un en-tête que ce site n'envoie nulle part ailleurs, `x-zone: uses`."
+    },
+    {
+      "type": "heading",
+      "text": "La page était la partie bon marché",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La page elle-même fait 514 lignes : une liste d'outils en cinq langues. La déplacer dans une autre app devrait être un copier-coller."
+    },
+    {
+      "type": "paragraph",
+      "text": "Ce n'en est pas un, parce que la page ne vit pas seule. Elle est dans la barre latérale, le header mobile, le footer, le raccourci de recherche, les sélecteurs de langue et de thème, les tokens de design et les traductions. Compté, ce cadre fait environ 2 560 lignes, cinq fois la page. Un micro frontend par route n'a pas besoin d'une page ; il a besoin de tout le cadre autour, identique, dans deux apps."
+    },
+    {
+      "type": "paragraph",
+      "text": "C'est là qu'était la vraie décision. Copier le cadre, c'est deux barres latérales qui divergent avec le temps. Donner à la nouvelle app un cadre minimal, c'est une page qui ressemble à un autre site. La réponse qui passe à l'échelle, c'est un monorepo avec le cadre en package partagé."
+    },
+    {
+      "type": "heading",
+      "text": "Étape un : un monorepo qui ne change rien",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Avant de créer la moindre nouvelle app, j'ai transformé le dépôt en monorepo pnpm et Turborepo : le site est passé dans `apps/portfolio`, et le cadre, le design system et les traductions sont devenus des packages. La règle : les visiteurs ne devaient rien remarquer."
+    },
+    {
+      "type": "paragraph",
+      "text": "« Identique » devait être mesuré, pas supposé. Avant de déplacer le moindre fichier, j'ai sauvegardé le HTML des 122 pages et l'ensemble complet des sélecteurs CSS, puis je les ai comparés après chaque étape. Cette comparaison a servi deux fois :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**58 classes CSS ont disparu.** Tailwind scannait tout le dépôt, y compris les exemples de code de la documentation, et générait du CSS pour eux. En ne scannant plus que l'app, ce CSS mort est parti. J'ai vérifié chacune avant de l'accepter.",
+        "**Le cadre a perdu ses styles quand j'ai retiré une ligne.** Tailwind ne génère que les classes qu'il trouve, et les packages vivent hors de l'app. Sans un `@source` explicite qui pointe vers eux, la barre latérale s'affiche sans style et tous les checks restent verts."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "Une revue indépendante en a ensuite trouvé un de plus : Turborepo ne savait pas que l'app dépendait des packages, donc un changement dans le seul cadre réutilisait les résultats de tests en cache de l'app. La CI aurait laissé passer une traduction manquante. Une règle de dépendance a réglé le problème."
+    },
+    {
+      "type": "heading",
+      "text": "Étape deux : la zone",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Avec le cadre en package, la nouvelle app est petite. Elle sert une route, utilise le même cadre et préfixe ses assets pour qu'ils n'entrent pas en collision avec ceux du portfolio sur le même domaine :"
+    },
+    {
+      "type": "code",
+      "code": "const nextConfig: NextConfig = {\n  // The zone's assets must not collide with the portfolio's on the same domain.\n  assetPrefix: \"/uses-static\",\n  transpilePackages: [\"@repo/i18n\", \"@repo/ui\", \"@repo/shell\"],\n  async headers() {\n    return [{ source: \"/(.*)\", headers: [{ key: \"x-zone\", value: \"uses\" }] }]\n  },\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le portfolio lui transmet la route. Si l'URL de la zone manque dans un build de production, le build échoue au lieu de publier un rewrite vers nulle part :"
+    },
+    {
+      "type": "code",
+      "code": "export function usesRewrites(env: { USES_ZONE_URL?: string; NODE_ENV?: string }) {\n  const raw = env.USES_ZONE_URL ?? (env.NODE_ENV === \"production\" ? undefined : \"http://localhost:3001\")\n  if (!raw) throw new Error(\"USES_ZONE_URL is required in production builds\")\n  const zone = raw.replace(/\\/$/, \"\")\n  return [\n    { source: `/${USES_LOCALE_PARAM}/uses`, destination: `${zone}/:locale/uses` },\n    { source: `/${USES_LOCALE_PARAM}/uses/:path*`, destination: `${zone}/:locale/uses/:path*` },\n    { source: \"/uses\", destination: `${zone}/uses` },\n    { source: \"/uses-static/:path*\", destination: `${zone}/uses-static/:path*` },\n  ]\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Le domaine propre de la zone sert un `robots.txt` qui bloque tout. Les moteurs de recherche arrivent sur la page par le domaine principal, et l'URL canonique y pointe déjà."
+    },
+    {
+      "type": "heading",
+      "text": "Un lien qui sait où il va",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "La partie subtile, c'était la navigation. La navigation côté client ne fonctionne qu'à l'intérieur d'une même app : depuis la page Outils, aller à l'accueil avec une route côté client demanderait cette route à une app qui ne l'a pas. Le cadre a donc appris à quelle app appartient chaque chemin :"
+    },
+    {
+      "type": "code",
+      "code": "export type Zone = \"portfolio\" | \"uses\"\n\nconst LOCALE_GROUP = `(?:${LOCALES.join(\"|\")})`\nconst USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)\n\nexport function zoneFor(pathname: string): Zone {\n  return USES.test(pathname) ? \"uses\" : \"portfolio\"\n}\n\nexport function linkMode(current: Zone, href: string): \"client\" | \"document\" | \"external\" {\n  if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.startsWith(\"//\")) return \"external\"\n  const pathname = href.split(/[?#]/)[0] || \"/\"\n  return zoneFor(pathname) === current ? \"client\" : \"document\"\n}",
+      "language": "typescript"
+    },
+    {
+      "type": "paragraph",
+      "text": "Chaque lien et chaque navigation programmatique du cadre passent par cette décision. Changer de langue dans Outils reste côté client. Aller d'Outils à l'accueil, ou à la recherche, charge un nouveau document, volontairement."
+    },
+    {
+      "type": "heading",
+      "text": "Ce que ça a coûté",
+      "level": 2
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Le saut supplémentaire.** Servie directement, la zone répondait en 224 ms ; via le rewrite du portfolio, en 267 ms.",
+        "**Le côté client n'est pas automatiquement plus rapide.** Changer de langue dans la zone (côté client) a pris 534 ms, alors que passer de la zone à l'accueil (document complet) a pris 318 ms. La transition côté client va chercher les données de la page à travers le rewrite : un aller-retour de plus à chaque changement.",
+        "**Les déploiements sont vraiment indépendants.** Un commit dans la seule zone ne rebuilde que la zone ; un commit dans le seul portfolio ne rebuilde que le portfolio ; un changement dans le cadre rebuilde les deux, parce que les deux en dépendent.",
+        "**La panne a une autre forme.** Si la zone tombe, `/uses` échouerait et le reste du site continuerait de fonctionner : un rewrite n'a pas de repli. Dans l'expérience Angular, un micro frontend en panne faisait tomber un bloc et laissait la page debout."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Ce que seule la production a montré",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Tout passait en local. Deux choses ne sont apparues qu'avec les deux apps déployées :"
+    },
+    {
+      "type": "list",
+      "items": [
+        "**Les prefetchs échouaient à travers le rewrite.** Next.js 16 précharge une route segment par segment, avec un en-tête spécial. Appelée directement, la zone répondait à ces requêtes. Via le portfolio, la même requête traversait le rewrite et arrivait à la zone sous une forme qu'elle ne savait pas servir : 404. Les requêtes complètes de la page passaient normalement ; seul le préchargement cassait. La navigation continuait de fonctionner, simplement sans préchargement. Ma première correction, déplacer le rewrite vers la couche de la plateforme (`vercel.json`), n'a rien changé. Ce qui a marché, c'est de désactiver le préchargement des liens à l'intérieur de la zone : la requête qui échouait a tout simplement cessé d'exister.",
+        "**La réponse de revalidation arrivait sans en-têtes.** Dans l'expérience Angular, le panneau affichait 0,3 Ko comme coût du module pour les visiteurs qui revenaient. Le 304 que la plateforme renvoie à la revalidation ne porte aucun des en-têtes CORS et de timing, donc le navigateur ne rapporte que la taille des en-têtes. Le panneau traite désormais ce cas comme du cache."
+      ],
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "Ce que le produit géré aurait fait",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Vercel a un produit Microfrontends qui fait ce routage à l'edge, à partir d'un seul fichier de configuration, avec du préchargement entre zones et un proxy local. Je l'ai fait avec de simples rewrites Next.js pour qu'une expérience ne dépende pas d'un produit qui pouvait être payant. La différence, c'est qui opère la tuyauterie, pas si le modèle fonctionne."
+    },
+    {
+      "type": "heading",
+      "text": "Un dépôt, deux propriétaires",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Une question légitime : la nouvelle app ne devrait-elle pas vivre dans son propre dépôt ? Les micro frontends, c'est une affaire de déploiements et de propriétaires indépendants, pas de dépôts. Ici, la zone a sa propre app, son propre projet Vercel et son propre déploiement, et un fichier `CODEOWNERS` rend la responsabilité explicite. Un dépôt séparé m'aurait obligé à publier le cadre en package versionné et à garder deux apps synchronisées avec lui, exactement la divergence que je voulais éviter. L'expérience Angular a eu son propre dépôt, parce qu'elle ne partageait rien avec le site."
+    },
+    {
+      "type": "heading",
+      "text": "Quand ça n'en vaut pas la peine",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Pour une personne et une page, c'est excessif, et c'était tout l'intérêt. Le coût n'est pas la page : c'est le cadre, le monorepo, les rewrites et un nouveau mode de panne. Ça commence à payer quand plusieurs équipes doivent publier des parties du même site à leur propre rythme. Maintenant, je sais à quoi ressemble la première étape."
+    }
+  ]
+}

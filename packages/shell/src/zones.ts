@@ -22,3 +22,11 @@ export function linkMode(current: Zone, href: string): LinkMode {
   const pathname = href.split(/[?#]/)[0] || "/"
   return zoneFor(pathname) === current ? "client" : "document"
 }
+
+// Zonas servidas por rewrite não pré-carregam. Pelo proxy, o prefetch por
+// segmento do Next 16 chega à zona num formato que ela não serve (404 em
+// produção, invisível em dev). Navegar continua funcionando: o clique busca o
+// payload completo, que atravessa o rewrite sem problema.
+export function shouldPrefetch(current: Zone): boolean {
+  return current === "portfolio"
+}

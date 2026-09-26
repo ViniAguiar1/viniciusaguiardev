@@ -1,6 +1,6 @@
 # viniciusaguiar.dev
 
-Portfolio and technical blog by **Vinicius Aguiar** — Software Engineer specializing in React, Next.js, TypeScript and Node.js.
+Portfolio and technical blog by **Vinicius Aguiar** — Senior Product Engineer specializing in React, Next.js, TypeScript and Node.js.
 
 **[viniciusaguiardev.com.br](https://viniciusaguiardev.com.br/)**
 
@@ -75,7 +75,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Author
 
-**Vinicius Aguiar** — Software Engineer
+**Vinicius Aguiar** — Senior Product Engineer
 
 - [Portfolio](https://viniciusaguiardev.com.br/)
 - [LinkedIn](https://www.linkedin.com/in/viniciusaguiar-araujo/)

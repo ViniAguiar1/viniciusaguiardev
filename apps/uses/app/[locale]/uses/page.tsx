@@ -437,14 +437,25 @@ const categories: UsesCategory[] = [
     title: { pt: "Hardware", en: "Hardware", es: "Hardware", jp: "ハードウェア", fr: "Hardware" },
     items: [
       {
+        name: "MacBook Pro M1 Pro",
+        url: "https://www.apple.com/macbook-pro/",
+        desc: {
+          pt: "Máquina principal. Apple Silicon M1 Pro, 16GB RAM, 1TB SSD.",
+          en: "Main machine. Apple Silicon M1 Pro, 16GB RAM, 1TB SSD.",
+          es: "Máquina principal. Apple Silicon M1 Pro, 16GB RAM, 1TB SSD.",
+          jp: "メインマシン。Apple Silicon M1 Pro、16GB RAM、1TB SSD。",
+          fr: "Machine principale. Apple Silicon M1 Pro, 16GB RAM, 1TB SSD.",
+        },
+      },
+      {
         name: "MacBook Air M2",
         url: "https://www.apple.com/macbook-air/",
         desc: {
-          pt: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso e leve.",
-          en: "Main machine. Apple Silicon M2, 16GB RAM, 256GB SSD. Silent and lightweight.",
-          es: "Máquina principal. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso y liviano.",
-          jp: "メインマシン。Apple Silicon M2、16GB RAM、256GB SSD。静かで軽量。",
-          fr: "Machine principale. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencieux et léger.",
+          pt: "Segunda máquina. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso e leve.",
+          en: "Second machine. Apple Silicon M2, 16GB RAM, 256GB SSD. Silent and lightweight.",
+          es: "Segunda máquina. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencioso y liviano.",
+          jp: "セカンドマシン。Apple Silicon M2、16GB RAM、256GB SSD。静かで軽量。",
+          fr: "Deuxième machine. Apple Silicon M2, 16GB RAM, 256GB SSD. Silencieux et léger.",
         },
       },
     ],

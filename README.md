@@ -58,16 +58,16 @@ Every route lives under a locale prefix (`/pt`, `/en`, `/es`, `/jp`, `/fr`).
 ## Project Structure
 
 ```
-apps/portfolio/   # O site (Next.js App Router): páginas, dados, posts, scripts, public/
-apps/uses/        # Zona /uses — app Next.js separado, servido no mesmo domínio via rewrites
-packages/i18n/    # @repo/i18n — locales, t(), dicionários
+apps/portfolio/   # The site (Next.js App Router): pages, data, posts, scripts, public/
+apps/uses/        # /uses zone — separate Next.js app, served on the same domain via rewrites
+packages/i18n/    # @repo/i18n — locales, t(), dictionaries
 packages/ui/      # @repo/ui — Shadcn UI, tokens, globals.css
-packages/shell/   # @repo/shell — moldura do site (sidebars, header, footer) e mapa de zonas
-packages/config/  # @repo/config — tsconfig e ESLint compartilhados
-docs/             # Guias e specs (ex.: capas do blog)
+packages/shell/   # @repo/shell — site shell (sidebars, header, footer) and zone map
+packages/config/  # @repo/config — shared tsconfig and ESLint
+docs/             # Guides and specs (e.g. blog covers)
 ```
 
-Monorepo com pnpm workspaces e Turborepo: `pnpm build`, `pnpm test`, `pnpm lint` e `pnpm typecheck` rodam em todos os apps e pacotes.
+Monorepo with pnpm workspaces and Turborepo: `pnpm build`, `pnpm test`, `pnpm lint` and `pnpm typecheck` run across every app and package.
 
 ## License
 

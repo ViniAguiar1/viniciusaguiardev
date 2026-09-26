@@ -61,7 +61,29 @@ O que faz funcionar:
 
 > A dark bedroom at night, a young developer seen from behind sitting on the edge of the bed, looking at a desk where a monitor glows with a finished app. The window beside the desk opens onto a vast busy city far below, thousands of lit windows, crowds in the streets, none of them looking up. The room feels isolated and silent.
 
+Para [`route-based-micro-frontend-monorepo`](../../apps/portfolio/data/posts/route-based-micro-frontend-monorepo.json)
+(a página era barata, a moldura era cara):
+
+**Moldura gigante**: escolhida como capa do post.
+
+![moldura](engraving-moldura.jpg)
+
+> Inside a vast dark workshop at night, a craftsman seen from behind stands on a tall ladder, working on an enormous ornate picture frame that towers over the room, intricate carved moulding, scaffolding and tools around it. Resting on a small easel at the foot of the ladder is a tiny finished painting, the only thing the giant frame will hold. A single strong lamp lights the scene.
+
+**Uma fachada, duas casas**
+
+![fachada](engraving-fachada.jpg)
+
+> A cutaway view of a building at night: from the street it is one single continuous grand facade with identical windows and one shared roofline, but the cutaway reveals two completely separate houses behind it, each with its own lit room, its own staircase and its own person working at a desk. A lone passerby seen from behind walks along the empty street in front of the facade.
+
+**Sala encaixada**
+
+![guindaste](engraving-guindaste.jpg)
+
+> At night, a huge old building with rows of identical lit windows; a crane is lowering one small new room into an empty slot in the facade, the new room lit exactly like all the others so it blends in perfectly. A single worker seen from behind stands on the scaffolding guiding it into place, tiny against the building.
+
 ### Cuidados
 
 - Telas de monitor tendem a sair com texto. A restrição `no readable screens` segura isso, mas confira.
 - Multidões no fundo às vezes ficam com rostos estranhos quando vistas de perto. No tamanho do card, não aparece.
+- Elementos no rodapé da cena sofrem no corte 1200×630: o quadrinho da moldura gigante ficou colado na borda de baixo do `og.jpg`. Peça o elemento-chave "in the middle of the frame" quando ele for pequeno.

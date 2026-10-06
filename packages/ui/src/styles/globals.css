@@ -176,6 +176,11 @@
   body {
     @apply bg-canvas text-fg;
   }
+  /* Tailwind v4 removeu o cursor: pointer padrão dos botões. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 /* Foco visível do aguiarlabs, no lugar do outline-ring/50 do shadcn. */

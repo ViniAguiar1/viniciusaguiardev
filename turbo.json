@@ -16,6 +16,7 @@
       ],
       "env": [
         "USES_ZONE_URL",
+        "ROADMAP_ZONE_URL",
         "NODE_ENV"
       ]
     },

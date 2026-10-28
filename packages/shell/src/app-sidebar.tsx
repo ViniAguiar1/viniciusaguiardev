@@ -19,6 +19,7 @@ export async function AppSidebar() {
     { href: localePath(locale, "/sobre"), label: dict.nav.about },
     { href: localePath(locale, "/projetos"), label: dict.nav.projects },
     { href: localePath(locale, "/engenharia"), label: dict.nav.engineering },
+    { href: localePath(locale, "/roadmap"), label: dict.nav.roadmap },
     { href: localePath(locale, "/uses"), label: dict.nav.uses },
   ]
 

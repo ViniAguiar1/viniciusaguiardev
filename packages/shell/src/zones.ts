@@ -3,16 +3,20 @@ import { LOCALES } from "@repo/i18n"
 // A que app (zona) pertence cada caminho do domínio. Navegar dentro da mesma
 // zona pode ser client-side; atravessar zonas exige carregar o documento,
 // porque a rota não existe no app atual.
-export type Zone = "portfolio" | "uses"
+export type Zone = "portfolio" | "uses" | "roadmap"
 
 const LOCALE_GROUP = `(?:${LOCALES.join("|")})`
 const USES = new RegExp(`^(?:/${LOCALE_GROUP})?/uses(?:/.*)?$`)
+// O roadmap mora em outro repositório (github.com/ViniAguiar1/roadmap).
+const ROADMAP = new RegExp(`^(?:/${LOCALE_GROUP})?/roadmap(?:/.*)?$`)
 
 // Parâmetro de locale no formato path-to-regexp, para os rewrites do portfólio.
-export const USES_LOCALE_PARAM = `:locale(${LOCALES.join("|")})`
+export const ZONE_LOCALE_PARAM = `:locale(${LOCALES.join("|")})`
 
 export function zoneFor(pathname: string): Zone {
-  return USES.test(pathname) ? "uses" : "portfolio"
+  if (USES.test(pathname)) return "uses"
+  if (ROADMAP.test(pathname)) return "roadmap"
+  return "portfolio"
 }
 
 export type LinkMode = "client" | "document" | "external"

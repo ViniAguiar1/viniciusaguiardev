@@ -33,11 +33,12 @@ Every route lives under a locale prefix (`/pt`, `/en`, `/es`, `/jp`, `/fr`).
 | [`/posts/[slug]`](https://viniciusaguiardev.com.br/pt/posts/case-study-xdrop) | Technical blog posts and case studies |
 | [`/busca`](https://viniciusaguiardev.com.br/pt/busca) | Search across posts and projects |
 | [`/uses`](https://viniciusaguiardev.com.br/pt/uses) | Tools and setup — served by a separate Next.js app (`apps/uses`) as a micro frontend zone |
+| [`/roadmap`](https://viniciusaguiardev.com.br/pt/roadmap) | 24-week Frontend & React interview roadmap — open source zone from its own repo ([ViniAguiar1/roadmap](https://github.com/ViniAguiar1/roadmap)) |
 
 ## Tech Stack
 
 - **Framework:** Next.js 16 (App Router, Turbopack)
-- **Monorepo:** pnpm workspaces + Turborepo, with `/uses` as a route-based micro frontend zone
+- **Monorepo:** pnpm workspaces + Turborepo, with `/uses` and `/roadmap` as route-based micro frontend zones
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS 4, Shadcn UI (Radix UI primitives)
 - **Themes:** next-themes (light/dark/system)

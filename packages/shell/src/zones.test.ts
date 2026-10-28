@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { LOCALES } from "@repo/i18n"
-import { zoneFor, linkMode, shouldPrefetch, USES_LOCALE_PARAM } from "./zones"
+import { zoneFor, linkMode, shouldPrefetch, ZONE_LOCALE_PARAM } from "./zones"
 
 describe("zoneFor", () => {
   it("uses em todos os locales, com ou sem barra final e subcaminhos", () => {
@@ -20,6 +20,15 @@ describe("zoneFor", () => {
   it("/uses sem locale é da zona uses (o proxy dela redireciona para /pt/uses)", () => {
     expect(zoneFor("/uses")).toBe("uses")
   })
+  it("roadmap em todos os locales, sem confundir prefixo", () => {
+    for (const l of LOCALES) {
+      expect(zoneFor(`/${l}/roadmap`)).toBe("roadmap")
+      expect(zoneFor(`/${l}/roadmap/`)).toBe("roadmap")
+    }
+    expect(zoneFor("/roadmap")).toBe("roadmap")
+    expect(zoneFor("/pt/roadmaps")).toBe("portfolio")
+    expect(zoneFor("/pt/posts/roadmap")).toBe("portfolio")
+  })
 })
 
 describe("linkMode", () => {
@@ -29,6 +38,7 @@ describe("linkMode", () => {
     expect(linkMode("uses", "/pt")).toBe("document")
     expect(linkMode("portfolio", "/pt/uses")).toBe("document")
     expect(linkMode("portfolio", "/pt/projetos")).toBe("client")
+    expect(linkMode("portfolio", "/pt/roadmap?semana=01")).toBe("document")
   })
   it("query e hash não mudam a zona", () => {
     expect(linkMode("portfolio", "/pt/uses?x=1#y")).toBe("document")
@@ -39,9 +49,9 @@ describe("linkMode", () => {
   })
 })
 
-describe("USES_LOCALE_PARAM", () => {
+describe("ZONE_LOCALE_PARAM", () => {
   it("é o parâmetro path-to-regexp com os locales do site", () => {
-    expect(USES_LOCALE_PARAM).toBe(`:locale(${LOCALES.join("|")})`)
+    expect(ZONE_LOCALE_PARAM).toBe(`:locale(${LOCALES.join("|")})`)
   })
 })
 

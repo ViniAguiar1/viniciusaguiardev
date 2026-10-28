@@ -13,6 +13,7 @@ const STATIC_ENTRIES: StaticEntry[] = [
   { path: "/sobre", changeFrequency: "monthly", priority: 0.8 },
   { path: "/projetos", changeFrequency: "monthly", priority: 0.8 },
   { path: "/engenharia", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/roadmap", changeFrequency: "monthly", priority: 0.7 },
   { path: "/uses", changeFrequency: "monthly", priority: 0.6 },
   { path: "/projetos/x-drop", changeFrequency: "monthly", priority: 0.8 },
   { path: "/projetos/vox-pet-digital", changeFrequency: "monthly", priority: 0.8 },

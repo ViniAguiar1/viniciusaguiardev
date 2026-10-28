@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { usesRewrites } from "./zones-rewrites"
+import { roadmapRewrites, usesRewrites } from "./zones-rewrites"
 
 describe("usesRewrites", () => {
   it("reescreve a página, subcaminhos, /uses sem locale e os assets da zona", () => {
@@ -20,5 +20,22 @@ describe("usesRewrites", () => {
   })
   it("em produção sem USES_ZONE_URL falha alto", () => {
     expect(() => usesRewrites({ NODE_ENV: "production" })).toThrow(/USES_ZONE_URL/)
+  })
+})
+
+describe("roadmapRewrites", () => {
+  it("reescreve a página, /roadmap sem locale e os assets da zona", () => {
+    expect(roadmapRewrites({ ROADMAP_ZONE_URL: "https://roadmap.example.com/", NODE_ENV: "production" })).toEqual([
+      { source: "/:locale(pt|en|es|jp|fr)/roadmap", destination: "https://roadmap.example.com/:locale/roadmap" },
+      { source: "/:locale(pt|en|es|jp|fr)/roadmap/:path*", destination: "https://roadmap.example.com/:locale/roadmap/:path*" },
+      { source: "/roadmap", destination: "https://roadmap.example.com/roadmap" },
+      { source: "/roadmap-static/:path*", destination: "https://roadmap.example.com/roadmap-static/:path*" },
+    ])
+  })
+  it("em dev usa localhost:3002 por padrão", () => {
+    expect(roadmapRewrites({ NODE_ENV: "development" })[0].destination).toBe("http://localhost:3002/:locale/roadmap")
+  })
+  it("em produção sem ROADMAP_ZONE_URL falha alto", () => {
+    expect(() => roadmapRewrites({ NODE_ENV: "production" })).toThrow(/ROADMAP_ZONE_URL/)
   })
 })

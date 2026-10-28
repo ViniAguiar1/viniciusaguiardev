@@ -17,7 +17,11 @@ export function SiteShell({ zone, children }: { zone: Zone; children: ReactNode 
       <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
         <SidebarProvider>
           <AppSidebar />
-          <main className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+          {/* overflow-x-clip, não hidden: hidden faz o main virar scroll
+              container (overflow-y vira auto) sem nunca rolar — quem rola é a
+              janela — e todo sticky aqui dentro (header mobile, botão do
+              roadmap) deixava de grudar. */}
+          <main className="flex-1 flex flex-col min-w-0 overflow-x-clip">
             <MobileHeader />
             {children}
             <Footer />

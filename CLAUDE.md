@@ -13,7 +13,7 @@ pnpm typecheck    # tsc --noEmit em apps e pacotes
 pnpm test         # Vitest em apps e pacotes
 pnpm aeo          # AEO readiness check do portfolio (threshold 90/100, fails CI if below)
 pnpm --filter portfolio <script>   # rodar um script de um app só
-USES_ZONE_URL=http://localhost:3001 pnpm build   # o build de produção do portfolio exige a URL da zona /uses
+USES_ZONE_URL=http://localhost:3001 ROADMAP_ZONE_URL=http://localhost:3002 pnpm build   # o build de produção do portfolio exige a URL de cada zona
 ```
 
 Uses **pnpm** (not npm/yarn). Node 24 locally (via nvm), Node 20 in CI. Turbopack is the bundler for both dev and build.
@@ -49,6 +49,8 @@ packages/config/    @repo/config — tsconfig base e ESLint compartilhados
 ### Zonas (micro frontend por rota)
 
 `/:locale/uses` é servida por `apps/uses` (porta 3001 em dev/start), atrás do domínio do portfólio via `rewrites` em `apps/portfolio/next.config.ts` (`usesRewrites`, `USES_ZONE_URL`). A zona usa `assetPrefix: "/uses-static"`, responde `x-zone: uses` e o `robots.txt` do domínio dela bloqueia tudo. Rodar as duas: `pnpm dev` (turbo sobe portfolio na 3000 e uses na 3001) e abrir `localhost:3000/pt/uses`. Cada app precisa do próprio `app/icon.png` (convenção de arquivo do Next). Na Vercel, cada zona é um projeto com Root Directory próprio e "Skip deployments when there are no changes to the root directory or its dependencies" ligado.
+
+`/:locale/roadmap` é uma zona de **outro repositório**, [`ViniAguiar1/roadmap`](https://github.com/ViniAguiar1/roadmap) (open source, clonado em `~/Development/roadmap`, porta 3002), via `roadmapRewrites` / `ROADMAP_ZONE_URL`. Mesmo contrato da `uses` (`assetPrefix: "/roadmap-static"`, `x-zone: roadmap`, robots bloqueado), mas não usa `@repo/*`: tem layout próprio com os tokens copiados. O `pnpm dev` daqui não sobe o roadmap — rode `pnpm dev` no repo dele para `localhost:3000/pt/roadmap` funcionar. Conteúdo do roadmap (tópicos, materiais) se edita lá, não aqui.
 
 ## Architecture
 

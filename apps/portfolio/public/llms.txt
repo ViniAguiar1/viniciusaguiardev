@@ -17,6 +17,7 @@ Notas importantes:
 - [Projetos](https://viniciusaguiardev.com.br/projetos): Portfolio curado com 9 projetos — Keep, Chattie, Hora Útil 360, termAI, FastSeller, X-Drop, Vox Pet Digital, iKropp e MovePro. Foco em AI SaaS, revenue ops, e-commerce e health.
 - [X-Drop — Página dedicada](https://viniciusaguiardev.com.br/projetos/x-drop): Case de produto com propósito, métricas reais (R$ 30k+ faturados, 100+ usuários, 400+ pedidos, MRR R$ 20k em 2 meses), screenshots do dashboard web e app iOS nativo (Swift UI), stack técnica e links para App Store e site.
 - [Engenharia](https://viniciusaguiardev.com.br/engenharia): Seção técnica com decisões de arquitetura, trade-offs e problemas resolvidos em produção. Inclui: performance de frontend (paginação cursor-based, virtualização de lista), arquitetura SaaS, multi-tenancy, pagamentos/webhooks, IA em produção.
+- [Roadmap Frontend & React](https://viniciusaguiardev.com.br/roadmap): Roadmap de 24 semanas para entrevistas de Frontend — fundamentos da web, JavaScript, TypeScript, React por baixo (Fiber, reconciliation, concurrent rendering), Next.js e renderização, testes, performance (Core Web Vitals) e Frontend System Design. Progresso marcado por tópico e salvo no navegador. Open source: https://github.com/ViniAguiar1/roadmap.
 
 ## Artigos técnicos (Blog)
 

@@ -22,6 +22,7 @@ export type Dictionary = {
     projects: string
     engineering: string
     uses: string
+    roadmap: string
     search: string
     curriculum: string
   }
@@ -53,6 +54,7 @@ const pt: Dictionary = {
     projects: "Projetos",
     engineering: "Engenharia",
     uses: "Ferramentas",
+    roadmap: "Roadmap",
     search: "Busca",
     curriculum: "Curriculum",
   },
@@ -94,6 +96,7 @@ const en: Dictionary = {
     projects: "Projects",
     engineering: "Engineering",
     uses: "Uses",
+    roadmap: "Roadmap",
     search: "Search",
     curriculum: "Resume",
   },
@@ -135,6 +138,7 @@ const es: Dictionary = {
     projects: "Proyectos",
     engineering: "Ingeniería",
     uses: "Herramientas",
+    roadmap: "Roadmap",
     search: "Búsqueda",
     curriculum: "Currículum",
   },
@@ -176,6 +180,7 @@ const jp: Dictionary = {
     projects: "プロジェクト",
     engineering: "エンジニアリング",
     uses: "ツール",
+    roadmap: "ロードマップ",
     search: "検索",
     curriculum: "履歴書",
   },
@@ -217,6 +222,7 @@ const fr: Dictionary = {
     projects: "Projets",
     engineering: "Ingénierie",
     uses: "Outils",
+    roadmap: "Roadmap",
     search: "Recherche",
     curriculum: "CV",
   },

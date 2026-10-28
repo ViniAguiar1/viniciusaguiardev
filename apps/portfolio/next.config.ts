@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { NextConfig } from "next";
-import { usesRewrites } from "./lib/zones-rewrites";
+import { roadmapRewrites, usesRewrites } from "./lib/zones-rewrites";
 
 const nextConfig: NextConfig = {
   // Pacotes do monorepo vivem fora do app: a raiz do Turbopack é a do repo.
@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    return usesRewrites(process.env);
+    return [...usesRewrites(process.env), ...roadmapRewrites(process.env)];
   },
   async headers() {
     return [
